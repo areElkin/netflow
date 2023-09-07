@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from collections import defaultdict
 from functools import partial
 import matplotlib.pyplot as plt
 import multiprocessing as mp
@@ -20,7 +21,7 @@ reload(utl)
 clustermap = utl.clustermap
 
 from .utils import compute_graph_distances, heat_kernel, compute_edge_weights, get_times, \
-    construct_anisotropic_laplacian_matrix, clustermap
+    construct_anisotropic_laplacian_matrix, clustermap, spearmanr_, stack_triu_, stack_triu_where_, dispersion_
 
 # import netflow.utils as utl
 # from importlib import reload
@@ -44,8 +45,7 @@ def wass_distance(samples, profiles, graph_distances, measure_cutoff=1e-6,
 
     Returns
     -------
-
-    """
+([([(    """
     
     sample_a, sample_b = samples
     if flag is None:
@@ -245,10 +245,104 @@ class InfoNet:
             for alternative hypotheses. `p` has the same
             shape as `R`.
         """
-        stats = sc_stats.spearmanr(data, axis=0, **kwargs)
-        R = pd.DataFrame(data=stats.correlation, index=data.columns.copy(), columns=data.columns.copy())
-        p = pd.DataFrame(data=stats.pvalue, index=data.columns.copy(), columns=data.columns.copy())
+        # stats = sc_stats.spearmanr(data, axis=0, **kwargs)
+        # R = pd.DataFrame(data=stats.correlation, index=data.columns.copy(), columns=data.columns.copy())
+        # p = pd.DataFrame(data=stats.pvalue, index=data.columns.copy(), columns=data.columns.copy())
+        R, p = spearmanr_(data, **kwargs)
         return R, p
+
+
+    def stack_triu(self, df, name=None):
+        """ Stack the upper triangular entries of the dataframe above the diagonal
+        .. note:: Useful for symmetric dataframes like correlations or distances.
+
+        Parameters
+        ----------
+        df : pandas DataFrame
+            Dataframe to stack. 
+            .. note:: upper triangular entries are taken from `df` as provided, with no check that the rows and columns are symmetric.
+        name : str
+            Optional name of pandas Series output `df_stacked`.
+
+        Returns
+        -------
+        df_stacked : pandas Series
+            The stacked upper triangular entries above the diagonal of the dataframe.
+        """
+        # df_stacked = df.stack()[np.triu(np.ones(df.shape).astype(bool), 1).reshape(df.size)]
+        # df_stacked.name = name
+        df_stacked = stack_triu_(df, name=name)
+        return df_stacked
+
+    def stack_triu_where(self, df, condition, name=None):
+        """ Stack the upper triangular entries of the dataframe above the diagonal where the condition is True
+        .. note:: Useful for symmetric dataframes like correlations or distances.
+
+        Parameters
+        ----------
+        df : pandas DataFrame
+            Dataframe to stack. 
+            .. note:: upper triangular entries are taken from `df` as provided, with no check that the rows and columns are symmetric.
+        condition : pandas DataFrame
+            Boolean dataframe of the same size and order of rows and columns as `df` indicating values, where `True`, to include
+            in the stacked dataframe.
+        name : str
+            Optional name of pandas Series output `df_stacked`.
+
+        Returns
+        -------
+        df_stacked : pandas Series
+            The stacked upper triangular entries above the diagonal of the dataframe, where `condition` is `True`.        
+        """        
+        # df_stacked = df.stack()[np.triu(condition.astype(bool), 1).reshape(df.size)]
+        # df_stacked.name = name
+        df_stacked = stack_triu_where_(df, condition, name=name)
+        return df_stacked
+
+
+    def dispersion(self, data, axis=0):
+        """ Data dispersion computed as the absolute value of the variance-to-mean ratio where the variance and mean is computed on
+        the values over the requested axis.
+
+        Parameters
+        ----------
+        data : pandas DataFrame
+            Data used to compute dispersion.
+        axis : {0, 1}
+            Axis on which the variance and mean is applied on computed.
+
+            Options
+            -------
+            0 : for each column, apply function to the values over the index
+            1 : for each index, apply function to the values over the columns
+
+        Returns
+        -------
+        vmr : pandas Series
+            Variance-to-mean ratio (vmr) quantifying the disperion.
+        """
+        # vmr = np.abs(data.var(axis=axis) / data.mean(axis=axis))
+        vmr = dispersion_(data, axis=axis)
+        return vmr
+
+
+    def value_counter(self, values):
+        """ returns dictionary with the number of times each value appears.
+
+        Parameters
+        ----------
+        values : iterable
+            List of values.
+
+        Returns
+        -------
+        counter : defaultdict(int)
+            Dictionary of the form {value : count} with the number of times each value appears in the iterable.
+        """
+        counter = defaultdict(int)
+        for k in values:
+            counter[k] += 1
+        return counter
 
         
     def weighted_sample_network(self, sample, weight='weight', data=None, **kwargs):
@@ -705,12 +799,7 @@ class InfoNet:
             diffused_profiles.append(profile)
 
         diffused_profiles = pd.concat(diffused_profiles, axis=1)
-        return diffused_profiles
-
-
-
-    
-            
+        return diffused_profiles            
         
 
     def plot_profiles(self, profiles, ylog=False, ax=None, figsize=(5.3, 4), title="", lw=1.3, marker_size=2, **plot_kwargs):

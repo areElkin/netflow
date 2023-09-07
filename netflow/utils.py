@@ -11,6 +11,7 @@ import scipy as sc
 import scipy.cluster.hierarchy as sch
 import scipy.sparse.csgraph as scg
 import scipy.spatial.distance as ssd
+import scipy.stats as sc_stats
 import seaborn as sns
 
 
@@ -319,3 +320,100 @@ def clustermap(data, observations=None, features=None, transform=True, is_symmet
     return cm
 
     
+def spearmanr_(data, **kwargs):
+    """ Calculate a Spearman correlation coefficient with associated p-value using scipy.stats.spearmanr.
+
+    Parameters
+    ----------
+    data : 2D array_like
+        2-D array containing multiple variables and observations, where each column represents
+        a variable, with observations in the rows.
+    **kwargs : dict
+        Optional key-word arguments passed to scipy.stats.spearmanr.
+
+    Returns
+    -------
+    R : pandas DataFrame
+        Spearman correlation matrix. The correlation matrix is square with
+        length equal to total number of variables (columns or rows).
+    pvalue : float
+        The p-value for a hypothesis test whose null hypotheisis
+        is that two sets of data are uncorrelated. See documentation for scipy.stats.spearmanr
+        for alternative hypotheses. `p` has the same
+        shape as `R`.
+    """
+    stats = sc_stats.spearmanr(data, axis=0, **kwargs)
+    R = pd.DataFrame(data=stats.correlation, index=data.columns.copy(), columns=data.columns.copy())
+    p = pd.DataFrame(data=stats.pvalue, index=data.columns.copy(), columns=data.columns.copy())
+    return R, p
+
+
+def stack_triu_(df, name=None):
+    """ Stack the upper triangular entries of the dataframe above the diagonal
+    .. note:: Useful for symmetric dataframes like correlations or distances.
+
+    Parameters
+    ----------
+    df : pandas DataFrame
+        Dataframe to stack. 
+        .. note:: upper triangular entries are taken from `df` as provided, with no check that the rows and columns are symmetric.
+    name : str
+        Optional name of pandas Series output `df_stacked`.
+
+    Returns
+    -------
+    df_stacked : pandas Series
+        The stacked upper triangular entries above the diagonal of the dataframe.
+    """
+    df_stacked = df.stack()[np.triu(np.ones(df.shape).astype(bool), 1).reshape(df.size)]
+    df_stacked.name = name
+    return df_stacked
+
+def stack_triu_where_(df, condition, name=None):
+    """ Stack the upper triangular entries of the dataframe above the diagonal where the condition is True
+    .. note:: Useful for symmetric dataframes like correlations or distances.
+
+    Parameters
+    ----------
+    df : pandas DataFrame
+        Dataframe to stack. 
+        .. note:: upper triangular entries are taken from `df` as provided, with no check that the rows and columns are symmetric.
+    condition : pandas DataFrame
+        Boolean dataframe of the same size and order of rows and columns as `df` indicating values, where `True`, to include
+        in the stacked dataframe.
+    name : str
+        Optional name of pandas Series output `df_stacked`.
+
+    Returns
+    -------
+    df_stacked : pandas Series
+        The stacked upper triangular entries above the diagonal of the dataframe, where `condition` is `True`.        
+    """        
+    df_stacked = df.stack()[np.triu(condition.astype(bool), 1).reshape(df.size)]
+    df_stacked.name = name
+    return df_stacked
+
+def dispersion_(data, axis=0):
+    """ Data dispersion computed as the absolute value of the variance-to-mean ratio where the variance and mean is computed on
+    the values over the requested axis.
+
+    Parameters
+    ----------
+    data : pandas DataFrame
+        Data used to compute dispersion.
+    axis : {0, 1}
+        Axis on which the variance and mean is applied on computed.
+
+        Options
+        -------
+        0 : for each column, apply function to the values over the index
+        1 : for each index, apply function to the values over the columns
+
+    Returns
+    -------
+    vmr : pandas Series
+        Variance-to-mean ratio (vmr) quantifying the disperion.
+    """
+    vmr = np.abs(data.var(axis=axis) / data.mean(axis=axis))
+    return vmr
+

@@ -7,6 +7,10 @@ __pycache__/
 ###############
 .DS_Store
 
+# Emacs Files #
+###############
+.#*
+
 # File extensions #
 ###################
 *~
