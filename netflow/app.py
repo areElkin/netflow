@@ -19,6 +19,7 @@ from .utils import stack_triu_where_
 
 cyto.load_extra_layouts()
 
+
 def correlation_network(R, condition, name='R'):
     """ Create graph from correlations `R` that satisfy given `condition`.
 
@@ -166,6 +167,14 @@ styles = {
         'height': '100%',
         'width': '100%'
     },
+    'in-line-container': {
+        'display': 'inline-block',
+        # 'border': 'thin lightgrey solid',
+    },
+    'border-container': {
+        'border': 'thin lightgrey solid',
+        'width': '99%',
+    },
     'cy-container': {
         # 'flex': '1',
         'position': 'relative'
@@ -178,7 +187,18 @@ styles = {
     },
     'tab': {'height': 'calc(98vh - 80px)'}
 }
-        
+
+radio_items_selected_graph_rendering = dcc.RadioItems(options=[{'label': 'Interaction network', 'value': 'interaction'},
+                                                               {'label': 'Correlated neighborhood network', 'value': 'functional'},
+                                                               {'label': 'Combo', 'value': 'combo'}], value='combo', # self.selected_graph, # 'combo',
+                                                      id="radio_graph_selection",
+                                                      labelStyle={"display": "flex", "align-items": "center"})
+
+# switch_fix_node_positions = html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False)
+switch_fix_node_positions = dbc.Switch(id="btn_fix_pos", # style=styles['container'], # class_name=, input_class_name=, input_style=, style=,
+                                       disabled=False, label='Fix layout', # label_class_name=, label_style=, 
+                                       label_id='btn_fix_pos_label', value=False, style=styles['in-line-container'])
+
 class App:
     """ Creating Dash app
 
@@ -197,7 +217,8 @@ class App:
     pos_kwargs : dict
         Optional key-word arguments passed to initialize node positions.
     """
-    def __init__(self, G, R, R_thresh=0.9, selected_graph='combo', node_type=int, **pos_kwargs):
+    def __init__(self, G, R, R_thresh=0.9, # selected_graph='combo',
+                 node_type=int, **pos_kwargs):
         self.node_type = node_type
         self.G = G.copy()
         nx.set_edge_attributes(self.G, {ee: R.loc[ee[0], ee[1]] for ee in self.G.edges()}, name='R')
@@ -206,9 +227,9 @@ class App:
 
         self.G_R = correlation_network(R, R>R_thresh, name='R')
 
-        self.selected_graph = selected_graph
+        self.selected_graph = 'combo' # selected_graph
         self.app = Dash(__name__,
-                        external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
+                        external_stylesheets=[dbc.themes.FLATLY]) # ['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 
         self.stylesheet = [
             # group selector for all nodes
@@ -237,21 +258,23 @@ class App:
         # print(self.elements)
         # print(self.G, self.G_R, len([k for k in self.G_R.edges() if k in self.G.edges()]))
 
-        self.app.layout = html.Div(
+        self.app.layout = html.Div(            
             [
-                html.H1(children="<PUT TITLE HERE!>",
+                html.H1(children="Functional network modules",
                         style={'textAlign': 'left'},
                         ),
-                dbc.Row([dbc.Col(dcc.RadioItems(options=[{'label': 'Interaction network', 'value': 'interaction'},
-                                                         {'label': 'Correlated neighborhood network', 'value': 'functional'},
-                                                         {'label': 'Combo', 'value': 'combo'}], value=self.selected_graph, # 'combo',
-                                                id="radio_graph_selection",
-                                                labelStyle={"display": "flex", "align-items": "center"}), width=2),
-                         dbc.Col(html.Div([html.Div("Node positions"),
-                                           html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False),
-                                           html.Button('Reset positions', id='btn_reset_pos', n_clicks=0, disabled=True)]),
-                                          width=1),
-                         dbc.Col(html.P("Info", id="cyto_info"), width=6)], className="nine columns"),
+                # dbc.Row(
+                html.Div(className='row',
+                         children=[dbc.Col(radio_items_selected_graph_rendering, width=2),
+                                   dbc.Col(html.Div([
+                             switch_fix_node_positions, # html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False),
+                             # html.Button('Reset positions', id='btn_reset_pos', n_clicks=0, disabled=True),
+                         ]),
+                                 width=4),
+                                   dbc.Col(html.Div([dcc.Slider(min=0.001, max=1.0, step=0.001, value=0.8, id='R-thresh-slider')]), width=4),
+                                   # dbc.Col(html.P("Info", id="cyto_info"), width=2),
+                                   ],
+                         ), # className="nine columns"),
                 dbc.Row([dbc.Col(html.Div([cyto.Cytoscape(id="cytoscape_visualization",
                                                           layout={'name': 'cose'},  # if self.pos is None else {'name': 'preset'},
                                                           # style={'width': "{}px".format(700), 'height': "{}px".format(500)},
@@ -262,10 +285,16 @@ class App:
                                           className="nine columns",                                         # className='cy-container', style=styles['cy-container'],
                                           ),
                                  width={"size": 6}),
-                         dbc.Col(html.Div("One of three columns"), width={"size": 3, "order": 'last'})]),
+                         # dbc.Col(html.Div("One of three columns"), width={"size": 3, "order": 'last'}),
+                         ]),
                 # dbc.Row(dcc.Download(id="download-graph")),
-            ])
+            ], style=styles['border-container'])                
 
+
+        # self.app.callback(Output('radio_graph_selection', 'value'),
+        #                   Input('R-thresh-slider', 'value'), prevent_initial_call=True, allow_duplicate=True)(self.update_functional_network)
+
+        
         # self.app.callback(Output('cytoscape_visualization', 'layout'),
         #                   Output("cyto_info", "children"),
         #                   Input('btn_fix_pos', 'n_clicks'), 
@@ -273,12 +302,13 @@ class App:
         self.app.callback(Output('cytoscape_visualization', 'layout'),
                           Output('radio_graph_selection', 'value'),
                           # Output('cytoscape_visualization', 'elements'),
-                          Input('btn_fix_pos', 'n_clicks'),
-                          # Input('radio_graph_selection', 'value'),
+                          # Input('btn_fix_pos', 'n_clicks'),
+                          Input('btn_fix_pos', 'value'),                          
+                          # Input('radio_graph_selection', 'value'),                          
                           State('cytoscape_visualization', 'elements'), prevent_initial_call=True)(self.fix_node_positions)
-
+                
         self.app.callback(Output('cytoscape_visualization', 'elements'),
-                          Input('radio_graph_selection', 'value'))(self.update_elements)
+                          Input('radio_graph_selection', 'value'), Input('R-thresh-slider', 'value'))(self.update_elements)
 
         # @self.app.callback([Output('cytoscape_visualization', 'layout'), Output("cyto_info", "children")],
         #                    Input('btn_fix_pos', 'n_clicks'),
@@ -301,13 +331,16 @@ class App:
         # Open Dash app in web browser
         webbrowser.open("http://LMPH20258.local:8050")
         self.app.run_server(debug=True, host='LMPH20258.local', use_reloader=False)
+
+    # def update_functional_network(self, value):
+    #     self.G_R = correlation_network(self.R, R>value, name='R')
+    #     self.elements = graph_elements(self.G, self.G_R, pos=self.pos) # **pos_kwargs)
+    #     return self.selected_graph
+        
     
 
-    def fix_node_positions(self, n_clicks, elements):
-        # if n_clicks is None:
-        #     raise PreventUpdate
-        # else:
-        if n_clicks:
+    def fix_node_positions(self, value, elements):
+        if value: # if n_clicks:
             # new_pos = json.dumps(elements)
             self.pos = {k['data']['id'] if self.node_type is str else int(k['data']['id']): k['position'] for k in elements if k['group'] == 'nodes'}
 
@@ -315,15 +348,30 @@ class App:
             self.elements = graph_elements(self.G, self.G_R, pos=self.pos) # **pos_kwargs)
             # print('******* fix node pos *******')
             # print(self.pos)
-            # updated_elements = self.update_elements(btn_value)
+            # updated_elements = self.update_elements(btn_value)                
             
             return {'name': 'preset'}, self.selected_graph # , updated_elements # , "Fixed node positions."
+        else:
+            self.pos = None
+            self.elements = graph_elements(self.G, self.G_R, pos=self.pos)
+            return {'name': 'cose'}, self.selected_graph
+            
+            
+                
+
+        
 
 
     # @self.app.callback(Output('cytoscape_visualization', 'elements'),
     #                    Input('radio_graph_selection', 'value'))
-    def update_elements(self, selected_graph):
+    def update_elements(self, selected_graph, R_thresh):
         self.selected_graph = selected_graph
+
+        if R_thresh != self.R_thresh:
+            self.R_thresh = R_thresh
+            self.G_R = correlation_network(self.R, R>self.R_thresh, name='R')
+            self.elements = graph_elements(self.G, self.G_R, pos=self.pos) # **pos_kwargs)
+        
 
         print(f"======== updated elements pos for node 0: {'None' if self.pos is None else self.pos[0]}")
         return graph_elements(self.G, self.G_R, show=selected_graph, pos=self.pos)
