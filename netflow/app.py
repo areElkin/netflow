@@ -181,6 +181,7 @@ styles = {
     },
     'cytoscape': {
         'position': 'absolute',
+        # 'position': 'relative',
         'width': '90%', # '100%',
         'height': '90%', # '100%',
         'z-index': 999
@@ -188,16 +189,8 @@ styles = {
     'tab': {'height': 'calc(98vh - 80px)'}
 }
 
-radio_items_selected_graph_rendering = dcc.RadioItems(options=[{'label': 'Interaction network', 'value': 'interaction'},
-                                                               {'label': 'Correlated neighborhood network', 'value': 'functional'},
-                                                               {'label': 'Combo', 'value': 'combo'}], value='combo', # self.selected_graph, # 'combo',
-                                                      id="radio_graph_selection",
-                                                      labelStyle={"display": "flex", "align-items": "center"})
-
-# switch_fix_node_positions = html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False)
-switch_fix_node_positions = dbc.Switch(id="btn_fix_pos", # style=styles['container'], # class_name=, input_class_name=, input_style=, style=,
-                                       disabled=False, label='Fix layout', # label_class_name=, label_style=, 
-                                       label_id='btn_fix_pos_label', value=False, style=styles['in-line-container'])
+# stylesheet with the .dbc class from dash-bootstrap-templates library
+dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
 
 class App:
     """ Creating Dash app
@@ -229,7 +222,7 @@ class App:
 
         self.selected_graph = 'combo' # selected_graph
         self.app = Dash(__name__,
-                        external_stylesheets=[dbc.themes.FLATLY]) # ['https://codepen.io/chriddyp/pen/bWLwgP.css'])
+                        external_stylesheets=[dbc.themes.FLATLY, dbc_css]) # ['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 
         self.stylesheet = [
             # group selector for all nodes
@@ -258,37 +251,64 @@ class App:
         # print(self.elements)
         # print(self.G, self.G_R, len([k for k in self.G_R.edges() if k in self.G.edges()]))
 
-        self.app.layout = html.Div(            
+
+        radio_items_selected_graph_rendering = dbc.RadioItems(options=[{'label': 'Interaction network', 'value': 'interaction'},
+                                                                       {'label': 'Correlated neighborhood network', 'value': 'functional'},
+                                                                       {'label': 'Combo', 'value': 'combo'}], value=self.selected_graph, # 'combo',
+                                                              id="radio_graph_selection",
+                                                              labelStyle={"display": "flex", "align-items": "center"},
+                                                              )
+
+        # switch_fix_node_positions = html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False)
+        switch_fix_node_positions = html.Div([dbc.Label("Layout", html_for="btn_fix_pos"),
+                                              dbc.Switch(id="btn_fix_pos", # style=styles['container'], # class_name=, input_class_name=, input_style=, style=,
+                                               disabled=False, label='Fix layout', # label_class_name=, label_style=,
+                                               label_id='btn_fix_pos_label', value=False, # style=styles['in-line-container'],
+                                               # class_name="ms-1",                                               
+                                                         )], className="mb-3 ml-3")
+
+        slider_R_thresh = html.Div([dbc.Label(u"\u03F1(W)", #  dcc.Markdown('$\rho_W$', mathjax=True),
+                                              html_for="R-thresh-slider"),
+                                    dcc.Slider(min=0.001, max=1.0, step=0.001, value=0.8, id='R-thresh-slider', # className="dbc",
+                                     tooltip={"placement": "bottom", "always_visible": True},
+                                               className="mb-2")], className="dbc")
+
+        cyto_rendering = dbc.Container([html.Div([cyto.Cytoscape(id="cytoscape_visualization",
+                                                                 layout={'name': 'cose'},  # if self.pos is None else {'name': 'preset'},
+                                                                 style=styles['cytoscape'], # {'height': '100vh', 'width': '100vw'}, # styles['cytoscape'],  # style={'width': "{}px".format(700), 'height': "{}px".format(500)}
+                                                                 stylesheet=self.stylesheet,
+                                                                 elements=self.elements)
+                                                  ],
+                                                 className="dbc", # style=styles['cy-container'], # className="nine columns", # className='cy-container', style=styles['cy-container'],
+                                                 # className="mb-3", color="primary", inverse=True,
+                                                 )], className="p-4") # "mx-3 mp-3")
+
+        # btn_download = dbc.Row(dcc.Download(id="download-graph"))
+        
+        self.app.layout = dbc.Container(# html.Div(
             [
-                html.H1(children="Functional network modules",
-                        style={'textAlign': 'left'},
-                        ),
-                # dbc.Row(
-                html.Div(className='row',
-                         children=[dbc.Col(radio_items_selected_graph_rendering, width=2),
-                                   dbc.Col(html.Div([
-                             switch_fix_node_positions, # html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False),
-                             # html.Button('Reset positions', id='btn_reset_pos', n_clicks=0, disabled=True),
-                         ]),
-                                 width=4),
-                                   dbc.Col(html.Div([dcc.Slider(min=0.001, max=1.0, step=0.001, value=0.8, id='R-thresh-slider')]), width=4),
-                                   # dbc.Col(html.P("Info", id="cyto_info"), width=2),
-                                   ],
-                         ), # className="nine columns"),
-                dbc.Row([dbc.Col(html.Div([cyto.Cytoscape(id="cytoscape_visualization",
-                                                          layout={'name': 'cose'},  # if self.pos is None else {'name': 'preset'},
-                                                          # style={'width': "{}px".format(700), 'height': "{}px".format(500)},
-                                                          style=styles['cytoscape'],
-                                                          stylesheet=self.stylesheet,
-                                                          elements=self.elements),
-                                           ],
-                                          className="nine columns",                                         # className='cy-container', style=styles['cy-container'],
-                                          ),
-                                 width={"size": 6}),
-                         # dbc.Col(html.Div("One of three columns"), width={"size": 3, "order": 'last'}),
-                         ]),
-                # dbc.Row(dcc.Download(id="download-graph")),
-            ], style=styles['border-container'])                
+                html.Div(html.H2(children="Cooperative network modules",
+                                 style={'textAlign': 'left'},
+                                 ), className="dbc"),
+                # dbc.Row(                
+                # html.Div(className='row',
+                dbc.Row(
+                         children=[# html.Div([dbc.Card([
+                             dbc.Col([dbc.Card([
+                             dbc.CardHeader([html.H4("Visualization", className="card-title"),
+                                             html.H6("Rendering options", className="card-subtitle")]),
+                             dbc.ListGroup([dbc.ListGroupItem(radio_items_selected_graph_rendering),
+                                            dbc.ListGroupItem(switch_fix_node_positions), # html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False),
+                                            dbc.ListGroupItem(slider_R_thresh)], flush=True),
+                         ], # style={"width": "18rem"},
+                                                      className="mb-3", color="primary", inverse=True,
+                                                      )],
+                                            # className="three columns", # style=styles['border-container'],
+                                            width=3), # className="nine columns"),
+                                   dbc.Col(cyto_rendering, width=9, class_name="mr-3")],
+                         # style=styles['border-container'],
+                         ),
+            ], className="dbc", fluid=True) # className="dash-bootstrap")
 
 
         # self.app.callback(Output('radio_graph_selection', 'value'),
@@ -307,7 +327,7 @@ class App:
                           # Input('radio_graph_selection', 'value'),                          
                           State('cytoscape_visualization', 'elements'), prevent_initial_call=True)(self.fix_node_positions)
                 
-        self.app.callback(Output('cytoscape_visualization', 'elements'),
+        self.app.callback(Output('cytoscape_visualization', 'elements'), Output('btn_fix_pos', 'disabled'),
                           Input('radio_graph_selection', 'value'), Input('R-thresh-slider', 'value'))(self.update_elements)
 
         # @self.app.callback([Output('cytoscape_visualization', 'layout'), Output("cyto_info", "children")],
@@ -370,11 +390,12 @@ class App:
         if R_thresh != self.R_thresh:
             self.R_thresh = R_thresh
             self.G_R = correlation_network(self.R, R>self.R_thresh, name='R')
-            self.elements = graph_elements(self.G, self.G_R, pos=self.pos) # **pos_kwargs)
-        
+            self.elements = graph_elements(self.G, self.G_R, pos=self.pos) # **pos_kwargs)        
 
-        print(f"======== updated elements pos for node 0: {'None' if self.pos is None else self.pos[0]}")
-        return graph_elements(self.G, self.G_R, show=selected_graph, pos=self.pos)
+        # print(f"======== updated elements pos for node 0: {'None' if self.pos is None else self.pos[0]}")
+        disabled = True if selected_graph == 'functional' else False
+        
+        return graph_elements(self.G, self.G_R, show=selected_graph, pos=self.pos), disabled
         
 
         
