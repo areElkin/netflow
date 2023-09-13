@@ -1,5 +1,8 @@
+import base64
+import io
+import os
 
-from dash import Dash, dcc, html, Input, Output, callback, State
+from dash import Dash, dcc, html, Input, Output, callback, State, dash_table
 import dash_bootstrap_components as dbc
 import dash_cytoscape as cyto
 from dash.exceptions import PreventUpdate
@@ -81,6 +84,10 @@ def node_positions(G, bounding_box=(0., 0., 1400, 650), weight='R', **pos_kwargs
 def graph_elements(G, G2, show="combo", pos=None, **pos_kwargs):
     """ put graph elements in JSON format
 
+    .. note:: assumes nodes in `G` have ids in consecutive order from 0, 1, ..., n-1 where n is the number of nodes and that
+        `G` has node attribute "name" with node label of type str
+    .. note:: assumes nodes in `G2` are subset of nodes in `G` with the same ids.
+
     Parameters
     ----------
     G, G2: networkx Graph
@@ -101,8 +108,8 @@ def graph_elements(G, G2, show="combo", pos=None, **pos_kwargs):
 
     Returns
     -------
-    elements : list
-        List of graph nodes and edges in JSON format.
+    elements : dict
+        dict of graph nodes and edges in JSON format {'nodes': [], 'edges': []}.
     """
 
     if show not in ['combo', 'interaction', 'functional']:
@@ -114,58 +121,130 @@ def graph_elements(G, G2, show="combo", pos=None, **pos_kwargs):
     #     else:
     #         pos = node_positions(G, **pos_kwargs)
 
-    if show == 'functional':
-        if pos is None:
-            nodes = [{'group': 'nodes',
-                      'data': {'id': g, 'label': G.nodes[g]['name'], 'cluster': G.nodes[g]['cluster']},
-                      'position': {'x': 0, 'y': 0},
-                      # 'position': {'x': pos[g]['x'], 'y': pos[g]['y']},
-                      # 'classes' : [],
-                      } for g in G2]
-        else:
-            nodes = [{'group': 'nodes',
-                      'data': {'id': g, 'label': G.nodes[g]['name'], 'cluster': G.nodes[g]['cluster']},
-                      'position': {'x': pos[g]['x'], 'y': pos[g]['y']},
-                      # 'classes' : [],
-                      } for g in G2]
-        el = list(G2.edges())
-    else:
-        if pos is None:
-            nodes = [{'group': 'nodes',
-                      'data': {'id': g, 'label': G.nodes[g]['name'], 'cluster': G.nodes[g]['cluster']},
-                      'position': {'x': 0, 'y': 0},
-                      # 'position': {'x': pos[g]['x'], 'y': pos[g]['y']},
-                      # 'classes' : [],
-                      } for g in G]
-        else:
-            nodes = [{'group': 'nodes',
-                      'data': {'id': g, 'label': G.nodes[g]['name'], 'cluster': G.nodes[g]['cluster']},
-                      'position': {'x': pos[g]['x'], 'y': pos[g]['y']},
-                      # 'classes' : [],
-                      } for g in G]
-        el = list(G.edges())
-        if show == "combo":
-            el = el + [ee for ee in G2.edges() if ee not in G.edges()] 
-        
-    # el = list(G.edges()) + [ee for ee in G2.edges() if ee not in G.edges()]  # set(G.edges()) | set(G2.edges())
+    # if pos is None:
+    #     nx.set_node_attributes(G, {k: {'x': 0., 'y': 0.} for k in G}, name='position')
+    # else:
+    #     nx.set_node_attributes(G, pos, name='position')
 
-    # interaction, functional, combo
-    edges = [{'group': 'edges',
-              'data': {'source': ee[0], 'target': ee[1],
-                       # 'weight': G.edges[ee]['weight'],
-                       },
-              # 'classes': ["interaction", "functional", "combo"] if (ee in G.edges() and ee in G2.edges()) else ["interaction"] if ee in G.edges() else ["functional"],
-              'classes': 'combo' if (ee in G.edges() and ee in G2.edges()) else 'interaction' if ee in G.edges() else 'functional',
-              } for ee in el]
-    return nodes + edges
-    
+    if pos is None:
+        pos = {k: {'x': 0., 'y': 0.} for k in G}
+
+
+    if show == 'functional':
+        elements = {'nodes': nx.cytoscape_data(G.subgraph(G2.nodes()))['elements']['nodes'], 'edges': nx.cytoscape_data(G2)['elements']['edges']}
+        # elements = nx.cytoscape_data(G2)
+    else:
+        G_json = nx.cytoscape_data(G)
+        elements = {'nodes': G_json['elements']['nodes'], 'edges': G_json['elements']['edges']}
+        if show == 'combo':
+            G2_json_edges = nx.cytoscape_data(G2)['elements']['edges']
+            elements['edges'] = elements['edges'] + [ee for ee in G2_json_edges if (ee['data']['source'], ee['data']['target']) not in G.edges()]
+        # elements = nx.cytoscape_data(G)
+    # for ee in elements['elements']['edges']:
+    for vv in elements['nodes']:
+        vv['position'] = pos[int(vv['data']['id'])]
+        vv['group'] = 'nodes'
+
+    for ee in elements['edges']:
+        edg = (ee['data']['source'], ee['data']['target'])
+        ee['group'] = 'edges'
+        ee['classes'] = 'combo' if (edg in G.edges() and edg in G2.edges()) else 'interaction' if edg in G.edges() else 'functional'
+
+    #########
+
+    # if show == 'functional':
+    #     if pos is None:
+    #         nodes = [{'group': 'nodes',
+    #                   'data': {'id': g, 'name': G.nodes[g]['name'], 'cluster': G.nodes[g]['cluster']},
+    #                   'position': {'x': 0, 'y': 0},
+    #                   # 'position': {'x': pos[g]['x'], 'y': pos[g]['y']},
+    #                   # 'classes' : [],
+    #                   } for g in G2]
+    #     else:
+    #         nodes = [{'group': 'nodes',
+    #                   'data': {'id': g, 'name': G.nodes[g]['name'], 'cluster': G.nodes[g]['cluster']},
+    #                   'position': {'x': pos[g]['x'], 'y': pos[g]['y']},
+    #                   # 'classes' : [],
+    #                   } for g in G2]
+    #     el = list(G2.edges())
+    # else:
+    #     if pos is None:
+    #         nodes = [{'group': 'nodes',
+    #                   'data': {'id': g, 'name': G.nodes[g]['name'], 'cluster': G.nodes[g]['cluster']},
+    #                   'position': {'x': 0, 'y': 0},
+    #                   # 'position': {'x': pos[g]['x'], 'y': pos[g]['y']},
+    #                   # 'classes' : [],
+    #                   } for g in G]
+    #     else:
+    #         nodes = [{'group': 'nodes',
+    #                   'data': {'id': g, 'name': G.nodes[g]['name'], 'cluster': G.nodes[g]['cluster']},
+    #                   'position': {'x': pos[g]['x'], 'y': pos[g]['y']},
+    #                   # 'classes' : [],
+    #                   } for g in G]
+    #     el = list(G.edges())
+    #     if show == "combo":
+    #         el = el + [ee for ee in G2.edges() if ee not in G.edges()] 
+        
+    # # el = list(G.edges()) + [ee for ee in G2.edges() if ee not in G.edges()]  # set(G.edges()) | set(G2.edges())
+
+    # # interaction, functional, combo
+    # edges = [{'group': 'edges',
+    #           'data': {'source': ee[0], 'target': ee[1],
+    #                    # 'weight': G.edges[ee]['weight'],
+    #                    },
+    #           # 'classes': ["interaction", "functional", "combo"] if (ee in G.edges() and ee in G2.edges()) else ["interaction"] if ee in G.edges() else ["functional"],
+    #           'classes': 'combo' if (ee in G.edges() and ee in G2.edges()) else 'interaction' if ee in G.edges() else 'functional',
+    #           } for ee in el]
+    # return nodes + edges
+    return elements # ['nodes'] + elements['edges']
+
+
+def upload_topology(contents, filename):
+    content_type, content_string = contents.split(',')
+
+    decoded = base64.b64decode(content_string)
+    try:
+        if 'csv' in filename:
+            # Assume that the user uploaded a CSV file
+            df = pd.read_csv(
+                io.StringIO(decoded.decode('utf-8')))
+        elif 'xls' in filename:
+            # Assume that the user uploaded an excel file
+            df = pd.read_excel(io.BytesIO(decoded))
+    except Exception as e:
+        print(e)
+        return html.Div([
+            'There was an error processing this file.'
+        ])
+
+    return df
+
+cose_layout = {
+    'name': 'cose',
+    'idealEdgeLength': 100,
+    'nodeOverlap': 20,
+    'refresh': 20,
+    'fit': True,
+    'padding': 30,
+    'randomize': False,
+    'componentSpacing': 100,
+    'nodeRepulsion': 400000,
+    'edgeElasticity': 100,
+    'nestingFactor': 5,
+    'gravity': 80,
+    'numIter': 1000,
+    'initialTemp': 200,
+    'coolingFactor': 0.95,
+    'minTemp': 1.0,
+}
+
 styles = {
     'container': {
         'position': 'fixed',
         'display': 'flex',
         'flex-direction': 'column',
         'height': '100%',
-        'width': '100%'
+        'width': '100%',        
     },
     'in-line-container': {
         'display': 'inline-block',
@@ -176,15 +255,17 @@ styles = {
         'width': '99%',
     },
     'cy-container': {
-        # 'flex': '1',
-        'position': 'relative'
+        'flex': '1',
+        'position': 'relative',
     },
     'cytoscape': {
         'position': 'absolute',
         # 'position': 'relative',
-        'width': '90%', # '100%',
-        'height': '90%', # '100%',
-        'z-index': 999
+        'width': '100%', # '90%',
+        'height': '100%', # '90%',
+        'z-index': 999,
+        # 'border': 'thin lightgrey solid',
+        # 'overflow-y': 'scroll',
     },
     'tab': {'height': 'calc(98vh - 80px)'}
 }
@@ -203,6 +284,8 @@ class App:
         Symmetric pairwise correlations between nodes in `G`.
     R_thresh : float (R_thresh > 0.)
         Initial correlation threshold.
+    clustering: {None, str}
+        Node attribute with cluster ID used to color the nodes
     selected_graph : {'combo', 'interaction', 'functional'}
         Initial graph to render.
     node_type : {int, str}
@@ -211,13 +294,14 @@ class App:
         Optional key-word arguments passed to initialize node positions.
     """
     def __init__(self, G, R, R_thresh=0.9, # selected_graph='combo',
+                 clustering=None,
                  node_type=int, **pos_kwargs):
         self.node_type = node_type
         self.G = G.copy()
         nx.set_edge_attributes(self.G, {ee: R.loc[ee[0], ee[1]] for ee in self.G.edges()}, name='R')
         self.R = R
         self.R_thresh = R_thresh
-
+        self.clustering = clustering
         self.G_R = correlation_network(R, R>R_thresh, name='R')
 
         self.selected_graph = 'combo' # selected_graph
@@ -227,21 +311,30 @@ class App:
         self.stylesheet = [
             # group selector for all nodes
             {'selector': 'node',
-             'style': {'content': 'data(label)', 'width': 15, 'height': 15, 'font-size': 24, 'background-color': 'gray', 'opacity': 0.9}},            
+             'style': {'content': 'data(name)', # 'width': 15, 'height': 15, 'font-size': 24,
+                       'background-color': 'gray', 'opacity': 0.9}},            
             {'selector': ".supernode",
-             'style': {'background-color': 'green', 'opacity': 0.9, 'z-index': 10000}},
+             'style': {'background-color': 'green', 'opacity': 0.9, 'z-index': 998, # 10000,
+                       }},
             {'selector': '[cluster = 0]',
-             'style': {'background-color': 'brown', 'width': 15, 'height': 15, 'opacity': 0.9, 'z-index': 10000}},
+             'style': {'background-color': 'brown', # 'width': 15, 'height': 15,
+                       'opacity': 0.9, 'z-index': 998, # 10000
+                       }},
             {'selector': '[cluster = 1]',
-             'style': {'background-color': 'violet', 'opacity': 0.9, 'z-index': 10000}},
+             'style': {'background-color': 'violet', 'opacity': 0.9, 'z-index': 998, # 10000,
+                       }},
             {'selector': 'edge',
-             'style': {'line-color': 'k', 'curve-style': 'bezier', 'opacity': 0.8, 'width': 2}},
+             'style': {'line-color': 'k', 'curve-style': 'bezier', 'opacity': 0.8, # 'width': 2,
+                       }},
             {'selector': ".interaction",
-             'style': {'line-color': 'gray', 'curve-style': 'bezier', 'opacity': 0.8, 'width': 2}}, # , 'z-index': 11000}},
+             'style': {'line-color': 'gray', 'curve-style': 'bezier', 'opacity': 0.8, # 'width': 2,
+                       }}, # , 'z-index': 11000}},
             {'selector': ".functional",
-             'style': {'line-color': 'green', 'curve-style': 'bezier', 'opacity': 1., 'width': 2}}, # , 'z-index': 11000}},
+             'style': {'line-color': 'green', 'curve-style': 'bezier', 'opacity': 1., # 'width': 2,
+                       }}, # , 'z-index': 11000}},
             {'selector': ".combo",
-             'style': {'line-color': 'orange', 'curve-style': 'bezier', 'opacity': 1., 'width': 2}}, # , 'z-index': 11000}},
+             'style': {'line-color': 'orange', 'curve-style': 'bezier', 'opacity': 1., # 'width': 2,
+                       }}, # , 'z-index': 11000}},
             ]
 
         self.pos = None # node_positions(self.G, bounding_box=(0., 0., 1400, 650), weight='R', **pos_kwargs)
@@ -271,50 +364,104 @@ class App:
                                               html_for="R-thresh-slider"),
                                     dcc.Slider(min=0.001, max=1.0, step=0.001, value=0.8, id='R-thresh-slider', # className="dbc",
                                      tooltip={"placement": "bottom", "always_visible": True},
-                                               className="mb-2")], className="dbc")
+                                               className="mb-1")], className="dbc")
 
-        cyto_rendering = dbc.Container([html.Div([cyto.Cytoscape(id="cytoscape_visualization",
-                                                                 layout={'name': 'cose'},  # if self.pos is None else {'name': 'preset'},
-                                                                 style=styles['cytoscape'], # {'height': '100vh', 'width': '100vw'}, # styles['cytoscape'],  # style={'width': "{}px".format(700), 'height': "{}px".format(500)}
-                                                                 stylesheet=self.stylesheet,
-                                                                 elements=self.elements)
-                                                  ],
-                                                 className="dbc", # style=styles['cy-container'], # className="nine columns", # className='cy-container', style=styles['cy-container'],
-                                                 # className="mb-3", color="primary", inverse=True,
-                                                 )], className="p-4") # "mx-3 mp-3")
+        # cyto_rendering = dbc.Container([# html.Div([
+        #     cyto.Cytoscape(id="cytoscape_visualization",
+        #                    layout=cose_layout, # {'name': 'cose'},  # if self.pos is None else {'name': 'preset'},
+        #                    # style=styles['cytoscape'], # {'height': '100vh', 'width': '100vw'}, # styles['cytoscape'],  # style={'width': "{}px".format(700), 'height': "{}px".format(500)}
+        #                    stylesheet=self.stylesheet,
+        #                    elements=self.elements)
+        # ], # style={'border': 'thin lightgrey solid'}, # , 'width': '30vw'},
+        #                                # className='pretty_container', # style=styles['cy-container'],
+        #                                # className="dbc", # style=styles['cy-container'], # className="nine columns", # className='cy-container', style=styles['cy-container'],
+        #                                # className="mb-3", color="primary", inverse=True,
+        #                                style={'width': '100hv'})# ], # class_name='cy-container', #style=styles['cy-container'], # className="p-4") # "mx-3 mp-3")
+        # )
+        cyto_rendering = dbc.Card([
+            dbc.CardHeader([html.H4("Network", className="card-title")], style={'color': 'primary'}),
+            dbc.CardBody([
+                html.Div([
+                    cyto.Cytoscape(id="cytoscape_visualization",
+                                   layout=cose_layout, # {'name': 'cose'},
+                                   # style=styles['cytoscape'], # {'height': '100vh', 'width': '100vw'}, # styles['cytoscape'],  # style={'width': "{}px".format(700), 'height': "{}px".format(500)}
+                                   style={
+                                       'width': '100%',
+                                       'height': '100%',
+                                       'position': 'absolute', 'left': 0, 'top': 0, 'z-index': 999, # 'border': "1px solid #888",
+                                   },
+                                   stylesheet=self.stylesheet,
+                                   elements=self.elements)
+                ], # style={'position': 'relative', 'width': '100vw', 'height': '100vh'},
+                         ), 
+            ], style={'position': 'relative', 'background-color': 'white', # 'border': '30rem', # 'width': '100vw', # HERE ******
+                      'height': '75vh'},  # className='pretty_container', # style=styles['cy-container'],
+                         # className="dbc", # style=styles['cy-container'], # className="nine columns", # className='cy-container', style=styles['cy-container'],
+                         # ***
+                         className="mb-1 ml-1")], # ], # class_name='cy-container', #style=styles['cy-container'], # className="p-4") # "mx-3 mp-3")
+                                  color="primary", inverse=True, # outline=True,                                  
+                                  # style={'width': '100wv', 'heigh': '100hv'},
+                                  )
 
-        # btn_download = dbc.Row(dcc.Download(id="download-graph"))
+        graph_tab = dbc.Row(
+            children=[# html.Div([dbc.Card([
+                dbc.Col([dbc.Card([
+                    dbc.CardHeader([html.H4("Visualization", className="card-title"),
+                                    html.H6("Rendering options", className="card-subtitle")]),
+                    dbc.ListGroup([dbc.ListGroupItem(radio_items_selected_graph_rendering, color='primary'),
+                                   dbc.ListGroupItem(switch_fix_node_positions, color='primary'), # html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False),
+                                   dbc.ListGroupItem(slider_R_thresh, color='primary')], flush=True),
+                ], # style={"width": "18rem"},  # className="d-flex flex-column", # "flex-grow-1", # "mb-1",
+                                  color="primary", inverse=True,
+                                  )],# className="three columns", # style=styles['border-container'],
+                        width=3, # style={"height": "100%"},
+                        ), # , class_name="flex-grow-1"), # className="nine columns"),
+                dbc.Col(cyto_rendering, width=9, # className="mr-1",
+                        # class_name="border",                                     # style={"height": "100%"},
+                        ),
+            ],
+            className="g-2 h-75", # "h-75 g-2",
+        )
         
-        self.app.layout = dbc.Container(# html.Div(
+        # btn_download = dbc.Row(dcc.Download(id="download-graph"))
+
+        upload_tab = html.Div([dcc.Upload(id='network-upload',
+                                          children=html.Div([
+                                              'Drag and Drop or click to ',
+                                              html.A('Select Network Topology File')
+                                          ]),
+                                          style={
+                                              'width': '100%',
+                                              'height': '60px',
+                                              'lineHeight': '60px',
+                                              'borderWidth': '1px',
+                                              'borderStyle': 'dashed',
+                                              'borderRadius': '5px',
+                                              'textAlign': 'center',
+                                              'margin': '10px'
+                                          },
+                                          # Allow multiple files to be uploaded
+                                          multiple=False,
+                                          ),
+                               html.Div(id='output-network-upload'),
+                               ])
+        
+        self.app.layout = dbc.Container(  # html.Div(
             [
                 html.Div(html.H2(children="Cooperative network modules",
                                  style={'textAlign': 'left'},
                                  ), className="dbc"),
-                # dbc.Row(                
-                # html.Div(className='row',
-                dbc.Row(
-                         children=[# html.Div([dbc.Card([
-                             dbc.Col([dbc.Card([
-                             dbc.CardHeader([html.H4("Visualization", className="card-title"),
-                                             html.H6("Rendering options", className="card-subtitle")]),
-                             dbc.ListGroup([dbc.ListGroupItem(radio_items_selected_graph_rendering),
-                                            dbc.ListGroupItem(switch_fix_node_positions), # html.Button('Fix positions', id='btn_fix_pos', n_clicks=0, disabled=False),
-                                            dbc.ListGroupItem(slider_R_thresh)], flush=True),
-                         ], # style={"width": "18rem"},
-                                                      className="mb-3", color="primary", inverse=True,
-                                                      )],
-                                            # className="three columns", # style=styles['border-container'],
-                                            width=3), # className="nine columns"),
-                                   dbc.Col(cyto_rendering, width=9, class_name="mr-3")],
-                         # style=styles['border-container'],
-                         ),
-            ], className="dbc", fluid=True) # className="dash-bootstrap")
+                dbc.Tabs(
+                    [dbc.Tab(["loading", upload_tab], label="Initialization"),
+                     dbc.Tab(graph_tab, label="Network visualization"),                     
+                     dbc.Tab("Heatmaps", label="Data visualization"),
+                     ])
+            ], className="dbc", fluid=True,     # style={"height": "100vh", 'width': '100vw'},
+        ) # , style=styles['container']) # className="dash-bootstrap")
 
 
         # self.app.callback(Output('radio_graph_selection', 'value'),
         #                   Input('R-thresh-slider', 'value'), prevent_initial_call=True, allow_duplicate=True)(self.update_functional_network)
-
-        
         # self.app.callback(Output('cytoscape_visualization', 'layout'),
         #                   Output("cyto_info", "children"),
         #                   Input('btn_fix_pos', 'n_clicks'), 
@@ -345,8 +492,13 @@ class App:
         #                    Input('radio_graph_selection', 'value'))
         # def update_elements(selected_graph):
         #     return graph_elements(self.G, self.G_R, show=selected_graph, pos=self.pos)
-            
 
+        self.app.callback(Output('output-network-upload', 'children'),
+                          Input('network-upload', 'contents'),
+                          State('network-upload', 'filename'),
+                          # State('network-upload', 'last_modified'),
+                          )(self.upload_graph)
+                                
 
         # Open Dash app in web browser
         webbrowser.open("http://LMPH20258.local:8050")
@@ -362,9 +514,11 @@ class App:
     def fix_node_positions(self, value, elements):
         if value: # if n_clicks:
             # new_pos = json.dumps(elements)
-            self.pos = {k['data']['id'] if self.node_type is str else int(k['data']['id']): k['position'] for k in elements if k['group'] == 'nodes'}
+            # self.pos = {k['data']['id'] if self.node_type is str else int(k['data']['id']): k['position'] for k in elements if k['group'] == 'nodes'}
+            # HERE: self.pos = {int(k['data']['id']): k['position'] for k in elements if k['group'] == 'nodes'}
+            self.pos = {int(k['data']['id']): k['position'] for k in elements['nodes']}
 
-            print(f" ********** fix node positions for node 0: ({len(self.pos)}), {self.pos} **************")
+            # print(f" ********** fix node positions for node 0: ({len(self.pos)}), {self.pos} **************")
             self.elements = graph_elements(self.G, self.G_R, pos=self.pos) # **pos_kwargs)
             # print('******* fix node pos *******')
             # print(self.pos)
@@ -374,12 +528,8 @@ class App:
         else:
             self.pos = None
             self.elements = graph_elements(self.G, self.G_R, pos=self.pos)
-            return {'name': 'cose'}, self.selected_graph
+            return cose_layout, self.selected_graph
             
-            
-                
-
-        
 
 
     # @self.app.callback(Output('cytoscape_visualization', 'elements'),
@@ -396,6 +546,23 @@ class App:
         disabled = True if selected_graph == 'functional' else False
         
         return graph_elements(self.G, self.G_R, show=selected_graph, pos=self.pos), disabled
+
+
+    def upload_graph(self, contents, names):
+        if contents is not None:
+            df = upload_topology(contents, names)
+
+            if isinstance(df, html.Div):
+                return df
+            else:
+                
+                G = nx.from_pandas_edgelist(df)
+                children = [
+                    html.Div([f"uploaded topology with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges."]),
+                    ]
+            return children
+                
+            
         
 
         
