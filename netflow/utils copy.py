@@ -13,7 +13,6 @@ import scipy.sparse.csgraph as scg
 import scipy.spatial.distance as ssd
 import scipy.stats as sc_stats
 import seaborn as sns
-from tqdm import tqdm
 
 
 from ._logging import logger
@@ -106,7 +105,7 @@ def heat_kernel(profile, laplacian, timestep):
     profile : (n,)-dimensional numpy array
         Feature profile.
     """
-    return sc.sparse.linalg.expm_multiply(-timestep * laplacian, profile.T)        
+    return sc.sparse.linalg.expm_multiply(-timestep * laplacian, profile)        
 
 @lru_cache(cache_maxsize)
 def pij(G, source, target, n_weight="weight", EPS=1e-7):
@@ -244,7 +243,7 @@ def construct_anisotropic_laplacian_matrix(G, weight, use_spectral_gap=True):
 
     # transpose formulation:
     W = sc.sparse.diags(node_weights).dot(A)
-    degrees = np.asarray(W.sum(axis=0)).squeeze()    
+    degrees = np.asarray(W.sum(axis=0)).squeeze()
     Dinv = sc.sparse.diags(1.0 / degrees)
     P = W.dot(Dinv)
     laplacian = sc.sparse.eye(G.number_of_nodes()) - P
@@ -348,49 +347,6 @@ def spearmanr_(data, **kwargs):
     p = pd.DataFrame(data=stats.pvalue, index=data.columns.copy(), columns=data.columns.copy())
     return R, p
 
-def kendall_tau_(data, **kwargs):
-    """ Calculate a Kendall's tau correlation coefficient with associated p-value using scipy.stats.kendalltau.
-
-    Parameters
-    ----------
-    data : 2D array_like
-        2-D array containing multiple variables and observations, where each column represents
-        a variable, with observations in the rows.
-    **kwargs : dict
-        Optional key-word arguments passed to scipy.stats.spearmanr.
-
-    Returns
-    -------
-    R : pandas DataFrame
-        Spearman correlation matrix. The correlation matrix is square with
-        length equal to total number of variables (columns or rows).
-    pvalue : float
-        The p-value for a hypothesis test whose null hypotheisis
-        is that two sets of data are uncorrelated. See documentation for scipy.stats.kendalltau.
-        for alternative hypotheses. `p` has the same
-        shape as `R`.
-    """
-
-    R = {k: {} for k in data.columns}
-    p = {k: {} for k in data.columns}
-
-    for k in data.columns:
-        R[k][k] = 1.
-        p[k][k] = 0.
-
-    for i, j in tqdm(itertools.combinations(data.columns, 2), total=data.shape[1]*(data.shape[1]-1)/2, leave=False):
-        stats = sc_stats.kendalltau(data[i].values, data[j].values)
-        R[i][j] = R[j][i] = stats.correlation
-        p[i][j] = p[j][i] = stats.pvalue
-
-    R = pd.DataFrame.from_dict(R)
-    R = R.loc[data.columns, data.columns]
-    p = pd.DataFrame.from_dict(p)
-    p = p.loc[data.columns, data.columns]
-    
-    return R, p
-
-
 
 def stack_triu_(df, name=None):
     """ Stack the upper triangular entries of the dataframe above the diagonal
@@ -412,7 +368,6 @@ def stack_triu_(df, name=None):
     df_stacked = df.stack()[np.triu(np.ones(df.shape).astype(bool), 1).reshape(df.size)]
     df_stacked.name = name
     return df_stacked
-
 
 def stack_triu_where_(df, condition, name=None):
     """ Stack the upper triangular entries of the dataframe above the diagonal where the condition is True
@@ -437,30 +392,6 @@ def stack_triu_where_(df, condition, name=None):
     df_stacked = df.stack()[np.triu(condition.astype(bool), 1).reshape(df.size)]
     df_stacked.name = name
     return df_stacked
-
-
-def unstack_triu_(series, index=None):
-    """ Unstack pandas Series with upper triangular entries to symmetric matrix.
-
-    Parameters
-    ----------
-    series : pandas Series
-        The stacked upper triangular entries to be unstacked.
-    index : list-like
-        (Optional) If provided, return unstacked matrix with rows and columns sorted by index.
-        If `None`, rows and columns are alphebetically sorted.
-
-    Returns
-    -------
-    M : pandas DataFrame
-        Symmetric unstacked matrix with zeros on the diagonal.
-    """
-
-    index = sorted(set(itertools.chain(*series.index))) if index is None else index
-    M = pd.concat([series, pd.Series(data=[0.]*len(index), index=[(k,k) for k in index]),
-                   pd.Series(data=series.values, index=[(k[1], k[0]) for k in series.index])], axis=0).unstack().loc[index, index]
-    return M
-
 
 def dispersion_(data, axis=0):
     """ Data dispersion computed as the absolute value of the variance-to-mean ratio where the variance and mean is computed on

@@ -18,15 +18,18 @@ from .metrics import OTD
 import netflow.utils as utl
 from importlib import reload
 reload(utl)
-clustermap = utl.clustermap
+kendall_tau_ = utl.kendall_tau_
+# clustermap = utl.clustermap
 
 from .utils import compute_graph_distances, heat_kernel, compute_edge_weights, get_times, \
-    construct_anisotropic_laplacian_matrix, clustermap, spearmanr_, stack_triu_, stack_triu_where_, dispersion_
+    construct_anisotropic_laplacian_matrix, clustermap, spearmanr_, kendall_tau_, stack_triu_, \
+    stack_triu_where_, dispersion_
 
-# import netflow.utils as utl
-# from importlib import reload
-# reload(utl)
+import netflow.utils as utl
+from importlib import reload
+reload(utl)
 # heat_kernel = utl.heat_kernel
+construct_anisotropic_laplacian_matrix = utl.construct_anisotropic_laplacian_matrix
 
 def wass_distance(samples, profiles, graph_distances, measure_cutoff=1e-6,
                   solvr=None, flag=None):
@@ -60,9 +63,9 @@ def wass_distance(samples, profiles, graph_distances, measure_cutoff=1e-6,
     if Na.shape[0] == Nb.shape[0] == 0:
         logger.msg(f"{flag}Profiles are both zero, returning Wasserstein distance = 0.")
         return 0.
-    elif Na.shape[0] == Nb.shape[0] == 1:
-        logger.msg(f"{flag}Both profiles with only one feature, returning Wasserstein distance = 0.")
-        return 0.
+    # elif Na.shape[0] == Nb.shape[0] == 1:
+    #     logger.msg(f"{flag}Both profiles with only one feature, returning Wasserstein distance = 0.")
+    #     return 0.
     elif (Na.shape[0] == 0) or (Nb.shape[0] == 0):
         logger.msg(f"{flag}Cannot compute Wasserstein distance between a zero-profile, returning Wasserstein distance = nan.")
         return np.nan
@@ -98,7 +101,7 @@ def pairwise_sample_euc_distances(profiles, metric='euclidean', **kwargs):
          Euclidean distances between pairwise samples
      """
      
-     n = profiles.shape[1]
+     n = profiles.shape[1]     
      eds = pd.DataFrame(data=ss.distance.cdist(profiles.T.values, profiles.T.values, metric=metric, **kwargs),
                         index=profiles.columns.tolist(), columns=profiles.columns.tolist())
      eds = eds.stack()[np.triu(np.ones(eds.shape), 1).astype(bool).reshape(eds.size)]
@@ -249,6 +252,31 @@ class InfoNet:
         # R = pd.DataFrame(data=stats.correlation, index=data.columns.copy(), columns=data.columns.copy())
         # p = pd.DataFrame(data=stats.pvalue, index=data.columns.copy(), columns=data.columns.copy())
         R, p = spearmanr_(data, **kwargs)
+        return R, p
+
+    def kendall_tau(self, data, **kwargs):
+        """ Calculate Kendall's tau correlation coefficient with associated p-value using scipy.stats.kendalltau.
+
+        Parameters
+        ----------
+        data : 2D array_like
+            2-D array containing multiple variables and observations, where each column represents
+            a variable, with observations in the rows.
+        **kwargs : dict
+            Optional key-word arguments passed to scipy.stats.kendalltau.
+
+        Returns
+        -------
+        R : pandas DataFrame
+            Spearman correlation matrix. The correlation matrix is square with
+            length equal to total number of variables (columns or rows).
+        pvalue : float
+            The p-value for a hypothesis test whose null hypotheisis
+            is that two sets of data are uncorrelated. See documentation for scipy.stats.spearmanr
+            for alternative hypotheses. `p` has the same
+            shape as `R`.
+        """
+        R, p = kendall_tau_(data, **kwargs)
         return R, p
 
 
@@ -564,7 +592,7 @@ class InfoNet:
 
         profiles = self.neighborhood_profiles(node, data=data, include_self=include_self)
         if normalize:
-            profiles = profiles / profiles.sum(axis=0)
+            profiles = profiles / profiles.sum(axis=0)        
         return pairwise_sample_euc_distances(profiles, metric=metric, **kwargs)
 
 
@@ -654,6 +682,10 @@ class InfoNet:
         profiles : pandas DataFrame
             Diffused profiles where each row is a time and each column is a feature name
         """
+
+        if do_save:
+            if not (self.outdir / 'diffused_profiles').is_dir():
+                (self.outdir / 'diffused_profiles').mkdir()
 
         times = get_times(times=times, t_min=t_min, t_max=t_max, n_t=n_t, log_time=log_time)
         times_with_zero = np.insert(times, 0, 0.0)
@@ -880,31 +912,41 @@ class InfoNet:
             Before starting the computation, check if the file exists. If so, load and remove already computed
             nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
             the previously computed and saved results before saving and returning the combined results.
+
+        To do: specify if nodes in input are ids or node names and check that loaded data has correct type int or str for nodes
         """
 
         if nodes is None:
             nodes = [k for k in self.G if len(list(self.G.neighbors(k)))>1]
+        else:
+            nodes = [self.name2node[k] for k in nodes if self.G.degree(self.name2node[k]) > 1]
 
         if self.outdir is None:
             fname = None
             wds_prior = None
         else:
-            # fname = self.outdir / f"wass_dist_sample_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'out' if include_self else ''}_self.csv"
-            fname = f"wass_dist_sample_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'out' if include_self else ''}_self.csv"
+            # fname = self.outdir / f"wass_dist_sample_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
+            fname = f"wass_dist_sample_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
             self.filenames.append(fname)
             if (self.outdir / fname).is_file():
-                logger.msg(f"Uploading saved sample pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles.")
+                
                 wds_prior = pd.read_csv(self.outdir / fname, header=0, index_col=(0, 1))
+                logger.msg(f"Loaded saved sample pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles of size {wds_prior.shape}.")
                 n_orig = len(nodes)
                 nodes = [k for k in nodes if self.G.nodes[k]['name'] not in wds_prior.columns]
                 n_update = len(nodes)
                 if n_update < n_orig:
+                    if n_update == 0:
+                        # logger.msg(f"Loading sample pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles.")
+                        return wds_prior
+                    
                     logger.msg(f"Computing sample pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles on {n_update}/{n_orig} nodes.")
             else:
                 wds_prior = None
 
         wds = []
 
+        # logger.msg(f"Computing Wasserstein distances on {len(nodes)} neighborhoods.")
         for ix, node in tqdm(enumerate(nodes), desc=desc, colour='yellow', total=len(nodes)):
             tmp = self.pairwise_sample_neighborhood_wass_distance(node, include_self=include_self, data=data,
                                                                   graph_distances=graph_distances,
@@ -922,10 +964,12 @@ class InfoNet:
                     wds_prior = wds_tmp
                 wds_prior.to_csv(str(self.outdir / fname), header=True, index=True)
                 wds = []
-                
 
-        wds = pd.concat(wds, axis=1)
-        wds = wds.rename(columns=nx.get_node_attributes(self.G, 'name'))
+        if wds:        
+            wds = pd.concat(wds, axis=1)
+            wds = wds.rename(columns=nx.get_node_attributes(self.G, 'name'))
+        else:
+            wds = None
         if wds_prior is not None:
             wds = pd.concat([wds_prior, wds], axis=1)
         if self.outdir is not None:
@@ -979,23 +1023,27 @@ class InfoNet:
 
         if nodes is None:
             nodes = [k for k in self.G if len(list(self.G.neighbors(k)))>1]
+        else:
+            nodes = [self.name2node[k] for k in nodes if self.G.degree(self.name2node[k]) > 1]
 
         if self.outdir is None:
             fname = None
             eds_prior = None
         else:
             if normalize:
-                fname = f"euc_dist_sample_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'out' if include_self else ''}_self_normalized.csv"
+                fname = f"euc_dist_sample_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self_normalized.csv"
             else:
-                fname = f"euc_dist_sample_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'out' if include_self else ''}_self.csv"
+                fname = f"euc_dist_sample_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
             self.filenames.append(fname)
-            if (self.outdir / fname).is_file():
-                logger.msg(f"Uploading saved sample pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles.")
+            if (self.outdir / fname).is_file():                
                 eds_prior = pd.read_csv(self.outdir / fname, header=0, index_col=(0, 1))
+                logger.msg(f"Loaded saved sample pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles of size {eds_prior.shape}.")
                 n_orig = len(nodes)
-                nodes = [k for k in nodes if k not in eds_prior.index]
+                nodes = [k for k in nodes if self.G.nodes[k]['name'] not in eds_prior.columns]
                 n_update = len(nodes)
-                if n_update < n_nodes:
+                if n_update < n_orig:
+                    if n_update == 0:
+                        return eds_prior
                     logger.msg(f"Computing sample pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles on {n_update}/{n_orig} nodes.")
             else:
                 eds_prior = None
@@ -1007,9 +1055,12 @@ class InfoNet:
                                                                  metric=metric, data=data, normalize=normalize, **kwargs)
             tmp.name = node
             eds.append(tmp)
-
-        eds = pd.concat(eds, axis=1)
-        eds = eds.rename(columns=nx.get_node_attributes(self.G, 'name'))
+        
+        if eds:
+            eds = pd.concat(eds, axis=1)
+            eds = eds.rename(columns=nx.get_node_attributes(self.G, 'name'))
+        else:
+            eds = None
 
         if eds_prior is not None:
             eds = pd.concat([eds_prior, eds], axis=1)
@@ -1058,20 +1109,20 @@ if __name__ == '__main__':
 
     dhop = inet.compute_graph_distances(weight=None)
     print(dhop.shape)
-    print(inet.neighborhood_profiles(16, include_self=False))
+    # print(inet.neighborhood_profiles(16, include_self=False))
 
-    logger.msg(f"Wass = {wass_distance(('x1', 'x2'), data, dhop, measure_cutoff=1e-6)}.")
+    # logger.msg(f"Wass = {wass_distance(('x1', 'x2'), data, dhop, measure_cutoff=1e-6)}.")
 
-    wds16 = inet.pairwise_sample_neighborhood_wass_distance(16, include_self=False) # , graph_distances=dhop, proc=mp.cpu_count(), chunksize=None)
+    # wds16 = inet.pairwise_sample_neighborhood_wass_distance(16, include_self=False, graph_distances=dhop) # , graph_distances=dhop, proc=mp.cpu_count(), chunksize=None)
     
 
-    print(wds16)
+    # print(wds16)
 
     wds, eds = [], []
 
     
     for gn in [k for k in G if len(list(G.neighbors(k)))>1]:
-        tmp = inet.pairwise_sample_neighborhood_wass_distance(gn, include_self=False, graph_distances=dhop)
+        tmp = inet.pairwise_sample_neighborhood_wass_distance(gn, include_self=False, graph_distances=dhop, measure_cutoff=1e-6)
         tmp.name = gn
         wds.append(tmp)
 
@@ -1082,24 +1133,52 @@ if __name__ == '__main__':
     wds = pd.concat(wds, axis=1)
     eds = pd.concat(eds, axis=1)
     print("ranges: ", wds.max().max(), wds.min().min(), eds.max().max(), eds.min().min())
+    print(wds.head())
+
+
+    wds_a = inet.multiple_pairwise_sample_neighborhood_wass_distance(data=None,
+                                                                     graph_distances=dhop, desc='Computing pairwise 1-hop distances',
+                                                                     profiles_desc='t0',
+                                                                     proc=mp.cpu_count(), chunksize=None,
+                                                                     measure_cutoff=1e-6, solvr=None)
+    print(f"And automated wds: ")
+    print("ranges: ", wds_a.max().max(), wds_a.min().min())
+    print(wds_a.head())
     
     # print(wds.corr(method='spearman'))
 
-    import seaborn as sns
-    import matplotlib.pyplot as plt
-    sns.clustermap(wds.corr(method='spearman'), method='ward', cmap='RdBu', center=0)
-    plt.gcf().suptitle('Spearman corr wds');
+    # import seaborn as sns
+    # import matplotlib.pyplot as plt
+    # sns.clustermap(wds.corr(method='spearman'), method='ward', cmap='RdBu', center=0)
+    # plt.gcf().suptitle('Spearman corr wds');
     
-    sns.clustermap(eds.corr(method='spearman'), method='ward', cmap='RdBu', center=0)
-    plt.gcf().suptitle('Spearman corr eds');
+    # sns.clustermap(eds.corr(method='spearman'), method='ward', cmap='RdBu', center=0)
+    # plt.gcf().suptitle('Spearman corr eds');
 
-    sns.clustermap(1. - (wds / eds), method='ward', cmap='RdBu', center=0)    
-    plt.gcf().suptitle('Sample curvatures');
+    # sns.clustermap(1. - (wds / eds), method='ward', cmap='RdBu', center=0)    
+    # plt.gcf().suptitle('Sample curvatures');
 
 
     # controlled distance ranges
-    wds2 = wds / wds.max().max()
-    eds2 = eds / eds.max().max()
-    sns.clustermap(1. - (wds2 / eds2), method='ward', cmap='RdBu', center=0)    
-    plt.gcf().suptitle('Sample scaled curvatures');
+    # wds2 = wds / wds.max().max()
+    # eds2 = eds / eds.max().max()
+    # sns.clustermap(1. - (wds2 / eds2), method='ward', cmap='RdBu', center=0)    
+    # plt.gcf().suptitle('Sample scaled curvatures');
+
+    plt.show()
+
+
+    # compute feature distance
+    import seaborn as sns
+    import netflow.pseudotime as nfp
+    import netflow.utils as nfu
+    print("Computing feature distances:")
+    wf = pd.Series(data=nfp.norm_features(wds, method='L2'),
+                   index=wds.index.copy())
+    print(wf.shape, wf, sep='\n')
+
+    A_wf = nfu.unstack_triu_(wf, index=data.columns.tolist())
+    print(A_wf)
+
+    sns.heatmap(A_wf)
     plt.show()

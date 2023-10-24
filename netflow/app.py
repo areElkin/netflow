@@ -550,6 +550,7 @@ class App:
 
     def upload_graph(self, contents, names):
         if contents is not None:
+            print(f"CONTENTS = {contents} and NAMES = {names}.")
             df = upload_topology(contents, names)
 
             if isinstance(df, html.Div):
@@ -558,7 +559,7 @@ class App:
                 
                 G = nx.from_pandas_edgelist(df)
                 children = [
-                    html.Div([f"uploaded topology with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges."]),
+                    html.Div([f"Uploaded topology from {names} with {G.number_of_nodes()} nodes and {G.number_of_edges()} edges."]),
                     ]
             return children
                 
