@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
 
 
 setuptools.setup(name="netflow",
-                 version="0.0.1",
+                 version="0.0.ddv",
                  author="Rena Elkin"
                  description="Toolbox to compute information flow on a network and correlations between network modules",
                  install_requires=install_requires,
