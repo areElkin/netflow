@@ -95,11 +95,11 @@ def graph_elements(G, G2, show="combo", pos=None, **pos_kwargs):
     show : {'combo', 'interaction', 'functional'}
         Select graph elements to show.
 
-        Options
-        -------
-        'combo' : show interaction and functional network
-        'interaction' : only show interaction network
-        'functional' : only show functional network
+        Options : 
+
+        - 'combo' : show interaction and functional network
+        - 'interaction' : only show interaction network
+        - 'functional' : only show functional network
     pos : dict
         Position of nodes.
     **pos_kwargs : dict

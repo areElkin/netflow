@@ -7,33 +7,45 @@ import pandas as pd
 import scipy as sp
 
 import netflow.utils as utl
+# from importlib import reload
+# reload(utl)
 from ._logging import logger
+
+# RE: TODO: ADD OPTION FOR MULTIPLE ROOTS
+### RE: TODO: ADD OPTION TO SELECT ROOT, IF NOT PROVIDED
+### RE: TODO: CHECK HOW UNIQUE BRANCHES ARE DETERMINED
+# RE: TODO: CHECK WHICH TRANSITION MATRIX IS USED AND HOW IT'S DEFINED
+### RE: TODO: CHECK HOW BRANCHING CONNECTIONS IS DEFINED WHEN THERE IS A TRUNK
+### RE: TODO: IF GIVE ROOT AS NAME OF DATA POINT (WHEN DISTANCES IS A DATAFRAME), CONVERT IT TO INT
+### RE: TODO: ADD OPTION FOR SMOOTHING CORR BEFORE FINDING MAX
+# RE: TODO: IF MAX CORR < THRESH, MAYBE DON"T INCLUDE BRANCH?
+# RE: TODO: ADD OPTION TO CHANGE ROOT AND UPDATE PSEUDOTIME, SEGS, AND ORDERING? -- this should be for earlier step in pipeline
+# RE: TODO: SHOULD -1 be included in segs_names_unique?
 
 def norm_features_(X, method='L1'):
     """ Norm of (multi-)feature data points.
 
     Intended to compute the norm of pairwise distances between obs. :math:`s_q` and :math:`s_r` for all features
-    :math:`f_i \in F`: :math:`D_{qr}^{(F)} = [d_{qr}^{(f_1)}, ..., d_{qr}^{(f_m)}]
+    :math:`f_i \in F`\: :math:`D_{qr}^{(F)} = [d_{qr}^{(f_1)}, ..., d_{qr}^{(f_m)}]`
 
     Parameters
     ----------
     X : array-like
         The norm is computed on rows of `X`.
     method : {'L1', 'L2', 'inf', 'mean', 'median'}
-        Indicate which norm to compute. For each row of the form :math:`x = [x_1, x_2, ..., x_n]`:
+        Indicate which norm to compute. For each row of the form :math:`x = [x_1, x_2, ..., x_n]` :
 
-        Options
-        -------
-        'L1' : :math:`\sum_{i=1}^n abs(x_i)`
-        'L2' : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`
-        'inf' : :math:`max_i abs(x_i)`
-        'mean' : Mean of :math:`x`
-        'median' : Median of :math:`x`
+        Options:
 
+        - 'L1' : :math:`\sum_{i=1}^n abs(x_i)`
+        - 'L2' : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`
+        - 'inf' : :math:`max_i abs(x_i)`
+        - 'mean' : Mean of :math:`x`
+        - 'median' : Median of :math:`x`
 
     Returns
     -------
-    n : float or array-like
+    n : `float` or array-like
         Norm of the row(s).
     """
     if isinstance(X, (pd.DataFrame, pd.Series)):
@@ -68,22 +80,21 @@ def get_knn_indices_distances(d, n_neighbors=None):
 
     Parameters
     ----------
-    d : numpy array
-        Symmetric distance matrix of size (m, m).
-    n_neighbors : int, n_neighbors > 0
-        K-th nearest neighbor. (uses `n_neighbors` + 1, since each obs is it's closest neighbor).
+    d : `numpy.ndarray`, (m, m)
+        Symmetric distance matrix.
+    n_neighbors : `int`, n_neighbors > 0
+        K-th nearest neighbor. (uses ``n_neighbors + 1``, since each obs is it's closest neighbor).
         If `None`, all neighbors are used.
     
     Returns
     -------
-    indices : numpy array
-        Matrix of size (m, n_neighbors) with indices of k-nearest neighbors in each row
-        (does not include self in output).
-    distances : numpy array
-        Matrix of size (m, n_neighbors) with distance to k-nearest neighbors
-        (does not include self in output).
+    indices : `numpy.ndarray`, (m, n_neighbors)
+        Matrix with indices of k-nearest neighbors in each row
+        Note, this does not include itself in output)
+    distances : `numpy.ndarray`, (m, n_neighbors)
+        Matrix with distance to k-nearest neighbors
+        Note, this does not include itself in output.
     """
-
     if isinstance(d, (pd.DataFrame, pd.Series)):
         d = d.values
     n_neighbors = d.shape[0] - 1 if n_neighbors is None else n_neighbors
@@ -98,33 +109,31 @@ def get_knn_indices_distances(d, n_neighbors=None):
     return indices, distances
 
 def sigma_knn_(d, n_neighbors=None, method='mean', return_nn=False):
-    """ Set sigma for each obs as the distance to its k-th neighbor
+    """ Set sigma for each obs as the distance to its k-th neighbor.
 
     Parameters
     ----------
-    d : numpy array
-        Symmetric distance matrix of size (m, m).
-    n_neighbors : {int, n_neighbors > 0, None}
-        K-th nearest neighbor. (uses `n_neighbors` + 1, since each obs is it's closest neighbor).
+    d : `numpy.ndarray`, (m, m)
+        Symmetric distance matrix.
+    n_neighbors : {`int`, n_neighbors > 0, `None`}
+        K-th nearest neighbor. (uses ``n_neighbors + 1``, since each obs is it's closest neighbor).
         If `None`, all neighbors are used.
     method : {'mean', 'median', 'max'}
         Indicate how to compute sigma.
-    return_nn : bool
-        If `True`, return indices and distances of `n_neighbors` nearest neighbors.
+    return_nn : `bool`
+        If `True`, return indices and distances of ``n_neighbors`` nearest neighbors.
 
-        Options
-        -------
-        'mean' : mean of distance to `n_neighbors` nearest neighbors
-        'median' : median of distance to `n_neighbors` nearest neighbors
-        'max' : distance to `n_neighbors`-nearest neighbor
-    
+        Options:
+
+        - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors
+        - 'median' : median of distance to ``n_neighbors`` nearest neighbors
+        - 'max' : distance to ``n_neighbors``-nearest neighbor
 
     Returns
     -------
-    sigmas : numpy array of size (m, )
-        The distance to the k-th nearest neighbor for all rows in `d`.
+    sigmas : `numpy.ndarray`, (m, )
+        The distance to the k-th nearest neighbor for all rows in ``d``.
     """
-
     indices, distances = get_knn_indices_distances(d, n_neighbors=n_neighbors)
     if method == 'mean':
         sigmas = np.mean(distances, axis=1)
@@ -148,35 +157,34 @@ def similarity_measure_(d, n_neighbors, method, sigmas=None, knn=False, indices=
 
     Parameters
     ----------
-    d : numpy array
-        Symmetric distance matrix of size (m, m).
-    n_neighbors : {int; n_neighbors > 0, None}
-        K-th nearest neighbor. (uses `n_neighbors` + 1, since each obs is it's closest neighbor).
+    d : `numpy.ndarray`, (m, m)
+        Symmetric distance matrix.
+    n_neighbors : {`int`; n_neighbors > 0, `None`}
+        K-th nearest neighbor. (uses ``n_neighbors + 1``, since each obs is it's closest neighbor).
         If `None`, all neighbors are used.
-        .. note: this is ignored if `method` is 'precomputed' and `sigmas` is provided.
+        Note: this is ignored if ``method`` is 'precomputed' and ``sigmas`` is provided.
     method : {'mean', 'median', 'max', 'precomputed'}
         Indicate how to compute sigma.
 
-        Options
-        -------
-        'mean' : mean of distance to `n_neighbors` nearest neighbors
-        'median' : median of distance to `n_neighbors` nearest neighbors
-        'max' : distance to `n_neighbors`-nearest neighbor
-        'precomputed' : precomputed values passed to `sigmas`
-    sigmas : numpy array of size (m, )
-        Option to provide precomputed sigmas , ignored unless method='precomputed'.
-    knn : bool
-        If `True`, restrict similarity measure to be non-zero only between `n_neighbors` nearest neighbors.
-    indices : numpy array of size (m, `n_neighbors`)
-        Option to provide precomputed indices of `n_neighbors` nearest neighbors for each obs when
-        `method` = 'precomputed' and `knn` = `True`
+        Options:
+
+        - 'mean' : mean of distance to `n_neighbors` nearest neighbors
+        - 'median' : median of distance to `n_neighbors` nearest neighbors
+        - 'max' : distance to `n_neighbors`-nearest neighbor
+        - 'precomputed' : precomputed values passed to `sigmas`
+    sigmas : `numpy.ndarray`, (m, )
+        Option to provide precomputed sigmas , ignored unless ``method='precomputed'``.
+    knn : `bool`
+        If `True`, restrict similarity measure to be non-zero only between ``n_neighbors`` nearest neighbors.
+    indices : `numpy.ndarray`, (m, `n_neighbors`)
+        Option to provide precomputed indices of ``n_neighbors`` nearest neighbors for each obs when
+        ``method`` = 'precomputed' and ``knn`` = `True`
 
     Returns
     -------
-    K : numpy array
-        Symmetric similarity measure of size (m, m).    
+    K : `numpy.ndarray`, (m, m)
+        Symmetric similarity measure.
     """
-
     if method == 'precomputed':
         if sigmas is None:
             msg = "When `method` is 'precomputed', `sigmas` must be provided."
@@ -228,35 +236,37 @@ class PseudoOrdering:
         of the form :math:`(obs_i, obs_j)` and :math:`d_{ij}` is the distance between pairwise-obs
         :math:`i = (obs_p, obs_q)` with respect to feature :math:`j`.
     method_norm : {'L1', 'L2', 'inf', 'mean', 'median'}
-        Indicate how to compute norm over multiple features, for each row of the form :math:`x = [x_1, x_2, ..., x_n]`:
+        Indicate how to compute norm over multiple features, for each row of the
+        form :math:`x = [x_1, x_2, ..., x_n]`:
 
-        Options
-        -------
-        'L1' : :math:`\sum_{i=1}^n abs(x_i)`
-        'L2' : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`
-        'inf' : :math:`max_i abs(x_i)`
-        'mean' : Mean of :math:`x`
-        'median' : Median of :math:`x`
-    n_neighbors : {int, n_neighbors > 0, None}
-        K-th nearest neighbor (or number of nearest neighbors) to use for computing `sigmas`
-        (uses `n_neighbors` + 1, since each obs is it's closest neighbor).
+        Options:
+
+        - 'L1' : :math:`\sum_{i=1}^n abs(x_i)`
+        - 'L2' : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`
+        - 'inf' : :math:`max_i abs(x_i)`
+        - 'mean' : Mean of :math:`x`
+        - 'median' : Median of :math:`x`
+    n_neighbors : {`int`, n_neighbors > 0, `None`}
+        K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``
+        (uses ``n_neighbors + 1``, since each obs is it's closest neighbor).
         If `None`, all neighbors are used.
     method_sigma : {'mean', 'median', 'max', 'precomputed'}
         Indicate how to compute sigma.
 
-        Options
-        -------
-        'mean' : mean of distance to `n_neighbors` nearest neighbors
-        'median' : median of distance to `n_neighbors` nearest neighbors
-        'max' : distance to `n_neighbors`-nearest neighbor
-        'precomputed' : precomputed values passed to `sigmas`
-    sigmas : numpy array of size (m, )
-        Option to provide precomputed sigmas, ignored unless method='precomputed'.
-    knn : bool
-        If `True`, restrict similarity measure to be non-zero only between `n_neighbors` nearest neighbors.
-    root : int
-        Index of root obs that pesudo-ordering is computed from (`root` > 0).
+        Options:
+
+        - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors
+        - 'median' : median of distance to ``n_neighbors`` nearest neighbors
+        - 'max' : distance to ``n_neighbors``-nearest neighbor
+        - 'precomputed' : precomputed values passed to ``sigmas``
+    sigmas : `numpy.ndarray`, (m, )
+        Option to provide precomputed sigmas, ignored unless ``method='precomputed'``.
+    knn : `bool`
+        If `True`, restrict similarity measure to be non-zero only between ``n_neighbors`` nearest neighbors.
+    root : `int`
+        Index of root obs that pesudo-ordering is computed from (``root > 0``).
     """
+    
     def __init__(self, all_feats_pairwise_obs_dists, method_norm='L1',
                  n_neighbors=5, method_sigma='max', sigmas=None, knn=False,
                  root=None):
@@ -315,7 +325,8 @@ class PseudoOrdering:
 
     def compute_norm_features(self):
         """ Compute norm of obs-pairwise distances with respect to all features in `all_feats_pairwise_obs_dists` returned
-        as symmetric obs-pairwise distance matrix of size (m, m). """
+        as symmetric obs-pairwise distance matrix of size (m, m).
+        """
         self._distances = utl.unstack_triu_(norm_features_(self.all_feats_pairwise_obs_dists,
                                                           method=self._method_norm),
                                             index=self.index)
@@ -353,19 +364,19 @@ class PseudoOrdering:
 
         Parameters
         ----------
-        similarities : numpy array
-            Symmetric similarity measure of size (m, m).    
-        density_normalize : bool
+        similarities : `numpy.ndarray`, (m, m)
+            Symmetric similarity measure.
+        density_normalize : `bool`
             The density rescaling of Coifman and Lafon (2006): Then only the
             geometry of the data matters, not the sampled density.
 
         Returns
         -------
-        Makes attributes `.transitions_sym` and `.transitions` available.
+        Makes attributes ``.transitions_sym`` and ``.transitions`` available.
 
-        Comments
+        Notes
         --------
-        Code copied from scanpy.neighbors.
+        Code copied from `scanpy.neighbors`.
         """
         
         W = self._similarities if similarities is None else similarities
@@ -378,7 +389,7 @@ class PseudoOrdering:
             if not issparse(W):
                 Q = np.diag(1.0 / q)
             else:
-                Q = scipy.sparse.spdiags(1.0 / q, 0, W.shape[0], W.shape[0])
+                Q = sp.sparse.spdiags(1.0 / q, 0, W.shape[0], W.shape[0])
             K = Q @ W @ Q
         else:
             K = W
@@ -389,7 +400,7 @@ class PseudoOrdering:
         if not issparse(K):
             Z = np.diag(1.0 / z)
         else:
-            Z = scipy.sparse.spdiags(1.0 / z, 0, K.shape[0], K.shape[0])
+            Z = sp.sparse.spdiags(1.0 / z, 0, K.shape[0], K.shape[0])
         self._transitions_asym = Z @ K
 
         # sym transitions
@@ -398,9 +409,12 @@ class PseudoOrdering:
         if not issparse(K):
             Z = np.diag(1.0 / z)
         else:
-            Z = scipy.sparse.spdiags(1.0 / z, 0, K.shape[0], K.shape[0])
+            Z = sp.sparse.spdiags(1.0 / z, 0, K.shape[0], K.shape[0])
         self._transitions_sym = Z @ K @ Z
 
+        # to compute first eigenvector phi0 if did density normalization (from matlab code):
+        # D1_ = np.asarray(K.sum(axis=0))
+        # phi0 = D1_ / np.sqrt(np.power(D1_, 2).sum())  # TODO: check if ever need this to be sparse
 
 
     def _set_pseudotime(self, root=None, ordering='distance', data=None):
@@ -408,25 +422,23 @@ class PseudoOrdering:
 
         Parameters
         ----------
-        root : int; 0 <= root < m where m is the number of obs.
-            Root obs for computing pseudo-ordering. If `None`, `self.root` is used.
-            If provided, `self.root` is updated to `root`.
+        root : `int`, 0 <= root < m where m is the number of obs.
+            Root obs for computing pseudo-ordering. If `None`, ``self.root`` is used.
+            If provided, ``self.root`` is updated to ``root``.
         ordering : {'distance', 'similarity', 'transitions_asym', 'transitions_sym', 'precomputed'}
             Metric by which pseudo-ordering should be computed.
 
-            Options
-            -------
-            'distance' : `self._distances`
-            'similarity' : 1 - `self._similarities`
-            'transitions_asym' : 1 - `self._transitions_asym`
-            'transitions_sym' : 1 - `self._transitions_sym`
-            'precomputed' : 1 - precomputed
-        data :
-            Similarity matrix used when `ordering` is "precomputed".
-            .. note: this is ignored if `ordering` is not "precomputed".
-        
-        """
+            Options:
 
+            - 'distance' : ``self._distances``
+            - 'similarity' : 1 - ``self._similarities``
+            - 'transitions_asym' : 1 - ``self._transitions_asym``
+            - 'transitions_sym' : 1 - ``self._transitions_sym``
+            - 'precomputed' : 1 - precomputed
+        data :
+            Similarity matrix used when ``ordering = 'precomputed'``.
+            Note, this is ignored if ``ordering`` is not "precomputed".
+        """
         self.root = root if root is not None else root
         if self.root is None:
             msg = "'root' must be specified in order to compute pseudo-ordering."
@@ -457,7 +469,7 @@ class PseudoOrdering:
                 msg = "Must provide `data` when ordering is precomputed."
                 raise AssertionError(msg)
 
-            pt = self._transitions_sym[self.root].copy()
+            pt = data[self.root].copy()
             pt[self.root] = np.max(pt) + 1e-3
             self.pseudotime = np.max(pt) - pt
 
@@ -468,27 +480,26 @@ class PseudoOrdering:
             
         self.pseudotime /= np.max(self.pseudotime[self.pseudotime < np.inf])
 
+
     def pseudotime_distances(self, ordering='distance', data=None):
-        """ Compute distance matrix used for pseudotime branching 
+        """ Compute distance matrix used for pseudotime branching.
 
         Parameters
         ----------
         ordering : {'distance', 'similarity', 'transitions_asym', 'transitions_sym', 'precomputed'}
             Metric by which pseudo-ordering should be computed.
 
-            Options
-            -------
-            'distance' : `self._distances`
-            'similarity' : 1 - `self._similarities`
-            'transitions_asym' : 1 - `self._transitions_asym`
-            'transitions_sym' : 1 - `self._transitions_sym`
-            'precomputed' : 1 - precomputed
-        data :
-            Similarity matrix used when `ordering` is "precomputed".
-            .. note: this is ignored if `ordering` is not "precomputed".
-        
-        """
+            Options:
 
+            - 'distance' : ``self._distances``
+            - 'similarity' : 1 - ``self._similarities``
+            - 'transitions_asym' : 1 - ``self._transitions_asym``
+            - 'transitions_sym' : 1 - ``self._transitions_sym``
+            - 'precomputed' : 1 - precomputed
+        data :
+            Similarity matrix used when ``ordering = 'precomputed'``.
+            Note, this is ignored if ``ordering`` is not "precomputed".
+        """
         if ordering == 'distance':
             self.pseudotime_distances = self._distances.copy()
 
@@ -522,49 +533,102 @@ class PseudoOrdering:
 
 
 
-class TDA:
+class TDA:    
     """ Class to compute topological branching analysis
 
     Parameters
     ----------
-    distances : {pandas DataFrame, numpy array}
+    distances : {`pandas.DataFrame`, `numpy.ndarray`}
         Symmetric distance matrix between data points.
-        .. note: If `distances` is a pandas DataFrame, it's Stored and processed as a numpy array but the index is stored for later conversion.
-    min_branch_size : int
-        Minimal number of data points needed to be considered as a branch.
-    choose_largest_segment : bool
-
+        Note, if ``distances`` is a `pandas.DataFrame`, it's Stored and processed as a `numpy.ndarray`
+        but the index is stored for later conversion.
+    min_branch_size : {`int`, `float`}
+        During recursive splitting of branches, only consider splitting a branch with at least
+        ``min_branch_size > 2`` data points.
+        If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
+        (``0 < min_branch_size < 1``).
+    choose_largest_segment : `bool`
+        ?
     flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
-    
-    allow_kendall_tau_shift : bool
+        ?
+    allow_kendall_tau_shift : `bool`
         If a very small branch is detected upon splitting, shift away from
         maximum correlation in Kendall tau criterion of [Haghverdi16]_ to
         stabilize the splitting.
-    
+    root : `int`
+        Index of root obs that pesudo-ordering is computed from (``root > 0``).
+    smooth_corr : `bool`, default = `False`
+        If `True`, smooth correlations before identifying cut points for branch splitting.
     """
+    
     def __init__(self, distances, min_branch_size=5, choose_largest_segment=False,
-                 flavor='haghverdi16', allow_kendall_tau_shift=False):
+                 flavor='haghverdi16', allow_kendall_tau_shift=False, root=None,
+                 smooth_corr=False):
+
+        # TODO: set root upfront and call _set_pseudotime after distance is computed
         self.distances = distances if not isinstance(distances, pd.DataFrame) else distances.values
-        self.index_labels = None if not isinstance(distances, pd.DataFrame) else distances.index
+        self.index_labels = None if not isinstance(distances, pd.DataFrame) else distances.index.tolist()
+
+        if isinstance(min_branch_size, int):
+            assert min_branch_size > 2, "As an integer, `min_branch_size` must be greater than 2."
+            self.check_min_branch_size = lambda x: len(x)>self.min_branch_size
+        elif isinstance(min_branch_size, float):
+            assert 0. < min_branch_size < 1., "As a float, `min_branch_size` must satisfy 0 < `min_branch_size` < 1."
+            self.check_min_branch_size = lambda x: (len(x) / self.distances.shape[0]) > self.min_branch_size
         self.min_branch_size = min_branch_size
         self.choose_largest_segment = choose_largest_segment
         self.flavor = flavor
         self.allow_kendall_tau_shift = allow_kendall_tau_shift
 
+        self.root = root
+        self.pseudotime = None
+
+        if self.root is None:
+            # set root as index of row with largest distance
+            # logger.msg(f"Suggesting root node -- to be implemented....")
+            self.root = np.unravel_index(np.argmin(self.distances, axis=None), self.distances.shape)[0]
+            logger.msg(f"Suggested root set as index {self.root}")
+        elif isinstance(self.root, str):
+            if self.index_labels is None:
+                raise ValueError("`root` must be an `int` when `distances` is an array.")
+            else:
+                self.root = self.index_labels.index(self.root)
+            # check if root is a string label
+
+        self._set_pseudotime()
+
+        self.smooth_corr = smooth_corr
+
         
-    def detect_branches(self, n_branches, root=None):
+    def detect_branches(self, n_branches):
         """ Detect up to `n_branches` branches.
 
         Parameters
         ----------
-        n_branches : int
-            Number of branches to look for (`n_branches` > 0).
-        root : int
-            Index of root obs that pesudo-ordering is computed from (`root` > 0).
-    
-        Returns
-        -------
+        n_branches : `int`
+            Number of branches to look for (``n_branches > 0``).
+
+        Notes
+        -----
+        Writes : 
+
+        - segs : `list`
         
+          * list of arrays of length (number of segments). Each entry stores
+            the indices of the members of a segment.
+        - segs_tips : `list`
+        
+          * List of arrays of length (number of segments) where Each entry stores the
+            indices of the two tip points of each segment.
+        - segs_undecided :
+        
+          * ?
+        - segs_adjacency :
+        
+          * ?
+        - segs_connects :
+        
+          * ?
         """
         # distances = distances if not isinstance(self.distances, pd.DataFrame) else distances.values
         
@@ -573,10 +637,10 @@ class TDA:
         segs = [indices_all]
 
         # get first tip (farthest from root)
-        if root is None:
+        if self.root is None:
             tip_0 = np.argmax(self.distances[0])
         else:
-            tip_0 = np.argmax(self.distances[root])
+            tip_0 = np.argmax(self.distances[self.root])
 
         # get tip of other end (farthest from tip_0)
         tips_all = np.array([tip_0, np.argmax(self.distances[tip_0])])
@@ -586,19 +650,21 @@ class TDA:
         segs_connects = [[]]
         segs_undecided = [True]
         segs_adjacency = [[]]
-        # segs_terminate_branching = [False]  # RE added - to indicate if segment has already been branched as much as possible 
+        segs_terminate_branching = [False]  # RE added - to indicate if segment has already been branched as much as possible 
         
         for ibranch in range(n_branches):
             logger.warning(f"*ibranch = {ibranch}")
-            iseg, tips3 = self.select_segment(segs, segs_tips, segs_undecided)
-            logger.warning(f"*iseg = {iseg}, tips3 = {tips3}, selected_seg = {segs[iseg]}")
+            logger.warning(f"*{len(segs)} segs = {segs}")
+            iseg, tips3 = self.select_segment(segs, segs_tips, segs_undecided, segs_terminate_branching)
+            # logger.warning(f"*iseg = {iseg}, tips3 = {tips3}, selected_seg = {segs[iseg]}")
             if iseg == -1:
-                logger.debug('    partitioning converged')
+                logger.warning(f'    partitioning converged: ibranch = {ibranch}')
                 break
             logger.debug(
                 f'    branching {ibranch + 1}: split group {iseg}',
             )  # [third start end]
             # detect branching and update segs and segs_tips
+            n_segs = len(segs)
             self.detect_branching(
                 segs,
                 segs_tips,
@@ -607,7 +673,14 @@ class TDA:
                 segs_adjacency,
                 iseg,
                 tips3,
+                segs_terminate_branching,
             )
+            
+            # RE START MODIFIED - added to indicate when segment should not be further branched
+            if len(segs) == n_segs:
+                logger.warning("No further branching occured at this iteration.")
+                segs_terminate_branching[iseg] = True
+                
 
         # store as class members
         self.segs = segs
@@ -628,11 +701,9 @@ class TDA:
 
         # RE: Add for points that weren't found in any of the resulting segments
 
-            
 
-
-    def select_segment(self, segs, segs_tips, segs_undecided):
-        """ Select segment with most distant second data point
+    def select_segment(self, segs, segs_tips, segs_undecided, segs_terminate_branching):
+        """ Select segment with most distant second data point.
 
         Returns
         -------
@@ -646,8 +717,8 @@ class TDA:
         # logger.warning(f"{len(segs)} segs iterating over.")
         for iseg, seg in enumerate(segs):
             # logger.warning(f"iseg = {iseg} begin iteration")
-            if segs_tips[iseg][0] == -1: # do not consider too small segments???
-                logger.warning(f"iseg = {iseg} ending iterations short")
+            if (segs_tips[iseg][0] == -1) or (segs_terminate_branching[iseg]): # do not consider too small segments???
+                logger.debug(f"Ending iterations short")
                 continue
 
             # restrict distance matrix to points in segment
@@ -720,11 +791,11 @@ class TDA:
             # logger.warning(f"iseg = {iseg}, SCORE2 = {score}")
             logger.debug(
                 f'    group {iseg} score {score} n_points {len(seg)} ' + '(too small)'
-                if len(seg) < self.min_branch_size
+                if not self.check_min_branch_size(seg) # len(seg) < self.min_branch_size
                 else '',
             )
             
-            if len(seg) <= self.min_branch_size:
+            if not self.check_min_branch_size(seg):  # len(seg) <= self.min_branch_size:
                 score = 0
                 # logger.warning(f"iseg = {iseg}, SCORE3 = {score}")
             # write result
@@ -740,7 +811,7 @@ class TDA:
         
 
     def detect_branching(self, segs, segs_tips, segs_connects, segs_undecided,
-                         segs_adjacency, iseg, tips3):
+                         segs_adjacency, iseg, tips3, segs_terminate_branching):
         """ Detect branching on a given segment and update list parameters in place.
 
         Parameters
@@ -754,7 +825,6 @@ class TDA:
         tips3
             The three tip points. They form a 'triangle' that contains the data.
         """
-
         seg = segs[iseg]
         Dseg = self.distances[np.ix_(seg, seg)]
         # logger.warning(f"*seg = {seg}")
@@ -772,7 +842,7 @@ class TDA:
             for iseg_new, seg_new in enumerate(ssegs):
                 ssegs[iseg_new] = seg[seg_new]
                 ssegs_tips[iseg_new] = seg[ssegs_tips[iseg_new]]
-                ssegs_connects[iseg_new] = list(seg[ssegs_connects[iseg_new]])
+                ssegs_connects[iseg_new] = list(seg[ssegs_connects[iseg_new]])            
 
             # remove previous segment
             segs.pop(iseg)
@@ -791,13 +861,22 @@ class TDA:
                 # insert undecided cells at same position
                 segs_undecided.pop(iseg)
                 segs_undecided.insert(iseg, True)
+            
 
             # QUESTION FROM HERE
             # correct edges in adjacency matrix
             n_add = len(ssegs) - 1
+
+            # RE START MODIFIED
+            # append seg reference for branching
+            segs_terminate_branching += [False for i in range(len(ssegs) - 1)]
+            # RE END MODIFIED
+            
             prev_connecting_segments = segs_adjacency[iseg].copy()
+
+            
             if self.flavor == 'haghverdi16':
-                segs_adjacency += [[iseg] for i in range(n_add)]
+                segs_adjacency += [[iseg] for i in range(n_add)]                
                 segs_connects += [
                     seg_connects
                     for iiseg, seg_connects in enumerate(ssegs_connects)
@@ -949,9 +1028,6 @@ class TDA:
                         break
 
             segs_undecided += [False for i in range(n_add)]                
-                
-            
-            
 
 
     def _detect_branch(self, Dseg: np.ndarray,
@@ -985,16 +1061,16 @@ class TDA:
             via the first two tip cells.
         ssegs_tips
             List of tips of segments in ssegs.
-        ssegs_adjacency : list
+        ssegs_adjacency : `list`
             List of lists of the same length as ssegs,
             where the i-th entry is a list with the index of the trunk, if the i-th segment is not the trunk.
             Otherwise, the i-th entry is a list with the indices of all other segments beside the trunk.
-        ssegs_connects : list
+        ssegs_connects : `list`
             List of lists of the same length as ssegs,
             where the i-th entry is a list of the form [index of data point in the trunk closest to the root of the i-th segment],
             if the i-th segment is not the trunk. Otherwise, the i-th entry is a list of indices of the closest cell in each other (non-trunk) segment
             to the trunk root.
-        trunk : int 
+        trunk : `int` 
             Index of segment in ssegs that is the trunk. When there are undecided points, the trunk is the seg of undecided points.
             If there are no undecided points and 3 segments in sseg (i.e. branching), then the trunk is the seg with the smallest distance to
             the other segments. If there are only two segments in sseg, the first segment is set as the trunk.
@@ -1013,8 +1089,16 @@ class TDA:
         # make sure that each data point has a unique association with a segment
         masks = np.zeros((len(ssegs), Dseg.shape[0]), dtype=bool)
         for iseg, seg in enumerate(ssegs):
-            masks[iseg][seg] = True
+            masks[iseg][seg] = True                
         nonunique = np.sum(masks, axis=0) > 1
+        # RE START MODIFIED - uncomment to match how original paper defines unique
+        # if len(ssegs) == 3:
+        #     allbranches = np.sum(masks, axis=0) == len(ssegs)
+        #     twobranches = np.sum(masks[1:, :], axis=0) == len(ssegs) - 1
+        #     nonunique = allbranches | twobranches
+        # else:
+        #     nonunique = np.sum(masks, axis=0) > 1
+        # # RE END MODIFIED
         ssegs = []
 
         for iseg, mask in enumerate(masks):
@@ -1033,7 +1117,7 @@ class TDA:
 
         # compute new tips within new segments
         ssegs_tips = []
-        logger.warning(f"*ssegs = {ssegs}")
+        # logger.warning(f"*ssegs = {ssegs}")
         for inewseg, newseg in enumerate(ssegs):
             # RE MODIFIED START
             # if len(np.flatnonzero(newseg)) <= 1:
@@ -1041,7 +1125,7 @@ class TDA:
             # secondtip = newseg[np.argmax(Dseg[tips[inewseg]][newseg])]
             # ssegs_tips.append([tips[inewseg], secondtip]) # RE: SHOULD BE CHANGED
 
-            logger.warning(f"*inewseg = {inewseg}, newseg = {newseg}")
+            # logger.warning(f"*inewseg = {inewseg}, newseg = {newseg}")
             secondtip = newseg[np.argmax(Dseg[tips[inewseg]][newseg])]
             firsttip = tips[inewseg]
             
@@ -1062,7 +1146,7 @@ class TDA:
             ssegs_connects = [[], [], [], []]
             for inewseg, newseg_tips in enumerate(ssegs_tips):
                 reference_point = newseg_tips[0]
-                # closest cell to the new segment within undecided cells
+                # closest (undecided) cell to the new segment tip within undecided cells
                 closest_cell = undecided_cells[
                     np.argmin(Dseg[reference_point][undecided_cells])
                 ]
@@ -1084,8 +1168,10 @@ class TDA:
             # RE START MODIFIED
             # trunk = 3
             trunk = len(ssegs) - 1
-            logger.warning(f"trunk = {trunk}")
+            # logger.warning(f"trunk = {trunk}")
             # RE END MODIFIED
+
+
         elif len(ssegs) == 3:
             reference_point = np.zeros(3, dtype=int)
             reference_point[0] = ssegs_tips[0][0]
@@ -1159,15 +1245,13 @@ class TDA:
 
         return ssegs, ssegs_tips, ssegs_adjacency, ssegs_connects, trunk            
 
-
-    
         
     def _detect_branching_single_haghverdi16(self, Dseg, tips):
-        """Detect branching on given segment."""
+        """Detect branching on given segment. """
         # compute branchings using different starting points the first index of
         # tips is the starting point for the other two, the order does not
         # matter
-        ssegs = []
+        ssegs = [] 
         # permutations of tip cells
         ps = [
             [0, 1, 2],  # start by computing distances from the first tip
@@ -1269,6 +1353,8 @@ class TDA:
         # increasing the following slightly from imax is a more conservative choice
         # as the criterion based on normalized distances, which follows below,
         # is less stable
+        if imax > 0.95 * len(idcs):
+            logger.warning('segment is more than 95\% correlated.')
         if imax > 0.95 * len(idcs) and self.allow_kendall_tau_shift:            
             # if "everything" is correlated (very large value of imax), a more
             # conservative choice amounts to reducing this
@@ -1297,14 +1383,15 @@ class TDA:
 
         Parameters
         ----------
-        a, b : np.ndarray
+        a, b : `numpy.ndarray`
             One dimensional sequences.
-        min_length : int (`min_length` > 0)
+        min_length : `int`, (``min_length > 0``)
             Minimum number of data points automatically included in branch.
 
         Returns
         -------
-        Splitting index according to above description.
+        imax : `int`
+            Splitting index according to above description.
         """
         if a.size != b.size:
             raise ValueError('a and b need to have the same size')
@@ -1358,18 +1445,35 @@ class TDA:
         # iimax = np.argmax(corr_coeff)
         # imax = min_length + iimax
         # corr_coeff_max = corr_coeff[iimax]
-        iimax = 0 if corr_coeff.size == 0 else np.argmax(corr_coeff)
+
+        # TODO: add smoothing to corr_coeff before selecting max index
+        if corr_coeff.size == 0:
+            iimax = 0
+            corr_coeff_max = 0.
+            
+        else:
+            if self.smooth_corr:
+                # logger.msg(f"corr before smoothing: {corr_coeff}")
+                # logger.msg(f"imax before smoothing: {np.argmax(corr_coeff)}")
+                corr_coeff = utl.gauss_conv(corr_coeff, window_size=5, smoothness=2.5)
+                # logger.msg(f"corr after smoothing: {corr_coeff}")
+                # logger.msg(f"imax after smoothing: {np.argmax(corr_coeff)}")
+
+            iimax = np.argmax(corr_coeff)
+            corr_coeff_max = corr_coeff[iimax]                
+            
+        # iimax = 0 if corr_coeff.size == 0 else np.argmax(corr_coeff)
         imax = min_length + iimax
-        corr_coeff_max = 0. if corr_coeff.size == 0 else corr_coeff[iimax]
+        # corr_coeff_max = 0. if corr_coeff.size == 0 else corr_coeff[iimax]
         
         # RE END MODIFIED
         if corr_coeff_max < 0.3:
-            logger.debug('    is root itself, never obtain significant correlation')
+            logger.warning('    is root itself, never obtain significant correlation')
         return imax
 
 
     def _kendall_tau_add(self, len_old: int, diff_pos: int, tau_old: float):
-        """Compute Kendall tau delta.
+        """ Compute Kendall tau delta.
 
         The new sequence has length len_old + 1.
 
@@ -1409,10 +1513,10 @@ class TDA:
 
         Parameters
         ----------
-        a, b : np.ndarray
+        a, b : `numpy.ndarray`
             One dimensional sequences.
-        i : int
-            Index for splitting `a` and `b`.
+        i : `int`
+            Index for splitting ``a`` and ``b``.
 
         Returns
         -------
@@ -1441,11 +1545,210 @@ class TDA:
         b_neg[b[i:] < b[i]] = -1
         diff_neg = np.dot(a_neg, b_neg)
 
-
         return diff_pos, diff_neg
 
-        
 
+    def postprocess_segments(self):
+        """ Convert the format of the segment class members. """
+        # make segs an array, where the array is a list of (boolean) mask arrays, each of the same length as the number of data points,
+        # it's easier to store as there is a hdf5 equivalent
+        for iseg, seg in enumerate(self.segs):
+            mask = np.zeros(self.distances.shape[0], dtype=bool)
+            mask[seg] = True
+            self.segs[iseg] = mask
+        # convert to arrays
+        self.segs = np.array(self.segs)
+        self.segs_tips = np.array(self.segs_tips)
+        # now each seg in segs is a boolean vector of length (self.distances.shape[0]), where it's True if that point is in the segment
+
+
+    def set_segs_names(self):
+        """ Return a single array that stores integer segment labels. """
+        # RE START MODIFIED - otherwise points that aren't in any segment are not differentiated from first segment.
+        # segs_names = np.zeros(self.distances.shape[0], dtype=np.int8)
+        segs_names = -np.ones(self.distances.shape[0], dtype=np.int8)
+        # RE END MODIFIED
+
+        # RE START MODIFIED - include -1 in unique names
+        # self.segs_names_unique = []
+        # for iseg, seg in enumerate(self.segs):
+        #     segs_names[seg] = iseg
+        #     self.segs_names_unique.append(iseg)
+        
+        for iseg, seg in enumerate(self.segs):
+            segs_names[seg] = iseg
+        self.segs_names_unique = sorted(set(segs_names))
+        # RE END MODIFIED
+        self.segs_names = segs_names
+
+
+    def order_pseudotime(self):
+        """ Define indices that reflect segment and pseudotime order.
+
+        Notes
+        -----
+        Writes : 
+
+        - indices : np.ndarray
+              Index array of shape n, which stores an ordering of the data points
+              with respect to increasing segment index and increasing pseudotime.
+        - changepoints : np.ndarray
+              Index array of shape len(ssegs)-1, which stores the indices of
+              points where the segment index changes, with respect to the ordering
+              of indices.
+        
+        """
+        # within segs_tips, order tips according to pseudotime
+        if self.root is not None:
+            for itips, tips in enumerate(self.segs_tips):
+                if tips[0] != -1:
+                    indices = np.argsort(self.pseudotime[tips])
+                    self.segs_tips[itips] = self.segs_tips[itips][indices]
+                else:
+                    logger.warning(f"    group {itips} is very small")
+
+        # sort indices according to segments
+        indices = np.argsort(self.segs_names)
+        segs_names = self.segs_names[indices]
+
+        # find changepoints of segments
+        changepoints = np.arange(indices.size - 1)[np.diff(segs_names) == 1] + 1
+        if self.root is not None:
+            pseudotime = self.pseudotime[indices]
+            for iseg, seg in enumerate(self.segs):
+                # only consider one segment, it's already ordered by segment
+                seg_sorted = seg[indices]
+                # consider the pseudotime on this segment and sort them
+                seg_indices = np.argsort(pseudotime[seg_sorted])
+                # within the segment, order indices according to increasing pseudotime
+                indices[seg_sorted] = indices[seg_sorted][seg_indices]
+
+        # define class members
+        self.indices = indices  # indices of data points in original position, sorted by seg and then pseudotime
+        self.changepoints = changepoints  # indices of first tip of all branches
+
+        ordering_id = np.zeros(self.distances.shape[0], dtype=int)
+        for count, idx in enumerate(self.indices):
+            ordering_id[idx] = count
+        self.ordering = ordering_id # ordered location of each data point
+
+
+    def ordered_segs(self):
+        """ returns List[array] of segments where the ``i-th`` entry has the sorted indices
+        corresponding to the ``i-th`` branch.
+        """
+        # determine branches
+        if self.segs_names_unique[0] == -1:
+            x0 = self.changepoints[0]
+            changepoints = self.changepoints[1:]
+        else: 
+            x0 = 0
+            changepoints = self.changepoints
+
+        segs = []
+        for x1 in changepoints:
+            segs.append(self.indices[x0:x1])
+            x0 = x1
+        segs.append(self.indices[x0:])
+        return segs
+
+
+    def construct_topology(self):
+        """ construct connections between data points.
+
+        Returns
+        -------
+        G : `networkx.Graph`
+            Graph where each node is a data point and edges reflect connections between them.
+            Edges have attributes {'connection' : (str) 'intra-branch' or 'inter-branch'}
+            Nodes have attributes
+
+            .. code-block:: py
+
+               {'branch' : (int) -1, 0, 1, ... where -1 indicates the data point was not identified with a branch,
+                                   'undecided' : (bool) True if the data point is part of a trunk and False otherwise,
+                                   'name' : (str) Original label if given data was a dataframe, otherwise the same as the node id}
+        
+        """
+        G = nx.Graph()
+
+        segs = self.ordered_segs()
+
+        # add missing data points:
+        missing_nodes = set((range(self.distances.shape[0]))) - set(itertools.chain(*segs))
+        G.add_nodes_from(list(missing_nodes), branch=-1)
+        nx.set_node_attributes(G, {k: False for k in missing_nodes}, name='undecided')
+
+        # add edges within branch:
+        for ix, seg in enumerate(segs):
+            G.add_edges_from(zip(seg, seg[1:]), connection='intra-branch')
+            if len(seg) == 1:
+                G.add_node(seg[0])
+            nx.set_node_attributes(G, {v: {'branch': ix, 'undecided': self.segs_undecided[ix]} for v in seg})
+
+        # add edges connecting branches:
+        segs_connects_triu = sp.sparse.triu(self.segs_connects).tocsr()
+        rows, cols = segs_connects_triu.nonzero()
+        inter_branch_edges = [(self.segs_connects[r, c], self.segs_connects[c, r]) for r, c in zip(rows, cols)]
+        G.add_edges_from(inter_branch_edges, connection='inter-branch')
+
+        # add node names:
+        if self.index_labels is not None:
+            nx.set_node_attributes(G, {k: self.index_labels[k] for k in G}, name='name')
+        else:
+            nx.set_node_attributes(G, {k: str(k) for k in G}, name='name')
+
+        return G
+
+        
+    def branchings_segments(self, n_branches):
+        """ Detect up to `n_branches` branches and partition the data into corresponding segments.
+
+        Parameters
+        ----------
+        n_branches : `int`
+            Number of branches to look for (``n_branches > 0``).
+         
+        Notes
+        -----
+        Writes :
+        
+        - segs : `numpy.ndarray`, (n_segments, n_data_points)
+              Array where each row stores a mask array that defines a segment.
+        - segs_tips : `numpy.ndarray`, (n_segments, 2)
+              Array where each row stores the
+              indices of the two tip points of each segment.
+        - segs_names : `numpy.ndarray`, (n_data_points, )
+              Array that stores an integer label
+              for each segment.
+        """
+        self.detect_branches(n_branches)
+        self.postprocess_segments()
+        self.set_segs_names()
+        self.order_pseudotime()
+
+
+    def _set_pseudotime(self):
+        """ Return pseudotime with respect to root point. """
+        # root = self.root if root is None else root
+        # if root is None:
+        #     msg = "'root' must be specified in order to compute pseudo-ordering."
+        #     raise AssertionError(msg)
+
+        self.pseudotime = self.distances[self.root].copy()
+
+        self.pseudotime /= np.max(self.pseudotime[self.pseudotime < np.inf])
+
+
+"""
+scanpy.tools._dpt.py
+line 157: dpt.branchings_segments()
+    line 237: self.detect_branchings()  # Detect all branchings up to `n_branchings`. (here, called self.detect_branches())
+    line 238: self.postprocess_segments() # make segs an array, where the array is a list of (boolean) mask arrays, each of the same length as the number of data points
+    line 239: self.set_segs_names()
+    line 240: self.order_pseudotime() # Define indices that reflect segment and pseudotime order.
+
+"""
             
         
             
