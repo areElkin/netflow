@@ -1,0 +1,1034 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>netflow.app &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/netflow/app';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">netflow v0.0.dev Manual</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
+  <p class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">netflow.app</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for netflow.app</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">Dash</span><span class="p">,</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">dash_table</span>
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span class="kn">import</span> <span class="nn">dash_cytoscape</span> <span class="k">as</span> <span class="nn">cyto</span>
+<span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="k">as</span> <span class="nn">hc</span>
+<span class="kn">import</span> <span class="nn">scipy.spatial</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">ss</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">webbrowser</span>
+
+<span class="kn">from</span> <span class="nn">.classes</span> <span class="kn">import</span> <span class="n">InfoNet</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">stack_triu_where_</span>
+
+<span class="n">cyto</span><span class="o">.</span><span class="n">load_extra_layouts</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="correlation_network"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.correlation_network">[docs]</a><span class="k">def</span> <span class="nf">correlation_network</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Create graph from correlations `R` that satisfy given `condition`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    R : pandas DataFrame</span>
+<span class="sd">        `n` by `n` symmetric correlations, where `n` is the number of nodes.</span>
+<span class="sd">    condition : pandas DataFrame</span>
+<span class="sd">        Boolean dataframe of the same size and order of rows and columns as `df` indicating values, where `True`, to include</span>
+<span class="sd">        in the stacked dataframe.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Name of edge attribute that the correlations are saved as.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    G_R : networkx Graph</span>
+<span class="sd">        Graph with edges determined by correlations that satisfy the specified condition.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">E</span> <span class="o">=</span> <span class="n">stack_triu_where_</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;level_0&#39;</span><span class="p">:</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;level_1&#39;</span><span class="p">:</span> <span class="s1">&#39;target&#39;</span><span class="p">})</span>
+    <span class="n">G_R</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_edgelist</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">G_R</span></div>
+
+
+<div class="viewcode-block" id="node_positions"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.node_positions">[docs]</a><span class="k">def</span> <span class="nf">node_positions</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">bounding_box</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mi">1400</span><span class="p">,</span> <span class="mi">650</span><span class="p">),</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">pos_kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; get x,y-coordinates of nodes in the graph.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : networkx Graph</span>
+<span class="sd">        The graph.</span>
+<span class="sd">    bounding_box : 4-tuple</span>
+<span class="sd">        Tuple of the form (x_min, y_min, x_max, y_max) with the dimensions of the bounding box where the nodes can be positioned.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pos : dict</span>
+<span class="sd">        A dictionary of positions keyed by node of the form {node: {&#39;x&#39;: x-coordinate, &#39;y&#39;: y-coordinate}}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pos = nx.layout.spring_layout(G, k=10)</span>
+    
+    <span class="n">g</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_edge_attributes</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">{</span><span class="n">ee</span><span class="p">:</span> <span class="mi">1000</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">ee</span><span class="p">][</span><span class="n">weight</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-6</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">ee</span><span class="p">][</span><span class="n">weight</span><span class="p">])</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">()},</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;weight_tmp&#39;</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">kamada_kawai_layout</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;weight_tmp&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="c1"># center=((bounding_box[2] - bounding_box[0])/2, (bounding_box[3] - bounding_box[1])/2),                                 </span>
+                                 <span class="p">)</span>
+
+    <span class="n">X_MIN</span><span class="p">,</span> <span class="n">Y_MIN</span><span class="p">,</span> <span class="n">X_MAX</span><span class="p">,</span> <span class="n">Y_MAX</span> <span class="o">=</span> <span class="n">bounding_box</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+    <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">X_MAX</span> <span class="o">-</span> <span class="n">X_MIN</span><span class="p">)</span> <span class="o">+</span> <span class="n">X_MIN</span><span class="p">,</span>
+                  <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Y_MAX</span> <span class="o">-</span> <span class="n">Y_MIN</span><span class="p">)</span> <span class="o">+</span> <span class="n">Y_MIN</span><span class="p">,</span>
+                  <span class="p">}</span> <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">return</span> <span class="n">pos</span></div>
+
+
+<div class="viewcode-block" id="graph_elements"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.graph_elements">[docs]</a><span class="k">def</span> <span class="nf">graph_elements</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G2</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="s2">&quot;combo&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">pos_kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; put graph elements in JSON format</span>
+
+<span class="sd">    .. note:: assumes nodes in `G` have ids in consecutive order from 0, 1, ..., n-1 where n is the number of nodes and that</span>
+<span class="sd">        `G` has node attribute &quot;name&quot; with node label of type str</span>
+<span class="sd">    .. note:: assumes nodes in `G2` are subset of nodes in `G` with the same ids.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G, G2: networkx Graph</span>
+<span class="sd">        The graph and `functional` graph with correlated edges.</span>
+<span class="sd">    show : {&#39;combo&#39;, &#39;interaction&#39;, &#39;functional&#39;}</span>
+<span class="sd">        Select graph elements to show.</span>
+
+<span class="sd">        Options : </span>
+
+<span class="sd">        - &#39;combo&#39; : show interaction and functional network</span>
+<span class="sd">        - &#39;interaction&#39; : only show interaction network</span>
+<span class="sd">        - &#39;functional&#39; : only show functional network</span>
+<span class="sd">    pos : dict</span>
+<span class="sd">        Position of nodes.</span>
+<span class="sd">    **pos_kwargs : dict</span>
+<span class="sd">        Optional key-word arguments passed to `node_positions`.</span>
+<span class="sd">        .. note:: this is ignored if `pos` is provided.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    elements : dict</span>
+<span class="sd">        dict of graph nodes and edges in JSON format {&#39;nodes&#39;: [], &#39;edges&#39;: []}.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;combo&#39;</span><span class="p">,</span> <span class="s1">&#39;interaction&#39;</span><span class="p">,</span> <span class="s1">&#39;functional&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized value for show, must be one of [&#39;combo&#39;, &#39;interaction&#39;, &#39;functional&#39;].&quot;</span><span class="p">)</span>
+
+    <span class="c1"># if pos is None:</span>
+    <span class="c1">#     if show == &#39;functional&#39;:            </span>
+    <span class="c1">#         pos = node_positions(G2, **pos_kwargs)</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         pos = node_positions(G, **pos_kwargs)</span>
+
+    <span class="c1"># if pos is None:</span>
+    <span class="c1">#     nx.set_node_attributes(G, {k: {&#39;x&#39;: 0., &#39;y&#39;: 0.} for k in G}, name=&#39;position&#39;)</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     nx.set_node_attributes(G, pos, name=&#39;position&#39;)</span>
+
+    <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">}</span>
+
+
+    <span class="k">if</span> <span class="n">show</span> <span class="o">==</span> <span class="s1">&#39;functional&#39;</span><span class="p">:</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">cytoscape_data</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="n">G2</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))[</span><span class="s1">&#39;elements&#39;</span><span class="p">][</span><span class="s1">&#39;nodes&#39;</span><span class="p">],</span> <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">cytoscape_data</span><span class="p">(</span><span class="n">G2</span><span class="p">)[</span><span class="s1">&#39;elements&#39;</span><span class="p">][</span><span class="s1">&#39;edges&#39;</span><span class="p">]}</span>
+        <span class="c1"># elements = nx.cytoscape_data(G2)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">G_json</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">cytoscape_data</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="n">G_json</span><span class="p">[</span><span class="s1">&#39;elements&#39;</span><span class="p">][</span><span class="s1">&#39;nodes&#39;</span><span class="p">],</span> <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="n">G_json</span><span class="p">[</span><span class="s1">&#39;elements&#39;</span><span class="p">][</span><span class="s1">&#39;edges&#39;</span><span class="p">]}</span>
+        <span class="k">if</span> <span class="n">show</span> <span class="o">==</span> <span class="s1">&#39;combo&#39;</span><span class="p">:</span>
+            <span class="n">G2_json_edges</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">cytoscape_data</span><span class="p">(</span><span class="n">G2</span><span class="p">)[</span><span class="s1">&#39;elements&#39;</span><span class="p">][</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span>
+            <span class="n">elements</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">ee</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">G2_json_edges</span> <span class="k">if</span> <span class="p">(</span><span class="n">ee</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;source&#39;</span><span class="p">],</span> <span class="n">ee</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;target&#39;</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()]</span>
+        <span class="c1"># elements = nx.cytoscape_data(G)</span>
+    <span class="c1"># for ee in elements[&#39;elements&#39;][&#39;edges&#39;]:</span>
+    <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]:</span>
+        <span class="n">vv</span><span class="p">[</span><span class="s1">&#39;position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])]</span>
+        <span class="n">vv</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;nodes&#39;</span>
+
+    <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]:</span>
+        <span class="n">edg</span> <span class="o">=</span> <span class="p">(</span><span class="n">ee</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;source&#39;</span><span class="p">],</span> <span class="n">ee</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;target&#39;</span><span class="p">])</span>
+        <span class="n">ee</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;edges&#39;</span>
+        <span class="n">ee</span><span class="p">[</span><span class="s1">&#39;classes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;combo&#39;</span> <span class="k">if</span> <span class="p">(</span><span class="n">edg</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span> <span class="ow">and</span> <span class="n">edg</span> <span class="ow">in</span> <span class="n">G2</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span> <span class="k">else</span> <span class="s1">&#39;interaction&#39;</span> <span class="k">if</span> <span class="n">edg</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;functional&#39;</span>
+
+    <span class="c1">#########</span>
+
+    <span class="c1"># if show == &#39;functional&#39;:</span>
+    <span class="c1">#     if pos is None:</span>
+    <span class="c1">#         nodes = [{&#39;group&#39;: &#39;nodes&#39;,</span>
+    <span class="c1">#                   &#39;data&#39;: {&#39;id&#39;: g, &#39;name&#39;: G.nodes[g][&#39;name&#39;], &#39;cluster&#39;: G.nodes[g][&#39;cluster&#39;]},</span>
+    <span class="c1">#                   &#39;position&#39;: {&#39;x&#39;: 0, &#39;y&#39;: 0},</span>
+    <span class="c1">#                   # &#39;position&#39;: {&#39;x&#39;: pos[g][&#39;x&#39;], &#39;y&#39;: pos[g][&#39;y&#39;]},</span>
+    <span class="c1">#                   # &#39;classes&#39; : [],</span>
+    <span class="c1">#                   } for g in G2]</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         nodes = [{&#39;group&#39;: &#39;nodes&#39;,</span>
+    <span class="c1">#                   &#39;data&#39;: {&#39;id&#39;: g, &#39;name&#39;: G.nodes[g][&#39;name&#39;], &#39;cluster&#39;: G.nodes[g][&#39;cluster&#39;]},</span>
+    <span class="c1">#                   &#39;position&#39;: {&#39;x&#39;: pos[g][&#39;x&#39;], &#39;y&#39;: pos[g][&#39;y&#39;]},</span>
+    <span class="c1">#                   # &#39;classes&#39; : [],</span>
+    <span class="c1">#                   } for g in G2]</span>
+    <span class="c1">#     el = list(G2.edges())</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     if pos is None:</span>
+    <span class="c1">#         nodes = [{&#39;group&#39;: &#39;nodes&#39;,</span>
+    <span class="c1">#                   &#39;data&#39;: {&#39;id&#39;: g, &#39;name&#39;: G.nodes[g][&#39;name&#39;], &#39;cluster&#39;: G.nodes[g][&#39;cluster&#39;]},</span>
+    <span class="c1">#                   &#39;position&#39;: {&#39;x&#39;: 0, &#39;y&#39;: 0},</span>
+    <span class="c1">#                   # &#39;position&#39;: {&#39;x&#39;: pos[g][&#39;x&#39;], &#39;y&#39;: pos[g][&#39;y&#39;]},</span>
+    <span class="c1">#                   # &#39;classes&#39; : [],</span>
+    <span class="c1">#                   } for g in G]</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         nodes = [{&#39;group&#39;: &#39;nodes&#39;,</span>
+    <span class="c1">#                   &#39;data&#39;: {&#39;id&#39;: g, &#39;name&#39;: G.nodes[g][&#39;name&#39;], &#39;cluster&#39;: G.nodes[g][&#39;cluster&#39;]},</span>
+    <span class="c1">#                   &#39;position&#39;: {&#39;x&#39;: pos[g][&#39;x&#39;], &#39;y&#39;: pos[g][&#39;y&#39;]},</span>
+    <span class="c1">#                   # &#39;classes&#39; : [],</span>
+    <span class="c1">#                   } for g in G]</span>
+    <span class="c1">#     el = list(G.edges())</span>
+    <span class="c1">#     if show == &quot;combo&quot;:</span>
+    <span class="c1">#         el = el + [ee for ee in G2.edges() if ee not in G.edges()] </span>
+        
+    <span class="c1"># # el = list(G.edges()) + [ee for ee in G2.edges() if ee not in G.edges()]  # set(G.edges()) | set(G2.edges())</span>
+
+    <span class="c1"># # interaction, functional, combo</span>
+    <span class="c1"># edges = [{&#39;group&#39;: &#39;edges&#39;,</span>
+    <span class="c1">#           &#39;data&#39;: {&#39;source&#39;: ee[0], &#39;target&#39;: ee[1],</span>
+    <span class="c1">#                    # &#39;weight&#39;: G.edges[ee][&#39;weight&#39;],</span>
+    <span class="c1">#                    },</span>
+    <span class="c1">#           # &#39;classes&#39;: [&quot;interaction&quot;, &quot;functional&quot;, &quot;combo&quot;] if (ee in G.edges() and ee in G2.edges()) else [&quot;interaction&quot;] if ee in G.edges() else [&quot;functional&quot;],</span>
+    <span class="c1">#           &#39;classes&#39;: &#39;combo&#39; if (ee in G.edges() and ee in G2.edges()) else &#39;interaction&#39; if ee in G.edges() else &#39;functional&#39;,</span>
+    <span class="c1">#           } for ee in el]</span>
+    <span class="c1"># return nodes + edges</span>
+    <span class="k">return</span> <span class="n">elements</span> <span class="c1"># [&#39;nodes&#39;] + elements[&#39;edges&#39;]</span></div>
+
+
+<div class="viewcode-block" id="upload_topology"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.upload_topology">[docs]</a><span class="k">def</span> <span class="nf">upload_topology</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">content_type</span><span class="p">,</span> <span class="n">content_string</span> <span class="o">=</span> <span class="n">contents</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+    <span class="n">decoded</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">content_string</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;csv&#39;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="c1"># Assume that the user uploaded a CSV file</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+                <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">decoded</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)))</span>
+        <span class="k">elif</span> <span class="s1">&#39;xls&#39;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="c1"># Assume that the user uploaded an excel file</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">decoded</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+            <span class="s1">&#39;There was an error processing this file.&#39;</span>
+        <span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+<span class="n">cose_layout</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;cose&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;idealEdgeLength&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s1">&#39;nodeOverlap&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="s1">&#39;refresh&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="s1">&#39;fit&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s1">&#39;padding&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s1">&#39;randomize&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;componentSpacing&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s1">&#39;nodeRepulsion&#39;</span><span class="p">:</span> <span class="mi">400000</span><span class="p">,</span>
+    <span class="s1">&#39;edgeElasticity&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s1">&#39;nestingFactor&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;gravity&#39;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+    <span class="s1">&#39;numIter&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="s1">&#39;initialTemp&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="s1">&#39;coolingFactor&#39;</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span>
+    <span class="s1">&#39;minTemp&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">styles</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;container&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="s1">&#39;fixed&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;flex&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;flex-direction&#39;</span><span class="p">:</span> <span class="s1">&#39;column&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>        
+    <span class="p">},</span>
+    <span class="s1">&#39;in-line-container&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="s1">&#39;inline-block&#39;</span><span class="p">,</span>
+        <span class="c1"># &#39;border&#39;: &#39;thin lightgrey solid&#39;,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;border-container&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;border&#39;</span><span class="p">:</span> <span class="s1">&#39;thin lightgrey solid&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;99%&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;cy-container&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;flex&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="s1">&#39;relative&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;cytoscape&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
+        <span class="c1"># &#39;position&#39;: &#39;relative&#39;,</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span> <span class="c1"># &#39;90%&#39;,</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span> <span class="c1"># &#39;90%&#39;,</span>
+        <span class="s1">&#39;z-index&#39;</span><span class="p">:</span> <span class="mi">999</span><span class="p">,</span>
+        <span class="c1"># &#39;border&#39;: &#39;thin lightgrey solid&#39;,</span>
+        <span class="c1"># &#39;overflow-y&#39;: &#39;scroll&#39;,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;tab&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;calc(98vh - 80px)&#39;</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># stylesheet with the .dbc class from dash-bootstrap-templates library</span>
+<span class="n">dbc_css</span> <span class="o">=</span> <span class="s2">&quot;https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css&quot;</span>
+
+<div class="viewcode-block" id="App"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.App">[docs]</a><span class="k">class</span> <span class="nc">App</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Creating Dash app</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : networkx Graph</span>
+<span class="sd">        The interaction network.</span>
+<span class="sd">    R : pandas DataFrame</span>
+<span class="sd">        Symmetric pairwise correlations between nodes in `G`.</span>
+<span class="sd">    R_thresh : float (R_thresh &gt; 0.)</span>
+<span class="sd">        Initial correlation threshold.</span>
+<span class="sd">    clustering: {None, str}</span>
+<span class="sd">        Node attribute with cluster ID used to color the nodes</span>
+<span class="sd">    selected_graph : {&#39;combo&#39;, &#39;interaction&#39;, &#39;functional&#39;}</span>
+<span class="sd">        Initial graph to render.</span>
+<span class="sd">    node_type : {int, str}</span>
+<span class="sd">        Data type of node ids.</span>
+<span class="sd">    pos_kwargs : dict</span>
+<span class="sd">        Optional key-word arguments passed to initialize node positions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="App.__init__"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.App.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">R_thresh</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="c1"># selected_graph=&#39;combo&#39;,</span>
+                 <span class="n">clustering</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">node_type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">pos_kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_type</span> <span class="o">=</span> <span class="n">node_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">ee</span><span class="p">:</span> <span class="n">R</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()},</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">R</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R_thresh</span> <span class="o">=</span> <span class="n">R_thresh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clustering</span> <span class="o">=</span> <span class="n">clustering</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G_R</span> <span class="o">=</span> <span class="n">correlation_network</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">R</span><span class="o">&gt;</span><span class="n">R_thresh</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_graph</span> <span class="o">=</span> <span class="s1">&#39;combo&#39;</span> <span class="c1"># selected_graph</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">Dash</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                        <span class="n">external_stylesheets</span><span class="o">=</span><span class="p">[</span><span class="n">dbc</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">FLATLY</span><span class="p">,</span> <span class="n">dbc_css</span><span class="p">])</span> <span class="c1"># [&#39;https://codepen.io/chriddyp/pen/bWLwgP.css&#39;])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stylesheet</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># group selector for all nodes</span>
+            <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;node&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;data(name)&#39;</span><span class="p">,</span> <span class="c1"># &#39;width&#39;: 15, &#39;height&#39;: 15, &#39;font-size&#39;: 24,</span>
+                       <span class="s1">&#39;background-color&#39;</span><span class="p">:</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="s1">&#39;opacity&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">}},</span>            
+            <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s2">&quot;.supernode&quot;</span><span class="p">,</span>
+             <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;background-color&#39;</span><span class="p">:</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;opacity&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s1">&#39;z-index&#39;</span><span class="p">:</span> <span class="mi">998</span><span class="p">,</span> <span class="c1"># 10000,</span>
+                       <span class="p">}},</span>
+            <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;[cluster = 0]&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;background-color&#39;</span><span class="p">:</span> <span class="s1">&#39;brown&#39;</span><span class="p">,</span> <span class="c1"># &#39;width&#39;: 15, &#39;height&#39;: 15,</span>
+                       <span class="s1">&#39;opacity&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s1">&#39;z-index&#39;</span><span class="p">:</span> <span class="mi">998</span><span class="p">,</span> <span class="c1"># 10000</span>
+                       <span class="p">}},</span>
+            <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;[cluster = 1]&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;background-color&#39;</span><span class="p">:</span> <span class="s1">&#39;violet&#39;</span><span class="p">,</span> <span class="s1">&#39;opacity&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s1">&#39;z-index&#39;</span><span class="p">:</span> <span class="mi">998</span><span class="p">,</span> <span class="c1"># 10000,</span>
+                       <span class="p">}},</span>
+            <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;edge&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;line-color&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;curve-style&#39;</span><span class="p">:</span> <span class="s1">&#39;bezier&#39;</span><span class="p">,</span> <span class="s1">&#39;opacity&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="c1"># &#39;width&#39;: 2,</span>
+                       <span class="p">}},</span>
+            <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s2">&quot;.interaction&quot;</span><span class="p">,</span>
+             <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;line-color&#39;</span><span class="p">:</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="s1">&#39;curve-style&#39;</span><span class="p">:</span> <span class="s1">&#39;bezier&#39;</span><span class="p">,</span> <span class="s1">&#39;opacity&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="c1"># &#39;width&#39;: 2,</span>
+                       <span class="p">}},</span> <span class="c1"># , &#39;z-index&#39;: 11000}},</span>
+            <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s2">&quot;.functional&quot;</span><span class="p">,</span>
+             <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;line-color&#39;</span><span class="p">:</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;curve-style&#39;</span><span class="p">:</span> <span class="s1">&#39;bezier&#39;</span><span class="p">,</span> <span class="s1">&#39;opacity&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="c1"># &#39;width&#39;: 2,</span>
+                       <span class="p">}},</span> <span class="c1"># , &#39;z-index&#39;: 11000}},</span>
+            <span class="p">{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s2">&quot;.combo&quot;</span><span class="p">,</span>
+             <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;line-color&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;curve-style&#39;</span><span class="p">:</span> <span class="s1">&#39;bezier&#39;</span><span class="p">,</span> <span class="s1">&#39;opacity&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="c1"># &#39;width&#39;: 2,</span>
+                       <span class="p">}},</span> <span class="c1"># , &#39;z-index&#39;: 11000}},</span>
+            <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># node_positions(self.G, bounding_box=(0., 0., 1400, 650), weight=&#39;R&#39;, **pos_kwargs)</span>
+        <span class="c1"># print(f&quot;---- initial pos of node 0: {self.pos[0]} ----&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">graph_elements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G_R</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_graph</span><span class="p">,</span> <span class="c1"># &quot;combo&quot;,</span>
+                                       <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span> <span class="c1"># **pos_kwargs)</span>
+        <span class="c1"># print(self.elements)</span>
+        <span class="c1"># print(self.G, self.G_R, len([k for k in self.G_R.edges() if k in self.G.edges()]))</span>
+
+
+        <span class="n">radio_items_selected_graph_rendering</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">RadioItems</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Interaction network&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;interaction&#39;</span><span class="p">},</span>
+                                                                       <span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Correlated neighborhood network&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;functional&#39;</span><span class="p">},</span>
+                                                                       <span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Combo&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;combo&#39;</span><span class="p">}],</span> <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_graph</span><span class="p">,</span> <span class="c1"># &#39;combo&#39;,</span>
+                                                              <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;radio_graph_selection&quot;</span><span class="p">,</span>
+                                                              <span class="n">labelStyle</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="s2">&quot;flex&quot;</span><span class="p">,</span> <span class="s2">&quot;align-items&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">},</span>
+                                                              <span class="p">)</span>
+
+        <span class="c1"># switch_fix_node_positions = html.Button(&#39;Fix positions&#39;, id=&#39;btn_fix_pos&#39;, n_clicks=0, disabled=False)</span>
+        <span class="n">switch_fix_node_positions</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span><span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Layout&quot;</span><span class="p">,</span> <span class="n">html_for</span><span class="o">=</span><span class="s2">&quot;btn_fix_pos&quot;</span><span class="p">),</span>
+                                              <span class="n">dbc</span><span class="o">.</span><span class="n">Switch</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;btn_fix_pos&quot;</span><span class="p">,</span> <span class="c1"># style=styles[&#39;container&#39;], # class_name=, input_class_name=, input_style=, style=,</span>
+                                               <span class="n">disabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fix layout&#39;</span><span class="p">,</span> <span class="c1"># label_class_name=, label_style=,</span>
+                                               <span class="n">label_id</span><span class="o">=</span><span class="s1">&#39;btn_fix_pos_label&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># style=styles[&#39;in-line-container&#39;],</span>
+                                               <span class="c1"># class_name=&quot;ms-1&quot;,                                               </span>
+                                                         <span class="p">)],</span> <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3 ml-3&quot;</span><span class="p">)</span>
+
+        <span class="n">slider_R_thresh</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span><span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;</span><span class="se">\u03F1</span><span class="s2">(W)&quot;</span><span class="p">,</span> <span class="c1">#  dcc.Markdown(&#39;$\rho_W$&#39;, mathjax=True),</span>
+                                              <span class="n">html_for</span><span class="o">=</span><span class="s2">&quot;R-thresh-slider&quot;</span><span class="p">),</span>
+                                    <span class="n">dcc</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;R-thresh-slider&#39;</span><span class="p">,</span> <span class="c1"># className=&quot;dbc&quot;,</span>
+                                     <span class="n">tooltip</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;placement&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;always_visible&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                                               <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-1&quot;</span><span class="p">)],</span> <span class="n">className</span><span class="o">=</span><span class="s2">&quot;dbc&quot;</span><span class="p">)</span>
+
+        <span class="c1"># cyto_rendering = dbc.Container([# html.Div([</span>
+        <span class="c1">#     cyto.Cytoscape(id=&quot;cytoscape_visualization&quot;,</span>
+        <span class="c1">#                    layout=cose_layout, # {&#39;name&#39;: &#39;cose&#39;},  # if self.pos is None else {&#39;name&#39;: &#39;preset&#39;},</span>
+        <span class="c1">#                    # style=styles[&#39;cytoscape&#39;], # {&#39;height&#39;: &#39;100vh&#39;, &#39;width&#39;: &#39;100vw&#39;}, # styles[&#39;cytoscape&#39;],  # style={&#39;width&#39;: &quot;{}px&quot;.format(700), &#39;height&#39;: &quot;{}px&quot;.format(500)}</span>
+        <span class="c1">#                    stylesheet=self.stylesheet,</span>
+        <span class="c1">#                    elements=self.elements)</span>
+        <span class="c1"># ], # style={&#39;border&#39;: &#39;thin lightgrey solid&#39;}, # , &#39;width&#39;: &#39;30vw&#39;},</span>
+        <span class="c1">#                                # className=&#39;pretty_container&#39;, # style=styles[&#39;cy-container&#39;],</span>
+        <span class="c1">#                                # className=&quot;dbc&quot;, # style=styles[&#39;cy-container&#39;], # className=&quot;nine columns&quot;, # className=&#39;cy-container&#39;, style=styles[&#39;cy-container&#39;],</span>
+        <span class="c1">#                                # className=&quot;mb-3&quot;, color=&quot;primary&quot;, inverse=True,</span>
+        <span class="c1">#                                style={&#39;width&#39;: &#39;100hv&#39;})# ], # class_name=&#39;cy-container&#39;, #style=styles[&#39;cy-container&#39;], # className=&quot;p-4&quot;) # &quot;mx-3 mp-3&quot;)</span>
+        <span class="c1"># )</span>
+        <span class="n">cyto_rendering</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Card</span><span class="p">([</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">CardHeader</span><span class="p">([</span><span class="n">html</span><span class="o">.</span><span class="n">H4</span><span class="p">(</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="n">className</span><span class="o">=</span><span class="s2">&quot;card-title&quot;</span><span class="p">)],</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;primary&#39;</span><span class="p">}),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">CardBody</span><span class="p">([</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+                    <span class="n">cyto</span><span class="o">.</span><span class="n">Cytoscape</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;cytoscape_visualization&quot;</span><span class="p">,</span>
+                                   <span class="n">layout</span><span class="o">=</span><span class="n">cose_layout</span><span class="p">,</span> <span class="c1"># {&#39;name&#39;: &#39;cose&#39;},</span>
+                                   <span class="c1"># style=styles[&#39;cytoscape&#39;], # {&#39;height&#39;: &#39;100vh&#39;, &#39;width&#39;: &#39;100vw&#39;}, # styles[&#39;cytoscape&#39;],  # style={&#39;width&#39;: &quot;{}px&quot;.format(700), &#39;height&#39;: &quot;{}px&quot;.format(500)}</span>
+                                   <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                                       <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                                       <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                                       <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="s1">&#39;absolute&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;z-index&#39;</span><span class="p">:</span> <span class="mi">999</span><span class="p">,</span> <span class="c1"># &#39;border&#39;: &quot;1px solid #888&quot;,</span>
+                                   <span class="p">},</span>
+                                   <span class="n">stylesheet</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stylesheet</span><span class="p">,</span>
+                                   <span class="n">elements</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span>
+                <span class="p">],</span> <span class="c1"># style={&#39;position&#39;: &#39;relative&#39;, &#39;width&#39;: &#39;100vw&#39;, &#39;height&#39;: &#39;100vh&#39;},</span>
+                         <span class="p">),</span> 
+            <span class="p">],</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="s1">&#39;relative&#39;</span><span class="p">,</span> <span class="s1">&#39;background-color&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="c1"># &#39;border&#39;: &#39;30rem&#39;, # &#39;width&#39;: &#39;100vw&#39;, # HERE ******</span>
+                      <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;75vh&#39;</span><span class="p">},</span>  <span class="c1"># className=&#39;pretty_container&#39;, # style=styles[&#39;cy-container&#39;],</span>
+                         <span class="c1"># className=&quot;dbc&quot;, # style=styles[&#39;cy-container&#39;], # className=&quot;nine columns&quot;, # className=&#39;cy-container&#39;, style=styles[&#39;cy-container&#39;],</span>
+                         <span class="c1"># ***</span>
+                         <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-1 ml-1&quot;</span><span class="p">)],</span> <span class="c1"># ], # class_name=&#39;cy-container&#39;, #style=styles[&#39;cy-container&#39;], # className=&quot;p-4&quot;) # &quot;mx-3 mp-3&quot;)</span>
+                                  <span class="n">color</span><span class="o">=</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># outline=True,                                  </span>
+                                  <span class="c1"># style={&#39;width&#39;: &#39;100wv&#39;, &#39;heigh&#39;: &#39;100hv&#39;},</span>
+                                  <span class="p">)</span>
+
+        <span class="n">graph_tab</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
+            <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="c1"># html.Div([dbc.Card([</span>
+                <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">([</span><span class="n">dbc</span><span class="o">.</span><span class="n">Card</span><span class="p">([</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">CardHeader</span><span class="p">([</span><span class="n">html</span><span class="o">.</span><span class="n">H4</span><span class="p">(</span><span class="s2">&quot;Visualization&quot;</span><span class="p">,</span> <span class="n">className</span><span class="o">=</span><span class="s2">&quot;card-title&quot;</span><span class="p">),</span>
+                                    <span class="n">html</span><span class="o">.</span><span class="n">H6</span><span class="p">(</span><span class="s2">&quot;Rendering options&quot;</span><span class="p">,</span> <span class="n">className</span><span class="o">=</span><span class="s2">&quot;card-subtitle&quot;</span><span class="p">)]),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">ListGroup</span><span class="p">([</span><span class="n">dbc</span><span class="o">.</span><span class="n">ListGroupItem</span><span class="p">(</span><span class="n">radio_items_selected_graph_rendering</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;primary&#39;</span><span class="p">),</span>
+                                   <span class="n">dbc</span><span class="o">.</span><span class="n">ListGroupItem</span><span class="p">(</span><span class="n">switch_fix_node_positions</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;primary&#39;</span><span class="p">),</span> <span class="c1"># html.Button(&#39;Fix positions&#39;, id=&#39;btn_fix_pos&#39;, n_clicks=0, disabled=False),</span>
+                                   <span class="n">dbc</span><span class="o">.</span><span class="n">ListGroupItem</span><span class="p">(</span><span class="n">slider_R_thresh</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;primary&#39;</span><span class="p">)],</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                <span class="p">],</span> <span class="c1"># style={&quot;width&quot;: &quot;18rem&quot;},  # className=&quot;d-flex flex-column&quot;, # &quot;flex-grow-1&quot;, # &quot;mb-1&quot;,</span>
+                                  <span class="n">color</span><span class="o">=</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="p">)],</span><span class="c1"># className=&quot;three columns&quot;, # style=styles[&#39;border-container&#39;],</span>
+                        <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="c1"># style={&quot;height&quot;: &quot;100%&quot;},</span>
+                        <span class="p">),</span> <span class="c1"># , class_name=&quot;flex-grow-1&quot;), # className=&quot;nine columns&quot;),</span>
+                <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span><span class="n">cyto_rendering</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="c1"># className=&quot;mr-1&quot;,</span>
+                        <span class="c1"># class_name=&quot;border&quot;,                                     # style={&quot;height&quot;: &quot;100%&quot;},</span>
+                        <span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">className</span><span class="o">=</span><span class="s2">&quot;g-2 h-75&quot;</span><span class="p">,</span> <span class="c1"># &quot;h-75 g-2&quot;,</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># btn_download = dbc.Row(dcc.Download(id=&quot;download-graph&quot;))</span>
+
+        <span class="n">upload_tab</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span><span class="n">dcc</span><span class="o">.</span><span class="n">Upload</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;network-upload&#39;</span><span class="p">,</span>
+                                          <span class="n">children</span><span class="o">=</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
+                                              <span class="s1">&#39;Drag and Drop or click to &#39;</span><span class="p">,</span>
+                                              <span class="n">html</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="s1">&#39;Select Network Topology File&#39;</span><span class="p">)</span>
+                                          <span class="p">]),</span>
+                                          <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                                              <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;60px&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;lineHeight&#39;</span><span class="p">:</span> <span class="s1">&#39;60px&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;borderWidth&#39;</span><span class="p">:</span> <span class="s1">&#39;1px&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;borderStyle&#39;</span><span class="p">:</span> <span class="s1">&#39;dashed&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;borderRadius&#39;</span><span class="p">:</span> <span class="s1">&#39;5px&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;textAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;10px&#39;</span>
+                                          <span class="p">},</span>
+                                          <span class="c1"># Allow multiple files to be uploaded</span>
+                                          <span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                          <span class="p">),</span>
+                               <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;output-network-upload&#39;</span><span class="p">),</span>
+                               <span class="p">])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Container</span><span class="p">(</span>  <span class="c1"># html.Div(</span>
+            <span class="p">[</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">H2</span><span class="p">(</span><span class="n">children</span><span class="o">=</span><span class="s2">&quot;Cooperative network modules&quot;</span><span class="p">,</span>
+                                 <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;textAlign&#39;</span><span class="p">:</span> <span class="s1">&#39;left&#39;</span><span class="p">},</span>
+                                 <span class="p">),</span> <span class="n">className</span><span class="o">=</span><span class="s2">&quot;dbc&quot;</span><span class="p">),</span>
+                <span class="n">dbc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">([</span><span class="s2">&quot;loading&quot;</span><span class="p">,</span> <span class="n">upload_tab</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Initialization&quot;</span><span class="p">),</span>
+                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">graph_tab</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Network visualization&quot;</span><span class="p">),</span>                     
+                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="s2">&quot;Heatmaps&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Data visualization&quot;</span><span class="p">),</span>
+                     <span class="p">])</span>
+            <span class="p">],</span> <span class="n">className</span><span class="o">=</span><span class="s2">&quot;dbc&quot;</span><span class="p">,</span> <span class="n">fluid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>     <span class="c1"># style={&quot;height&quot;: &quot;100vh&quot;, &#39;width&#39;: &#39;100vw&#39;},</span>
+        <span class="p">)</span> <span class="c1"># , style=styles[&#39;container&#39;]) # className=&quot;dash-bootstrap&quot;)</span>
+
+
+        <span class="c1"># self.app.callback(Output(&#39;radio_graph_selection&#39;, &#39;value&#39;),</span>
+        <span class="c1">#                   Input(&#39;R-thresh-slider&#39;, &#39;value&#39;), prevent_initial_call=True, allow_duplicate=True)(self.update_functional_network)</span>
+        <span class="c1"># self.app.callback(Output(&#39;cytoscape_visualization&#39;, &#39;layout&#39;),</span>
+        <span class="c1">#                   Output(&quot;cyto_info&quot;, &quot;children&quot;),</span>
+        <span class="c1">#                   Input(&#39;btn_fix_pos&#39;, &#39;n_clicks&#39;), </span>
+        <span class="c1">#                   State(&#39;cytoscape_visualization&#39;, &#39;elements&#39;))(self.fix_node_positions)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;cytoscape_visualization&#39;</span><span class="p">,</span> <span class="s1">&#39;layout&#39;</span><span class="p">),</span>
+                          <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;radio_graph_selection&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span>
+                          <span class="c1"># Output(&#39;cytoscape_visualization&#39;, &#39;elements&#39;),</span>
+                          <span class="c1"># Input(&#39;btn_fix_pos&#39;, &#39;n_clicks&#39;),</span>
+                          <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;btn_fix_pos&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span>                          
+                          <span class="c1"># Input(&#39;radio_graph_selection&#39;, &#39;value&#39;),                          </span>
+                          <span class="n">State</span><span class="p">(</span><span class="s1">&#39;cytoscape_visualization&#39;</span><span class="p">,</span> <span class="s1">&#39;elements&#39;</span><span class="p">),</span> <span class="n">prevent_initial_call</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">fix_node_positions</span><span class="p">)</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;cytoscape_visualization&#39;</span><span class="p">,</span> <span class="s1">&#39;elements&#39;</span><span class="p">),</span> <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;btn_fix_pos&#39;</span><span class="p">,</span> <span class="s1">&#39;disabled&#39;</span><span class="p">),</span>
+                          <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;radio_graph_selection&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span> <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;R-thresh-slider&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">))(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_elements</span><span class="p">)</span>
+
+        <span class="c1"># @self.app.callback([Output(&#39;cytoscape_visualization&#39;, &#39;layout&#39;), Output(&quot;cyto_info&quot;, &quot;children&quot;)],</span>
+        <span class="c1">#                    Input(&#39;btn_fix_pos&#39;, &#39;n_clicks&#39;),</span>
+        <span class="c1">#                    State(&#39;cytoscape_visualization&#39;, &#39;elements&#39;))</span>
+        <span class="c1"># def fix_node_positions(self, n_clicks, elements):</span>
+        <span class="c1">#     if n_clicks:</span>
+        <span class="c1">#         # new_pos = json.dumps(elements)</span>
+        <span class="c1">#         s1 = json.dumps(self.pos)</span>
+        <span class="c1">#         self.pos = {k[&#39;data&#39;][&#39;id&#39;]: k[&#39;position&#39;] for k in elements if k[&#39;group&#39;] == &#39;nodes&#39;}</span>
+        <span class="c1">#         return {&#39;name&#39;: &#39;preset&#39;}, &quot;Fixed node positions.&quot;</span>
+
+
+        <span class="c1"># @self.app.callback(Output(&#39;cytoscape_visualization&#39;, &#39;elements&#39;),</span>
+        <span class="c1">#                    Input(&#39;radio_graph_selection&#39;, &#39;value&#39;))</span>
+        <span class="c1"># def update_elements(selected_graph):</span>
+        <span class="c1">#     return graph_elements(self.G, self.G_R, show=selected_graph, pos=self.pos)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s1">&#39;output-network-upload&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="p">),</span>
+                          <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;network-upload&#39;</span><span class="p">,</span> <span class="s1">&#39;contents&#39;</span><span class="p">),</span>
+                          <span class="n">State</span><span class="p">(</span><span class="s1">&#39;network-upload&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">),</span>
+                          <span class="c1"># State(&#39;network-upload&#39;, &#39;last_modified&#39;),</span>
+                          <span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">upload_graph</span><span class="p">)</span>
+                                
+
+        <span class="c1"># Open Dash app in web browser</span>
+        <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;http://LMPH20258.local:8050&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s1">&#39;LMPH20258.local&#39;</span><span class="p">,</span> <span class="n">use_reloader</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    <span class="c1"># def update_functional_network(self, value):</span>
+    <span class="c1">#     self.G_R = correlation_network(self.R, R&gt;value, name=&#39;R&#39;)</span>
+    <span class="c1">#     self.elements = graph_elements(self.G, self.G_R, pos=self.pos) # **pos_kwargs)</span>
+    <span class="c1">#     return self.selected_graph</span>
+        
+    
+
+<div class="viewcode-block" id="App.fix_node_positions"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.App.fix_node_positions">[docs]</a>    <span class="k">def</span> <span class="nf">fix_node_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">elements</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span><span class="p">:</span> <span class="c1"># if n_clicks:</span>
+            <span class="c1"># new_pos = json.dumps(elements)</span>
+            <span class="c1"># self.pos = {k[&#39;data&#39;][&#39;id&#39;] if self.node_type is str else int(k[&#39;data&#39;][&#39;id&#39;]): k[&#39;position&#39;] for k in elements if k[&#39;group&#39;] == &#39;nodes&#39;}</span>
+            <span class="c1"># HERE: self.pos = {int(k[&#39;data&#39;][&#39;id&#39;]): k[&#39;position&#39;] for k in elements if k[&#39;group&#39;] == &#39;nodes&#39;}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]):</span> <span class="n">k</span><span class="p">[</span><span class="s1">&#39;position&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]}</span>
+
+            <span class="c1"># print(f&quot; ********** fix node positions for node 0: ({len(self.pos)}), {self.pos} **************&quot;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">graph_elements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G_R</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span> <span class="c1"># **pos_kwargs)</span>
+            <span class="c1"># print(&#39;******* fix node pos *******&#39;)</span>
+            <span class="c1"># print(self.pos)</span>
+            <span class="c1"># updated_elements = self.update_elements(btn_value)                </span>
+            
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;preset&#39;</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_graph</span> <span class="c1"># , updated_elements # , &quot;Fixed node positions.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">graph_elements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G_R</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cose_layout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_graph</span></div>
+            
+
+
+    <span class="c1"># @self.app.callback(Output(&#39;cytoscape_visualization&#39;, &#39;elements&#39;),</span>
+    <span class="c1">#                    Input(&#39;radio_graph_selection&#39;, &#39;value&#39;))</span>
+<div class="viewcode-block" id="App.update_elements"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.App.update_elements">[docs]</a>    <span class="k">def</span> <span class="nf">update_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected_graph</span><span class="p">,</span> <span class="n">R_thresh</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_graph</span> <span class="o">=</span> <span class="n">selected_graph</span>
+
+        <span class="k">if</span> <span class="n">R_thresh</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R_thresh</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">R_thresh</span> <span class="o">=</span> <span class="n">R_thresh</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G_R</span> <span class="o">=</span> <span class="n">correlation_network</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="n">R</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">R_thresh</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">graph_elements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G_R</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span> <span class="c1"># **pos_kwargs)        </span>
+
+        <span class="c1"># print(f&quot;======== updated elements pos for node 0: {&#39;None&#39; if self.pos is None else self.pos[0]}&quot;)</span>
+        <span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">selected_graph</span> <span class="o">==</span> <span class="s1">&#39;functional&#39;</span> <span class="k">else</span> <span class="kc">False</span>
+        
+        <span class="k">return</span> <span class="n">graph_elements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G_R</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">selected_graph</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span> <span class="n">disabled</span></div>
+
+
+<div class="viewcode-block" id="App.upload_graph"><a class="viewcode-back" href="../../reference/generated/netflow.app.html#netflow.app.App.upload_graph">[docs]</a>    <span class="k">def</span> <span class="nf">upload_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CONTENTS = </span><span class="si">{</span><span class="n">contents</span><span class="si">}</span><span class="s2"> and NAMES = </span><span class="si">{</span><span class="n">names</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">upload_topology</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">df</span>
+            <span class="k">else</span><span class="p">:</span>
+                
+                <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_edgelist</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                <span class="n">children</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;Uploaded topology from </span><span class="si">{</span><span class="n">names</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">G</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span><span class="si">}</span><span class="s2"> nodes and </span><span class="si">{</span><span class="n">G</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span><span class="si">}</span><span class="s2"> edges.&quot;</span><span class="p">]),</span>
+                    <span class="p">]</span>
+            <span class="k">return</span> <span class="n">children</span></div></div>
+                
+            
+        
+
+        
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">n_obs</span> <span class="o">=</span> <span class="mi">120</span>
+    <span class="n">R_thresh</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># 0.9</span>
+    <span class="n">outdir</span> <span class="o">=</span> <span class="s1">&#39;/Users/renae12/Desktop/testing_app&#39;</span>
+    
+    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">karate_club_graph</span><span class="p">()</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;club&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Officer&#39;</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cluster&quot;</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_obs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="p">)),</span> <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">n_obs</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">G</span><span class="p">))</span>
+
+    <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">outdir</span><span class="p">)</span>
+    
+    <span class="n">R</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+    <span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">R_thresh</span><span class="o">=</span><span class="n">R_thresh</span><span class="p">)</span>
+    
+    
+    
+    
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023-2023, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

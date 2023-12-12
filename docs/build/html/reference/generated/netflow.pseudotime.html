@@ -1,0 +1,1262 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>netflow.pseudotime &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.pseudotime';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="netflow.utils" href="netflow.utils.html" />
+    <link rel="prev" title="netflow.app" href="netflow.app.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">netflow v0.0.dev Manual</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../main_namespace.html">netflow</a><input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.keepers.html">netflow.keepers</a><input checked class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.keepers.keeper.html">netflow.keepers.keeper</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.pose.html">netflow.pose</a><input checked class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.similarity.html">netflow.pose.similarity</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">netflow.pseudotime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">netflow.pseudotime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="netflow.keepers.html">netflow.keepers</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="netflow.keepers.keeper.html">netflow.keepers.keeper</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="netflow.pose.html">netflow.pose</a><input checked class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.pose.similarity.html">netflow.pose.similarity</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
+  <p class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">netflow API</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../main_namespace.html" class="nav-link">The main netflow namespace</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">netflow.pseudotime</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="module-netflow.pseudotime">
+<span id="netflow-pseudotime"></span><h1>netflow.pseudotime<a class="headerlink" href="#module-netflow.pseudotime" title="Permalink to this headline">#</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.pseudotime.get_knn_indices_distances" title="netflow.pseudotime.get_knn_indices_distances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_knn_indices_distances</span></code></a>(d[, n_neighbors])</p></td>
+<td><p>Get indices of and distances to k-nearest neighbors</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.pseudotime.norm_features_" title="netflow.pseudotime.norm_features_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norm_features_</span></code></a>(X[, method])</p></td>
+<td><p>Norm of (multi-)feature data points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.pseudotime.sigma_knn_" title="netflow.pseudotime.sigma_knn_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sigma_knn_</span></code></a>(d[, n_neighbors, method, return_nn])</p></td>
+<td><p>Set sigma for each obs as the distance to its k-th neighbor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.pseudotime.similarity_measure_" title="netflow.pseudotime.similarity_measure_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">similarity_measure_</span></code></a>(d, n_neighbors, method)</p></td>
+<td><p>Convert distance matrix to symmetric similarity measure.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.pseudotime.PseudoOrdering" title="netflow.pseudotime.PseudoOrdering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PseudoOrdering</span></code></a>(all_feats_pairwise_obs_dists)</p></td>
+<td><p>Pseudo-ordering of observations (e.g., samples).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.pseudotime.TDA" title="netflow.pseudotime.TDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TDA</span></code></a>(distances[, min_branch_size, ...])</p></td>
+<td><p>Class to compute topological branching analysis</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.pseudotime.</span></span><span class="sig-name descname"><span class="pre">PseudoOrdering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_feats_pairwise_obs_dists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#PseudoOrdering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering" title="Permalink to this definition">#</a></dt>
+<dd><p>Pseudo-ordering of observations (e.g., samples).</p>
+<p>Represent data matrix as a graph of associations (i.e., edges) among data points (i.e., observations or nodes).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>all_feats_pairwise_obs_dists</strong> (<em>pandas DataFrame</em>) – Distance matrix of the form <span class="math notranslate nohighlight">\(D^{(F)} = [d_{ij}]\)</span> of size <span class="math notranslate nohighlight">\((m * (m-1) * 0.5, n)\)</span>,
+where <span class="math notranslate nohighlight">\(m\)</span> is the number of observations (obs), <span class="math notranslate nohighlight">\(n\)</span> is the number of features (feats),
+<span class="math notranslate nohighlight">\(F\)</span> is the set of features where <span class="math notranslate nohighlight">\(|F| = n\)</span>, with a multi-index of size 2
+of the form <span class="math notranslate nohighlight">\((obs_i, obs_j)\)</span> and <span class="math notranslate nohighlight">\(d_{ij}\)</span> is the distance between pairwise-obs
+<span class="math notranslate nohighlight">\(i = (obs_p, obs_q)\)</span> with respect to feature <span class="math notranslate nohighlight">\(j\)</span>.</p></li>
+<li><p><strong>method_norm</strong> (<em>{'L1'</em><em>, </em><em>'L2'</em><em>, </em><em>'inf'</em><em>, </em><em>'mean'</em><em>, </em><em>'median'}</em>) – <p>Indicate how to compute norm over multiple features, for each row of the
+form <span class="math notranslate nohighlight">\(x = [x_1, x_2, ..., x_n]\)</span>:</p>
+<p>Options:</p>
+<ul>
+<li><p>’L1’ : <span class="math notranslate nohighlight">\(\sum_{i=1}^n abs(x_i)\)</span></p></li>
+<li><p>’L2’ : <span class="math notranslate nohighlight">\(\sqrt{\sum_{i=1}^n (x_i)^2}\)</span></p></li>
+<li><p>’inf’ : <span class="math notranslate nohighlight">\(max_i abs(x_i)\)</span></p></li>
+<li><p>’mean’ : Mean of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+<li><p>’median’ : Median of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+</ul>
+</p></li>
+<li><p><strong>n_neighbors</strong> ({<cite>int</cite>, n_neighbors &gt; 0, <cite>None</cite>}) – K-th nearest neighbor (or number of nearest neighbors) to use for computing <code class="docutils literal notranslate"><span class="pre">sigmas</span></code>
+(uses <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">+</span> <span class="pre">1</span></code>, since each obs is it’s closest neighbor).
+If <cite>None</cite>, all neighbors are used.</p></li>
+<li><p><strong>method_sigma</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'max'</em><em>, </em><em>'precomputed'}</em>) – <p>Indicate how to compute sigma.</p>
+<p>Options:</p>
+<ul>
+<li><p>’mean’ : mean of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
+<li><p>’median’ : median of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
+<li><p>’max’ : distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code>-nearest neighbor</p></li>
+<li><p>’precomputed’ : precomputed values passed to <code class="docutils literal notranslate"><span class="pre">sigmas</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>sigmas</strong> (<cite>numpy.ndarray</cite>, (m, )) – Option to provide precomputed sigmas, ignored unless <code class="docutils literal notranslate"><span class="pre">method='precomputed'</span></code>.</p></li>
+<li><p><strong>knn</strong> (<cite>bool</cite>) – If <cite>True</cite>, restrict similarity measure to be non-zero only between <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors.</p></li>
+<li><p><strong>root</strong> (<cite>int</cite>) – Index of root obs that pesudo-ordering is computed from (<code class="docutils literal notranslate"><span class="pre">root</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_feats_pairwise_obs_dists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#PseudoOrdering.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.pseudotime'</span></em><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.__module__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering._set_pseudotime">
+<span class="sig-name descname"><span class="pre">_set_pseudotime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ordering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#PseudoOrdering._set_pseudotime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering._set_pseudotime" title="Permalink to this definition">#</a></dt>
+<dd><p>Return pseudotime with respect to root point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<cite>int</cite>, 0 &lt;= root &lt; m where m is the number of obs.) – Root obs for computing pseudo-ordering. If <cite>None</cite>, <code class="docutils literal notranslate"><span class="pre">self.root</span></code> is used.
+If provided, <code class="docutils literal notranslate"><span class="pre">self.root</span></code> is updated to <code class="docutils literal notranslate"><span class="pre">root</span></code>.</p></li>
+<li><p><strong>ordering</strong> (<em>{'distance'</em><em>, </em><em>'similarity'</em><em>, </em><em>'transitions_asym'</em><em>, </em><em>'transitions_sym'</em><em>, </em><em>'precomputed'}</em>) – <p>Metric by which pseudo-ordering should be computed.</p>
+<p>Options:</p>
+<ul>
+<li><p>’distance’ : <code class="docutils literal notranslate"><span class="pre">self._distances</span></code></p></li>
+<li><p>’similarity’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._similarities</span></code></p></li>
+<li><p>’transitions_asym’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._transitions_asym</span></code></p></li>
+<li><p>’transitions_sym’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._transitions_sym</span></code></p></li>
+<li><p>’precomputed’ : 1 - precomputed</p></li>
+</ul>
+</p></li>
+<li><p><strong>data</strong> – Similarity matrix used when <code class="docutils literal notranslate"><span class="pre">ordering</span> <span class="pre">=</span> <span class="pre">'precomputed'</span></code>.
+Note, this is ignored if <code class="docutils literal notranslate"><span class="pre">ordering</span></code> is not “precomputed”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.compute_norm_features">
+<span class="sig-name descname"><span class="pre">compute_norm_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#PseudoOrdering.compute_norm_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.compute_norm_features" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute norm of obs-pairwise distances with respect to all features in <cite>all_feats_pairwise_obs_dists</cite> returned
+as symmetric obs-pairwise distance matrix of size (m, m).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.compute_sigma_knn">
+<span class="sig-name descname"><span class="pre">compute_sigma_knn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#PseudoOrdering.compute_sigma_knn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.compute_sigma_knn" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute sigmas from nearest neighbors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.compute_similarity_measure">
+<span class="sig-name descname"><span class="pre">compute_similarity_measure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#PseudoOrdering.compute_similarity_measure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.compute_similarity_measure" title="Permalink to this definition">#</a></dt>
+<dd><p>convert <cite>_distances</cite> to <cite>similarity</cite> measure.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.compute_transitions">
+<span class="sig-name descname"><span class="pre">compute_transitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#PseudoOrdering.compute_transitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.compute_transitions" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute transition matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>similarities</strong> (<cite>numpy.ndarray</cite>, (m, m)) – Symmetric similarity measure.</p></li>
+<li><p><strong>density_normalize</strong> (<cite>bool</cite>) – The density rescaling of Coifman and Lafon (2006): Then only the
+geometry of the data matters, not the sampled density.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Makes attributes <code class="docutils literal notranslate"><span class="pre">.transitions_sym</span></code> and <code class="docutils literal notranslate"><span class="pre">.transitions</span></code> available.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Code copied from <cite>scanpy.neighbors</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.distances">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">distances</span></span><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.distances" title="Permalink to this definition">#</a></dt>
+<dd><p>Distances between data points.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.nn_distances">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nn_distances</span></span><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.nn_distances" title="Permalink to this definition">#</a></dt>
+<dd><p>distances to nearest neighbors where each row corresponds to an obs.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.nn_indices">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nn_indices</span></span><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.nn_indices" title="Permalink to this definition">#</a></dt>
+<dd><p>Indices of nearest neighbors where each row corresponds to an obs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.pseudotime_distances">
+<span class="sig-name descname"><span class="pre">pseudotime_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ordering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#PseudoOrdering.pseudotime_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.pseudotime_distances" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute distance matrix used for pseudotime branching.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ordering</strong> (<em>{'distance'</em><em>, </em><em>'similarity'</em><em>, </em><em>'transitions_asym'</em><em>, </em><em>'transitions_sym'</em><em>, </em><em>'precomputed'}</em>) – <p>Metric by which pseudo-ordering should be computed.</p>
+<p>Options:</p>
+<ul>
+<li><p>’distance’ : <code class="docutils literal notranslate"><span class="pre">self._distances</span></code></p></li>
+<li><p>’similarity’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._similarities</span></code></p></li>
+<li><p>’transitions_asym’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._transitions_asym</span></code></p></li>
+<li><p>’transitions_sym’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._transitions_sym</span></code></p></li>
+<li><p>’precomputed’ : 1 - precomputed</p></li>
+</ul>
+</p></li>
+<li><p><strong>data</strong> – Similarity matrix used when <code class="docutils literal notranslate"><span class="pre">ordering</span> <span class="pre">=</span> <span class="pre">'precomputed'</span></code>.
+Note, this is ignored if <code class="docutils literal notranslate"><span class="pre">ordering</span></code> is not “precomputed”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.sigmas">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sigmas</span></span><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.sigmas" title="Permalink to this definition">#</a></dt>
+<dd><p>Kernel width representing each data point’s accessible neighbors.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.pseudotime.PseudoOrdering.similarities">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">similarities</span></span><a class="headerlink" href="#netflow.pseudotime.PseudoOrdering.similarities" title="Permalink to this definition">#</a></dt>
+<dd><p>Similarities between data points.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.pseudotime.</span></span><span class="sig-name descname"><span class="pre">TDA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose_largest_segment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flavor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'haghverdi16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_kendall_tau_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA" title="Permalink to this definition">#</a></dt>
+<dd><p>Class to compute topological branching analysis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distances</strong> ({<cite>pandas.DataFrame</cite>, <cite>numpy.ndarray</cite>}) – Symmetric distance matrix between data points.
+Note, if <code class="docutils literal notranslate"><span class="pre">distances</span></code> is a <cite>pandas.DataFrame</cite>, it’s Stored and processed as a <cite>numpy.ndarray</cite>
+but the index is stored for later conversion.</p></li>
+<li><p><strong>min_branch_size</strong> ({<cite>int</cite>, <cite>float</cite>}) – During recursive splitting of branches, only consider splitting a branch with at least
+<code class="docutils literal notranslate"><span class="pre">min_branch_size</span> <span class="pre">&gt;</span> <span class="pre">2</span></code> data points.
+If a <cite>float</cite>, <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> refers to the fraction of the total number of data points
+(<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">min_branch_size</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>).</p></li>
+<li><p><strong>choose_largest_segment</strong> (<cite>bool</cite>) – <p>?</p>
+</p></li>
+<li><p><strong>flavor</strong> (<em>{'haghverdi16'</em><em>, </em><em>'wolf17_tri'</em><em>, </em><em>'wolf17_bi'</em><em>, </em><em>'wolf17_bi_un'}</em>) – <p>?</p>
+</p></li>
+<li><p><strong>allow_kendall_tau_shift</strong> (<cite>bool</cite>) – If a very small branch is detected upon splitting, shift away from
+maximum correlation in Kendall tau criterion of <a class="reference internal" href="../../references.html#haghverdi16" id="id1"><span>[Haghverdi16]</span></a> to
+stabilize the splitting.</p></li>
+<li><p><strong>root</strong> (<cite>int</cite>) – Index of root obs that pesudo-ordering is computed from (<code class="docutils literal notranslate"><span class="pre">root</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p></li>
+<li><p><strong>smooth_corr</strong> (<cite>bool</cite>, default = <cite>False</cite>) – If <cite>True</cite>, smooth correlations before identifying cut points for branch splitting.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.__detect_branching_haghverdi16">
+<span class="sig-name descname"><span class="pre">__detect_branching_haghverdi16</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#netflow.pseudotime.TDA.__detect_branching_haghverdi16" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect branching on given segment.</p>
+<p>Compute point that maximizes kendall tau correlation of the sequences of
+distances to the second and the third tip, respectively, when ‘moving
+away’ from the first tip: tips[0]. ‘Moving away’ means moving in the
+direction of increasing distance from the first tip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Dseg</strong> – Dchosen distance matrix restricted to segment.</p></li>
+<li><p><strong>tips</strong> – The three tip points. They form a ‘triangle’ that contains the data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Segments obtained from “splitting away the first tip cell”.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose_largest_segment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flavor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'haghverdi16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_kendall_tau_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.pseudotime'</span></em><a class="headerlink" href="#netflow.pseudotime.TDA.__module__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA._detect_branch">
+<span class="sig-name descname"><span class="pre">_detect_branch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seg_reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA._detect_branch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA._detect_branch" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect branching on given segment.</p>
+<p>Call function __detect_branching three times for all three orderings of
+tips. Points that do not belong to the same segment in all three
+orderings are assigned to a fourth segment. The latter is, by Haghverdi
+et al. (2016) referred to as ‘undecided cells’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Dseg</strong> – Dchosen distance matrix restricted to segment.</p></li>
+<li><p><strong>tips</strong> – The three tip points. They form a ‘triangle’ that contains the data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>ssegs</em> – List of segments obtained from splitting the single segment defined
+via the first two tip cells.</p></li>
+<li><p><em>ssegs_tips</em> – List of tips of segments in ssegs.</p></li>
+<li><p><strong>ssegs_adjacency</strong> (<cite>list</cite>) – List of lists of the same length as ssegs,
+where the i-th entry is a list with the index of the trunk, if the i-th segment is not the trunk.
+Otherwise, the i-th entry is a list with the indices of all other segments beside the trunk.</p></li>
+<li><p><strong>ssegs_connects</strong> (<cite>list</cite>) – List of lists of the same length as ssegs,
+where the i-th entry is a list of the form [index of data point in the trunk closest to the root of the i-th segment],
+if the i-th segment is not the trunk. Otherwise, the i-th entry is a list of indices of the closest cell in each other (non-trunk) segment
+to the trunk root.</p></li>
+<li><p><strong>trunk</strong> (<cite>int</cite>) – Index of segment in ssegs that is the trunk. When there are undecided points, the trunk is the seg of undecided points.
+If there are no undecided points and 3 segments in sseg (i.e. branching), then the trunk is the seg with the smallest distance to
+the other segments. If there are only two segments in sseg, the first segment is set as the trunk.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA._detect_branching_single_haghverdi16">
+<span class="sig-name descname"><span class="pre">_detect_branching_single_haghverdi16</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA._detect_branching_single_haghverdi16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA._detect_branching_single_haghverdi16" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect branching on given segment.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA._detect_branching_single_wolf17_bi">
+<span class="sig-name descname"><span class="pre">_detect_branching_single_wolf17_bi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA._detect_branching_single_wolf17_bi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA._detect_branching_single_wolf17_bi" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA._detect_branching_single_wolf17_tri">
+<span class="sig-name descname"><span class="pre">_detect_branching_single_wolf17_tri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA._detect_branching_single_wolf17_tri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA._detect_branching_single_wolf17_tri" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA._kendall_tau_add">
+<span class="sig-name descname"><span class="pre">_kendall_tau_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">len_old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">diff_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA._kendall_tau_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA._kendall_tau_add" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Kendall tau delta.</p>
+<p>The new sequence has length len_old + 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>len_old</strong> – The length of the old sequence, used to compute tau_old.</p></li>
+<li><p><strong>diff_pos</strong> – Difference between concordant and non-concordant pairs.</p></li>
+<li><p><strong>tau_old</strong> – Kendall rank correlation of the old sequence.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA._kendall_tau_diff">
+<span class="sig-name descname"><span class="pre">_kendall_tau_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA._kendall_tau_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA._kendall_tau_diff" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute difference in concordance of pairs in split sequences.</p>
+<p>Consider splitting a and b at index i.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<cite>numpy.ndarray</cite>) – One dimensional sequences.</p></li>
+<li><p><strong>b</strong> (<cite>numpy.ndarray</cite>) – One dimensional sequences.</p></li>
+<li><p><strong>i</strong> (<cite>int</cite>) – Index for splitting <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>diff_pos</em> – Difference between concordant pairs for both subsequences.</p></li>
+<li><p><em>diff_neg</em> – Difference between non-concordant pairs for both subsequences.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA._kendall_tau_subtract">
+<span class="sig-name descname"><span class="pre">_kendall_tau_subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">len_old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">diff_neg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA._kendall_tau_subtract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA._kendall_tau_subtract" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Kendall tau delta.</p>
+<p>The new sequence has length len_old - 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>len_old</strong> – The length of the old sequence, used to compute tau_old.</p></li>
+<li><p><strong>diff_neg</strong> – Difference between concordant and non-concordant pairs.</p></li>
+<li><p><strong>tau_old</strong> – Kendall rank correlation of the old sequence.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA._set_pseudotime">
+<span class="sig-name descname"><span class="pre">_set_pseudotime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA._set_pseudotime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA._set_pseudotime" title="Permalink to this definition">#</a></dt>
+<dd><p>Return pseudotime with respect to root point.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.branchings_segments">
+<span class="sig-name descname"><span class="pre">branchings_segments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_branches</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.branchings_segments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.branchings_segments" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect up to <cite>n_branches</cite> branches and partition the data into corresponding segments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branches to look for (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Writes :</p>
+<ul>
+<li><dl>
+<dt>segs<span class="classifier"><cite>numpy.ndarray</cite>, (n_segments, n_data_points)</span></dt><dd><p>Array where each row stores a mask array that defines a segment.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>segs_tips<span class="classifier"><cite>numpy.ndarray</cite>, (n_segments, 2)</span></dt><dd><p>Array where each row stores the
+indices of the two tip points of each segment.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>segs_names<span class="classifier"><cite>numpy.ndarray</cite>, (n_data_points, )</span></dt><dd><p>Array that stores an integer label
+for each segment.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.construct_topology">
+<span class="sig-name descname"><span class="pre">construct_topology</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.construct_topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.construct_topology" title="Permalink to this definition">#</a></dt>
+<dd><p>construct connections between data points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p><strong>G</strong> – Graph where each node is a data point and edges reflect connections between them.
+Edges have attributes {‘connection’ : (str) ‘intra-branch’ or ‘inter-branch’}
+Nodes have attributes</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;branch&#39;</span> <span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">...</span> <span class="n">where</span> <span class="o">-</span><span class="mi">1</span> <span class="n">indicates</span> <span class="n">the</span> <span class="n">data</span> <span class="n">point</span> <span class="n">was</span> <span class="ow">not</span> <span class="n">identified</span> <span class="k">with</span> <span class="n">a</span> <span class="n">branch</span><span class="p">,</span>
+                    <span class="s1">&#39;undecided&#39;</span> <span class="p">:</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">the</span> <span class="n">data</span> <span class="n">point</span> <span class="ow">is</span> <span class="n">part</span> <span class="n">of</span> <span class="n">a</span> <span class="n">trunk</span> <span class="ow">and</span> <span class="kc">False</span> <span class="n">otherwise</span><span class="p">,</span>
+                    <span class="s1">&#39;name&#39;</span> <span class="p">:</span> <span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="n">Original</span> <span class="n">label</span> <span class="k">if</span> <span class="n">given</span> <span class="n">data</span> <span class="n">was</span> <span class="n">a</span> <span class="n">dataframe</span><span class="p">,</span> <span class="n">otherwise</span> <span class="n">the</span> <span class="n">same</span> <span class="k">as</span> <span class="n">the</span> <span class="n">node</span> <span class="nb">id</span><span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>networkx.Graph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.detect_branches">
+<span class="sig-name descname"><span class="pre">detect_branches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_branches</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.detect_branches"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.detect_branches" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect up to <cite>n_branches</cite> branches.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branches to look for (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Writes :</p>
+<ul class="simple">
+<li><p>segs : <cite>list</cite></p>
+<ul>
+<li><p>list of arrays of length (number of segments). Each entry stores
+the indices of the members of a segment.</p></li>
+</ul>
+</li>
+<li><p>segs_tips : <cite>list</cite></p>
+<ul>
+<li><p>List of arrays of length (number of segments) where Each entry stores the
+indices of the two tip points of each segment.</p></li>
+</ul>
+</li>
+<li><p>segs_undecided :</p>
+<ul>
+<li><p>?</p></li>
+</ul>
+</li>
+<li><p>segs_adjacency :</p>
+<ul>
+<li><p>?</p></li>
+</ul>
+</li>
+<li><p>segs_connects :</p>
+<ul>
+<li><p>?</p></li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.detect_branching">
+<span class="sig-name descname"><span class="pre">detect_branching</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs_tips</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs_connects</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs_undecided</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs_adjacency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs_terminate_branching</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.detect_branching"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.detect_branching" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect branching on a given segment and update list parameters in place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segs</strong> – Dchosen distance matrix restricted to segment.</p></li>
+<li><p><strong>segs_tips</strong> – Stores all tip points for the segments in segs.</p></li>
+<li><p><strong>iseg</strong> – Position of segment under study in segs.</p></li>
+<li><p><strong>tips3</strong> – The three tip points. They form a ‘triangle’ that contains the data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.kendall_tau_split">
+<span class="sig-name descname"><span class="pre">kendall_tau_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.kendall_tau_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.kendall_tau_split" title="Permalink to this definition">#</a></dt>
+<dd><p>Return splitting index that maximizes correlation in the sequences.</p>
+<p>Compute difference in Kendall tau for all splitted sequences.</p>
+<p>For each splitting index i, compute the difference of the two
+correlation measures kendalltau(a[:i], b[:i]) and
+kendalltau(a[i:], b[i:]).</p>
+<dl class="simple">
+<dt>Returns the splitting index that maximizes</dt><dd><p>kendalltau(a[:i], b[:i]) - kendalltau(a[i:], b[i:])</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<cite>numpy.ndarray</cite>) – One dimensional sequences.</p></li>
+<li><p><strong>b</strong> (<cite>numpy.ndarray</cite>) – One dimensional sequences.</p></li>
+<li><p><strong>min_length</strong> (<cite>int</cite>, (<code class="docutils literal notranslate"><span class="pre">min_length</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>)) – Minimum number of data points automatically included in branch.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>imax</strong> – Splitting index according to above description.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.order_pseudotime">
+<span class="sig-name descname"><span class="pre">order_pseudotime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.order_pseudotime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.order_pseudotime" title="Permalink to this definition">#</a></dt>
+<dd><p>Define indices that reflect segment and pseudotime order.</p>
+<p class="rubric">Notes</p>
+<p>Writes :</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>indices<span class="classifier">np.ndarray</span></dt><dd><p>Index array of shape n, which stores an ordering of the data points
+with respect to increasing segment index and increasing pseudotime.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>changepoints<span class="classifier">np.ndarray</span></dt><dd><p>Index array of shape len(ssegs)-1, which stores the indices of
+points where the segment index changes, with respect to the ordering
+of indices.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.ordered_segs">
+<span class="sig-name descname"><span class="pre">ordered_segs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.ordered_segs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.ordered_segs" title="Permalink to this definition">#</a></dt>
+<dd><p>returns List[array] of segments where the <code class="docutils literal notranslate"><span class="pre">i-th</span></code> entry has the sorted indices
+corresponding to the <code class="docutils literal notranslate"><span class="pre">i-th</span></code> branch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.postprocess_segments">
+<span class="sig-name descname"><span class="pre">postprocess_segments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.postprocess_segments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.postprocess_segments" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert the format of the segment class members.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.select_segment">
+<span class="sig-name descname"><span class="pre">select_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs_tips</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs_undecided</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs_terminate_branching</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.select_segment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.select_segment" title="Permalink to this definition">#</a></dt>
+<dd><p>Select segment with most distant second data point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>iseg</em> – Index identifying the position within the list of line segments.</p></li>
+<li><p><em>tips3</em> – Positions of tips within chosen segment.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pseudotime.TDA.set_segs_names">
+<span class="sig-name descname"><span class="pre">set_segs_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#TDA.set_segs_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.TDA.set_segs_names" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a single array that stores integer segment labels.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.pseudotime.get_knn_indices_distances">
+<span class="sig-prename descclassname"><span class="pre">netflow.pseudotime.</span></span><span class="sig-name descname"><span class="pre">get_knn_indices_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#get_knn_indices_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.get_knn_indices_distances" title="Permalink to this definition">#</a></dt>
+<dd><p>Get indices of and distances to k-nearest neighbors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<cite>numpy.ndarray</cite>, (m, m)) – Symmetric distance matrix.</p></li>
+<li><p><strong>n_neighbors</strong> (<cite>int</cite>, n_neighbors &gt; 0) – K-th nearest neighbor. (uses <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">+</span> <span class="pre">1</span></code>, since each obs is it’s closest neighbor).
+If <cite>None</cite>, all neighbors are used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>indices</strong> (<cite>numpy.ndarray</cite>, (m, n_neighbors)) – Matrix with indices of k-nearest neighbors in each row
+Note, this does not include itself in output)</p></li>
+<li><p><strong>distances</strong> (<cite>numpy.ndarray</cite>, (m, n_neighbors)) – Matrix with distance to k-nearest neighbors
+Note, this does not include itself in output.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.pseudotime.norm_features_">
+<span class="sig-prename descclassname"><span class="pre">netflow.pseudotime.</span></span><span class="sig-name descname"><span class="pre">norm_features_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#norm_features_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.norm_features_" title="Permalink to this definition">#</a></dt>
+<dd><p>Norm of (multi-)feature data points.</p>
+<p>Intended to compute the norm of pairwise distances between obs. <span class="math notranslate nohighlight">\(s_q\)</span> and <span class="math notranslate nohighlight">\(s_r\)</span> for all features
+<span class="math notranslate nohighlight">\(f_i \in F\)</span>: <span class="math notranslate nohighlight">\(D_{qr}^{(F)} = [d_{qr}^{(f_1)}, ..., d_{qr}^{(f_m)}]\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array-like</em>) – The norm is computed on rows of <cite>X</cite>.</p></li>
+<li><p><strong>method</strong> (<em>{'L1'</em><em>, </em><em>'L2'</em><em>, </em><em>'inf'</em><em>, </em><em>'mean'</em><em>, </em><em>'median'}</em>) – <p>Indicate which norm to compute. For each row of the form <span class="math notranslate nohighlight">\(x = [x_1, x_2, ..., x_n]\)</span> :</p>
+<p>Options:</p>
+<ul>
+<li><p>’L1’ : <span class="math notranslate nohighlight">\(\sum_{i=1}^n abs(x_i)\)</span></p></li>
+<li><p>’L2’ : <span class="math notranslate nohighlight">\(\sqrt{\sum_{i=1}^n (x_i)^2}\)</span></p></li>
+<li><p>’inf’ : <span class="math notranslate nohighlight">\(max_i abs(x_i)\)</span></p></li>
+<li><p>’mean’ : Mean of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+<li><p>’median’ : Median of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Norm of the row(s).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>float</cite> or array-like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.pseudotime.sigma_knn_">
+<span class="sig-prename descclassname"><span class="pre">netflow.pseudotime.</span></span><span class="sig-name descname"><span class="pre">sigma_knn_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_nn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#sigma_knn_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.sigma_knn_" title="Permalink to this definition">#</a></dt>
+<dd><p>Set sigma for each obs as the distance to its k-th neighbor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<cite>numpy.ndarray</cite>, (m, m)) – Symmetric distance matrix.</p></li>
+<li><p><strong>n_neighbors</strong> ({<cite>int</cite>, n_neighbors &gt; 0, <cite>None</cite>}) – K-th nearest neighbor. (uses <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">+</span> <span class="pre">1</span></code>, since each obs is it’s closest neighbor).
+If <cite>None</cite>, all neighbors are used.</p></li>
+<li><p><strong>method</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'max'}</em>) – Indicate how to compute sigma.</p></li>
+<li><p><strong>return_nn</strong> (<cite>bool</cite>) – <p>If <cite>True</cite>, return indices and distances of <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors.</p>
+<p>Options:</p>
+<ul>
+<li><p>’mean’ : mean of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
+<li><p>’median’ : median of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
+<li><p>’max’ : distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code>-nearest neighbor</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sigmas</strong> – The distance to the k-th nearest neighbor for all rows in <code class="docutils literal notranslate"><span class="pre">d</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>numpy.ndarray</cite>, (m, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.pseudotime.similarity_measure_">
+<span class="sig-prename descclassname"><span class="pre">netflow.pseudotime.</span></span><span class="sig-name descname"><span class="pre">similarity_measure_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pseudotime.html#similarity_measure_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pseudotime.similarity_measure_" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert distance matrix to symmetric similarity measure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<cite>numpy.ndarray</cite>, (m, m)) – Symmetric distance matrix.</p></li>
+<li><p><strong>n_neighbors</strong> ({<cite>int</cite>; n_neighbors &gt; 0, <cite>None</cite>}) – K-th nearest neighbor. (uses <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">+</span> <span class="pre">1</span></code>, since each obs is it’s closest neighbor).
+If <cite>None</cite>, all neighbors are used.
+Note: this is ignored if <code class="docutils literal notranslate"><span class="pre">method</span></code> is ‘precomputed’ and <code class="docutils literal notranslate"><span class="pre">sigmas</span></code> is provided.</p></li>
+<li><p><strong>method</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'max'</em><em>, </em><em>'precomputed'}</em>) – <p>Indicate how to compute sigma.</p>
+<p>Options:</p>
+<ul>
+<li><p>’mean’ : mean of distance to <cite>n_neighbors</cite> nearest neighbors</p></li>
+<li><p>’median’ : median of distance to <cite>n_neighbors</cite> nearest neighbors</p></li>
+<li><p>’max’ : distance to <cite>n_neighbors</cite>-nearest neighbor</p></li>
+<li><p>’precomputed’ : precomputed values passed to <cite>sigmas</cite></p></li>
+</ul>
+</p></li>
+<li><p><strong>sigmas</strong> (<cite>numpy.ndarray</cite>, (m, )) – Option to provide precomputed sigmas , ignored unless <code class="docutils literal notranslate"><span class="pre">method='precomputed'</span></code>.</p></li>
+<li><p><strong>knn</strong> (<cite>bool</cite>) – If <cite>True</cite>, restrict similarity measure to be non-zero only between <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors.</p></li>
+<li><p><strong>indices</strong> (<cite>numpy.ndarray</cite>, (m, <cite>n_neighbors</cite>)) – Option to provide precomputed indices of <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors for each obs when
+<code class="docutils literal notranslate"><span class="pre">method</span></code> = ‘precomputed’ and <code class="docutils literal notranslate"><span class="pre">knn</span></code> = <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>K</strong> – Symmetric similarity measure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>numpy.ndarray</cite>, (m, m)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="netflow.app.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">netflow.app</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="netflow.utils.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">netflow.utils</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="current visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html#modules">Modules</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.keepers.html">netflow.keepers</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
+<li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.pseudotime</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
+<li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.pseudotime</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.keepers.html">netflow.keepers</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/reference/generated/netflow.pseudotime.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023-2023, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

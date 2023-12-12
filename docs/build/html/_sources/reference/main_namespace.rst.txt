@@ -1,0 +1,33 @@
+==========================
+The main netflow namespace
+==========================
+
+.. currentmodule:: netflow
+
+:py:mod:`netflow`
+   
+Modules
+-------
+
+.. autosummary::
+   :recursive:
+   :toctree: generated/
+      
+      keepers
+      pose
+      methods
+      classes
+      metrics
+      checks
+      app
+      pseudotime
+      utils
+
+
+
+
+===========================     ==================================================
+:py:mod:`netflow`
+:py:mod:`netflow.keepers`       Store and manipulate data
+:py:mod:`~netflow.metrics`      Metrics
+===========================     ==================================================		   
