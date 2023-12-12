@@ -1,0 +1,70 @@
+.. _netflow-api:
+
+.. netflow documentation master file, created by
+   sphinx-quickstart on Tue Nov  7 13:12:46 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+.. template largely taken from scipy
+
+***********
+netflow API
+***********
+
+
+API definition
+--------------
+
+* `netflow`
+
+* `metrics`
+
+* `classes`
+
+* `pseudotime`
+
+* `utils`
+
+* `checks`
+
+* `app`
+
+* `netflow.keepers`
+
+  - `netflow.keepers.keeper`
+
+* `netflow.pose`
+
+  - `netflow.pose.organization`
+
+..
+   add :hidden: below to hide in main section and only
+   include toc in side bar
+
+..
+   add :numbered: to have the TOC numbered
+
+..
+   add :caption: Contents: to have title of TOC
+   
+.. toctree::
+   :maxdepth: 6
+
+   netflow <main_namespace>
+   netflow.metrics <metrics>
+   netflow.classes <classes>
+   netflow.pseudotime <pseudotime>
+   netflow.utils <utils>
+   netflow.checks <checks>
+   netflow.app <app>
+   netflow.keepers <keepers>
+   netflow.pose <pose>
+   netflow.pose.organization <organization>
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

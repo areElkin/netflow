@@ -1,0 +1,2636 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>POSE pipeline &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorial/notebooks/pose_pipeline_MM_rna_apop';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">netflow v0.0.dev Manual</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
+  <p class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">POSE pipeline</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="pose-pipeline">
+<h1>POSE pipeline<a class="headerlink" href="#pose-pipeline" title="Permalink to this headline">#</a></h1>
+<p>(Single-modal) In this tutorial, we demonstrate how to perform the POSE pipeline on multiple myeloma (MM) RNA data restricted to the apoptosis pathway. This analysis entails the following:</p>
+<ol class="arabic simple">
+<li><p>Upload data</p></li>
+<li><p>Compute pairwise sample (WE) distances with respect to gene neigborhoods</p></li>
+<li><p>Compute global pairwise sample (WE) distance matrices</p></li>
+<li><p>Convert global distances to a single sample pairwise similarity matrix</p></li>
+<li><p>(Future work - dpt distance and/or multi-scale diffusion based distances)</p></li>
+<li><p>Extract pseudo-organization (i.e., ordering) of samples.</p></li>
+<li><p>Determine schema (i.e., branching).</p></li>
+<li><p>Visualize schema</p></li>
+<li><p>(Future work - further investigation into samples within different branches and differential analysis between branches)</p></li>
+</ol>
+<ul class="simple">
+<li><p>$d_W(i,j,v)$ - The Wasserstein distance of the 1-hop neighborhood around gene $v$ between sample $i$ and sample $j$</p></li>
+<li><p>$d_E(i,j,v)$ - The Euclidean distance of the 1-hop neighborhood around gene $v$ between sample $i$ and sample $j$</p></li>
+<li><p>$D_W(i,j) = |d_W(i,j,v)|$ - Net Wasserstein distance between sample $i$ and sample $j$ wrt all genes $v$</p></li>
+<li><p>$D_E(i,j) = |d_E(i,j,v)|$ - Net Euclidean distance between sample $i$ and sample $j$ wrt all genes $v$</p></li>
+<li><p>$K_W = e^{-\frac{|D_W|^2}{\sigma^2}}$ - Pairwise sample Wasserstein similarity matrix</p></li>
+<li><p>$K_E = e^{-\frac{|D_E|^2}{\sigma^2}}$ - Pairwise sample Euclidean similarity matrix</p></li>
+<li><p>(Multi-feature, multi-modal) $K = \frac{K_W + K_E}{2}$ - Fused pairwise sample similarity matrix</p></li>
+<li><p>$D = 1 - K$ - Fused pairwise sample distance matrix</p></li>
+<li><p>(Clustering) Determine branching according to lineage tracing algorithm using $D$</p></li>
+<li><p>(Visualizing) Pseudo-ordering of samples in branches according to distance from root node $r$, i.e., $D(r,:)$</p></li>
+</ul>
+<p>First, import the necessary packages:</p>
+</section>
+<section id="load-libraries">
+<h1>Load libraries<a class="headerlink" href="#load-libraries" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">netflow</span></code> has not been installed, add the path to the library:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+<span class="c1"># sys.path.insert(0, pathlib.Path(pathlib.Path(&#39;.&#39;).absolute()).parents[0].resolve().as_posix())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>From the <code class="docutils literal notranslate"><span class="pre">netflow</span></code> package, we load the following modules:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">InfoNet</span></code> class is used to compute 1-hop neighborhood distances</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> class is used to store and manipulate data/results</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">netflow</span> <span class="k">as</span> <span class="nn">nf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from netflow.keepers import keeper </span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-data">
+<h1>Load data<a class="headerlink" href="#load-data" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RNA_FNAME</span> <span class="o">=</span> <span class="s1">&#39;/Users/renae12/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/!GDriveMigratedData/My Documents/MSKCC/data/multiple_myeloma_apoptosis_ASK/data/rna_hgnc_apop140_660.csv&#39;</span>
+<span class="n">E_FNAME</span> <span class="o">=</span> <span class="s1">&#39;/Users/renae12/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/!GDriveMigratedData/My Documents/MSKCC/data/multiple_myeloma_apoptosis_ASK/data/E_apop140.csv&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RNA_FNAME</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(140, 669)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">E</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">E_FNAME</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_edgelist</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Graph with 140 nodes and 672 edges
+</pre></div>
+</div>
+</div>
+</div>
+<p>Upload data to the keeper:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># results = keeper.Keeper(data={&#39;rna&#39;: X})</span>
+
+<span class="n">data_label</span> <span class="o">=</span> <span class="s1">&#39;rna&#39;</span>
+<span class="n">keeper</span> <span class="o">=</span> <span class="n">nf</span><span class="o">.</span><span class="n">Keeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="n">data_label</span><span class="p">:</span> <span class="n">X</span><span class="p">})</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Add the PPI network to the misc data for storage and later reference.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graph_label</span> <span class="o">=</span> <span class="s1">&#39;PPI&#39;</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">graph_label</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compute-pairwise-sample-1-hop-wasserstein-distances">
+<h1>Compute pairwise-sample 1-hop Wasserstein distances<a class="headerlink" href="#compute-pairwise-sample-1-hop-wasserstein-distances" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inet</span> <span class="o">=</span> <span class="n">nf</span><span class="o">.</span><span class="n">InfoNet</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">graph_label</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_label</span><span class="p">,</span>
+                  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;pw_sample_1hop_wass&#39;</span><span class="p">,</span> <span class="n">outdir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">MSG      Loaded graph: Graph with <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">140</span> nodes and <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">672</span> edges                                                          
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">MSG      Loaded data: <span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">140</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">669</span><span style="font-weight: bold">)</span>                                                                                   
+</pre>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dhop</span> <span class="o">=</span> <span class="n">inet</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wds</span> <span class="o">=</span> <span class="n">inet</span><span class="o">.</span><span class="n">multiple_pairwise_sample_neighborhood_wass_distance</span><span class="p">(</span><span class="n">graph_distances</span><span class="o">=</span><span class="n">dhop</span><span class="p">,</span> 
+                                                               <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                               <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise 1-hop distances&#39;</span><span class="p">,</span>
+                                                               <span class="n">profiles_desc</span><span class="o">=</span><span class="s1">&#39;t0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing pairwise 1-hop distances:  92%|<span class=" -Color -Color-Yellow">██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊          </span>| 117/127 [10:24&lt;00:51,  5.15s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MSG      node 124: MMRF_1021_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1029_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1391_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1269_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1030_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1511_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1392_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1270_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1031_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1512_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1393_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1274_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1516_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1032_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1395_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1284_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1519_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1033_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1401_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1522_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1286_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1403_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1037_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1523_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1293_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1408_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1531_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1048_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1300_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1413_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1068_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1534_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1309_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1423_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1537_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1073_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1318_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1424_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1077_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1323_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1538_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1425_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1539_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1079_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1324_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1426_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1540_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1082_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1325_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1432_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1542_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1543_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1546_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1550_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1556_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1560_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1565_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1570_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1572_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1573_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1574_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1577_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1579_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1580_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1583_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1586_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1587_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1588_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1589_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1593_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1595_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1596_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1597_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1598_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1603_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1605_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1613_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1614_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1617_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1618_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1621_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1624_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1625_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1627_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1630_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1089_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1327_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1633_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1634_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1637_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1639_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1640_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1641_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1643_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1433_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1644_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1645_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1648_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1651_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1652_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1656_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1659_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1664_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1665_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1668_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1670_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1671_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1672_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1677_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1682_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1683_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1689_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1690_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1694_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1695_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1698_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1700_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1705_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1710_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1713_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1714_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1715_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1716_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1718_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1719_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1720_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1721_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1722_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1726_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1727_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1730_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1733_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1735_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1736_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1738_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1739_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1744_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1750_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1755_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1758_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1759_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1766_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1328_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1768_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1771_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1773_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1775_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1777_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1434_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1778_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1780_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1782_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1092_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1783_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1785_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1786_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1787_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1790_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1792_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1793_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1795_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1796_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1797_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1801_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1802_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1805_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1808_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1810_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1814_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1815_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1817_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1819_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1822_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1823_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1824_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1825_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1830_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1831_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1832_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1833_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1835_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1837_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1839_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1842_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1845_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1846_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1847_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1850_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1851_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1854_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1855_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1856_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1859_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1860_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1861_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1862_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1865_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1867_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1871_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1876_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1879_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1880_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1882_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1886_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1888_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1890_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1891_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1893_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1895_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1900_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1906_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1911_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1915_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1916_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1917_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1918_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1331_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1921_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1922_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1927_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1928_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1931_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1932_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1935_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1963_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1965_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1098_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1967_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1971_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1972_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1977_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1978_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1981_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1982_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1985_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1988_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1436_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1991_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1992_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1997_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_1998_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2000_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2001_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2002_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2005_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2006_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2012_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2013_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2015_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2016_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2017_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2018_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2026_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2035_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2038_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2039_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2041_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2043_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2047_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2054_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2055_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2056_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2057_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2059_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2061_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2062_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2068_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2074_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2076_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2079_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2080_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2081_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2082_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2083_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2087_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2089_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2091_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2093_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2097_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2098_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2102_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2106_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2107_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2111_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2113_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2115_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2116_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2118_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2119_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2122_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2125_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2126_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2140_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2141_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2143_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2149_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1439_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2150_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2151_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2153_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2168_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2172_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2173_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2174_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2176_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2180_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2183_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2187_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2194_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2195_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2197_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2199_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2200_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2201_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2203_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2204_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2211_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2213_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2214_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2215_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1338_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2216_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2217_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2220_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2224_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2225_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2228_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2229_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2230_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2231_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2232_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2236_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2238_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2240_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2245_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2250_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2251_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2253_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2257_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1108_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2258_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2265_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2266_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2267_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2268_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2269_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2271_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2272_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2273_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2279_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2290_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2291_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2293_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2297_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2300_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2301_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2302_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2305_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2306_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2307_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2310_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1445_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2313_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2314_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1342_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2317_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2325_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2326_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2329_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2330_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2331_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2335_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2336_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2339_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2341_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2352_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2353_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2362_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2364_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2365_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2366_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2367_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2368_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2373_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2377_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2378_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2379_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2380_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2384_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2394_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2399_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2400_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2401_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1148_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2404_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2407_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2409_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2412_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2413_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2419_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2422_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2427_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2429_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2433_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2436_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2437_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2438_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2440_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2444_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2445_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2449_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2452_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2453_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2455_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2456_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2457_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2458_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2459_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2461_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2464_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2465_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2468_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2469_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1344_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2471_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2473_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2475_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2476_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2478_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2480_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2485_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2488_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2489_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2490_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2497_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2498_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2499_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2501_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2505_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2506_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2507_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2514_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2515_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2516_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1446_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2518_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2519_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2522_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2523_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2524_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2525_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2526_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2531_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2532_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2535_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2538_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2539_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2543_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2548_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2549_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2550_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2554_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2557_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2559_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2560_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1164_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2562_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2564_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2567_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2568_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2570_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2572_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2574_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2579_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2580_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2581_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2583_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2587_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2590_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2595_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2596_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2597_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2598_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2599_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2601_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2602_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2604_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2605_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2606_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2608_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1348_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2613_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2614_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2621_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1447_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2622_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2628_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2630_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2631_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2634_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2635_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2636_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2637_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2638_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2639_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2641_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2642_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2643_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2646_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2651_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2652_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2654_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2664_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2667_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2670_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2675_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2676_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2677_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2678_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2680_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2681_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2682_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2689_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2690_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2691_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2692_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2694_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2695_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2696_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1167_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2698_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2699_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2700_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2702_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2705_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2706_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2709_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2716_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2718_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2719_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1450_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2721_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2722_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2723_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2727_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2728_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2729_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2731_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2732_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2733_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2737_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2739_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2740_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2742_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2743_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2745_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2746_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2750_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2751_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2754_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1349_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2757_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2760_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2761_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2762_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2763_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2764_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2767_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2769_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2770_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2772_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2774_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2776_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2778_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2779_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2781_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2782_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2787_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2788_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2789_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2793_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2794_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2795_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2799_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2801_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2807_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2808_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2813_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2814_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2815_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2816_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2817_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1451_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2818_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2820_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1169_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2822_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2826_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2827_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2828_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2829_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2830_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2831_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2832_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2834_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2836_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2847_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2848_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2851_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2853_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2903_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2905_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2908_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2914_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2926_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2938_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2939_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2941_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2946_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1541_1_BM_CD138pos - MMRF_2947_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1352_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1453_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1171_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1354_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1178_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1454_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1356_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1460_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1180_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1358_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1185_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1461_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1359_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1462_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1188_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1189_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1360_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1466_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1195_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1361_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1474_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1202_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1484_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1364_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1485_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1365_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1210_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1371_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1377_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1489_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1216_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1491_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1231_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1380_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1250_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1497_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1383_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1251_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1499_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1386_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1501_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1267_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1388_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1502_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1389_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1506_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+MSG      node 124: MMRF_1510_1_BM_CD138pos - MMRF_1541_1_BM_CD138pos: Cannot    
+         compute Wasserstein distance between a zero-profile, returning         
+         Wasserstein distance = nan.                                            
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing pairwise 1-hop distances: 100%|<span class=" -Color -Color-Yellow">█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████</span>| 127/127 [11:16&lt;00:00,  5.32s/it]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compute-pairwise-sample-1-hop-euclidean-distances">
+<h1>Compute pairwise-sample 1-hop Euclidean distances<a class="headerlink" href="#compute-pairwise-sample-1-hop-euclidean-distances" title="Permalink to this headline">#</a></h1>
+</section>
+<section id="compute-pairwise-sample-profile-wasserstein-distances">
+<h1>Compute pairwise-sample profile Wasserstein distances<a class="headerlink" href="#compute-pairwise-sample-profile-wasserstein-distances" title="Permalink to this headline">#</a></h1>
+</section>
+<section id="compute-pairwise-sample-profile-euclidean-distances">
+<h1>Compute pairwise-sample profile Euclidean distances<a class="headerlink" href="#compute-pairwise-sample-profile-euclidean-distances" title="Permalink to this headline">#</a></h1>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/tutorial/notebooks/pose_pipeline_MM_rna_apop.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023-2023, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

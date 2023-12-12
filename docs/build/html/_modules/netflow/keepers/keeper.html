@@ -1,0 +1,1356 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>netflow.keepers.keeper &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/netflow/keepers/keeper';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">netflow v0.0.dev Manual</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
+  <p class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">netflow.keepers.keeper</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for netflow.keepers.keeper</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">keeper</span>
+<span class="sd">======</span>
+
+<span class="sd">Classes used for data storage and manipulation. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">.._utils</span> <span class="kn">import</span> <span class="n">_docstring_parameter</span><span class="p">,</span> <span class="n">_desc_distance</span><span class="p">,</span> <span class="n">_desc_data_distance</span>
+<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">logger</span>
+
+
+<div class="viewcode-block" id="DataKeeper"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper">[docs]</a><span class="k">class</span> <span class="nc">DataKeeper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to store and handle multiple data sets.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : {`numpy.ndarray`, `pandas.DataFrame`, `dict` [`str`, `numpy.ndarray`], `dict` [`str`, `pandas.DataFrame`]}</span>
+<span class="sd">        One or multiple feature data sets, where each data set is size (num_features, num_observations).</span>
+
+<span class="sd">        Feature data set(s) may be provided in multiple ways:</span>
+
+<span class="sd">        - `numpy.ndarray` : A single feature data set.</span>
+
+<span class="sd">          * Observation labels may be specified in ``observation_labels``.</span>
+<span class="sd">          * To include feature labels, ``data`` should be a `pandas.DataFrame`.</span>
+<span class="sd">          * The array ``data`` is placed in a `dict` with default label of the form</span>
+<span class="sd">            ``{&#39;data&#39; : data}``. </span>
+<span class="sd">        - `pandas.DataFrame` : A single feature data set.</span>
+<span class="sd">    </span>
+<span class="sd">          * The index indicates feature labels.</span>
+<span class="sd">          * Columns indicate observation labels.</span>
+<span class="sd">          * If ``observation_labels`` is provided, it should match the columns of the dataframe,</span>
+<span class="sd">            that will be ordered according to the ``observation_labels``.</span>
+<span class="sd">          * The array ``data.values`` is placed in a `dict` with default label of the form</span>
+<span class="sd">            ``{&#39;data&#39; : data.values}``. </span>
+<span class="sd">        - `dict` [`str`, `numpy.ndarray`] : A single or mutliple feature data set(s) may be provided as </span>
+<span class="sd">           the value(s) of a `dict` keyed by a `str` that serves as the feature data descriptor or label </span>
+<span class="sd">           for each input of the form ``{&#39;data_label&#39; : `numpy.ndarray`}``.</span>
+
+<span class="sd">          * All arrays are expected to have the same number of columns corresponding to the number</span>
+<span class="sd">            of observations with the same ordering.</span>
+<span class="sd">          * Observation labels may be specified in ``observation_labels``.</span>
+<span class="sd">          * To include feature labels, pass a `dict` of `pandas.DataFrame`\s instaed.</span>
+<span class="sd">        - `dict` [`str`, `pandas.DataFrame`] : A single or mutliple feature data set(s) may be provided as </span>
+<span class="sd">           the value(s) of a `dict` keyed by a `str` that serves as the feature data descriptor or label </span>
+<span class="sd">           for each input of the form ``{&#39;data_label&#39; : `pandas.DataFrame`}``.</span>
+
+<span class="sd">          * All dataframes are expected to have the same number of columns corresponding to the number</span>
+<span class="sd">            of observations with the same columns provided in the same order.</span>
+<span class="sd">          * The index of each input indicates feature labels.</span>
+<span class="sd">          * Columns indicate observation labels.</span>
+<span class="sd">          * If ``observation_labels`` is provided, it should match the columns of the dataframe(s),</span>
+<span class="sd">            that will be ordered according to the ``observation_labels``.</span>
+<span class="sd">    observation_labels : `list` [`str`], optional</span>
+<span class="sd">        List of labels for each observation with length equal to num_observations.</span>
+<span class="sd">        If provided when ``data`` is a `pandas.DataFrame` or `dict` [`str`, `pandas.DataFrame`],</span>
+<span class="sd">        it should match the columns of the dataframe(s), which will be ordered according to</span>
+<span class="sd">        ``observation_labels``.</span>
+<span class="sd">    </span>
+<span class="sd">        If not provided and ``data`` is a :</span>
+
+<span class="sd">        - `pandas.DataFrame` or `dict` [`str`, `pandas.DataFrame`],</span>
+<span class="sd">          then the columns of the (first) dataframe are used.</span>
+<span class="sd">        - `numpy.ndarray` or `dict` [`str`, `numpy.ndarray`],</span>
+<span class="sd">          then the columns are labeled by their row index from :math:`0, 1, ..., num\_observations - 1`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    All data sets are assumed to contain the same set of data points in the same order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataKeeper.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">observation_labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_features_labels</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_features</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">cur_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cur_data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataKeeper.__getitem__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="c1"># return self._data[key]</span>
+        <span class="k">return</span> <span class="n">DataView</span><span class="p">(</span><span class="n">dkeeper</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataKeeper.__contains__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__contains__">[docs]</a>    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="DataKeeper.__iter__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">DataView</span><span class="p">(</span><span class="n">dkeeper</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A dictionary of all data sets. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">observation_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Labels for each observation. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span>
+
+
+    <span class="c1"># @observation_labels.setter</span>
+    <span class="c1"># def observation_labels(self, labels):</span>
+    <span class="c1">#     if self._observation_labels is not None:</span>
+    <span class="c1">#         raise ValueError(&quot;Observation labels cannot be changed.&quot;)</span>
+
+    <span class="c1">#     if (self._num_observations is not None) and (self._num_observations != len(labels)):</span>
+    <span class="c1">#         raise ValueError(&quot;Inconsisstent size, number of labels must match the number of observations.&quot;)</span>
+            
+    <span class="c1">#     self._observation_labels = labels.copy()</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Number of observations. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">features_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A dictionary of feature labels for each data set. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_features_labels</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A dictionary with the number of features in each data set. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_features</span> 
+
+
+<div class="viewcode-block" id="DataKeeper.add_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a feature data set to the keeper.</span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">           Observation labels may be set after object initialization.</span>
+<span class="sd">           This may require upkeep in :class:`Keeper` to update and coordinate</span>
+<span class="sd">           observation labels among the different keepers.</span>
+<span class="sd">            </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : {`numpy.ndarray`, `pandas.DataFrame`}</span>
+<span class="sd">            The data set of size (num_features, num_observations).</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the data set.        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check that label is not already in the keeper</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dubplicate label detected, </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> already exists in the keeper.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Check that data is numpy ndarray or pandas DataFrame:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized type, data must be numpy ndarray or pandas DataFrame.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># If no data in keeper yet, initialize:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inconsistent data size, must be the same as num_observations.&quot;</span><span class="p">)</span>
+            
+            <span class="c1"># if isinstance(data, pd.DataFrame):</span>
+        <span class="c1">#         self._observation_labels = data.columns.tolist()  # overrides pre-specified observation_labels</span>
+        <span class="c1">#     else:  # np.ndarray</span>
+        <span class="c1">#         self._observation_labels = self._observation_labels if self._observation_labels is not None \</span>
+        <span class="c1">#             else list(range(self._num_observations))</span>
+            
+        <span class="c1"># else:  # Check that the data has the right number of columns        </span>
+        <span class="c1">#     if data.shape[1] != self._num_observations:</span>
+        <span class="c1">#         raise ValueError(&quot;Inconsistent data size, must be the same as num_observations&quot;)</span>
+
+        <span class="c1"># Check that the data has the right number of columns        </span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inconsistent data size, must be the same as num_observations&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set observation labels.&quot;</span><span class="p">)</span>
+            <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># np.ndarray</span>
+            <span class="n">feature_labels</span> <span class="o">=</span> <span class="kc">None</span>        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_features_labels</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature_labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_features</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> features added to keeper.&quot;</span><span class="p">)</span></div></div>
+    
+            
+
+<div class="viewcode-block" id="DataView"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView">[docs]</a><span class="k">class</span> <span class="nc">DataView</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to extract single data view from DataKeeper for analysis.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dkeeper : `DataKeeper`</span>
+<span class="sd">        The object to extract data from.        </span>
+<span class="sd">    label : `str`</span>
+<span class="sd">        The identifier of the data to be extracted from ``dkeeper``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataView.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dkeeper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="c1"># data=None, observation_labels=None, feature_labels=None,</span>
+                 <span class="p">):</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> in dkeeper.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">observation_labels</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">num_observations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_feature_labels</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">features_labels</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_features</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">num_features</span><span class="p">[</span><span class="n">label</span><span class="p">]</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The data label. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span>
+
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The data set. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">observation_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Labels for each observation. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Number of observations. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">feature_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Feature labels. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_labels</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_features</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The number of features in the data set. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_features</span> 
+
+
+
+<div class="viewcode-block" id="DataView.subset"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return data for specified subset of observations and/or features.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observations : `list`, </span>
+<span class="sd">            List of observations to include in the subset.</span>
+<span class="sd">            This is treated differently depending on the type of observation labels :</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `List` [`str`], ``observations`` can be of the form:</span>
+<span class="sd">        </span>
+<span class="sd">              * `List` [`str`], to reference observations by their `str` label or;</span>
+<span class="sd">              * `List` [`int`], to reference observations by their location index.</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `None` or `List` [`int`], ``observations`` must </span>
+<span class="sd">              be of the form `List` [`int`], to reference observations by their location index.</span>
+<span class="sd">        features : `list`</span>
+<span class="sd">            List of features to include in the subset.</span>
+<span class="sd">            The list type depends on the type of ``self._feature_labels``, analogous to</span>
+<span class="sd">            ``self._observation_labels`` for ``observations`` above.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data : `numpy.ndarray`, (``len(observations)``, ``len(features)``)</span>
+<span class="sd">            The data subset where the :math:`ij^{th}` entry is the value of the</span>
+<span class="sd">            :math:`i^{th}` feature in ``features`` for the  :math:`j^{th}`</span>
+<span class="sd">            observation in ``observations``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either observations or features must be provided.&quot;</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+        <span class="k">if</span> <span class="n">observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
+                <span class="n">observations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations</span><span class="p">]</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">observations</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
+                <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_feature_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">features</span><span class="p">]</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">features</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="k">return</span> <span class="n">data</span></div></div>
+
+        
+<div class="viewcode-block" id="DistanceKeeper"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper">[docs]</a><span class="k">class</span> <span class="nc">DistanceKeeper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to store and handle multiple distances.</span>
+
+<span class="sd">    This class may also be used to store and handle similarity matrices.</span>
+<span class="sd">    Distance may be interchanged with similarity, but distance is used for simplicity.</span>
+<span class="sd">    </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : {`numpy.ndarray`, `pandas.DataFrame`, `dict` [`str`, `numpy.ndarray`], `dict` [`str`, `pandas.DataFrame`]}</span>
+<span class="sd">        One or multiple symmetric distance(s) between observations, where each distance matrix is size</span>
+<span class="sd">        (num_observations, num_observations).</span>
+
+<span class="sd">        Distance(s) may be provided in multiple ways:</span>
+
+<span class="sd">        - `numpy.ndarray` : A single distance matrix.</span>
+
+<span class="sd">          * Observation labels may be specified in ``observation_labels``.</span>
+<span class="sd">          * To include feature labels, ``data`` should be a `pandas.DataFrame`.</span>
+<span class="sd">          * The array ``data`` is placed in a `dict` with default label of the form ``{&#39;distance&#39; : data}``. </span>
+<span class="sd">        - `pandas.DataFrame` : A single distance matrix.</span>
+<span class="sd">    </span>
+<span class="sd">          * The index should be the same as the columns, which indicate observation labels.</span>
+<span class="sd">          * If ``observation_labels`` is provided, it should match the rows and columns of the dataframe,</span>
+<span class="sd">            that will be ordered according to the ``observation_labels``.</span>
+<span class="sd">          * The array ``data.values`` is placed in a `dict` with default label of the form</span>
+<span class="sd">            ``{&#39;distance&#39; : data.values}``. </span>
+<span class="sd">        - `dict` [`str`, `numpy.ndarray`] : A single or mutliple distance(s) may be provided as the value(s) </span>
+<span class="sd">           of a `dict` keyed by a `str` that serves as the distance descriptor or label for each</span>
+<span class="sd">           input of the form ``{&#39;distance_label&#39; : `numpy.ndarray`}``.</span>
+
+<span class="sd">          * All arrays are expected to have the same number of columns and rows corresponding to the number</span>
+<span class="sd">            of observations with the same ordering.</span>
+<span class="sd">          * Observation labels may be specified in ``observation_labels``.</span>
+<span class="sd">        - `dict` [`str`, `pandas.DataFrame`] : A single or mutliple distance(s) may be provided as the value(s) </span>
+<span class="sd">           of a `dict` keyed by a `str` that serves as the distance descriptor or label for each</span>
+<span class="sd">           input of the form ``{&#39;distance_label&#39; : `pandas.DataFrame`}``.</span>
+
+<span class="sd">          * All dataframes are expected to have the same number of rows and columns corresponding </span>
+<span class="sd">            to the number of observations with the same columns provided in the same order.</span>
+<span class="sd">          * The index and columns indicate observation labels.</span>
+<span class="sd">          * If ``observation_labels`` is provided, it should match the columns of the dataframe(s),</span>
+<span class="sd">            that will be ordered according to the ``observation_labels``.</span>
+<span class="sd">    observation_labels : `list` [`str`]</span>
+<span class="sd">        List of labels for each observation with length equal to num_observations.</span>
+<span class="sd">        If provided when ``data`` is a `pandas.DataFrame` or `dict` [`str`, `pandas.DataFrame`],</span>
+<span class="sd">        it should match the columns of the dataframe(s), which will be ordered according to</span>
+<span class="sd">        ``observation_labels``.</span>
+<span class="sd">    </span>
+<span class="sd">        If not provided and ``data`` is a :</span>
+
+<span class="sd">        - `pandas.DataFrame` or `dict` [`str`, `pandas.DataFrame`],</span>
+<span class="sd">          then the columns of the (first) dataframe are used.</span>
+<span class="sd">        - `numpy.ndarray` or `dict` [`str`, `numpy.ndarray`],</span>
+<span class="sd">          then the columns are labeled by their row index from :math:`0, 1, ..., num_observations - 1`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    All sets are assumed to contain the same set of data points in the same order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DistanceKeeper.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">observation_labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;distance&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">cur_distance</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cur_distance</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DistanceKeeper.__getitem__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="c1"># return self._data[key]</span>
+        <span class="k">return</span> <span class="n">DistanceView</span><span class="p">(</span><span class="n">dkeeper</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DistanceKeeper.__contains__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__contains__">[docs]</a>    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="DistanceKeeper.__iter__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">DistanceView</span><span class="p">(</span><span class="n">dkeeper</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;\ A dictionary of all distances. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">observation_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Labels for each observation. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Number of observations. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
+
+
+<div class="viewcode-block" id="DistanceKeeper.add_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.add_data">[docs]</a>    <span class="nd">@_docstring_parameter</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="n">_desc_distance</span><span class="p">,</span> <span class="n">desc_data</span><span class="o">=</span><span class="n">_desc_data_distance</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">        {desc}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        {desc_data}</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the input.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check that label is not already in the keeper</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dubplicate label detected, </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> already exists in the keeper.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Check that distance is numpy ndarray or pandas DataFrame:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized type, data must be numpy ndarray or pandas DataFrame&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># If no distance in keeper yet, initialize:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inconsistent data size, must be the same as num_observations.&quot;</span><span class="p">)</span>
+            
+        <span class="c1"># Check that the distance has the right number of rows and columns        </span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inconsistent distance matrix size, should be (num_observations, num_observations).&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set observation labels.&quot;</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distance </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> between </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> observations added to keeper.&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DistanceView"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView">[docs]</a><span class="k">class</span> <span class="nc">DistanceView</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to extract single distance matrix view from DistanceKeeper for analysis.</span>
+
+<span class="sd">    This class may also be used to extract a similarity matrix.</span>
+<span class="sd">    Distance may be interchanged with similarity, but distance is used for simplicity.    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dkeeper : `DistanceKeeper`</span>
+<span class="sd">        The object to extract the distance from.</span>
+<span class="sd">    label : `str`</span>
+<span class="sd">        The identifier of the distance matrix to be extracted from ``dkeeper``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DistanceView.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dkeeper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> in dkeeper.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">observation_labels</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">num_observations</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The distance label. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span>
+
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The distance matrix. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">observation_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Labels for each observation. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Number of observations. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
+
+
+<div class="viewcode-block" id="DistanceView.subset"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observations_a</span><span class="p">,</span> <span class="n">observations_b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return subset of distances between ``observations_a`` and ``observations_b``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observations_a : `list`</span>
+<span class="sd">            Subset of observations to extract distances from, that make up the rows of</span>
+<span class="sd">            the returned sub-distance matrix.</span>
+<span class="sd">            This is treated differently depending on the type of observation labels :</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `List` [`str`], ``observations_a`` can</span>
+<span class="sd">              be of the form:</span>
+<span class="sd">        </span>
+<span class="sd">              * `List` [`str`], to reference observations by their `str` label or;</span>
+<span class="sd">              * `List` [`int`], to reference observations by their location index.</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `None` or `List` [`int`], ``observations``</span>
+<span class="sd">              must be of the form `List` [`int`], to reference observations by their</span>
+<span class="sd">              location index.</span>
+<span class="sd">        observations_b : {`None`, `list`}, optional</span>
+<span class="sd">            Subset of observations to extract distances computed from ``observations_a``.</span>
+<span class="sd">            The list type depends on the type of ``self._feature_labels``, analogous to</span>
+<span class="sd">            ``self._observation_labels`` for ``observations_a`` above.</span>
+<span class="sd">            If `None`, ``observations_a`` is used to create symmetric matrix.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        distance : `numpy.ndarray`, (``len(observations_a)``, ``len(observations_b)``)</span>
+<span class="sd">            The sub-matrix of distances where the :math:`ij^{th}` entry is the distance</span>
+<span class="sd">            between the :math:`i^{th}` observation in ``observations_a`` and the</span>
+<span class="sd">            :math:`j^{th}` observation in ``observations_b``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observations_a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
+                <span class="n">observations_a</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations_a</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">observations_b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">observations_b</span> <span class="o">=</span> <span class="n">observations_a</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observations_b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
+                <span class="n">observations_b</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations_b</span><span class="p">]</span>
+
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">observations_a</span><span class="p">,</span> <span class="n">observations_b</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">distance</span></div></div>
+        
+
+        
+<div class="viewcode-block" id="Keeper"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper">[docs]</a><span class="k">class</span> <span class="nc">Keeper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to store and handle data, distances and similarities between data points</span>
+<span class="sd">    (or observations), and miscellaneous related results.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : {`numpy.ndarray`, `pandas.DataFrame`, `dict` [`str`, `numpy.ndarray`], `dict` [`str`, `pandas.DataFrame`]}</span>
+<span class="sd">        One or multiple feature data sets, where each data set is size (num_features, num_observations).</span>
+
+<span class="sd">        Feature data set(s) may be provided in multiple ways:</span>
+
+<span class="sd">        - `numpy.ndarray` : A single feature data set.</span>
+
+<span class="sd">          * Observation labels may be specified in ``observation_labels``.</span>
+<span class="sd">          * To include feature labels, ``data`` should be a `pandas.DataFrame`.</span>
+<span class="sd">          * The array ``data`` is placed in a `dict` with default label of the form ``{&#39;data&#39; : data}``. </span>
+<span class="sd">        - `pandas.DataFrame` : A single feature data set.</span>
+<span class="sd">    </span>
+<span class="sd">          * The index indicates feature labels.</span>
+<span class="sd">          * Columns indicate observation labels.</span>
+<span class="sd">          * If ``observation_labels`` is provided, it should match the columns of the dataframe,</span>
+<span class="sd">            that will be ordered according to the ``observation_labels``.</span>
+<span class="sd">          * The array ``data.values`` is placed in a `dict` with default label of the form ``{&#39;data&#39; : data.values}``. </span>
+<span class="sd">        - `dict` [`str`, `numpy.ndarray`] : A single or mutliple feature data set(s) may be provided as the value(s) </span>
+<span class="sd">           of a `dict` keyed by a `str` that serves as the feature data descriptor or label for each</span>
+<span class="sd">           input of the form ``{&#39;data_label&#39; : `numpy.ndarray`}``.</span>
+
+<span class="sd">          * All arrays are expected to have the same number of columns corresponding to the number</span>
+<span class="sd">            of observations with the same ordering.</span>
+<span class="sd">          * Observation labels may be specified in ``observation_labels``.</span>
+<span class="sd">          * To include feature labels, pass a `dict` of `pandas.DataFrame`\s instaed.</span>
+<span class="sd">        - `dict` [`str`, `pandas.DataFrame`] : A single or mutliple feature data set(s) may be provided as the value(s) </span>
+<span class="sd">           of a `dict` keyed by a `str` that serves as the feature data descriptor or label for each</span>
+<span class="sd">           input of the form ``{&#39;data_label&#39; : `pandas.DataFrame`}``.</span>
+
+<span class="sd">          * All dataframes are expected to have the same number of columns corresponding to the number</span>
+<span class="sd">            of observations with the same columns provided in the same order.</span>
+<span class="sd">          * The index of each input indicates feature labels.</span>
+<span class="sd">          * Columns indicate observation labels.</span>
+<span class="sd">          * If ``observation_labels`` is provided, it should match the columns of the dataframe(s),</span>
+<span class="sd">            that will be ordered according to the ``observation_labels``.</span>
+<span class="sd">    distances : {`numpy.ndarray`, `pandas.DataFrame`, `dict` [`str`, `numpy.ndarray`], `dict` [`str`, `pandas.DataFrame`]}</span>
+<span class="sd">        One or multiple symmetric distance(s) between observations, where each distance matrix is size</span>
+<span class="sd">        (num_observations, num_observations).</span>
+
+<span class="sd">        Distance(s) may be provided in multiple ways:</span>
+
+<span class="sd">        - `numpy.ndarray` : A single distance matrix.</span>
+
+<span class="sd">          * Observation labels may be specified in ``observation_labels``.</span>
+<span class="sd">          * To include feature labels, ``distances`` should be a `pandas.DataFrame`.</span>
+<span class="sd">          * The array ``distances`` is placed in a `dict` with default label of the form</span>
+<span class="sd">            ``{&#39;distance&#39; : distances}``. </span>
+<span class="sd">        - `pandas.DataFrame` : A single distance matrix.</span>
+<span class="sd">    </span>
+<span class="sd">          * The index should be the same as the columns, which indicate observation labels.</span>
+<span class="sd">          * If ``observation_labels`` is provided, it should match the rows and columns of the dataframe,</span>
+<span class="sd">            that will be ordered according to the ``observation_labels``.</span>
+<span class="sd">          * The array ``distances.values`` is placed in a `dict` with default label of the form</span>
+<span class="sd">            ``{&#39;distance&#39; : distances.values}``. </span>
+<span class="sd">        - `dict` [`str`, `numpy.ndarray`] : A single or mutliple distance(s) may be provided as the value(s) </span>
+<span class="sd">           of a `dict` keyed by a `str` that serves as the distance descriptor or label for each</span>
+<span class="sd">           input of the form ``{&#39;distance_label&#39; : `numpy.ndarray`}``.</span>
+
+<span class="sd">          * All arrays are expected to have the same number of columns and rows corresponding to the number</span>
+<span class="sd">            of observations with the same ordering.</span>
+<span class="sd">          * Observation labels may be specified in ``observation_labels``.</span>
+<span class="sd">        - `dict` [`str`, `pandas.DataFrame`] : A single or mutliple distance(s) may be provided as the value(s) </span>
+<span class="sd">           of a `dict` keyed by a `str` that serves as the distance descriptor or label for each</span>
+<span class="sd">           input of the form ``{&#39;distance_label&#39; : `pandas.DataFrame`}``.</span>
+
+<span class="sd">          * All dataframes are expected to have the same number of rows and columns corresponding </span>
+<span class="sd">            to the number of observations with the same columns provided in the same order.</span>
+<span class="sd">          * The index and columns indicate observation labels.</span>
+<span class="sd">          * If ``observation_labels`` is provided, it should match the columns of the dataframe(s),</span>
+<span class="sd">            that will be ordered according to the ``observation_labels``.</span>
+<span class="sd">    similarities : {`numpy.ndarray`, `pandas.DataFrame`, `dict` [`str`, `numpy.ndarray`], `dict` [`str`, `pandas.DataFrame`]}</span>
+<span class="sd">        One or multiple symmetric similarit(y/ies) between observations, where each similarity</span>
+<span class="sd">        matrix is size (num_observations, num_observations).</span>
+<span class="sd">        Similarit(y/ies) may be provided in multiple ways, analogous to ``distances``.:</span>
+<span class="sd">    misc : `dict`</span>
+<span class="sd">        Miscellaneous data or results.</span>
+<span class="sd">    observation_labels : `list` [`str`], optional</span>
+<span class="sd">        List of labels for each observation with length equal to num_observations.</span>
+
+<span class="sd">        Labels will be set depending on the input format accordingly :</span>
+<span class="sd">    </span>
+<span class="sd">        - If ``observation_labels`` is provided and ``data``, ``distances``, or ``similarities``  is a :</span>
+
+<span class="sd">          * `pandas.DataFrame` or `dict` [`str`, `pandas.DataFrame`], then ``observation_labels`` should </span>
+<span class="sd">            match the columns of the dataframe(s), which will be ordered according to ``observation_labels``.</span>
+<span class="sd">          * `numpy.ndarray` or `dict` [`str`, `numpy.ndarray`], then the array(s) is (are) assumed to be</span>
+<span class="sd">            ordered according to ``observation_labels``.</span>
+<span class="sd">    </span>
+<span class="sd">        - If ``observation_labels`` is not provided and ``data``, ``distances``, or ``similarities``  is a :</span>
+
+<span class="sd">          * `pandas.DataFrame` or `dict` [`str`, `pandas.DataFrame`], then all dataframes are expected to</span>
+<span class="sd">            have the same column names, which is used as the ``observation_labels``.</span>
+<span class="sd">          * `numpy.ndarray` or `dict` [`str`, `numpy.ndarray`], then the array(s) is (are) assumed to have</span>
+<span class="sd">            columns corresponding to the observations in the same order. Default values are used for</span>
+<span class="sd">            ``observation_labels`` of the form &#39;X0&#39;, &#39;X1&#39;, ... and so on.</span>
+<span class="sd">    outdir : {`None`, `str` `pathlib.Path`}</span>
+<span class="sd">        Global path where any results will be saved. If `None`, no results will be saved.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    All data sets, distances and similarities are assumed to contain the same set of data points in the same order.</span>
+
+<span class="sd">    Subsets of a data set, distance or similarity should be stored in ``Keeper.misc`` as a `pandas.DataFrame`</span>
+<span class="sd">    to keep track of the subset of observations (and features).</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="Keeper.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">similarities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">misc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">similarities</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one of data, distances, or similarities must be provided.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># check if observation labels given in data, distances or similarities:</span>
+        <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">num_observations</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="n">observation_labels</span><span class="p">)</span>
+            <span class="n">observation_labels</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">observation_labels</span>
+            <span class="k">if</span> <span class="n">tmp</span><span class="o">.</span><span class="n">num_observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">num_observations</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">num_observations</span>
+            <span class="c1"># if observation_labels are still None, try distances:</span>
+            <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">distances</span><span class="p">,</span>
+                                     <span class="n">observation_labels</span><span class="o">=</span><span class="n">observation_labels</span><span class="p">)</span>
+                <span class="n">observation_labels</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">observation_labels</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">num_observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="n">num_observations</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">num_observations</span>
+                <span class="c1"># if observation_labels are still None, try similarities:</span>
+                <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">similarities</span><span class="p">,</span>
+                                         <span class="n">observation_labels</span><span class="o">=</span><span class="n">observation_labels</span><span class="p">)</span>
+                    <span class="n">observation_labels</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">observation_labels</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">num_observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                        <span class="n">num_observations</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">num_observations</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">num_observations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span>
+                    
+                    
+        <span class="c1"># if no observation labels have been found at this point, set to default</span>
+        <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_observations</span><span class="p">)]</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">observation_labels</span>
+        <span class="c1"># self._num_observations = None if self._observation_labels is None else len(self._observation_labels)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">distances</span><span class="p">,</span>
+                                         <span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">similarities</span><span class="p">,</span>
+                                            <span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_misc</span> <span class="o">=</span> <span class="n">misc</span> <span class="k">if</span> <span class="n">misc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">outdir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">=</span> <span class="n">outdir</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="p">,</span> <span class="n">Path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating directory </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper._check_num_observations"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper._check_num_observations">[docs]</a>    <span class="k">def</span> <span class="nf">_check_num_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Check that num_observation are consistent (or None) across keepers. &quot;&quot;&quot;</span>
+        <span class="n">num_cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
+        <span class="n">num_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">num_observations</span>
+        <span class="n">num_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="o">.</span><span class="n">num_observations</span>
+        <span class="n">num_sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="o">.</span><span class="n">num_observations</span>
+
+        <span class="n">record</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">dl</span> <span class="ow">in</span> <span class="p">[</span><span class="n">num_cur</span><span class="p">,</span> <span class="n">num_data</span><span class="p">,</span> <span class="n">num_dist</span><span class="p">,</span> <span class="n">num_sim</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">dl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dl</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">dl</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">dl2</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dl</span> <span class="o">!=</span> <span class="n">dl2</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missmatched number of observation detected between keepers.&quot;</span><span class="p">)</span></div>
+                
+
+<div class="viewcode-block" id="Keeper._check_observation_labels"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper._check_observation_labels">[docs]</a>    <span class="k">def</span> <span class="nf">_check_observation_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Check that observation_labels are consistent (or None) across keepers. &quot;&quot;&quot;</span>
+        <span class="n">cur_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span>
+        <span class="n">data_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">observation_labels</span>
+        <span class="n">dist_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="o">.</span><span class="n">observation_labels</span>
+        <span class="n">sim_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="o">.</span><span class="n">observation_labels</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">dl</span> <span class="ow">in</span> <span class="p">[</span><span class="n">cur_labels</span><span class="p">,</span> <span class="n">data_labels</span><span class="p">,</span> <span class="n">dist_labels</span><span class="p">,</span> <span class="n">sim_labels</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">dl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dl</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">dl</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">dl2</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dl</span> <span class="o">!=</span> <span class="n">dl2</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missmatched observation labels detected between keepers.&quot;</span><span class="p">)</span></div>
+
+                
+    <span class="c1"># def _update_observation_labels(self):</span>
+    <span class="c1">#     &quot;&quot;&quot; Update observation labels (and number of observations) if changed in keeper. &quot;&quot;&quot;</span>
+    <span class="c1">#     # first check that num_observations and observation labels match (or are None) across sub-keepers:</span>
+    <span class="c1">#     self.check_num_observations()</span>
+    <span class="c1">#     self._check_observation_labels()</span>
+
+    <span class="c1">#     record = [None]</span>
+    <span class="c1">#     for dl in [self._data, self._distances, self._similarities]:</span>
+    <span class="c1">#         if dl.observation_labels is not None:</span>
+    <span class="c1">#             record.append(dl.observation_labels)</span>
+    <span class="c1">#             # num_labels.append(dl.num_observations)</span>
+    <span class="c1">#             break  # already checked that labels are eqiovalent, so no need to keep looking</span>
+
+    <span class="c1">#     labels = record[-1]</span>
+    <span class="c1">#     # num_labels = num_labels[-1]</span>
+
+    <span class="c1">#     if self._observation_labels is not None and labels is not None:</span>
+            
+
+    <span class="c1">#     if self._observation_labels is None:</span>
+    <span class="c1">#         if labels is not None:</span>
+    <span class="c1">#             if self._num_observations is None:</span>
+                    
+    <span class="c1">#             if (self._num_observations is not None) and (len(labels) != self_num_observations):</span>
+    <span class="c1">#                 raise ValueError(&quot;Number of observations in sub-keepers does not match global keeper.&quot;)</span>
+    <span class="c1">#             self._observation_labels = labels.copy()</span>
+    <span class="c1">#             # check that all</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         if (labels is not None) and (self._observation_labels != labels):</span>
+    <span class="c1">#             raise ValueError(&quot;Inconsisstent observation labels detected between keepers.&quot;)</span>
+            
+            
+                  
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">observation_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Labels for each observation. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span>
+    
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The feature data sets. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">distances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The distances. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">similarities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The similarities. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">misc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The misc data. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_misc</span>
+
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The number of observations. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span>
+        
+        <span class="c1"># num_obs = self._data.num_observations</span>
+        <span class="c1"># if num_obs is not None:</span>
+        <span class="c1">#     return num_obs</span>
+
+        <span class="c1"># num_obs = self._distances.num_observations</span>
+        <span class="c1"># if num_obs is not None:</span>
+        <span class="c1">#     return num_obs</span>
+
+        <span class="c1"># num_obs = self._similarities.num_observations</span>
+        <span class="c1"># if num_obs is not None:</span>
+        <span class="c1">#     return num_obs</span>
+
+        <span class="c1"># return None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
+
+
+<div class="viewcode-block" id="Keeper.add_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a feature data set to the data keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : {`numpy.ndarray`, `pandas.DataFrame`}</span>
+<span class="sd">            The data set of size (num_features, num_observations).</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the data set.        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added data input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.add_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_distance">[docs]</a>    <span class="k">def</span> <span class="nf">add_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a distance array to the distance keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : {`numpy.ndarray`, `pandas.DataFrame`}</span>
+<span class="sd">            The distance array of size (num_observations, num_observations).</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the distance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added distance input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.add_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">add_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a similarity array to the similarity keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : {`numpy.ndarray`, `pandas.DataFrame`}</span>
+<span class="sd">            The similarity array of size (num_observations, num_observations).</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the similarity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added similarity input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>    </div>
+
+
+<div class="viewcode-block" id="Keeper.add_misc"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_misc">[docs]</a>    <span class="k">def</span> <span class="nf">add_misc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add misc information to be stored.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data </span>
+<span class="sd">            The misc information, e.g., a graph.</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the input.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_misc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dubplicate label detected, </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> already exists in the keeper.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_misc</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added misc input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div></div>
+
+        
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023-2023, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

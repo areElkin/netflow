@@ -1,0 +1,1327 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>netflow.keepers.keeper &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.keepers.keeper';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="netflow.pose" href="netflow.pose.html" />
+    <link rel="prev" title="netflow.keepers" href="netflow.keepers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">netflow v0.0.dev Manual</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../main_namespace.html">netflow</a><input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="netflow.keepers.html">netflow.keepers</a><input checked class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">netflow.keepers.keeper</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.pose.html">netflow.pose</a><input checked class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.similarity.html">netflow.pose.similarity</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="netflow.keepers.html">netflow.keepers</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">netflow.keepers.keeper</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="netflow.pose.html">netflow.pose</a><input checked class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.pose.similarity.html">netflow.pose.similarity</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
+  <p class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">netflow API</a></li>
+    
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="netflow.keepers.html" class="nav-link">netflow.keepers</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">netflow.keepers.keeper</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="module-netflow.keepers.keeper">
+<span id="netflow-keepers-keeper"></span><h1>netflow.keepers.keeper<a class="headerlink" href="#module-netflow.keepers.keeper" title="Permalink to this headline">#</a></h1>
+<section id="keeper">
+<h2>keeper<a class="headerlink" href="#keeper" title="Permalink to this headline">#</a></h2>
+<p>Classes used for data storage and manipulation.</p>
+<p class="rubric">Classes</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.keepers.keeper.DataKeeper" title="netflow.keepers.keeper.DataKeeper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataKeeper</span></code></a>([data, observation_labels])</p></td>
+<td><p>A class to store and handle multiple data sets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.keepers.keeper.DataView" title="netflow.keepers.keeper.DataView"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataView</span></code></a>([dkeeper, label])</p></td>
+<td><p>A class to extract single data view from DataKeeper for analysis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.keepers.keeper.DistanceKeeper" title="netflow.keepers.keeper.DistanceKeeper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistanceKeeper</span></code></a>([data, observation_labels])</p></td>
+<td><p>A class to store and handle multiple distances.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.keepers.keeper.DistanceView" title="netflow.keepers.keeper.DistanceView"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistanceView</span></code></a>([dkeeper, label])</p></td>
+<td><p>A class to extract single distance matrix view from DistanceKeeper for analysis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.keepers.keeper.Keeper" title="netflow.keepers.keeper.Keeper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Keeper</span></code></a>([data, distances, similarities, ...])</p></td>
+<td><p>A class to store and handle data, distances and similarities between data points (or observations), and miscellaneous related results.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.keepers.keeper.</span></span><span class="sig-name descname"><span class="pre">DataKeeper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataKeeper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper" title="Permalink to this definition">#</a></dt>
+<dd><p>A class to store and handle multiple data sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>, <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>], <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]}) – <p>One or multiple feature data sets, where each data set is size (num_features, num_observations).</p>
+<p>Feature data set(s) may be provided in multiple ways:</p>
+<ul>
+<li><p><cite>numpy.ndarray</cite> : A single feature data set.</p>
+<ul class="simple">
+<li><p>Observation labels may be specified in <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>To include feature labels, <code class="docutils literal notranslate"><span class="pre">data</span></code> should be a <cite>pandas.DataFrame</cite>.</p></li>
+<li><p>The array <code class="docutils literal notranslate"><span class="pre">data</span></code> is placed in a <cite>dict</cite> with default label of the form
+<code class="docutils literal notranslate"><span class="pre">{'data'</span> <span class="pre">:</span> <span class="pre">data}</span></code>.</p></li>
+</ul>
+</li>
+<li><p><cite>pandas.DataFrame</cite> : A single feature data set.</p>
+<ul class="simple">
+<li><p>The index indicates feature labels.</p></li>
+<li><p>Columns indicate observation labels.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided, it should match the columns of the dataframe,
+that will be ordered according to the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>The array <code class="docutils literal notranslate"><span class="pre">data.values</span></code> is placed in a <cite>dict</cite> with default label of the form
+<code class="docutils literal notranslate"><span class="pre">{'data'</span> <span class="pre">:</span> <span class="pre">data.values}</span></code>.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>]<span class="classifier">A single or mutliple feature data set(s) may be provided as</span></dt><dd><p>the value(s) of a <cite>dict</cite> keyed by a <cite>str</cite> that serves as the feature data descriptor or label
+for each input of the form <code class="docutils literal notranslate"><span class="pre">{'data_label'</span> <span class="pre">:</span> <span class="pre">`numpy.ndarray`}</span></code>.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>All arrays are expected to have the same number of columns corresponding to the number
+of observations with the same ordering.</p></li>
+<li><p>Observation labels may be specified in <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>To include feature labels, pass a <cite>dict</cite> of <cite>pandas.DataFrame</cite>s instaed.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]<span class="classifier">A single or mutliple feature data set(s) may be provided as</span></dt><dd><p>the value(s) of a <cite>dict</cite> keyed by a <cite>str</cite> that serves as the feature data descriptor or label
+for each input of the form <code class="docutils literal notranslate"><span class="pre">{'data_label'</span> <span class="pre">:</span> <span class="pre">`pandas.DataFrame`}</span></code>.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>All dataframes are expected to have the same number of columns corresponding to the number
+of observations with the same columns provided in the same order.</p></li>
+<li><p>The index of each input indicates feature labels.</p></li>
+<li><p>Columns indicate observation labels.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided, it should match the columns of the dataframe(s),
+that will be ordered according to the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</p></li>
+<li><p><strong>observation_labels</strong> (<cite>list</cite> [<cite>str</cite>], optional) – <p>List of labels for each observation with length equal to num_observations.
+If provided when <code class="docutils literal notranslate"><span class="pre">data</span></code> is a <cite>pandas.DataFrame</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>],
+it should match the columns of the dataframe(s), which will be ordered according to
+<code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p>
+<p>If not provided and <code class="docutils literal notranslate"><span class="pre">data</span></code> is a :</p>
+<ul>
+<li><p><cite>pandas.DataFrame</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>],
+then the columns of the (first) dataframe are used.</p></li>
+<li><p><cite>numpy.ndarray</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>],
+then the columns are labeled by their row index from <span class="math notranslate nohighlight">\(0, 1, ..., num\_observations - 1\)</span>.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>All data sets are assumed to contain the same set of data points in the same order.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.__contains__">
+<span class="sig-name descname"><span class="pre">__contains__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataKeeper.__contains__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.__contains__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataKeeper.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.__getitem__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataKeeper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataKeeper.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.__iter__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.keepers.keeper'</span></em><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.__module__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.add_data">
+<span class="sig-name descname"><span class="pre">add_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataKeeper.add_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.add_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a feature data set to the keeper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Observation labels may be set after object initialization.
+This may require upkeep in <a class="reference internal" href="#netflow.keepers.keeper.Keeper" title="netflow.keepers.keeper.Keeper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Keeper</span></code></a> to update and coordinate
+observation labels among the different keepers.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>}) – The data set of size (num_features, num_observations).</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – Reference label describing the data set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.data" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary of all data sets.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.features_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">features_labels</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.features_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary of feature labels for each data set.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.num_features">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_features</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.num_features" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary with the number of features in each data set.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.num_observations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_observations</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.num_observations" title="Permalink to this definition">#</a></dt>
+<dd><p>Number of observations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.observation_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_labels</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.observation_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>Labels for each observation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.keepers.keeper.</span></span><span class="sig-name descname"><span class="pre">DataView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dkeeper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataView" title="Permalink to this definition">#</a></dt>
+<dd><p>A class to extract single data view from DataKeeper for analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dkeeper</strong> (<cite>DataKeeper</cite>) – The object to extract data from.</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – The identifier of the data to be extracted from <code class="docutils literal notranslate"><span class="pre">dkeeper</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dkeeper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataView.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataView.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.keepers.keeper'</span></em><a class="headerlink" href="#netflow.keepers.keeper.DataView.__module__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataView.data" title="Permalink to this definition">#</a></dt>
+<dd><p>The data set.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.feature_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feature_labels</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataView.feature_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>Feature labels.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.label">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataView.label" title="Permalink to this definition">#</a></dt>
+<dd><p>The data label.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.num_features">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_features</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataView.num_features" title="Permalink to this definition">#</a></dt>
+<dd><p>The number of features in the data set.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.num_observations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_observations</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataView.num_observations" title="Permalink to this definition">#</a></dt>
+<dd><p>Number of observations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.observation_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_labels</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataView.observation_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>Labels for each observation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.subset">
+<span class="sig-name descname"><span class="pre">subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataView.subset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataView.subset" title="Permalink to this definition">#</a></dt>
+<dd><p>Return data for specified subset of observations and/or features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>observations</strong> (<cite>list</cite>,) – <p>List of observations to include in the subset.
+This is treated differently depending on the type of observation labels :</p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">self._observation_labels</span></code> is <cite>List</cite> [<cite>str</cite>], <code class="docutils literal notranslate"><span class="pre">observations</span></code> can be of the form:</p>
+<ul>
+<li><p><cite>List</cite> [<cite>str</cite>], to reference observations by their <cite>str</cite> label or;</p></li>
+<li><p><cite>List</cite> [<cite>int</cite>], to reference observations by their location index.</p></li>
+</ul>
+</li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">self._observation_labels</span></code> is <cite>None</cite> or <cite>List</cite> [<cite>int</cite>], <code class="docutils literal notranslate"><span class="pre">observations</span></code> must
+be of the form <cite>List</cite> [<cite>int</cite>], to reference observations by their location index.</p></li>
+</ul>
+</p></li>
+<li><p><strong>features</strong> (<cite>list</cite>) – List of features to include in the subset.
+The list type depends on the type of <code class="docutils literal notranslate"><span class="pre">self._feature_labels</span></code>, analogous to
+<code class="docutils literal notranslate"><span class="pre">self._observation_labels</span></code> for <code class="docutils literal notranslate"><span class="pre">observations</span></code> above.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>data</strong> – The data subset where the <span class="math notranslate nohighlight">\(ij^{th}\)</span> entry is the value of the
+<span class="math notranslate nohighlight">\(i^{th}\)</span> feature in <code class="docutils literal notranslate"><span class="pre">features</span></code> for the  <span class="math notranslate nohighlight">\(j^{th}\)</span>
+observation in <code class="docutils literal notranslate"><span class="pre">observations</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>numpy.ndarray</cite>, (<code class="docutils literal notranslate"><span class="pre">len(observations)</span></code>, <code class="docutils literal notranslate"><span class="pre">len(features)</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.keepers.keeper.</span></span><span class="sig-name descname"><span class="pre">DistanceKeeper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceKeeper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper" title="Permalink to this definition">#</a></dt>
+<dd><p>A class to store and handle multiple distances.</p>
+<p>This class may also be used to store and handle similarity matrices.
+Distance may be interchanged with similarity, but distance is used for simplicity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>, <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>], <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]}) – <p>One or multiple symmetric distance(s) between observations, where each distance matrix is size
+(num_observations, num_observations).</p>
+<p>Distance(s) may be provided in multiple ways:</p>
+<ul>
+<li><p><cite>numpy.ndarray</cite> : A single distance matrix.</p>
+<ul class="simple">
+<li><p>Observation labels may be specified in <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>To include feature labels, <code class="docutils literal notranslate"><span class="pre">data</span></code> should be a <cite>pandas.DataFrame</cite>.</p></li>
+<li><p>The array <code class="docutils literal notranslate"><span class="pre">data</span></code> is placed in a <cite>dict</cite> with default label of the form <code class="docutils literal notranslate"><span class="pre">{'distance'</span> <span class="pre">:</span> <span class="pre">data}</span></code>.</p></li>
+</ul>
+</li>
+<li><p><cite>pandas.DataFrame</cite> : A single distance matrix.</p>
+<ul class="simple">
+<li><p>The index should be the same as the columns, which indicate observation labels.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided, it should match the rows and columns of the dataframe,
+that will be ordered according to the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>The array <code class="docutils literal notranslate"><span class="pre">data.values</span></code> is placed in a <cite>dict</cite> with default label of the form
+<code class="docutils literal notranslate"><span class="pre">{'distance'</span> <span class="pre">:</span> <span class="pre">data.values}</span></code>.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>]<span class="classifier">A single or mutliple distance(s) may be provided as the value(s)</span></dt><dd><p>of a <cite>dict</cite> keyed by a <cite>str</cite> that serves as the distance descriptor or label for each
+input of the form <code class="docutils literal notranslate"><span class="pre">{'distance_label'</span> <span class="pre">:</span> <span class="pre">`numpy.ndarray`}</span></code>.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>All arrays are expected to have the same number of columns and rows corresponding to the number
+of observations with the same ordering.</p></li>
+<li><p>Observation labels may be specified in <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]<span class="classifier">A single or mutliple distance(s) may be provided as the value(s)</span></dt><dd><p>of a <cite>dict</cite> keyed by a <cite>str</cite> that serves as the distance descriptor or label for each
+input of the form <code class="docutils literal notranslate"><span class="pre">{'distance_label'</span> <span class="pre">:</span> <span class="pre">`pandas.DataFrame`}</span></code>.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>All dataframes are expected to have the same number of rows and columns corresponding
+to the number of observations with the same columns provided in the same order.</p></li>
+<li><p>The index and columns indicate observation labels.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided, it should match the columns of the dataframe(s),
+that will be ordered according to the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</p></li>
+<li><p><strong>observation_labels</strong> (<cite>list</cite> [<cite>str</cite>]) – <p>List of labels for each observation with length equal to num_observations.
+If provided when <code class="docutils literal notranslate"><span class="pre">data</span></code> is a <cite>pandas.DataFrame</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>],
+it should match the columns of the dataframe(s), which will be ordered according to
+<code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p>
+<p>If not provided and <code class="docutils literal notranslate"><span class="pre">data</span></code> is a :</p>
+<ul>
+<li><p><cite>pandas.DataFrame</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>],
+then the columns of the (first) dataframe are used.</p></li>
+<li><p><cite>numpy.ndarray</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>],
+then the columns are labeled by their row index from <span class="math notranslate nohighlight">\(0, 1, ..., num_observations - 1\)</span>.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>All sets are assumed to contain the same set of data points in the same order.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.__contains__">
+<span class="sig-name descname"><span class="pre">__contains__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceKeeper.__contains__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.__contains__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceKeeper.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.__getitem__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceKeeper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceKeeper.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.__iter__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.keepers.keeper'</span></em><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.__module__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.add_data">
+<span class="sig-name descname"><span class="pre">add_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceKeeper.add_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.add_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a symmeric distance matrix to the keeper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>}) – The distance matrix of size (num_observations, num_observations).</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – Reference label describing the input.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.data" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary of all distances.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.num_observations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_observations</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.num_observations" title="Permalink to this definition">#</a></dt>
+<dd><p>Number of observations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.observation_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_labels</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.observation_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>Labels for each observation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.keepers.keeper.</span></span><span class="sig-name descname"><span class="pre">DistanceView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dkeeper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceView" title="Permalink to this definition">#</a></dt>
+<dd><p>A class to extract single distance matrix view from DistanceKeeper for analysis.</p>
+<p>This class may also be used to extract a similarity matrix.
+Distance may be interchanged with similarity, but distance is used for simplicity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dkeeper</strong> (<cite>DistanceKeeper</cite>) – The object to extract the distance from.</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – The identifier of the distance matrix to be extracted from <code class="docutils literal notranslate"><span class="pre">dkeeper</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dkeeper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceView.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.keepers.keeper'</span></em><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.__module__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.data" title="Permalink to this definition">#</a></dt>
+<dd><p>The distance matrix.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.label">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.label" title="Permalink to this definition">#</a></dt>
+<dd><p>The distance label.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.num_observations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_observations</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.num_observations" title="Permalink to this definition">#</a></dt>
+<dd><p>Number of observations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.observation_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_labels</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.observation_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>Labels for each observation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.subset">
+<span class="sig-name descname"><span class="pre">subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observations_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observations_b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceView.subset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.subset" title="Permalink to this definition">#</a></dt>
+<dd><p>Return subset of distances between <code class="docutils literal notranslate"><span class="pre">observations_a</span></code> and <code class="docutils literal notranslate"><span class="pre">observations_b</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>observations_a</strong> (<cite>list</cite>) – <p>Subset of observations to extract distances from, that make up the rows of
+the returned sub-distance matrix.
+This is treated differently depending on the type of observation labels :</p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">self._observation_labels</span></code> is <cite>List</cite> [<cite>str</cite>], <code class="docutils literal notranslate"><span class="pre">observations_a</span></code> can
+be of the form:</p>
+<ul>
+<li><p><cite>List</cite> [<cite>str</cite>], to reference observations by their <cite>str</cite> label or;</p></li>
+<li><p><cite>List</cite> [<cite>int</cite>], to reference observations by their location index.</p></li>
+</ul>
+</li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">self._observation_labels</span></code> is <cite>None</cite> or <cite>List</cite> [<cite>int</cite>], <code class="docutils literal notranslate"><span class="pre">observations</span></code>
+must be of the form <cite>List</cite> [<cite>int</cite>], to reference observations by their
+location index.</p></li>
+</ul>
+</p></li>
+<li><p><strong>observations_b</strong> ({<cite>None</cite>, <cite>list</cite>}, optional) – Subset of observations to extract distances computed from <code class="docutils literal notranslate"><span class="pre">observations_a</span></code>.
+The list type depends on the type of <code class="docutils literal notranslate"><span class="pre">self._feature_labels</span></code>, analogous to
+<code class="docutils literal notranslate"><span class="pre">self._observation_labels</span></code> for <code class="docutils literal notranslate"><span class="pre">observations_a</span></code> above.
+If <cite>None</cite>, <code class="docutils literal notranslate"><span class="pre">observations_a</span></code> is used to create symmetric matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>distance</strong> – The sub-matrix of distances where the <span class="math notranslate nohighlight">\(ij^{th}\)</span> entry is the distance
+between the <span class="math notranslate nohighlight">\(i^{th}\)</span> observation in <code class="docutils literal notranslate"><span class="pre">observations_a</span></code> and the
+<span class="math notranslate nohighlight">\(j^{th}\)</span> observation in <code class="docutils literal notranslate"><span class="pre">observations_b</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>numpy.ndarray</cite>, (<code class="docutils literal notranslate"><span class="pre">len(observations_a)</span></code>, <code class="docutils literal notranslate"><span class="pre">len(observations_b)</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.keepers.keeper.</span></span><span class="sig-name descname"><span class="pre">Keeper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">similarities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">misc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper" title="Permalink to this definition">#</a></dt>
+<dd><p>A class to store and handle data, distances and similarities between data points
+(or observations), and miscellaneous related results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>, <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>], <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]}) – <p>One or multiple feature data sets, where each data set is size (num_features, num_observations).</p>
+<p>Feature data set(s) may be provided in multiple ways:</p>
+<ul>
+<li><p><cite>numpy.ndarray</cite> : A single feature data set.</p>
+<ul class="simple">
+<li><p>Observation labels may be specified in <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>To include feature labels, <code class="docutils literal notranslate"><span class="pre">data</span></code> should be a <cite>pandas.DataFrame</cite>.</p></li>
+<li><p>The array <code class="docutils literal notranslate"><span class="pre">data</span></code> is placed in a <cite>dict</cite> with default label of the form <code class="docutils literal notranslate"><span class="pre">{'data'</span> <span class="pre">:</span> <span class="pre">data}</span></code>.</p></li>
+</ul>
+</li>
+<li><p><cite>pandas.DataFrame</cite> : A single feature data set.</p>
+<ul class="simple">
+<li><p>The index indicates feature labels.</p></li>
+<li><p>Columns indicate observation labels.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided, it should match the columns of the dataframe,
+that will be ordered according to the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>The array <code class="docutils literal notranslate"><span class="pre">data.values</span></code> is placed in a <cite>dict</cite> with default label of the form <code class="docutils literal notranslate"><span class="pre">{'data'</span> <span class="pre">:</span> <span class="pre">data.values}</span></code>.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>]<span class="classifier">A single or mutliple feature data set(s) may be provided as the value(s)</span></dt><dd><p>of a <cite>dict</cite> keyed by a <cite>str</cite> that serves as the feature data descriptor or label for each
+input of the form <code class="docutils literal notranslate"><span class="pre">{'data_label'</span> <span class="pre">:</span> <span class="pre">`numpy.ndarray`}</span></code>.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>All arrays are expected to have the same number of columns corresponding to the number
+of observations with the same ordering.</p></li>
+<li><p>Observation labels may be specified in <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>To include feature labels, pass a <cite>dict</cite> of <cite>pandas.DataFrame</cite>s instaed.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]<span class="classifier">A single or mutliple feature data set(s) may be provided as the value(s)</span></dt><dd><p>of a <cite>dict</cite> keyed by a <cite>str</cite> that serves as the feature data descriptor or label for each
+input of the form <code class="docutils literal notranslate"><span class="pre">{'data_label'</span> <span class="pre">:</span> <span class="pre">`pandas.DataFrame`}</span></code>.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>All dataframes are expected to have the same number of columns corresponding to the number
+of observations with the same columns provided in the same order.</p></li>
+<li><p>The index of each input indicates feature labels.</p></li>
+<li><p>Columns indicate observation labels.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided, it should match the columns of the dataframe(s),
+that will be ordered according to the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</p></li>
+<li><p><strong>distances</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>, <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>], <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]}) – <p>One or multiple symmetric distance(s) between observations, where each distance matrix is size
+(num_observations, num_observations).</p>
+<p>Distance(s) may be provided in multiple ways:</p>
+<ul>
+<li><p><cite>numpy.ndarray</cite> : A single distance matrix.</p>
+<ul class="simple">
+<li><p>Observation labels may be specified in <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>To include feature labels, <code class="docutils literal notranslate"><span class="pre">distances</span></code> should be a <cite>pandas.DataFrame</cite>.</p></li>
+<li><p>The array <code class="docutils literal notranslate"><span class="pre">distances</span></code> is placed in a <cite>dict</cite> with default label of the form
+<code class="docutils literal notranslate"><span class="pre">{'distance'</span> <span class="pre">:</span> <span class="pre">distances}</span></code>.</p></li>
+</ul>
+</li>
+<li><p><cite>pandas.DataFrame</cite> : A single distance matrix.</p>
+<ul class="simple">
+<li><p>The index should be the same as the columns, which indicate observation labels.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided, it should match the rows and columns of the dataframe,
+that will be ordered according to the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p>The array <code class="docutils literal notranslate"><span class="pre">distances.values</span></code> is placed in a <cite>dict</cite> with default label of the form
+<code class="docutils literal notranslate"><span class="pre">{'distance'</span> <span class="pre">:</span> <span class="pre">distances.values}</span></code>.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>]<span class="classifier">A single or mutliple distance(s) may be provided as the value(s)</span></dt><dd><p>of a <cite>dict</cite> keyed by a <cite>str</cite> that serves as the distance descriptor or label for each
+input of the form <code class="docutils literal notranslate"><span class="pre">{'distance_label'</span> <span class="pre">:</span> <span class="pre">`numpy.ndarray`}</span></code>.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>All arrays are expected to have the same number of columns and rows corresponding to the number
+of observations with the same ordering.</p></li>
+<li><p>Observation labels may be specified in <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]<span class="classifier">A single or mutliple distance(s) may be provided as the value(s)</span></dt><dd><p>of a <cite>dict</cite> keyed by a <cite>str</cite> that serves as the distance descriptor or label for each
+input of the form <code class="docutils literal notranslate"><span class="pre">{'distance_label'</span> <span class="pre">:</span> <span class="pre">`pandas.DataFrame`}</span></code>.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>All dataframes are expected to have the same number of rows and columns corresponding
+to the number of observations with the same columns provided in the same order.</p></li>
+<li><p>The index and columns indicate observation labels.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided, it should match the columns of the dataframe(s),
+that will be ordered according to the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</p></li>
+<li><p><strong>similarities</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>, <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>], <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>]}) – One or multiple symmetric similarit(y/ies) between observations, where each similarity
+matrix is size (num_observations, num_observations).
+Similarit(y/ies) may be provided in multiple ways, analogous to <code class="docutils literal notranslate"><span class="pre">distances</span></code>.:</p></li>
+<li><p><strong>misc</strong> (<cite>dict</cite>) – Miscellaneous data or results.</p></li>
+<li><p><strong>observation_labels</strong> (<cite>list</cite> [<cite>str</cite>], optional) – <p>List of labels for each observation with length equal to num_observations.</p>
+<p>Labels will be set depending on the input format accordingly :</p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is provided and <code class="docutils literal notranslate"><span class="pre">data</span></code>, <code class="docutils literal notranslate"><span class="pre">distances</span></code>, or <code class="docutils literal notranslate"><span class="pre">similarities</span></code>  is a :</p>
+<ul>
+<li><p><cite>pandas.DataFrame</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>], then <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> should
+match the columns of the dataframe(s), which will be ordered according to <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p><cite>numpy.ndarray</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>], then the array(s) is (are) assumed to be
+ordered according to <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+</ul>
+</li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> is not provided and <code class="docutils literal notranslate"><span class="pre">data</span></code>, <code class="docutils literal notranslate"><span class="pre">distances</span></code>, or <code class="docutils literal notranslate"><span class="pre">similarities</span></code>  is a :</p>
+<ul>
+<li><p><cite>pandas.DataFrame</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>pandas.DataFrame</cite>], then all dataframes are expected to
+have the same column names, which is used as the <code class="docutils literal notranslate"><span class="pre">observation_labels</span></code>.</p></li>
+<li><p><cite>numpy.ndarray</cite> or <cite>dict</cite> [<cite>str</cite>, <cite>numpy.ndarray</cite>], then the array(s) is (are) assumed to have
+columns corresponding to the observations in the same order. Default values are used for
+<code class="docutils literal notranslate"><span class="pre">observation_labels</span></code> of the form ‘X0’, ‘X1’, … and so on.</p></li>
+</ul>
+</li>
+</ul>
+</p></li>
+<li><p><strong>outdir</strong> ({<cite>None</cite>, <cite>str</cite> <cite>pathlib.Path</cite>}) – Global path where any results will be saved. If <cite>None</cite>, no results will be saved.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>All data sets, distances and similarities are assumed to contain the same set of data points in the same order.</p>
+<p>Subsets of a data set, distance or similarity should be stored in <code class="docutils literal notranslate"><span class="pre">Keeper.misc</span></code> as a <cite>pandas.DataFrame</cite>
+to keep track of the subset of observations (and features).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">similarities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">misc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.keepers.keeper'</span></em><a class="headerlink" href="#netflow.keepers.keeper.Keeper.__module__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper._check_num_observations">
+<span class="sig-name descname"><span class="pre">_check_num_observations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper._check_num_observations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper._check_num_observations" title="Permalink to this definition">#</a></dt>
+<dd><p>Check that num_observation are consistent (or None) across keepers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper._check_observation_labels">
+<span class="sig-name descname"><span class="pre">_check_observation_labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper._check_observation_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper._check_observation_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>Check that observation_labels are consistent (or None) across keepers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.add_data">
+<span class="sig-name descname"><span class="pre">add_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.add_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.add_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a feature data set to the data keeper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>}) – The data set of size (num_features, num_observations).</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – Reference label describing the data set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.add_distance">
+<span class="sig-name descname"><span class="pre">add_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.add_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.add_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a distance array to the distance keeper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>}) – The distance array of size (num_observations, num_observations).</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – Reference label describing the distance.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.add_misc">
+<span class="sig-name descname"><span class="pre">add_misc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.add_misc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.add_misc" title="Permalink to this definition">#</a></dt>
+<dd><p>Add misc information to be stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The misc information, e.g., a graph.</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – Reference label describing the input.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.add_similarity">
+<span class="sig-name descname"><span class="pre">add_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.add_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.add_similarity" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a similarity array to the similarity keeper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> ({<cite>numpy.ndarray</cite>, <cite>pandas.DataFrame</cite>}) – The similarity array of size (num_observations, num_observations).</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – Reference label describing the similarity.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#netflow.keepers.keeper.Keeper.data" title="Permalink to this definition">#</a></dt>
+<dd><p>The feature data sets.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.distances">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">distances</span></span><a class="headerlink" href="#netflow.keepers.keeper.Keeper.distances" title="Permalink to this definition">#</a></dt>
+<dd><p>The distances.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.misc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">misc</span></span><a class="headerlink" href="#netflow.keepers.keeper.Keeper.misc" title="Permalink to this definition">#</a></dt>
+<dd><p>The misc data.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.num_observations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_observations</span></span><a class="headerlink" href="#netflow.keepers.keeper.Keeper.num_observations" title="Permalink to this definition">#</a></dt>
+<dd><p>The number of observations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.observation_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_labels</span></span><a class="headerlink" href="#netflow.keepers.keeper.Keeper.observation_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>Labels for each observation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.similarities">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">similarities</span></span><a class="headerlink" href="#netflow.keepers.keeper.Keeper.similarities" title="Permalink to this definition">#</a></dt>
+<dd><p>The similarities.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="netflow.keepers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">netflow.keepers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="netflow.pose.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">netflow.pose</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="current visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html#modules">Modules</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.keepers.html">netflow.keepers</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l6 current toc-h6 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.keepers.keeper</a><ul class="nav section-nav flex-column">
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#keeper">keeper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
+<li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.keepers.html">netflow.keepers</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.keepers.keeper</a><ul class="nav section-nav flex-column">
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#keeper">keeper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/reference/generated/netflow.keepers.keeper.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023-2023, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
