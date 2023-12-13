@@ -18,6 +18,13 @@ in [Haghverdi16]_ as implemented in scanpy.
 A large portion of the code was taken from
 scanpy.tools._dpt.py and code related to
 the method :mod:`scanpy.tools._dpt.dpt`.
+
+Some noted differences made in scanpy implementation :
+
+  - Add smoothing when computing maximal correlation cutoff
+  - Compute third branch tip as argmax of the sum of distance from root to each point and the
+    distance from the second tip to each point. (scanpy implementation only considers distance
+    between second tip and each point).
 """
 
 from typing import Tuple, Optional, Sequence, List
@@ -346,12 +353,16 @@ class TDA:
         - `str` : Observation label.
     smooth_corr : `bool`, default = `False`
         If `True`, smooth correlations before identifying cut points for branch splitting.
+    brute : `bool`
+        If `True`, data points not associated with any branch upon split are combined with
+        undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,
+        not associated with any branch (and assigned branch index -1).
     """
     
     def __init__(self, keeper, key, label=None, # distances,
                  min_branch_size=5, choose_largest_segment=False,
                  flavor='haghverdi16', allow_kendall_tau_shift=False, root=None,
-                 smooth_corr=False):
+                 smooth_corr=False, brute=False):
 
         # TODO: set root upfront and call _set_pseudotime after distance is computed
         # self.keeper = keeper
@@ -383,7 +394,7 @@ class TDA:
             self.root = self.observation_labels.index(self.root)
             # self.root = keeper.observation_labels.index(self.root)
         elif isinstance(root, int):
-            if 0 <= self.root < self.num_observations:
+            if 0 <= root < self.num_observations:
                 self.root = root
             else:
                 raise ValueError("Unexpected value for root of type int, must be 0 <= root < num_observations.")
@@ -395,6 +406,7 @@ class TDA:
         self._set_pseudotime()
 
         self.smooth_corr = smooth_corr
+        self.brute = brute
         
 
         
@@ -419,15 +431,20 @@ class TDA:
         
           * List of arrays of length (number of segments) where Each entry stores the
             indices of the two tip points of each segment.
-        - segs_undecided :
+        - segs_undecided : 
         
           * ?
-        - segs_adjacency :
+        - segs_adjacency : `list`
         
-          * ?
-        - segs_connects :
+          * List of lists of the same length as  ``segs``, , where the i-th entry is a list
+            with the index of the trunk, if the i-th segment is not the trunk. Otherwise,
+            the i-th entry is a list with the indices of all other segments beside the trunk. 
+        - segs_connects : `list`
         
-          * ?
+          * List of lists of the same length as ``segs``, where the i-th entry is a list of
+            the form [index of data point in the trunk closest to the root of the i-th segment], 
+            if the i-th segment is not the trunk. Otherwise, the i-th entry is a list of indices
+            of the closest cell in each other (non-trunk) segment to the trunk root. 
         """
         # distances = distances if not isinstance(self.distances, pd.DataFrame) else distances.values
         
@@ -435,26 +452,37 @@ class TDA:
         # branch_hierarchy = [indices_all]  # keep record
         segs = [indices_all]
 
+        segs_by_index = [[0]*indices_all.shape[0]] # HERE
+
         # get first tip (farthest from root)
         # if self.root is None:
         #     tip_0 = np.argmax(self.distances[0])
         # else:
         #     tip_0 = np.argmax(self.distances[self.root])
-        tip_0 = np.argmax(self.distances[self.root])
-
+        tip_0 = np.argmax(self.distances[self.root])        
+        
         # get tip of other end (farthest from tip_0)
         tips_all = np.array([tip_0, np.argmax(self.distances[tip_0])])
+
+        # net_distance = self.distances[self.root] + self.distances[tip_0]
+        # tip_1 = np.argmax(net_distance)
+        # tips_all = np.array([tip_0, tip_1]) ### CHANGED HERE
+        # tips_all = np.array([self.root, tip_0]) ### CHANGED HERE
+        
         # branch_tips = [tips_all]  # keep record
         segs_tips = [tips_all]
-
+        
         segs_connects = [[]]
         segs_undecided = [True]
         segs_adjacency = [[]]
-        segs_terminate_branching = [False]  # RE added - to indicate if segment has already been branched as much as possible 
+        segs_terminate_branching = [False]  # RE added - to indicate if segment has already been branched as much as possible
+        # RE added - to account for points that are not associated with any branch after split
+        # Note: if brute = True, unidentified points are included in trunk
+        unidentified_points = set()          
         
         for ibranch in range(n_branches):
             logger.warning(f"*ibranch = {ibranch}")
-            logger.warning(f"*{len(segs)} segs = {segs}")
+            # logger.warning(f"*{len(segs)} segs = {segs}")
             iseg, tips3 = self.select_segment(segs, segs_tips, segs_undecided, segs_terminate_branching)
             # logger.warning(f"*iseg = {iseg}, tips3 = {tips3}, selected_seg = {segs[iseg]}")
             if iseg == -1:
@@ -474,6 +502,7 @@ class TDA:
                 iseg,
                 tips3,
                 segs_terminate_branching,
+                unidentified_points,
             )
             
             # RE START MODIFIED - added to indicate when segment should not be further branched
@@ -499,7 +528,7 @@ class TDA:
         self.segs_adjacency = self.segs_adjacency.tocsr()
         self.segs_connects = self.segs_connects.tocsr()
 
-        # RE: Add for points that weren't found in any of the resulting segments
+        self.unidentified_points = unidentified_points
 
 
     def select_segment(self, segs, segs_tips, segs_undecided, segs_terminate_branching):
@@ -510,7 +539,7 @@ class TDA:
         iseg
             Index identifying the position within the list of line segments.
         tips3
-            Positions of tips within chosen segment.
+            Positions of tips within chosen segment (local indices of tips relative to the segment).
         """
         scores_tips = np.zeros((len(segs), 4))
         allindices = np.arange(self.distances.shape[0], dtype=int)
@@ -560,12 +589,17 @@ class TDA:
 
             # logger.warning(f"iseg = {iseg} made it to line 658 and 666")
             if third_maximizer is not None:
+                logger.warning(f"TODO: THIRD MAXIMIZER IS NOT NONE... IS THIS CORRECT???")
                 # find a fourth point that has maximal distance to all three
                 dseg += Dseg[third_tip]
                 fourth_tip = np.argmax(dseg)
-                if fourth_tip != tips[0] and fourth_tip != third_tip:
+                # should it be >>> if fourth_tip != tips[third_maximizer] and fourth_tip != third_tip: ... and >>> tips[third_maximizer] = fourth_tip ???
+                if fourth_tip != tips[0] and fourth_tip != third_tip: 
+                    # dseg -= Dseg[tips[1]] # RE CHANGED TO COMPUTE BEFORE UPDATING TIP
+                    logger.warning(f"TODO: tip1 changed from {tips[1]} to {fourth_tip}...")
                     tips[1] = fourth_tip
-                    dseg -= Dseg[tips[1]]
+                    dseg -= Dseg[tips[1]] # OLD WAY COMPUTED AFTER UPDATING TIP --- should it be dseg += Dseg[tips[1]]?
+                    # dseg = Dseg[tips[0]] + Dseg[tips[1]] # RE ADDED SECOND NEW WAY OPTION:
                 else:
                     dseg -= Dseg[third_tip]
             tips3 = np.append(tips, third_tip)
@@ -611,7 +645,8 @@ class TDA:
         
 
     def detect_branching(self, segs, segs_tips, segs_connects, segs_undecided,
-                         segs_adjacency, iseg, tips3, segs_terminate_branching):
+                         segs_adjacency, iseg, tips3, segs_terminate_branching,
+                         unidentified_points):
         """ Detect branching on a given segment and update list parameters in place.
 
         Parameters
@@ -623,7 +658,10 @@ class TDA:
         iseg
             Position of segment under study in segs.
         tips3
-            The three tip points. They form a 'triangle' that contains the data.
+            The three tip points local index relative to the seg.
+            They form a 'triangle' that contains the data.
+        unidentified_points : `set`
+            Points that are not associated with any branch after splitting.
         """
         seg = segs[iseg]
         Dseg = self.distances[np.ix_(seg, seg)]
@@ -636,13 +674,19 @@ class TDA:
         if result is None: # RE ADDED THIS CONDITION
             logger.warning(f"No unique branch detected - removed from consideration.")
         else:
-            ssegs, ssegs_tips, ssegs_adjacency, ssegs_connects, trunk = result
+            ssegs, ssegs_tips, ssegs_adjacency, ssegs_connects, trunk, unidentified = result
 
             # map back to global indices
+            unidentified = seg[unidentified] # record data points not associated with any branch
+            logger.warning(f"* {len(unidentified)} unclaimed points.")
+            
             for iseg_new, seg_new in enumerate(ssegs):
                 ssegs[iseg_new] = seg[seg_new]
                 ssegs_tips[iseg_new] = seg[ssegs_tips[iseg_new]]
-                ssegs_connects[iseg_new] = list(seg[ssegs_connects[iseg_new]])            
+                ssegs_connects[iseg_new] = list(seg[ssegs_connects[iseg_new]])
+
+            # RE ADDED - update unidentified points
+            unidentified_points = unidentified_points | set(unidentified)
 
             # remove previous segment
             segs.pop(iseg)
@@ -891,6 +935,13 @@ class TDA:
         for iseg, seg in enumerate(ssegs):
             masks[iseg][seg] = True                
         nonunique = np.sum(masks, axis=0) > 1
+        logger.warning(f"* {nonunique.sum()} nonunique points.")
+
+        # RE START MODIFIED - to account for points not associated with any branch
+        unidentified = np.sum(masks, axis=0) == 0
+        logger.warning(f"* {unidentified.sum()} unidentified points.")        
+        # RE END MODIFIED
+        
         # RE START MODIFIED - uncomment to match how original paper defines unique
         # if len(ssegs) == 3:
         #     allbranches = np.sum(masks, axis=0) == len(ssegs)
@@ -938,7 +989,17 @@ class TDA:
             
             ssegs_tips.append([firsttip, secondtip]) # RE: SHOULD BE CHANGED
             # RE MODIFIED END
+
+        # RE START MODIFIED - to account for points not associated with any branch
+        if self.brute:
+            nonunique = nonunique | unidentified
+        # RE END MODIFIED
         undecided_cells = np.arange(Dseg.shape[0], dtype=int)[nonunique]
+
+        # RE START MODIFIED - to account for points not associated with any branch
+        unidentified_points = np.arange(Dseg.shape[0], dtype=int)[unidentified]
+        # RE END MODIFIED
+        
 
         if len(undecided_cells) > 0:
             ssegs.append(undecided_cells)
@@ -1043,7 +1104,7 @@ class TDA:
             ]
             ssegs_connects = [[closest_point_in_1], [closest_point_in_0]]
 
-        return ssegs, ssegs_tips, ssegs_adjacency, ssegs_connects, trunk            
+        return ssegs, ssegs_tips, ssegs_adjacency, ssegs_connects, trunk, unidentified_points            
 
         
     def _detect_branching_single_haghverdi16(self, Dseg, tips):
@@ -1363,7 +1424,9 @@ class TDA:
 
 
     def set_segs_names(self):
-        """ Return a single array that stores integer segment labels. """
+        """ Return a single array that stores integer segment labels.
+
+        -1 indicates observations that are not in any segment. """
         # RE START MODIFIED - otherwise points that aren't in any segment are not differentiated from first segment.
         # segs_names = np.zeros(self.distances.shape[0], dtype=np.int8)
         segs_names = -np.ones(self.distances.shape[0], dtype=np.int8)
@@ -1389,14 +1452,13 @@ class TDA:
         -----
         Writes : 
 
-        - indices : np.ndarray
-              Index array of shape n, which stores an ordering of the data points
+        - indices : np.ndarray (num_observations,)
+              Index array, which stores an ordering of the data points
               with respect to increasing segment index and increasing pseudotime.
-        - changepoints : np.ndarray
+        - changepoints : np.ndarray, (num_segs - 1,)
               Index array of shape len(ssegs)-1, which stores the indices of
               points where the segment index changes, with respect to the ordering
               of indices.
-        
         """
         # within segs_tips, order tips according to pseudotime
         if self.root is not None:
@@ -1465,9 +1527,12 @@ class TDA:
 
             .. code-block:: py
 
-               {'branch' : (int) -1, 0, 1, ... where -1 indicates the data point was not identified with a branch,
+               {'branch' : (`int`) -1, 0, 1, ... where -1 indicates the data point was not identified with a branch,
                                    'undecided' : (bool) True if the data point is part of a trunk and False otherwise,
-                                   'name' : (str) Original label if given data was a dataframe, otherwise the same as the node id}
+                                   'name' : (str) Original label if given data was a dataframe, otherwise the same as the node id,
+                'unidentified' : (0 or 1) 1 if data point was ever not associated with any branch upon split,
+                                   0 otherwise.,
+               }
         
         """
         G = nx.Graph()
@@ -1510,6 +1575,9 @@ class TDA:
 
         # add node names:
         nx.set_node_attributes(G, dict(zip(range(self.num_observations), self.observation_labels)), name='name')
+
+        # add if node was ever an unidentified point:
+        nx.set_node_attributes(G, {v: 1 if v in self.unidentified_points else 0 for v in G}, name='unidentified')
 
         return G
 
