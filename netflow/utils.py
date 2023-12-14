@@ -26,7 +26,10 @@ from typing import (
 from tqdm import tqdm
 
 
-from ._logging import logger
+# from ._logging import logger
+from ._logging import _gen_logger
+
+logger = _gen_logger(__name__)
 
 # e.g. https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
 AnyRandom = Union[None, int, np.random.RandomState]  # maybe in the future random.Generator

@@ -11,7 +11,9 @@ import numpy as np
 import pandas as pd
 
 from .._utils import _docstring_parameter, _desc_distance, _desc_data_distance
-from .._logging import logger
+from .._logging import _gen_logger, set_verbose
+
+logger = _gen_logger(__name__)
 
 
 class DataKeeper:
@@ -751,8 +753,10 @@ class Keeper:
     """
     
     def __init__(self, data=None, distances=None, similarities=None,
-                 misc=None, observation_labels=None, outdir=None):
+                 misc=None, observation_labels=None, outdir=None, verbose=None):
 
+        if verbose is not None:
+            set_verbose(logger, verbose)
 
         if (data is None) and (distances is None) and (similarities is None):
             raise ValueError("At least one of data, distances, or similarities must be provided.")

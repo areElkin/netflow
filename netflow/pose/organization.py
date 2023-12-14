@@ -42,7 +42,10 @@ pptree = reload(pptree)
 import netflow.utils as utl
 # from importlib import reload
 # reload(utl)
-from .._logging import logger
+# from .._logging import logger, set_verbose ###
+from .._logging import _gen_logger, set_verbose
+
+logger = _gen_logger(__name__)
 
 # RE: TODO: ADD OPTION FOR MULTIPLE ROOTS
 ### RE: TODO: CHECK HOW UNIQUE BRANCHES ARE DETERMINED
@@ -357,7 +360,10 @@ class PseudoOrdering:
         Index of root obs that pesudo-ordering is computed from (``root > 0``).
     """
     
-    def __init__(self, keeper, key, label, root=None):
+    def __init__(self, keeper, key, label, root=None, verbose=None):
+        if verbose is not None:
+            set_verbose(logger, verbose)
+            
         self.keeper = keeper
         
         self.root = root
@@ -649,10 +655,14 @@ class TDA:
     def __init__(self, keeper, key, label=None, # distances,
                  min_branch_size=5, choose_largest_segment=False,
                  flavor='haghverdi16', allow_kendall_tau_shift=False, root=None,
-                 smooth_corr=False, brute=True):
+                 smooth_corr=False, brute=True, verbose=None):
 
         # TODO: set root upfront and call _set_pseudotime after distance is computed
         # self.keeper = keeper
+
+        if verbose is not None:
+            set_verbose(logger, verbose)
+        
         self.distances = keeper.distances[key].data
         self.num_observations = keeper.num_observations
         self.observation_labels = keeper.observation_labels
