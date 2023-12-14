@@ -21,6 +21,7 @@ To do:
 - In `netflow.keepers.DistanceKeeper`, add option for to similarity?
 - In `netflow.pose.organization`, separate out multiscale analysis to it's own form and possibly should be under `netflow.methods` instead
 - `netflow.keepers.keeper.DataView` can be better leveraged in `netflow.methods.classes` and for computing neighborhoods and wass distance, etc.
+- In `netflow.pose.organization`, add segment tips, etc to NodeTree and convert from lists to tree for representing segment branching.
 """
 
 # __version__ = "0.0.dev"
