@@ -15,11 +15,13 @@ import scipy.spatial as ss
 import scipy.stats as sc_stats
 from tqdm import tqdm
 
-from .._logging import logger
+# from .._logging import logger
+from .._logging import _gen_logger, set_verbose
 from ..checks import *
 from .metrics import pairwise_observation_euc_distances, pairwise_observation_wass_distances
 
 import netflow.utils as utl
+
 # from importlib import reload
 # reload(utl)
 # kendall_tau_ = utl.kendall_tau_
@@ -34,6 +36,8 @@ import netflow.utils as utl
 # reload(utl)
 # # heat_kernel = utl.heat_kernel
 # construct_anisotropic_laplacian_matrix = utl.construct_anisotropic_laplacian_matrix
+
+logger = _gen_logger(__name__)
 
 class InfoNet:
     """ A class to compute information flow on a network and correlation between network modules
@@ -54,7 +58,10 @@ class InfoNet:
     
     def __init__(self, keeper, graph_key, layer='data',
                  label='infonet',
-                 outdir=None):
+                 outdir=None, verbose=None):
+
+        if verbose is not None:
+            set_verbose(logger, verbose)
 
         G = keeper.misc[graph_key].copy()
         check_connected_graph(G)
