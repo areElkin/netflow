@@ -7,10 +7,12 @@ Classes used for data storage and manipulation.
 
 from pathlib import Path
 
+import networkx as nx
 import numpy as np
 import pandas as pd
 
-from .._utils import _docstring_parameter, _desc_distance, _desc_data_distance
+from .._utils import _docstring_parameter, _desc_distance, \
+    _desc_data_distance, load_from_file
 from .._logging import _gen_logger, set_verbose
 
 logger = _gen_logger(__name__)
@@ -88,6 +90,10 @@ class DataKeeper:
         elif isinstance(data, dict):
             for label, cur_data in data.items():
                 self.add_data(cur_data, label)
+        elif data is None:
+            pass
+        else:
+            raise TypeError("Unrecognized type for data, must be one of [pandas.DataFrame, numpy.ndarray, dict].")
 
 
     def __getitem__(self, key):
@@ -246,7 +252,7 @@ class DataView:
         self._num_observations = dkeeper.num_observations
         self._feature_labels = dkeeper.features_labels[label]
         self._num_features = dkeeper.num_features[label]
-
+        
 
     @property
     def label(self):
@@ -363,6 +369,14 @@ class DataView:
         feature_index = self._feature_labels.index(feature_label)
         return feature_index
 
+
+    def to_frame(self):
+        """ Return data as a pandas DataFrame """
+        df = pd.DataFrame(data=self.data,
+                          columns=self.observation_labels,
+                          index=self.feature_labels)
+        return df
+
         
 class DistanceKeeper:
     """ A class to store and handle multiple distances.
@@ -435,6 +449,10 @@ class DistanceKeeper:
         elif isinstance(data, dict):
             for label, cur_distance in data.items():
                 self.add_data(cur_distance, label)
+        elif data is None:
+            pass
+        else:
+            raise TypeError("Unrecognized type for data, must be one of [pandas.DataFrame, numpy.ndarray, dict].")
 
 
     def __getitem__(self, key):
@@ -636,9 +654,99 @@ class DistanceView:
         """
         observation_index = self._observation_labels.index(observation_label)
         return observation_index
+
+
+    def to_frame(self):
+        """ Return data as a pandas DataFrame """
+        df = pd.DataFrame(data=self.data,
+                          columns=self.observation_labels,
+                          index=self.observation_labels)
+        return df
         
 
-        
+class GraphKeeper:
+    """ A class to store and handle multiple netowrks.
+
+    Parameters
+    ----------
+    graphs : {`networkx.Graph`, `dict` [`str', `networkx.Graph`]}
+        One or multiple networks.
+
+        The network(s) may be provided in multiple ways:
+
+        - `networkx.Graph` : A single network.
+          
+          * The network is placed in a `dict` with default label of the form
+            ``{'graph' : graphs}``.
+          * To use a customized label for the network, provide the network
+            as a `dict`, shown next.
+        - `dict` [`str`, `networkx.Graph`] : A single or multiple networks may
+          be provided as the value(s) of a `dict` keyed by a `str` that serves as
+          the netwwork descriptor or label for each input of the form
+          ``{'graph_label' : `networkx.Graph`}``.
+
+
+    Notes
+    -----
+    The graph label is also set to the graph's name.
+    """
+
+    def __init__(self, graphs=None):
+        self._graphs = {}
+
+        if isinstance(graphs, nx.Graph):
+            self.add_graph(graphs, 'graph')
+        elif isinstance(graphs, dict):
+            for label, cur_graph in graphs.items():
+                self.add_graph(cur_graph, label)
+        elif graphs is None:
+            pass
+        else:
+            raise TypeError("Unrecognized type for graphs, must be one of [networkx.Graph or dict].")
+
+
+    def __getitem__(self, key):
+        return self._graphs[key]
+
+
+    def __contains__(self, key):
+        return key in self._graphs
+
+
+    def __iter__(self):
+        for key, graph in self._graphs.items():
+            yield graph
+
+
+    @property
+    def graphs(self):
+        """ A dictionary of all the graphs. """
+        return self._graphs
+
+
+    def add_graph(self, graph, label):
+        """ Add a network to the keeper.
+
+        Parameters
+        ----------
+        graph : `networkx.Graph`
+            The network.
+        label : `str`
+            Reference label describing the network.
+        """
+        # Check that the label is not already in the keeper
+        if label in self._graphs:
+            raise KeyError(f"Dupblicate label detected, {label} already exists in the keeper.")
+
+        # Check that the graph is a networkx.Graph instance
+        if not isinstance(graph, nx.Graph):
+            raise ValueError("Unrecognized type, graph must be networkx Graph.")
+
+        graph.name = label
+
+        self._graphs[label] = graph
+
+    
 class Keeper:
     """ A class to store and handle data, distances and similarities between data points
     (or observations), and miscellaneous related results.
@@ -718,7 +826,22 @@ class Keeper:
     similarities : {`numpy.ndarray`, `pandas.DataFrame`, `dict` [`str`, `numpy.ndarray`], `dict` [`str`, `pandas.DataFrame`]}
         One or multiple symmetric similarit(y/ies) between observations, where each similarity
         matrix is size (num_observations, num_observations).
-        Similarit(y/ies) may be provided in multiple ways, analogous to ``distances``.:
+        Similarit(y/ies) may be provided in multiple ways, analogous to ``distances``.
+    graphs : : {`networkx.Graph`, `dict` [`str', `networkx.Graph`]}
+        One or multiple networks.
+
+        The network(s) may be provided in multiple ways:
+
+        - `networkx.Graph` : A single network.
+          
+          * The network is placed in a `dict` with default label of the form
+            ``{'graph' : graphs}``.
+          * To use a customized label for the network, provide the network
+            as a `dict`, shown next.
+        - `dict` [`str`, `networkx.Graph`] : A single or multiple networks may
+          be provided as the value(s) of a `dict` keyed by a `str` that serves as
+          the netwwork descriptor or label for each input of the form
+          ``{'graph_label' : `networkx.Graph`}``.
     misc : `dict`
         Miscellaneous data or results.
     observation_labels : `list` [`str`], optional
@@ -753,7 +876,8 @@ class Keeper:
     """
     
     def __init__(self, data=None, distances=None, similarities=None,
-                 misc=None, observation_labels=None, outdir=None, verbose=None):
+                 graphs=None, misc=None, observation_labels=None,
+                 outdir=None, verbose=None):
 
         if verbose is not None:
             set_verbose(logger, verbose)
@@ -800,6 +924,7 @@ class Keeper:
                                          observation_labels=self._observation_labels)
         self._similarities = DistanceKeeper(data=similarities,
                                             observation_labels=self._observation_labels)
+        self._graphs = GraphKeeper(graphs=graphs)
         self._misc = misc if misc is not None else {}
 
         self._check_num_observations()
@@ -810,7 +935,7 @@ class Keeper:
         self.outdir = outdir
         if isinstance(self.outdir, Path) and not self.outdir.is_dir():
             self.outdir.mkdir()
-            logger.msg(f"Creating directory {self.outdir}.")
+            logger.msg(f"Created directory {self.outdir}.")
 
 
     def _check_num_observations(self):
@@ -914,6 +1039,12 @@ class Keeper:
 
 
     @property
+    def graphs(self):
+        """ The networks. """
+        return self._graphs
+    
+
+    @property
     def misc(self):
         """ The misc data. """
         return self._misc
@@ -938,8 +1069,8 @@ class Keeper:
 
         # return None
         return self._num_observations
-
-
+        
+        
     def add_data(self, data, label):
         """ Add a feature data set to the data keeper.
 
@@ -952,6 +1083,9 @@ class Keeper:
         """
         self._data.add_data(data, label)
         logger.msg(f"Added data input {label} to the keeper.")
+
+        self._check_observation_labels()
+        self._check_num_observations()
 
 
     def add_distance(self, data, label):
@@ -967,6 +1101,9 @@ class Keeper:
         self._distances.add_data(data, label)
         logger.msg(f"Added distance input {label} to the keeper.")
 
+        self._check_observation_labels()
+        self._check_num_observations()
+
 
     def add_similarity(self, data, label):
         """ Add a similarity array to the similarity keeper.
@@ -979,9 +1116,26 @@ class Keeper:
             Reference label describing the similarity.
         """
         self._similarities.add_data(data, label)
-        logger.msg(f"Added similarity input {label} to the keeper.")    
+        logger.msg(f"Added similarity input {label} to the keeper.")
+
+        self._check_observation_labels()
+        self._check_num_observations()
 
 
+    def add_graph(self, graph, label):
+        """ Add a network to the graph keeper.
+
+        Parameters
+        ----------
+        graph : `networkx.Graph`
+            The network to add.
+        label : `str`
+            Reference label describing the network.
+        """
+        self._graphs.add_graph(graph, label)
+        logger.msg(f"Added graph input {label} to the keeper.")
+
+        
     def add_misc(self, data, label):
         """ Add misc information to be stored.
 
@@ -998,6 +1152,291 @@ class Keeper:
         self._misc[label] = data
 
         logger.msg(f"Added misc input {label} to the keeper.")
+    
+
+    def load_data(self, file_name, label='data', file_path=None, file_format=None,                  
+                  delimiter=',', dtype=None, **kwargs):
+        """ Load data from file into the keeper.
+
+        .. Note::
+
+        Currently loads data using ``pandas.read_csv``.
+        Additional formats will be added in the future.
+                  
+        Parameters
+        ----------
+        file_name: {`str`, `pathlib.Path`} 
+            Input data file name.
+        label : `str`, (default: 'data')
+            Reference label describing the data set.        
+        file_path: {`str` `pathlib.Path`}, optional (default: None)
+            File path. Empty string by default
+        file_format: `str`, optional (default: None)
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+            If `None`, ``file_format`` will be inferred from the file extension
+            in ``file_name``.
+            Currently, this is ignored.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        dtype
+            If provided, ensure to convert data type after loaded. 
+        **kwargs
+            Additional key-word arguments passed to ``pandas.read_csv``.
+        
+        """
+        data = load_from_file(file_name, file_path=file_path, file_format=file_format,
+                              delimiter=delimiter, **kwargs)
+        if dtype is not None:
+            data = data.astype(dtype)
+        self.add_data(data, label)
+
+
+    def load_distance(self, file_name, label='distance', file_path=None, file_format=None,
+                      delimiter=',', **kwargs):
+        """ Load distance from file into the keeper. 
+
+        .. Note::
+
+        Assumed that the distance array is stored with the first row and first column as
+        the index and header, respectively.
+        
+        Currently loads data using ``pandas.read_csv``.
+        Additional formats will be added in the future.
+                  
+        Parameters
+        ----------
+        file_name: {`str`, `pathlib.Path`} 
+            Input distance file name.
+        label : `str`, (default: 'distance')
+            Reference label describing the data set.        
+        file_path: {`str` `pathlib.Path`}, optional (default: None)
+            File path. Empty string by default
+        file_format: `str`, optional (default: None)
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+            If `None`, ``file_format`` will be inferred from the file extension
+            in ``file_name``.
+            Currently, this is ignored.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.read_csv``.
+        """        
+        data = load_from_file(file_name, file_path=file_path, file_format=file_format,
+                              delimiter=delimiter, header=0, index_col=0, **kwargs)
+        self.add_distance(data, label)
+
+
+    def load_similarity(self, file_name, label='similarity', file_path=None, file_format=None,
+                        delimiter=',', **kwargs):
+        """ Load similarity from file into the keeper. 
+
+        .. Note::
+
+        Assumed that the distance array is stored with the first row and first column as
+        the index and header, respectively.
+        
+        Currently loads data using ``pandas.read_csv``.
+        Additional formats will be added in the future.
+                  
+        Parameters
+        ----------
+        file_name: {`str`, `pathlib.Path`} 
+            Input similarity file name.
+        label : `str`, (default: 'similarity')
+            Reference label describing the data set.        
+        file_path: {`str` `pathlib.Path`}, optional (default: None)
+            File path. Empty string by default
+        file_format: `str`, optional (default: None)
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+            If `None`, ``file_format`` will be inferred from the file extension
+            in ``file_name``.
+            Currently, this is ignored.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.read_csv``.
+        """        
+        data = load_from_file(file_name, file_path=file_path, file_format=file_format,
+                              delimiter=delimiter, header=0, index_col=0, **kwargs)
+        self.add_similarity(data, label)
+
+
+    def load_graph(self, file_name, label='graph', file_path=None,
+                   file_format=None, delimiter=',',
+                   source='source', target='target', **kwargs):
+        """ Load network (edgelist) from file into graph and store in the keeper. 
+
+        .. Note::
+
+        Currently loads graph from edgelist. Future release will allow different
+        graph types (e.g., adjacency, graphml).
+        
+        Assumed that the edge-list is stored as two columns, where the first row
+        is labeled as source and target.
+        
+        Currently loads data using ``pandas.read_csv``.
+        Additional formats will be added in the future.
+                  
+        Parameters
+        ----------
+        file_name: {`str`, `pathlib.Path`} 
+            Input edge-list file name.
+        label : `str`, (default: 'graph')
+            Reference label describing the network.
+        file_path: {`str` `pathlib.Path`}, optional (default: None)
+            File path. Empty string by default
+        file_format: `str`, optional (default: None)
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+            If `None`, ``file_format`` will be inferred from the file extension
+            in ``file_name``.
+            Currently, this is ignored.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        source : {`str`, `int`} (default: 'source')
+            A valid column name (string or integer) for the source nodes
+            passed to ``networkx.from_pandas_edgelist``.
+        target : {`str`, `int`} (default: 'target')
+            A valid column name (string or integer) for the target nodes
+            passed to ``networkx.from_pandas_edgelist``.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.read_csv``.
+        """        
+        E = load_from_file(file_name, file_path=file_path, file_format=file_format,
+                           delimiter=delimiter, header=0, index_col=None, **kwargs)
+        G = nx.from_pandas_edgelist(E, source=source, target=target)
+        self.add_graph(G, label)
+
+
+    def save_data(self, label, file_format='txt', delimiter=',', **kwargs):
+        """ Save data to file. 
+
+        .. Note::
+
+        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
+        Future releases will allow for other formats.
+
+        Data set is saved to the file named '{self.outdir}/data_{label}.{file_format}'.
+
+        Parameters
+        ----------
+        label : `str`
+            Reference label describing which data set to save.
+        file_format : `str`
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.to_csv``.
+        """
+        if self.outdir is None:
+            raise ValueError("Cannot store data - outdir was not set.")
+
+        _fp = self.outdir / f"data_{label}.{file_format}"
+        if _fp.is_file():
+            raise ValueError(f"File already exists, cannot save data to {_fp}.")
+
+        df = self.data[label].to_frame()
+        df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
+        logger.msg(f"Data set saved to {_df}.")
+
+
+    def save_distance(self, label, file_format='txt', delimiter=',', **kwargs):
+        """ Save distance to file. 
+
+        .. Note::
+
+        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
+        Future releases will allow for other formats.
+
+        Distance is saved to the file named '{self.outdir}/distance_{label}.{file_format}'.
+
+        Parameters
+        ----------
+        label : `str`
+            Reference label describing which distance to save.
+        file_format : `str`
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.to_csv``.
+        """
+        if self.outdir is None:
+            raise ValueError("Cannot store distance - outdir was not set.")
+
+        _fp = self.outdir / f"distance_{label}.{file_format}"
+        if _fp.is_file():
+            raise ValueError(f"File already exists, cannot save distance to {_fp}.")
+
+        df = self.distances[label].to_frame()
+        df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
+        logger.msg(f"Distance set saved to {_df}.")
+
+
+    def save_similarity(self, label, file_format='txt', delimiter=',', **kwargs):
+        """ Save similarity to file. 
+
+        .. Note::
+
+        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
+        Future releases will allow for other formats.
+
+        Similarity is saved to the file named '{self.outdir}/similarity_{label}.{file_format}'.
+
+        Parameters
+        ----------
+        label : `str`
+            Reference label describing which similarity to save.
+        file_format : `str`
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.to_csv``.
+        """
+        if self.outdir is None:
+            raise ValueError("Cannot store similarity - outdir was not set.")
+
+        _fp = self.outdir / f"similarity_{label}.{file_format}"
+        if _fp.is_file():
+            raise ValueError(f"File already exists, cannot save similarity to {_fp}.")
+
+        df = self.similarities[label].to_frame()
+        df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
+        logger.msg(f"Similarities set saved to {_df}.")
+
+
+    def save_misc(self, label, file_format='txt', delimiter=',', **kwargs):
+        """ Save misc data to file. 
+
+        .. Note::
+
+        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
+        Future releases will allow for other formats.
+
+        Misc data is saved to the file named '{self.outdir}/misc_{label}.{file_format}'.
+
+        Parameters
+        ----------
+        label : `str`
+            Reference label describing which misc data to save.
+        file_format : `str`
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.to_csv``.
+        """
+        if self.outdir is None:
+            raise ValueError("Cannot store misc data - outdir was not set.")
+
+        _fp = self.outdir / f"misc_{label}.{file_format}"
+        if _fp.is_file():
+            raise ValueError(f"File already exists, cannot save misc data to {_fp}.")
+
+        df = self.misc[label]
+        df.to_csv(_fp, sep=delimiter, **kwargs)
+        logger.msg(f"Misc data set saved to {_df}.")
 
 
     def observation_index(self, observation_label):

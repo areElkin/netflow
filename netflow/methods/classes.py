@@ -47,7 +47,7 @@ class InfoNet:
     keeper : `netflow.Keeper`
         The keeper object that stores the data of size (n_features, n_observations).
     graph_key : 'str'
-        The key to the graph in the misc keeper that should be used.
+        The key to the graph in the graph keeper that should be used.
     layer : `str`
         The key to the data in the data keeper that should be used, default = 'data'.
     label : `str`
@@ -58,12 +58,13 @@ class InfoNet:
     
     def __init__(self, keeper, graph_key, layer='data',
                  label='infonet',
-                 outdir=None, verbose=None):
+                 # outdir=None,
+                 verbose=None):
 
         if verbose is not None:
             set_verbose(logger, verbose)
 
-        G = keeper.misc[graph_key].copy()
+        G = keeper.graphs[graph_key].copy()  # keeper.misc[graph_key].copy()
         check_connected_graph(G)
         check_graph_no_self_loops(G)
 
