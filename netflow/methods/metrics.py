@@ -12,7 +12,10 @@ from scipy import sparse
 import scipy
 
 import netflow.utils as utl
-from .._logging import logger
+# from .._logging import logger
+from .._logging import _gen_logger
+
+logger = _gen_logger(__name__)
 
 
 linprog_status = {0:'Optimization proceeding nominally.',
