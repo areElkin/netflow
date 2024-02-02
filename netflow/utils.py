@@ -438,7 +438,7 @@ def stack_triu_(df, name=None):
     df_stacked : `pandas.Series`
         The stacked upper triangular entries above the diagonal of the dataframe.
     """
-    df_stacked = df.stack()[np.triu(np.ones(df.shape).astype(bool), 1).reshape(df.size)]
+    df_stacked = df.stack(dropna=False)[np.triu(np.ones(df.shape).astype(bool), 1).reshape(df.size)]
     df_stacked.name = name
     return df_stacked
 
@@ -467,7 +467,7 @@ def stack_triu_where_(df, condition, name=None):
         The stacked upper triangular entries above the diagonal of the dataframe,
         where ``condition`` is `True`.        
     """        
-    df_stacked = df.stack()[np.triu(condition.astype(bool), 1).reshape(df.size)]
+    df_stacked = df.stack(dropna=False)[np.triu(condition.astype(bool), 1).reshape(df.size)]
     df_stacked.name = name
     return df_stacked
 
@@ -522,7 +522,7 @@ def dispersion_(data, axis=0):
 
 
 def compute_eigen(T,
-                  n_comps: int = 15,
+                  n_comps: int = 0,
                   sort: Literal["decrease", "increase"] = "decrease",
                   random_state: AnyRandom = 0,
                   ):

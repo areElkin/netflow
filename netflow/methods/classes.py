@@ -6,6 +6,7 @@ from pathlib import Path
 
 from collections import defaultdict
 from functools import partial
+from itertools import combinations
 import matplotlib.pyplot as plt
 import multiprocessing as mp
 import networkx as nx
@@ -376,10 +377,10 @@ class InfoNet:
         return neighborhood, sub_profiles
 
 
-    def pairwise_observation_neighborhood_wass_distance(self, node, include_self=False, 
-                                                   graph_distances=None,
-                                                   proc=mp.cpu_count(), chunksize=None,
-                                                   measure_cutoff=1e-6, solvr=None):
+    def pairwise_observation_neighborhood_wass_distance(self, node, include_self=False,
+                                                        graph_distances=None,
+                                                        proc=mp.cpu_count(), chunksize=None,
+                                                        measure_cutoff=1e-6, solvr=None):
         """ Compute observation-pairwise Wasserstein distances between the profiles over node neighborhood.
 
         Parameters
@@ -427,9 +428,8 @@ class InfoNet:
 
         Parameters
         ----------
-        profiles : `pandas.DataFrame`
-            Profiles that are normalized and treated as probability distributions for computing Wasserstein distance,
-            where rows are features and columns are observations.
+        profiles : `pandas.DataFrame` (n_features, n_observations)
+            Profiles that Euclidean distance is computed between. 
         node : `int`
             Node in the graph to compute the neighborhood on.
         include_self : `bool`
@@ -844,7 +844,7 @@ class InfoNet:
         Parameters
         ----------
         nodes : {`None`, `list`, [`int`]}
-            List of nodes to compute neighborhood distances on. If `None`, all genes with at least 2 neighbors is used.
+            List of nodes to compute neighborhood distances on. If `None`, all nodes with at least 2 neighbors are used.
         include_self : `bool`
             If `True`, add node in neighborhood which will result in computing normalized profile over the neighborhood.
             If `False`, node is not included in neighborhood which results in computing the transition distribution over the neighborhood.
@@ -924,6 +924,198 @@ class InfoNet:
         self.keeper.add_misc(eds, label)
         # return eds
         return None
+
+
+    def pairwise_observation_profile_wass_distance(self, features=None,
+                                                   graph_distances=None, label='wass_dist_observation_pairwise_profiles_t0',
+                                                   desc='Computing pairwise profile Wasserstein distances',
+                                                   proc=mp.cpu_count(), chunksize=None,
+                                                   measure_cutoff=1e-6, solvr=None):
+        """ Compute observation-pairwise Wasserstein distances between the profiles over selected features.
+
+        Parameters
+        ----------
+        features : {`None`, `list` [`str`])}
+            List of features to compute profile distances on. If `None`, all features are used.
+        graph_distances : `numpy.ndarray`, (n, n)
+            A matrix of node-pairwise graph distances between the :math:`n` nodes (ordered from :math:`0, 1, ..., n-1`).
+            If `None`, use hop distance.
+        label : str
+            Label that resulting Wasserstein distances are saved in ``keeper.misc`` and
+            name of file to store results..
+        desc : `str`
+            Description for progress bar.
+        measure_cutoff : `float`
+            Threshold for treating values in profiles as zero, default = 1e-6.
+        proc : `int`
+            Number of processor used for multiprocessing. (Default value = cpu_count()). 
+        chunksize : `int`
+            Chunksize to allocate for multiprocessing.
+        solvr : `str`
+            Solver to pass to POT library for computing Wasserstein distance.
+
+        Returns
+        -------
+        wds : `pandas.DataFrame`
+            Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names.
+            This is saved in ``keeper.misc`` with the key ``label``.
+
+        Notes
+        -----
+        If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.
+        Before starting the computation, check if the file exists. If so, load and remove already computed
+        nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+        the previously computed and saved results before saving and returning the combined results.
+
+        Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein distance
+        and do not provide any further information.
+
+        To do: specify if nodes in input are ids or node names and check that loaded data has correct type int or str for nodes
+        """
+        if features is None:
+            features = list(self.G)
+        else:
+            features = [self.name2node[k] for k in features]
+        
+        pw_obs = list(combinations(self.observations, 2))
+
+        if self.outdir is None:
+            fname = None
+            wds_prior = None
+        else:
+            # fname = self.outdir / f"wass_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
+            fname = f"{label}.csv"
+            self.filenames.append(fname)
+            if (self.outdir / fname).is_file():
+                
+                wds_prior = pd.read_csv(self.outdir / fname, header=0, index_col=(0, 1))
+                logger.msg(f"Loaded saved observation pairwise profile Wasserstein distances from {label} profiles of size {wds_prior.shape}.")
+
+                n_orig = len(pw_obs)
+                pw_obs = [k for k in pw_obs if k not in set(wds_prior.index)]
+                n_update = len(pw_obs)
+                if n_update < n_orig:
+                    if n_update == 0:
+                        # logger.msg(f"Loading observation pairwise profile Wasserstein distances from {label}.csv.")
+                        # return wds_prior
+                        self.keeper.add_misc(wds_prior, label)
+                        return None
+                    
+                    logger.msg(f"Computing observation pairwise profile Wasserstein distances between {n_update}/{n_orig} pairwise observations.")
+            else:
+                wds_prior = None
+
+        profiles = self.data.subset(features=features)
+
+        if graph_distances is None:
+            logger.msg("Computing graph hop distances.")
+            graph_distances = self.compute_graph_distances(weight=None)            
+        graph_distances = graph_distances[np.ix_(features, features)]
+
+        wds = pairwise_observation_wass_distances(profiles,
+                                                  graph_distances, proc=proc, pairwise_obs_list=pw_obs,
+                                                  chunksize=chunksize,
+                                                  measure_cutoff=measure_cutoff, solvr=solvr, flag=f"pairwise-profiles")
+        wds.name = 'WD'
+        
+
+        if wds_prior is not None:
+            wds = pd.concat([wds_prior, wds], axis=0)
+        if self.outdir is not None:
+            wds.to_csv(str(self.outdir / fname), header=True, index=True)
+            logger.msg(f"Observation pairwise profile Wasserstein distances saved to {str(fname)}.")
+
+        self.keeper.add_misc(wds, label)
+        # return wds
+        return None
+
+
+    def pairwise_observation_profile_euc_distance(self, features=None, label='euc_dist_observation_pairwise_profiles_t0',
+                                                  desc='Computing pairwise profile Euclidean distances',
+                                                  metric='euclidean', normalize=False, **kwargs):
+        """ Compute observation-pairwise Euclidean distances between the profiles over selected features.
+
+        Parameters
+        ----------
+        features : {`None`, `list`, [`int`]}
+            List of features to compute profile distances on. If `None`, all features are used.
+        label : str
+            Label that resulting Euclidean distances are saved in ``keeper.misc`` and
+            name of file to store results.
+        desc : `str`
+            Description for progress bar.
+        normalize : `bool`
+            If `True`, normalize neighborhood profiles to sum to 1.
+        **kwargs : `dict`
+            Extra arguments to metric, passed to `scipy.spatial.distance.cdist`.
+
+        Returns
+        -------
+        eds : `pandas.DataFrame`
+            Euclidean distances between pairwise observations where rows are observation-pairs and columns are node names.
+            This is saved in ``keeper.misc`` with the key ``label``.
+
+        Notes
+        -----
+        If ``object.outdir`` is not `None`, Euclidean distances are saved to file.
+        Before starting the computation, check if the file exists. If so, load and remove already computed
+        nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+        the previously computed and saved results before saving and returning the combined results.
+        """
+        if features is None:
+            features = list(self.G)
+        else:
+            features = [self.name2node[k] for k in features]
+
+        pw_obs = list(combinations(self.observations, 2))
+
+        if self.outdir is None:
+            fname = None
+            eds_prior = None
+        else:
+            if normalize:
+                fname = f"{label}_self_normalized.csv"
+            else:
+                fname = f"{label}.csv"
+            self.filenames.append(fname)
+            if (self.outdir / fname).is_file():                
+                eds_prior = pd.read_csv(self.outdir / fname, header=0, index_col=(0, 1))
+                logger.msg(f"Loaded saved observation pairwise profile Euclidean distances from {label} profiles of size {eds_prior.shape}.")
+
+                n_orig = len(pw_obs)
+                pw_obs = [k for k in pw_obs if k not in set(eds_prior.index)]
+                n_update = len(pw_obs)
+                if n_update < n_orig:
+                    if n_update == 0:
+                        # return eds_prior
+                        self.keeper.add_misc(eds_prior, label)
+                        return None
+                    logger.msg(f"Computing observation pairwise profile Euclidean distances between {n_update}/{n_orig} pairwise observations.")
+            else:
+                eds_prior = None
+
+        profiles = self.data.subset(features=features)
+
+        if normalize:
+            profiles = profiles / profiles.sum(axis=0)
+            
+        eds = pairwise_observation_euc_distances(profiles,
+                                                 metric=metric, **kwargs)
+
+        # line 1025
+        eds.name = 'ED'
+
+        if eds_prior is not None:
+            eds = pd.concat([eds_prior, eds], axis=0)
+        if self.outdir is not None:
+            eds.to_csv(self.outdir / fname, header=True, index=True)
+            logger.msg(f"Observation pairwise profile Euclidean distances saved to {str(fname)}.")
+
+        self.keeper.add_misc(eds, label)
+        # return eds
+        return None
+
+
 
             
 
