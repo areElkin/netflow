@@ -34,9 +34,10 @@ from operator import itemgetter
 import pandas as pd
 import pptree
 import scipy as sp
+from scipy.sparse import issparse
 
-from importlib import reload
-pptree = reload(pptree)
+# from importlib import reload
+# pptree = reload(pptree)
 
 # import netflow.utils as utl
 import netflow.utils as utl
@@ -334,18 +335,187 @@ class Tree:
         return co_tracker
         
         
+def _compute_transitions(similarity=None, density_normalize: bool = True):
+    """ Compute transition matrix.
 
+    Parameters
+    ----------
+    similarity : `numpy.ndarray`, (n_observations, n_observations)
+        Symmetric similarity measure (with 1s on the diagonal).
+    density_normalize : `bool`
+        The density rescaling of Coifman and Lafon (2006): Then only the
+        geometry of the data matters, not the sampled density.
 
-
+    Returns
+    -------
+    transitions_asym : `numpy.ndarray`, (n_observations, n_observations)
+        Asymmetric Transition matrix.
+    transitions_sym : `numpy.ndarray`, (n_observations, n_observations)
+        Symmetric Transition matrix.
     
-        
+    Notes
+    -----
+    Code copied from `scanpy.neighbors`.
+    """
+
+    W = similarity.copy()
+    
+    # set diagonal to zero:
+    np.fill_diagonal(W, 0.)
+    
+    # density normalization as of Coifman et al. (2005)
+    # ensures that kernel matrix is independent of sampling density
+    if density_normalize:
+        # q[i] is an estimate for the sampling density at point i
+        # it's also the degree of the underlying graph
+        q = np.asarray(W.sum(axis=0))
+        if not issparse(W):
+            Q = np.diag(1.0 / q)
+        else:
+            Q = sp.sparse.spdiags(1.0 / q, 0, W.shape[0], W.shape[0])
+        K = Q @ W @ Q
+    else:
+        K = W
+
+    # asym transitions
+    # z[i] is the row sum of K
+    z = np.asarray(K.sum(axis=0))
+    if not issparse(K):
+        Z = np.diag(1.0 / z)
+    else:
+        Z = sp.sparse.spdiags(1.0 / z, 0, K.shape[0], K.shape[0])
+    transitions_asym = Z @ K
+
+    # sym transitions
+    # z[i] is the square root of the row sum of K
+    z = np.sqrt(np.asarray(K.sum(axis=0)))
+    if not issparse(K):
+        Z = np.diag(1.0 / z)
+    else:
+        Z = sp.sparse.spdiags(1.0 / z, 0, K.shape[0], K.shape[0])
+    transitions_sym = Z @ K @ Z
+
+    # to compute first eigenvector phi0 if did density normalization (from matlab code):
+    # D1_ = np.asarray(K.sum(axis=0))
+    # phi0 = D1_ / np.sqrt(np.power(D1_, 2).sum())  # TODO: check if ever need this to be sparse
+
+    return transitions_asym, transitions_sym
+
+
+def compute_transitions(keeper, similarity_key, density_normalize: bool = True):
+    """ Compute symmetric and asymmetric transition matrices and store in keeper.
+
+    Parameters
+    ----------
+    keeper : `netflow.Keeper`
+        The keeper object.
+    similarity_key : `str`
+        Reference key to the `numpy.ndarray`, (n_observations, n_observations)
+        symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+        in the keeper.
+    density_normalize : `bool`
+        The density rescaling of Coifman and Lafon (2006): Then only the
+        geometry of the data matters, not the sampled density.
+
+    Returns
+    -------
+    Adds the following to the keeper.misc (with 0s on the diagonals):
+        transitions_asym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)
+            Asymmetric Transition matrix.
+        transitions_sym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)
+            Symmetric Transition matrix.
+    
+    Notes
+    -----
+    Code primarily copied from `scanpy.neighbors`.
+    """
+    similarity = keeper.similarities[similarity_key].data
+    
+    transitions_asym, transitions_sym = _compute_transitions(similarity=similarity,
+                                                             density_normalize=density_normalize)
+
+    asym_label = f"transitions_asym_{similarity_key}"
+    sym_label = f"transitions_sym_{similarity_key}"
+    # if label is not None:
+    #     asym_label = "_".join([asym_label, label])
+    #     sym_label = "_".join([sym_label, label])
+
+    keeper.add_misc(transitions_asym, asym_label)
+    keeper.add_misc(transitions_sym, sym_label)
+
+
+def _dpt_from_augmented_sym_transitions(T):
+    """ Return the diffusion pseudotime metric between observations,
+    computed from the symmetric transitions.
+
+    .. Note::
+
+        - :math:`T` is the symmetric transition matrix
+        - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`
+        - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2
+    
+    Parameters
+    ----------
+    T : `numpy.ndarray`, (n_observations, n_observations)
+        Symmetric transitions.
+
+    Returns
+    -------
+    dpt : `numpy.ndarray`, (n_observations, n_observations)
+        Pairwise-observation Diffusion pseudotime distances.
+    """
+    evals, evecs = utl.compute_eigen(T, n_comps=0, sort="decrease")
+    if np.abs(evals[0] - 1.) > 1e-3:
+        raise ValueError(f"Largest eigenvalue is expected to be close to 1, found to be {np.round(evals[0], 4)}")
+    if evals[1] > 1.0:
+        raise ValueError(f"Expected second largest eigenvalue to be less than 1, found to be {np.round(evals[1], 4)}")
+    EVALS = np.diag(evals[1:] / (1. - evals[1:]))
+    M = evecs[:, 1:] @ EVALS @ evecs[:, 1:].T
+    dpt = sp.spatial.distance.cdist(M, M)
+    return dpt
+
+
+def dpt_from_augmented_sym_transitions(keeper, key):
+    """ Compute the diffusion pseudotime metric between observations,
+    computed from the symmetric transitions.
+
+    .. Note::
+
+        - :math:`T` is the symmetric transition matrix
+        - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`
+        - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2
+    
+    Parameters
+    ----------
+    key : `str`
+        Reference ID for the symmetric transitions `numpy.ndarray`, (n_observations, n_observations)
+        stored in ``keeper.misc``.
+
+    Returns
+    -------
+    dpt : `numpy.ndarray`, (n_observations, n_observations)
+        Pairwise-observation Diffusion pseudotime distances are stored
+        in keeper.distances["dpt_from_{key}"].
+    """
+    T = keeper.misc[key]
+    dpt = _dpt_from_augmented_sym_transitions(T)
+    keeper.add_distance(dpt, f"dpt_from_{key}")
+    
 
 class PseudoOrdering:
-    """ Pseudo-ordering of observations (e.g., samples). 
+    """ Compute pseudo-organization transitions and distance from similarity.
+
+    Pseudo-ordering of observations (e.g., samples). 
 
     Represent data matrix as a graph of associations (i.e., edges) among data points (i.e., observations or nodes).
 
     Results are stored to the keeper as a `dict`.
+
+    .. Note::
+
+        Code primarily copied from `scanpy.neighbors`.
+        Code makes attributes ``._transitions_asym`` and ``._transitions_sym`` available in the object.
+        Code makes ``transitions_asym`` and ``transitions_sym`` available in similarity keeper.
 
     Parameters
     ----------
@@ -355,12 +525,18 @@ class PseudoOrdering:
         The label used to reference the similarity matrix stored in ``keeper.similarities``,
         of size (n_observations, n_observations).
     label : str
-        Label used to store resulting organization schema in ``keeper.misc[label]``.
+        Label used to store resulting organization schema in ``keeper.misc[label]``
+        and used to store transition matrices in ``keeper.similarities["transitions_{label}"]``
+        and ``keeper.similarities[transitions_Psym_{label}"]``.
     root : `int`
         Index of root obs that pesudo-ordering is computed from (``root > 0``).
+    density_normalize : `bool`
+        The density rescaling of Coifman and Lafon (2006): Then only the
+            geometry of the data matters, not the sampled density.
     """
     
-    def __init__(self, keeper, key, label, root=None, verbose=None):
+    def __init__(self, keeper, key, label, root=None,
+                 density_normalize=True, verbose=None):
         if verbose is not None:
             set_verbose(logger, verbose)
             
@@ -375,6 +551,7 @@ class PseudoOrdering:
         self._similarities = keeper.similarities[key] # None # convert `_distances` to `similarity` measure.
 
 
+        self.density_normalize = density_normalize
         self._transitions_asym = None
         self._transitions_sym = None
 
@@ -423,13 +600,16 @@ class PseudoOrdering:
     #         self.compute_norm_features()        
 
     #     if self._method_sigma == 'precomputed':
-    #         self._similarities = similarity_measure_(self._distances, self._n_neighbors, self._method_sigma, sigmas=self._sigmas, knn=self._knn, indices=self._nn_indices)
+    #         self._similarities = similarity_measure_(self._distances, self._n_neighbors,
+    #                                                  self._method_sigma, sigmas=self._sigmas, knn=self._knn,
+    #                                                  indices=self._nn_indices)
     #     else:
     #         # if not yet computed, compute sigmas so computation performed only once and save values
     #         if (self._sigmas is None) or (self._knn and (self._nn_indices is None)):
     #             self.compute_sigma_knn()
                 
-    #         self._similarities = similarity_measure_(self._distances, self._n_neighbors, 'precomputed', sigmas=self._sigmas, knn=self._knn, indices=self._nn_indices)
+    #         self._similarities = similarity_measure_(self._distances, self._n_neighbors, 'precomputed',
+    #                                                  sigmas=self._sigmas, knn=self._knn, indices=self._nn_indices)
 
     def compute_transitions(self, similarities=None, density_normalize: bool = True):
         """ Compute transition matrix.
@@ -688,7 +868,7 @@ class TDA:
             logger.msg(f"Suggested root set as index {self.root}")
         elif isinstance(root, str):
             # self.root = self.distances.observation_index(root)
-            self.root = self.observation_labels.index(self.root)
+            self.root = self.observation_labels.index(root)
             # self.root = keeper.observation_labels.index(self.root)
         elif isinstance(root, int):
             if 0 <= root < self.num_observations:

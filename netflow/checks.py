@@ -51,11 +51,23 @@ def check_symmetric(A):
 
 
 def check_distance_matrix(A):
-    """ Raises AssertionError if the distance matrix is not non-negative and symmetric"""
+    """ Raises AssertionError if the distance matrix is not non-negative and symmetric.
+
+    Note: This does not require the diagonal to be zeros. """
     assert A.ndim == 2, "Distance matrix must be 2-dimensional."
     assert A.shape[0] == A.shape[1], "Distance matrix must have the same number of rows as columns."
     check_symmetric(A)
     assert np.min(A) >= 0., "Distance matrix must be non-negative."
+
+
+def check_matrix_no_nan(A):
+    """ Raises AssertionError if the matrix has any missing values. """
+    assert not np.any(np.isnan(A)), "Missing value(s) detected in the matrix."
+
+
+def check_matrix_nonnegative(A):
+    """ Raises AssertionError if the matrix has negative values. """
+    assert np.min(A) >= 0., "Negative value(s) detected in the matrix."
 
 
 

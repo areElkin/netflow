@@ -151,6 +151,10 @@ def distance_to_similarity_(d, n_neighbors, method, sigmas=None, knn=False, indi
     """
     Convert distance matrix to symmetric similarity measure.
 
+    .. math::
+
+       K = \sqrt{2\sigma_i\sigma_j / (\sigma_i^2 + \sigma_j^2)}\exp{-(x-y)^2 / (\sigma_x^2 + \sigma_y^2)}.
+
     Parameters
     ----------
     d : `numpy.ndarray`, (n_observations, n_observations)
@@ -159,12 +163,13 @@ def distance_to_similarity_(d, n_neighbors, method, sigmas=None, knn=False, indi
         K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,
         ``n_neighbors > 0``. (Uses ``n_neighbors + 1``, since each obs is it's closest neighbor).
         If `None`, all neighbors are used.
-    method : {`float`, 'mean', 'median', 'max', 'precomputed'}
+    method : {`float`, `int`, 'mean', 'median', 'max', 'precomputed'}
         Indicate how to compute sigma.
 
         Options:
 
-        - `float` : constance float to use as sigma
+        - `float` : constant float to use as sigma
+        - `int` : constant int to use as sigma
         - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors
         - 'median' : median of distance to ``n_neighbors`` nearest neighbors
         - 'max' : distance to ``n_neighbors``-nearest neighbor
@@ -184,6 +189,8 @@ def distance_to_similarity_(d, n_neighbors, method, sigmas=None, knn=False, indi
     """
     if isinstance(method, float):
         sigmas = np.array([method]*d.shape[0])
+    elif isinstance(method, int):
+        sigmas = np.array([float(method)]*d.shape[0])
     elif isinstance(method, str):        
         if method == 'precomputed':
             if sigmas is None:
@@ -198,13 +205,14 @@ def distance_to_similarity_(d, n_neighbors, method, sigmas=None, knn=False, indi
             else:
                 sigmas = sigma_knn_(d, n_neighbors=n_neighbors, method=method, return_nn=False)
     else:
-        raise TypeError("Uncrecognized type for `method`, must be `float` or `str`.")        
+        raise TypeError("Uncrecognized type for `method`, must be `float`, `int`, or `str`.")        
 
     sigmas_sq = np.power(sigmas, 2)
     
     Num = 2 * np.multiply.outer(sigmas, sigmas)
     Den = np.add.outer(sigmas_sq, sigmas_sq)
     K = np.sqrt(Num / Den) * np.exp(-np.power(d, 2) / (2 * Den)) # TO DO: integral may not sum to 1
+    # K = np.sqrt(Num / Den) * np.exp(-np.power(d, 2) / (Den)) # TO DO: integral may not sum to 1    
 
     if knn:  # restrict to nearest neighbors (symmetric)
         mask = np.zeros(d.shape, dtype=bool)
@@ -245,7 +253,8 @@ def distance_to_similarity(keeper, key, n_neighbors, method,
 
         Options:
 
-        - `float` : constance float to use as sigma
+        - `float` : constant float to use as sigma
+        - `int` : constant int to use as sigma
         - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors
         - 'median' : median of distance to ``n_neighbors`` nearest neighbors
         - 'max' : distance to ``n_neighbors``-nearest neighbor
@@ -272,8 +281,13 @@ def distance_to_similarity(keeper, key, n_neighbors, method,
         stored in ``keeper.similarities[label]`` instead of being returned.
     """
     d = keeper.distances[key]
-    if sigmas is not None:
-        sigmas = keeper.misc[sigmas]
+
+    if isinstance(method, str) and method=='precomputed':
+        if sigmas is not None:
+            sigmas = keeper.misc[sigmas]
+        else:
+            raise ValueError("Must pass sigmas key when method='precomputed'.")
+            
     if indices is not None:
         indices = keeper.misc[indices]
     K = distance_to_similarity_(d.data, n_neighbors, method, sigmas=sigmas,
@@ -283,5 +297,3 @@ def distance_to_similarity(keeper, key, n_neighbors, method,
     else:
         keeper.add_similarity(K, label)
         return None
-
-

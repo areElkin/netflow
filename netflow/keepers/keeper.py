@@ -11,8 +11,9 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
+from .. import checks
 from .._utils import _docstring_parameter, _desc_distance, \
-    _desc_data_distance, load_from_file
+    _desc_data_distance, load_from_file, unstack_triu_
 from .._logging import _gen_logger, set_verbose
 
 logger = _gen_logger(__name__)
@@ -93,7 +94,7 @@ class DataKeeper:
         elif data is None:
             pass
         else:
-            raise TypeError("Unrecognized type for data, must be one of [pandas.DataFrame, numpy.ndarray, dict].")
+            raise TypeError("Unrecognized type for data, must be one of [pandas.DataFrame, numpy.ndarray, dict].")            
 
 
     def __getitem__(self, key):
@@ -221,12 +222,41 @@ class DataKeeper:
         else:  # np.ndarray
             feature_labels = None        
 
+        checks.check_matrix_no_nan(data)
+        checks.check_matrix_nonnegative(data)
         self._data[label] = data
         self._features_labels[label] = feature_labels
         self._num_features[label] = data.shape[0]
 
         logger.debug(f"Data {label} with {data.shape[0]} features added to keeper.")
-    
+
+
+    def subset(self, observations):
+        """ Return a new instance of DataKeeper restricted to subset of observations
+
+        Parameters
+        ----------
+        observations : `list`, 
+            List of observations to include in the subset.
+            This is treated differently depending on the type of observation labels :
+
+            - If ``self._observation_labels`` is `List` [`str`], ``observations`` can be of the form:
+        
+              * `List` [`str`], to reference observations by their `str` label or;
+              * `List` [`int`], to reference observations by their location index.
+
+            - If ``self._observation_labels`` is `None` or `List` [`int`], ``observations`` must 
+              be of the form `List` [`int`], to reference observations by their location index.
+
+        Returns
+        -------
+        data_subset : `DataKeeper`
+            A DataKeeper object restricted to the selected observations.
+        """
+        data_subset = DataKeeper(data=None, observation_labels=observations)
+        for data in self:
+            data_subset.add_data(data.subset(observations=observations), data.label)
+        return data_subset    
             
 
 class DataView:
@@ -314,7 +344,7 @@ class DataView:
 
         Returns
         -------
-        data : `numpy.ndarray`, (``len(observations)``, ``len(features)``)
+        data : `pandas.DataFrame`, (``len(observations)``, ``len(features)``)
             The data subset where the :math:`ij^{th}` entry is the value of the
             :math:`i^{th}` feature in ``features`` for the  :math:`j^{th}`
             observation in ``observations``.
@@ -323,17 +353,31 @@ class DataView:
             raise ValueError("Either observations or features must be provided.")
 
         data = self._data
-        if observations is not None:
-            if isinstance(observations[0], str):  # convert to location index
-                observations = [self._observation_labels.index(k) for k in observations]
-            data = data[:, observations]
+        if observations is None:
+            observations = self.observation_labels            
+        # if observations is not None:
+        #     if isinstance(observations[0], str):  # convert to location index
+        #         observations = [self._observation_labels.index(k) for k in observations]
+        # data = data[:, observations]
+        if isinstance(observations[0], str):  # convert to location index
+            observations_ix = [self._observation_labels.index(k) for k in observations]
+        else:
+            observations_ix = observations
+        data = data[:, observations_ix]
 
-        if features is not None:
-            if isinstance(features[0], str):  # convert to location index
-                features = [self._feature_labels.index(k) for k in features]
-            data = data[features, :]
+        if features is None:
+            features = self.feature_labels
+        # if features is not None:
+        #     if isinstance(features[0], str):  # convert to location index
+        #         features = [self._feature_labels.index(k) for k in features]
+        #     data = data[features, :]
+        if isinstance(features[0], str):  # convert to location index
+            features_ix = [self._feature_labels.index(k) for k in features]
+        else:
+            features_ix = features
+        data = data[features_ix, :]
 
-        return data
+        return pd.DataFrame(data=data, columns=observations, index=features)
 
 
     def observation_index(self, observation_label):
@@ -376,6 +420,7 @@ class DataView:
                           columns=self.observation_labels,
                           index=self.feature_labels)
         return df
+    
 
         
 class DistanceKeeper:
@@ -522,10 +567,33 @@ class DistanceKeeper:
                 logger.debug("Set observation labels.")
             data = data.loc[self._observation_labels, self._observation_labels].values
 
+
+        checks.check_matrix_no_nan(data)
+        checks.check_distance_matrix(data)
+
         self._data[label] = data
 
         logger.debug(f"Distance {label} between {data.shape[0]} observations added to keeper.")
 
+    def add_stacked_data(self, data, label):
+        """ Add a symmetric distance from stacked Series to the keeper.
+
+        Parameters
+        ----------
+        data : `pandas.Series`
+            The stacked distances of size (num_observations * (num_observations - 1) / 2,)
+            with a 2-multi-index of the pairwise observation labels.
+        label : `str`
+            Reference label describing the input.
+        """
+        # Check that label is not already in the keeper
+        if label in self._data:
+            raise KeyError(f"Dubplicate label detected, {label} already exists in the keeper.")
+
+        data = unstack_triu_(data, diag=0., index=keeper.observation_labels)
+
+        self.add_data(data, label)
+        
 
     def observation_index(self, observation_label):
         """ Return index of observation.
@@ -542,6 +610,35 @@ class DistanceKeeper:
         """
         observation_index = self._observation_labels.index(observation_label)
         return observation_index
+
+
+    def subset(self, observations):
+        """ Return a new instance of DistanceKeeper restricted to subset of observations
+
+        Parameters
+        ----------
+        observations : `list`, 
+            List of observations to include in the subset.
+            This is treated differently depending on the type of observation labels :
+
+            - If ``self._observation_labels`` is `List` [`str`], ``observations`` can be of the form:
+        
+              * `List` [`str`], to reference observations by their `str` label or;
+              * `List` [`int`], to reference observations by their location index.
+
+            - If ``self._observation_labels`` is `None` or `List` [`int`], ``observations`` must 
+              be of the form `List` [`int`], to reference observations by their location index.
+
+        Returns
+        -------
+        distance_subset : `DistanceKeeper`
+            A DistnaceKeeper object restricted to the selected observations.
+        """
+        distance_subset = DistanceKeeper(data=None, observation_labels=observations)
+        for data in self:
+            distance_subset.add_data(data.subset(observations=observations), data.label)
+        return distance_subset
+
 
 
 class DistanceView:
@@ -619,7 +716,7 @@ class DistanceView:
 
         Returns
         -------
-        distance : `numpy.ndarray`, (``len(observations_a)``, ``len(observations_b)``)
+        distance : `pandas.DataFrame`, (``len(observations_a)``, ``len(observations_b)``)
             The sub-matrix of distances where the :math:`ij^{th}` entry is the distance
             between the :math:`i^{th}` observation in ``observations_a`` and the
             :math:`j^{th}` observation in ``observations_b``.
@@ -628,15 +725,20 @@ class DistanceView:
         distance = self._data
 
         if isinstance(observations_a[0], str):  # convert to location index
-                observations_a = [self._observation_labels.index(k) for k in observations_a]
+            observations_a_ix = [self._observation_labels.index(k) for k in observations_a]
+        else:
+            observations_a_ix = observations_a
 
         if observations_b is None:
             observations_b = observations_a
+            observations_b_ix = observations_a_ix
         elif isinstance(observations_b[0], str):  # convert to location index
-                observations_b = [self._observation_labels.index(k) for k in observations_b]
+            observations_b_ix = [self._observation_labels.index(k) for k in observations_b]
+        else:
+            observations_b_ix = observations_b
 
-        distance = distance[np.ix_(observations_a, observations_b)]
-        return distance
+        distance = distance[np.ix_(observations_a_ix, observations_b_ix)]
+        return pd.DataFrame(data=distance, index=observations_a, columns=observations_b)
 
 
     def observation_index(self, observation_label):
@@ -882,8 +984,8 @@ class Keeper:
         if verbose is not None:
             set_verbose(logger, verbose)
 
-        if (data is None) and (distances is None) and (similarities is None):
-            raise ValueError("At least one of data, distances, or similarities must be provided.")
+        # if (data is None) and (distances is None) and (similarities is None):
+        #     raise ValueError("At least one of data, distances, or similarities must be provided.")
         
         # check if observation labels given in data, distances or similarities:
         if observation_labels is None:
@@ -912,12 +1014,16 @@ class Keeper:
                     
                     
         # if no observation labels have been found at this point, set to default
-        if observation_labels is None:
+        if (observation_labels is None) and (num_observations is not None):
             observation_labels = [f"X{i}" for i in range(num_observations)]
+
+        if (observation_labels is not None) and (num_observations is not None):
+            assert len(observation_labels) == num_observations, \
+                "Inconsistent number of observation labels, length of observation_labels must equal num_observations"
             
         self._observation_labels = observation_labels
         # self._num_observations = None if self._observation_labels is None else len(self._observation_labels)
-        self._num_observations = len(self._observation_labels)
+        self._num_observations = num_observations # len(self._observation_labels)
 
         self._data = DataKeeper(data=data, observation_labels=self._observation_labels)
         self._distances = DistanceKeeper(data=distances,
@@ -1084,6 +1190,17 @@ class Keeper:
         self._data.add_data(data, label)
         logger.msg(f"Added data input {label} to the keeper.")
 
+        # If not yet initialized, update keeper observation_labels and num_observations
+        if self._num_observations is None:
+            self._num_observations = self._data[label].num_observations
+            self._observation_labels = self._data[label].observation_labels            
+            if self._data[label]._observation_labels is None:
+                self._observation_labels = [f"X{i}" for i in range(self._num_observations)]
+
+            # initialize distances and similarities:
+            self._distances = DistanceKeeper(observation_labels=self._observation_labels)
+            self._similarities = DistanceKeeper(observation_labels=self._observation_labels)
+
         self._check_observation_labels()
         self._check_num_observations()
 
@@ -1101,6 +1218,17 @@ class Keeper:
         self._distances.add_data(data, label)
         logger.msg(f"Added distance input {label} to the keeper.")
 
+        # If not yet initialized, update keeper observation_labels and num_observations
+        if self._num_observations is None:
+            self._num_observations = self._distances[label].num_observations
+            self._observation_labels = self._distances[label].observation_labels            
+            if self._distances[label]._observation_labels is None:
+                self._observation_labels = [f"X{i}" for i in range(self._num_observations)]
+
+            # initialize data and similarities
+            self._data = DataKeeper(observation_labels=self._observation_labels)
+            self._similarities = DistanceKeeper(observation_labels=self._observation_labels)
+
         self._check_observation_labels()
         self._check_num_observations()
 
@@ -1117,6 +1245,17 @@ class Keeper:
         """
         self._similarities.add_data(data, label)
         logger.msg(f"Added similarity input {label} to the keeper.")
+
+        # If not yet initialized, update keeper observation_labels and num_observations
+        if self._num_observations is None:
+            self._num_observations = self._similarities[label].num_observations
+            self._observation_labels = self._similarities[label].observation_labels            
+            if self._similarities[label]._observation_labels is None:
+                self._observation_labels = [f"X{i}" for i in range(self._num_observations)]
+
+            # initialize data and distances
+            self._data = DataKeeper(observation_labels=self._observation_labels)
+            self._distances = DistanceKeeper(observation_labels=self._observation_labels)
 
         self._check_observation_labels()
         self._check_num_observations()
@@ -1224,6 +1363,41 @@ class Keeper:
         data = load_from_file(file_name, file_path=file_path, file_format=file_format,
                               delimiter=delimiter, header=0, index_col=0, **kwargs)
         self.add_distance(data, label)
+
+    def load_distance(self, file_name, label='distance', file_path=None, file_format=None,
+                      delimiter=',', **kwargs):
+        """ Load distance in stacked form from file, convert to unstacked form and store in the keeper. 
+
+        .. Note::
+
+        Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion
+        (excluding self-pairs) and a single column with the pairwise distances.
+        
+        Currently loads data using ``pandas.read_csv``.
+        Additional formats will be added in the future.
+                  
+        Parameters
+        ----------
+        file_name: {`str`, `pathlib.Path`} 
+            Input distance file name.
+        label : `str`, (default: 'distance')
+            Reference label describing the data set.        
+        file_path: {`str` `pathlib.Path`}, optional (default: None)
+            File path. Empty string by default
+        file_format: `str`, optional (default: None)
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+            If `None`, ``file_format`` will be inferred from the file extension
+            in ``file_name``.
+            Currently, this is ignored.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.read_csv``.
+        """        
+        data = load_from_file(file_name, file_path=file_path, file_format=file_format,
+                              delimiter=delimiter, header=0, index_col=(0, 1), **kwargs)
+        self.add_stacked_distance(data, label)
+
 
 
     def load_similarity(self, file_name, label='similarity', file_path=None, file_format=None,
@@ -1337,7 +1511,7 @@ class Keeper:
 
         df = self.data[label].to_frame()
         df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
-        logger.msg(f"Data set saved to {_df}.")
+        logger.msg(f"Data set saved to {df}.")
 
 
     def save_distance(self, label, file_format='txt', delimiter=',', **kwargs):
@@ -1370,7 +1544,7 @@ class Keeper:
 
         df = self.distances[label].to_frame()
         df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
-        logger.msg(f"Distance set saved to {_df}.")
+        logger.msg(f"Distance set saved to {_fp}.")
 
 
     def save_similarity(self, label, file_format='txt', delimiter=',', **kwargs):
@@ -1403,7 +1577,7 @@ class Keeper:
 
         df = self.similarities[label].to_frame()
         df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
-        logger.msg(f"Similarities set saved to {_df}.")
+        logger.msg(f"Similarities set saved to {_fp}.")
 
 
     def save_misc(self, label, file_format='txt', delimiter=',', **kwargs):
@@ -1436,7 +1610,7 @@ class Keeper:
 
         df = self.misc[label]
         df.to_csv(_fp, sep=delimiter, **kwargs)
-        logger.msg(f"Misc data set saved to {_df}.")
+        logger.msg(f"Misc data set saved to {_fp}.")
 
 
     def observation_index(self, observation_label):
@@ -1454,5 +1628,58 @@ class Keeper:
         """
         observation_index = self._observation_labels.index(observation_label)
         return observation_index
+
+
+    def subset(self, observations, keep_misc=False, keep_graphs=False, outdir=None):
+        """ Return a new instance of Keeper restricted to subset of observations.
+
+        The default behavior is to not include misc or graphs in the Keeper subset.
+        This is because there is no check for which observations the misc and graphs
+        correspond to.
+
+        Warning: The subset keeper and all data it contains is not a copy.
+
+        Parameters
+        ----------
+        observations : `list`
+            List of observations to include in the subset.
+            This is treated differently depending on the type of observation labels :
+
+            - If ``self._observation_labels`` is `List` [`str`], ``observations`` can be of the form:
+        
+              * `List` [`str`], to reference observations by their `str` label or;
+              * `List` [`int`], to reference observations by their location index.
+
+            - If ``self._observation_labels`` is `None` or `List` [`int`], ``observations`` must 
+              be of the form `List` [`int`], to reference observations by their location index.
+        keep_misc : `bool`
+            If True, misc is added to the new Keeper. 
+        keep_graphs : `bool`
+            If True, the graphs are added to the new Keeper.
+        outdir : {`None`, `str` `pathlib.Path`}
+            Global path where any results will be saved. If `None`, no results will be saved.
+        
+        Returns
+        -------
+        keeper_subset : `Keeper`
+            A Keeper object restricted to the selected observations.
+        """
+        keeper_subset = Keeper(observation_labels=observations, outdir=outdir)
+        keeper_subset._data = self.data.subset(observations)
+        keeper_subset._distances = self.distances.subset(observations)
+        keeper_subset._similarities = self.similarities.subset(observations)
+
+        if keep_misc:
+            keeper_subset._misc = self.misc
+
+        if keep_graphs:
+            keeper_subset._graphs = self._graphs
+
+        keeper_subset._check_num_observations()
+        keeper_subset._check_observation_labels()
+
+        return keeper_subset
+            
+
 
         

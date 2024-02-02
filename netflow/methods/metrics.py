@@ -182,15 +182,16 @@ def pairwise_observation_euc_distances(profiles, metric='euclidean', **kwargs):
      n = profiles.shape[1]     
      eds = pd.DataFrame(data=ss.distance.cdist(profiles.T.values, profiles.T.values, metric=metric, **kwargs),
                         index=profiles.columns.tolist(), columns=profiles.columns.tolist())
-     eds = eds.stack()[np.triu(np.ones(eds.shape), 1).astype(bool).reshape(eds.size)]
+     eds = eds.stack(dropna=False)[np.triu(np.ones(eds.shape), 1).astype(bool).reshape(eds.size)]
      eds = eds.reset_index().rename(columns={'level_0': 'observation_a', 'level_1': 'observation_b'}).set_index(['observation_a', 'observation_b'])
      eds = eds[0]
 
      return eds
 
 
-def pairwise_observation_wass_distances(profiles, graph_distances, proc=mp.cpu_count(), chunksize=None,
-                                   measure_cutoff=1e-6, solvr=None, flag=None):
+def pairwise_observation_wass_distances(profiles, graph_distances, proc=mp.cpu_count(),
+                                        pairwise_obs_list=None, chunksize=None,
+                                        measure_cutoff=1e-6, solvr=None, flag=None):
     """ Compute observation-pairwise Wasserstein distances between the profiles on a fixed weighted graph.
 
     Parameters
@@ -203,7 +204,12 @@ def pairwise_observation_wass_distances(profiles, graph_distances, proc=mp.cpu_c
     measure_cutoff : `float`
         Threshold for treating values in profiles as zero, default = 1e-6.
     proc : `int`
-        Number of processor used for multiprocessing. (Default value = cpu_count()). 
+        Number of processor used for multiprocessing. (Default value = cpu_count()).
+    pairwise_obs_list : `list` [2-`tuple`]
+        (Optional) Provide restricted list of pairwise observations that the Wasserstein distance should be
+        computed between. Observations are expected to be the columns of ``profiles``.
+        If not provided, the pairwise Wasserstein distance is computed between every two observations
+        in ``profiles``.
     chunksize : `int`
         Chunksize to allocate for multiprocessing.
     solvr : `str`
@@ -218,6 +224,10 @@ def pairwise_observation_wass_distances(profiles, graph_distances, proc=mp.cpu_c
     # wds = np.zeros([1, int(0.5 * n * (n-1))])
     # print(f"wds = {wds.shape}.")
     # print(f"wds[0] = {wds[0].shape}.")
+
+    if pairwise_obs_list is None:
+        pairwise_obs_list = list(itertools.combinations(profiles.columns.tolist(), 2))
+        
     with mp.Pool(proc) as pool:
         if chunksize is None:            
             # logger.msg(f"Profiles shape = {n}")
@@ -236,7 +246,7 @@ def pairwise_observation_wass_distances(profiles, graph_distances, proc=mp.cpu_c
                                measure_cutoff=measure_cutoff,
                                solvr=solvr,
                                flag=flag),
-                       list(itertools.combinations(profiles.columns.tolist(), 2)),
+                       pairwise_obs_list,
                        chunksize=chunksize)
 
         # logger.msg(f"wds = {wds}.")
