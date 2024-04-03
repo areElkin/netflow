@@ -793,6 +793,8 @@ def _curve_trace(n_points, a=0.5, b=np.pi, C=0., h=0.5,  start=1.5):
     pos = np.asarray([x, y]).T
     return pos
 
+# testing
+
 
 
 def _interbranch_edges(G_tda, branch_a, branch_b):
