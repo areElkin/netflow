@@ -50,48 +50,46 @@ class InfoNet:
     graph_key : 'str'
         The key to the graph in the graph keeper that should be used.
     layer : `str`
-        The key to the data in the data keeper that should be used, default = 'data'.
-    label : `str`
-        The key in misc where output will be stored in the keeper, default = 'infonet'.
-    outdir : {`None`, `Path`, `str`}
-        Path to store results. If `None`, results are not saved.
+        The key to the data in the data keeper that should be used.
     """
     
-    def __init__(self, keeper, graph_key, layer='data',
-                 label='infonet',
-                 # outdir=None,
+    def __init__(self, keeper, graph_key, layer,
                  verbose=None):
+
+        # logger.msg("INFONET HAS BEEN ENTERED")
 
         if verbose is not None:
             set_verbose(logger, verbose)
 
-        G = keeper.graphs[graph_key].copy()  # keeper.misc[graph_key].copy()
-        check_connected_graph(G)
-        check_graph_no_self_loops(G)
-
-        self.data = keeper.data[layer]
-        logger.msg(f"Loaded graph: {G}")
+        self.data = keeper.data[layer]        
         logger.msg(f"Loaded data: {self.data.data.shape}")
 
+        if graph_key is not None:
+            G = keeper.graphs[graph_key].copy()  # keeper.misc[graph_key].copy()
+            check_connected_graph(G)
+            check_graph_no_self_loops(G)
+            logger.msg(f"Loaded graph: {G}")
+
+            if not nx.get_node_attributes(G, name='name'):
+                # G = nx.convert_node_labels_to_integers(G, label_attribute='name')
+                # Note: need nodes to line up with order in data
+                nx.set_node_attributes(G, {k: k for k in G}, name='name')
+                # nx.relabel_nodes(G, {k: ix for ix, k in enumerate(self.data.feature_labels)}, copy=False)
+                nx.relabel_nodes(G, dict(zip(self.data.feature_labels, range(self.data.num_features))), copy=False)
+
+            self.G = G
+            self.name2node = {v: k for k, v in nx.get_node_attributes(self.G, "name").items()}
+
+            # self.data = data.rename(index=self.name2node)
+            # self.features = data.index.tolist()[:]
+            # self.observations = data.columns.tolist()[:]
+            self.features = [self.name2node[i] for i in self.data.feature_labels]
+            assert self.features == list(range(len(self.G))), "Graph features are not ordered according to data features."
+        else:
+            self.name2node = dict(zip(self.data.feature_labels, range(len(self.data.feature_labels))))
+            self.features = self.data.feature_labels
 
         self.keeper = keeper
-
-        if not nx.get_node_attributes(G, name='name'):
-            # G = nx.convert_node_labels_to_integers(G, label_attribute='name')
-            # Note: need nodes to line up with order in data
-            nx.set_node_attributes(G, {k: k for k in G}, name='name')
-            # nx.relabel_nodes(G, {k: ix for ix, k in enumerate(self.data.feature_labels)}, copy=False)
-            nx.relabel_nodes(G, dict(zip(self.data.feature_labels, range(self.data.num_features))), copy=False)
-            
-        self.G = G
-        self.name2node = {v: k for k, v in nx.get_node_attributes(self.G, "name").items()}
-
-        # self.data = data.rename(index=self.name2node)
-        # self.features = data.index.tolist()[:]
-        # self.observations = data.columns.tolist()[:]
-        self.features = [self.name2node[i] for i in self.data.feature_labels]
-        assert self.features == list(range(len(self.G))), "Graph features are not ordered according to data features."
-        
         self.observations = self.data.observation_labels
 
         self.meta = {}  # can be used to reference data to be used for subsequent analysis
@@ -104,6 +102,28 @@ class InfoNet:
                 logger.msg(f"Creating directory {self.outdir}.")
                 self.outdir.mkdir()
                 self.filenames = []
+
+
+    def invariant_measures(self, label='IM'):
+        """ Compute the invariant measure for each observation using data as node weights.
+
+        Parameters
+        ----------
+        label : `str`
+            Label of key used to store invariant measures in the data keeper.
+
+        Returns
+        -------
+        Makes the invariant measures attribute of size (n_observations, n_observations)
+        in ``keeper.data[label]`` available.
+        """
+
+        IM = utl.invariant_measure(self.data.data, G=self.G)
+        self.keeper.add_data(IM, label)
+        
+
+        raise NotImplementedError("Not yet implemented")
+        
 
             
     def spearmanr(self, data, **kwargs):
@@ -941,8 +961,8 @@ class InfoNet:
             A matrix of node-pairwise graph distances between the :math:`n` nodes (ordered from :math:`0, 1, ..., n-1`).
             If `None`, use hop distance.
         label : str
-            Label that resulting Wasserstein distances are saved in ``keeper.misc`` and
-            name of file to store results..
+            Label that resulting Wasserstein distances are saved in ``keeper.distances`` and
+            name of file to store stacked results.
         desc : `str`
             Description for progress bar.
         measure_cutoff : `float`
@@ -958,7 +978,7 @@ class InfoNet:
         -------
         wds : `pandas.DataFrame`
             Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names.
-            This is saved in ``keeper.misc`` with the key ``label``.
+            This is saved in ``keeper.distances`` with the key ``label``.
 
         Notes
         -----
@@ -971,13 +991,19 @@ class InfoNet:
         and do not provide any further information.
 
         To do: specify if nodes in input are ids or node names and check that loaded data has correct type int or str for nodes
+
+        SAVED TO DISTANCES
         """
+
+        # logger.msg(">>> ENTERED FN")
         if features is None:
             features = list(self.G)
         else:
             features = [self.name2node[k] for k in features]
         
         pw_obs = list(combinations(self.observations, 2))
+
+        logger.msg(f">>> {len(pw_obs)} pw-obs")
 
         if self.outdir is None:
             fname = None
@@ -992,16 +1018,27 @@ class InfoNet:
                 logger.msg(f"Loaded saved observation pairwise profile Wasserstein distances from {label} profiles of size {wds_prior.shape}.")
 
                 n_orig = len(pw_obs)
-                pw_obs = [k for k in pw_obs if k not in set(wds_prior.index)]
-                n_update = len(pw_obs)
-                if n_update < n_orig:
-                    if n_update == 0:
+                
+                # logger.msg(f">>> n_orig = {n_orig}")
+                # pw_obs = [k for k in pw_obs if k not in set(wds_prior.index)]
+                # n_update = len(pw_obs)
+                # logger.msg(f">>> n_update / n_orig = {n_update} / {n_orig}.")
+                # if n_update < n_orig:
+                #     if n_update == 0:
+                if wds_prior.shape[0] == len(pw_obs):
+                    if True:
                         # logger.msg(f"Loading observation pairwise profile Wasserstein distances from {label}.csv.")
                         # return wds_prior
-                        self.keeper.add_misc(wds_prior, label)
+                        # self.keeper.add_misc(wds_prior, label)
+                        logger.msg(f">>> WD TO UPDATE")
+                        if isinstance(wds_prior, pd.DataFrame):
+                            wds_prior = wds_prior[wds_prior.columns[0]]
+                        logger.msg(f">>> WD to stacked distance")
+                        self.keeper.add_stacked_distance(wds_prior, label)
+                        logger.msg(f">>> stacked distance updated - should return now.")
                         return None
                     
-                    logger.msg(f"Computing observation pairwise profile Wasserstein distances between {n_update}/{n_orig} pairwise observations.")
+                    # logger.msg(f"Computing observation pairwise profile Wasserstein distances between {n_update}/{n_orig} pairwise observations.")
             else:
                 wds_prior = None
 
@@ -1009,23 +1046,41 @@ class InfoNet:
 
         if graph_distances is None:
             logger.msg("Computing graph hop distances.")
+            # TO DO: SHOULDN"T COMPUTE ALL DISTANCES HERE
             graph_distances = self.compute_graph_distances(weight=None)            
         graph_distances = graph_distances[np.ix_(features, features)]
+
+        # logger.msg(f">>> {len(pw_obs)} pw-obs left to compute")
 
         wds = pairwise_observation_wass_distances(profiles,
                                                   graph_distances, proc=proc, pairwise_obs_list=pw_obs,
                                                   chunksize=chunksize,
                                                   measure_cutoff=measure_cutoff, solvr=solvr, flag=f"pairwise-profiles")
         wds.name = 'WD'
-        
+
 
         if wds_prior is not None:
             wds = pd.concat([wds_prior, wds], axis=0)
-        if self.outdir is not None:
-            wds.to_csv(str(self.outdir / fname), header=True, index=True)
-            logger.msg(f"Observation pairwise profile Wasserstein distances saved to {str(fname)}.")
+            # only save if new wds were computed:
+            if self.outdir is not None: 
+                wds.to_csv(str(self.outdir / fname), header=True, index=True)
+                logger.msg(f"Observation pairwise profile Wasserstein distances saved to {str(fname)}.")
 
-        self.keeper.add_misc(wds, label)
+        logger.msg(f">>> wds made it to here with shape {wds.shape}.")
+
+        ## self.keeper.add_misc(wds, label)
+
+        # ensure wds is a Series and not a DataFrame
+        # logger.msg(f">>> wds is a {type(wds)}")
+        if isinstance(wds, pd.DataFrame):
+            wds = wds[wds.columns[0]]
+        # logger.msg(f">>> wds is now a {type(wds)}")
+
+        # logger.msg(f">>> ABOUT TO SAVE WDS TO KEEPER AS STACKED DISTANCE: type={type(wds)}, size={wds.shape}.")
+
+        # logger.msg(f">>> {help(self.keeper.add_stacked_distance)}.")
+            
+        self.keeper.add_stacked_distance(wds, label)
         # return wds
         return None
 
@@ -1040,8 +1095,8 @@ class InfoNet:
         features : {`None`, `list`, [`int`]}
             List of features to compute profile distances on. If `None`, all features are used.
         label : str
-            Label that resulting Euclidean distances are saved in ``keeper.misc`` and
-            name of file to store results.
+            Label that resulting Euclidean distances are saved in ``keeper.distances`` and
+            name of file to store stacked results.
         desc : `str`
             Description for progress bar.
         normalize : `bool`
@@ -1053,7 +1108,7 @@ class InfoNet:
         -------
         eds : `pandas.DataFrame`
             Euclidean distances between pairwise observations where rows are observation-pairs and columns are node names.
-            This is saved in ``keeper.misc`` with the key ``label``.
+            This is saved in ``keeper.distances`` with the key ``label``.
 
         Notes
         -----
@@ -1061,9 +1116,11 @@ class InfoNet:
         Before starting the computation, check if the file exists. If so, load and remove already computed
         nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
         the previously computed and saved results before saving and returning the combined results.
+
+        SAVES TO DISTANCES
         """
         if features is None:
-            features = list(self.G)
+            features = list(self.features) # list(self.G)
         else:
             features = [self.name2node[k] for k in features]
 
@@ -1083,35 +1140,55 @@ class InfoNet:
                 logger.msg(f"Loaded saved observation pairwise profile Euclidean distances from {label} profiles of size {eds_prior.shape}.")
 
                 n_orig = len(pw_obs)
-                pw_obs = [k for k in pw_obs if k not in set(eds_prior.index)]
-                n_update = len(pw_obs)
-                if n_update < n_orig:
-                    if n_update == 0:
+                # pw_obs = [k for k in pw_obs if k not in set(eds_prior.index)]
+                # n_update = len(pw_obs)
+                
+                # if n_update < n_orig:
+                #     if n_update == 0:
+                if eds_prior.shape[0] == n_orig:
+                    if True:
                         # return eds_prior
-                        self.keeper.add_misc(eds_prior, label)
+                        # self.keeper.add_misc(eds_prior, label)
+                        if isinstance(eds_prior, pd.DataFrame):
+                            eds_prior = eds_prior[eds_prior.columns[0]]
+                            self.keeper.add_stacked_distance(eds_prior, label)
                         return None
-                    logger.msg(f"Computing observation pairwise profile Euclidean distances between {n_update}/{n_orig} pairwise observations.")
-            else:
-                eds_prior = None
 
+                    # logger.msg(f"Computing observation pairwise profile Euclidean distances between {n_update}/{n_orig} pairwise observations.")
+            # else:
+            #     eds_prior = None
+
+        # if len(pw_obs)>0:
         profiles = self.data.subset(features=features)
 
         if normalize:
             profiles = profiles / profiles.sum(axis=0)
-            
+
         eds = pairwise_observation_euc_distances(profiles,
                                                  metric=metric, **kwargs)
 
         # line 1025
         eds.name = 'ED'
 
-        if eds_prior is not None:
-            eds = pd.concat([eds_prior, eds], axis=0)
         if self.outdir is not None:
             eds.to_csv(self.outdir / fname, header=True, index=True)
             logger.msg(f"Observation pairwise profile Euclidean distances saved to {str(fname)}.")
+            
+        # if eds_prior is not None:
+        #     eds = pd.concat([eds_prior, eds], axis=0)
+        # if self.outdir is not None:
+        #     eds.to_csv(self.outdir / fname, header=True, index=True)
+        #     logger.msg(f"Observation pairwise profile Euclidean distances saved to {str(fname)}.")
 
-        self.keeper.add_misc(eds, label)
+
+        # ensure wds is a Series and not a DataFrame
+        if isinstance(eds, pd.DataFrame):
+            eds = eds[eds.columns[0]]
+
+        # logger.msg(f">>> Euc - type(eds) = {type(eds)}")
+            
+        # logger.msg(f">>> ABOUT TO SAVE EUC TO KEEPER AS STACKED DISTANCE: type={type(eds)}, size={eds.shape}.")
+        self.keeper.add_stacked_distance(eds, label)        
         # return eds
         return None
 

@@ -22,6 +22,7 @@ To do:
 - In `netflow.pose.organization`, separate out multiscale analysis to it's own form and possibly should be under `netflow.methods` instead
 - `netflow.keepers.keeper.DataView` can be better leveraged in `netflow.methods.classes` and for computing neighborhoods and wass distance, etc.
 - In `netflow.pose.organization`, add segment tips, etc to NodeTree and convert from lists to tree for representing segment branching.
+- In keeper - DataKeeper().add_data() - currently must be numeric type because it checks for nan.s - Add ability to add feature data of other types.
 """
 
 # __version__ = "0.0.dev"
@@ -33,4 +34,6 @@ from netflow.keepers.keeper import Keeper
 from netflow.methods.classes import InfoNet
 from netflow.pose import organization, similarity
 # from netflow import pose
+
+
 
