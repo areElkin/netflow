@@ -137,8 +137,8 @@
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -146,6 +146,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -241,8 +248,8 @@ document.write(`
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -250,6 +257,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -364,6 +378,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">scipy.sparse.csgraph</span> <span class="k">as</span> <span class="nn">scg</span>
 <span class="kn">import</span> <span class="nn">scipy.spatial.distance</span> <span class="k">as</span> <span class="nn">ssd</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">sc_stats</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">issparse</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
@@ -378,7 +393,10 @@ document.write(`
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 
-<span class="kn">from</span> <span class="nn">._logging</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="c1"># from ._logging import logger</span>
+<span class="kn">from</span> <span class="nn">._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="c1"># e.g. https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html</span>
 <span class="n">AnyRandom</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">]</span>  <span class="c1"># maybe in the future random.Generator</span>
@@ -787,7 +805,7 @@ document.write(`
 <span class="sd">    df_stacked : `pandas.Series`</span>
 <span class="sd">        The stacked upper triangular entries above the diagonal of the dataframe.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df_stacked</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
+    <span class="n">df_stacked</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
     <span class="n">df_stacked</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
     <span class="k">return</span> <span class="n">df_stacked</span></div>
 
@@ -816,7 +834,7 @@ document.write(`
 <span class="sd">        The stacked upper triangular entries above the diagonal of the dataframe,</span>
 <span class="sd">        where ``condition`` is `True`.        </span>
 <span class="sd">    &quot;&quot;&quot;</span>        
-    <span class="n">df_stacked</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">condition</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
+    <span class="n">df_stacked</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">condition</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
     <span class="n">df_stacked</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
     <span class="k">return</span> <span class="n">df_stacked</span></div>
 
@@ -871,7 +889,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="compute_eigen"><a class="viewcode-back" href="../../reference/generated/netflow.utils.html#netflow.utils.compute_eigen">[docs]</a><span class="k">def</span> <span class="nf">compute_eigen</span><span class="p">(</span><span class="n">T</span><span class="p">,</span>
-                  <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+                  <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                   <span class="n">sort</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;decrease&quot;</span><span class="p">,</span> <span class="s2">&quot;increase&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;decrease&quot;</span><span class="p">,</span>
                   <span class="n">random_state</span><span class="p">:</span> <span class="n">AnyRandom</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                   <span class="p">):</span>
@@ -978,6 +996,53 @@ document.write(`
 
     <span class="n">smoothed_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">gauss_filter</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">smoothed_array</span></div>
+
+
+<div class="viewcode-block" id="invariant_measure"><a class="viewcode-back" href="../../reference/generated/netflow.utils.html#netflow.utils.invariant_measure">[docs]</a><span class="k">def</span> <span class="nf">invariant_measure</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the invariant measure of the profile (node weights) on the network.</span>
+
+<span class="sd">    ..Note:: Either the graph ``G`` or the adjacency matrix ``adj`` must be provided.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    profiles : {`pandas.DataFrame` (n_features, n_observations), `numpy.ndarray` (n_features, n_observations)}</span>
+<span class="sd">        The network profile used as node weights for the initial condition of the random walk.</span>
+<span class="sd">    G : `networkx.Graph`</span>
+<span class="sd">        The graph used to compute the adjacency matrix. Note, this is ignored if ``adj`` is</span>
+<span class="sd">        provided. If ``profile`` is a `pandas.DataFrame`, the node ids in ``G`` are expected to</span>
+<span class="sd">        match the ``profile`` index. Otherwise, ``list(G)`` is expected to match the</span>
+<span class="sd">        ``profile`` order.</span>
+<span class="sd">    adj : {`numpy.ndarray`, `scipy.sparse.csr_matrix`} (n_features, n_features)</span>
+<span class="sd">        The (binary) adjacency matrix. Rows and columns are expected to be in the same</span>
+<span class="sd">        order as in ``profiles``. Note, if provided, ``G`` is ignored.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    IM : `numpy.ndarray` (n_features, n_observations)</span>
+<span class="sd">        The invariant measures whose features and observations are in the same order as ``profiles``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">nodelist</span> <span class="o">=</span> <span class="n">profiles</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">nodelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">profiles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="k">if</span> <span class="n">adj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">G</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Either the graph or the adjacency matrix must be provided.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">adj</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span> 
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">profiles</span><span class="p">)</span> 
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">IM</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="n">Z</span></div>
+    
+
+    
+
+    
+        
+        
     
     
     
@@ -1013,8 +1078,9 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
 </ul>
 
@@ -1044,7 +1110,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2023, The netflow community.
+      © Copyright 2023-2024, The netflow community.
       <br/>
     
   </p>

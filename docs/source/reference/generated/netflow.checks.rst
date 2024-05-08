@@ -18,6 +18,8 @@
       check_edges_in_graph
       check_graph_no_self_loops
       check_graph_weights
+      check_matrix_no_nan
+      check_matrix_nonnegative
       check_symmetric
    
    

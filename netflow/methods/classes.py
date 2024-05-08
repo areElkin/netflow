@@ -22,7 +22,6 @@ from ..checks import *
 from .metrics import pairwise_observation_euc_distances, pairwise_observation_wass_distances
 
 import netflow.utils as utl
-
 # from importlib import reload
 # reload(utl)
 # kendall_tau_ = utl.kendall_tau_
@@ -49,6 +48,7 @@ class InfoNet:
         The keeper object that stores the data of size (n_features, n_observations).
     graph_key : 'str'
         The key to the graph in the graph keeper that should be used.
+        (Does not have to include all features in the data)
     layer : `str`
         The key to the data in the data keeper that should be used.
     """
@@ -83,8 +83,12 @@ class InfoNet:
             # self.data = data.rename(index=self.name2node)
             # self.features = data.index.tolist()[:]
             # self.observations = data.columns.tolist()[:]
-            self.features = [self.name2node[i] for i in self.data.feature_labels]
-            assert self.features == list(range(len(self.G))), "Graph features are not ordered according to data features."
+            self.features = [self.name2node[i] for i in self.data.feature_labels if i in self.name2node] # HERE!!! 
+            # assert self.features == list(range(len(self.G))), "Graph features are not ordered according to data features."
+            assert all([self.data.feature_labels[i] == self.G.nodes[i]['name'] for i in self.G]), \
+                "Features in the graph are not ordered according to the data features."
+            assert max(list(self.G)) == len(self.features) - 1, f"Features in the graph are not consecutively ordered."
+            
         else:
             self.name2node = dict(zip(self.data.feature_labels, range(len(self.data.feature_labels))))
             self.features = self.data.feature_labels

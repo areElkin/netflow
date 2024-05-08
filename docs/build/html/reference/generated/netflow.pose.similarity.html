@@ -46,10 +46,11 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/design-tabs.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.pose.similarity';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="netflow.methods" href="netflow.methods.html" />
+    <link rel="next" title="netflow.probe" href="netflow.probe.html" />
     <link rel="prev" title="netflow.pose.organization" href="netflow.pose.organization.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
@@ -139,9 +140,9 @@
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../index.html">
-                        API reference
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -149,6 +150,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -243,9 +251,9 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../index.html">
-                        API reference
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -253,6 +261,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -302,7 +317,11 @@ document.write(`
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">netflow.pose.similarity</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
 </ul>
@@ -313,28 +332,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
-</ul>
-</li>
-</ul>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="netflow.keepers.html">netflow.keepers</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="netflow.keepers.keeper.html">netflow.keepers.keeper</a></li>
-</ul>
-</li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="netflow.pose.html">netflow.pose</a><input checked class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">netflow.pose.similarity</a></li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
 </ul>
 </li>
 </ul>
@@ -457,7 +454,8 @@ If <cite>None</cite>, all neighbors are used.</p></li>
 <li><p><strong>method</strong> ({<cite>float</cite>, ‘mean’, ‘median’, ‘max’, ‘precomputed’}) – <p>Indicate how to compute sigma.</p>
 <p>Options:</p>
 <ul>
-<li><p><cite>float</cite> : constance float to use as sigma</p></li>
+<li><p><cite>float</cite> : constant float to use as sigma</p></li>
+<li><p><cite>int</cite> : constant int to use as sigma</p></li>
 <li><p>’mean’ : mean of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
 <li><p>’median’ : median of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
 <li><p>’max’ : distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code>-nearest neighbor</p></li>
@@ -490,6 +488,8 @@ stored in <code class="docutils literal notranslate"><span class="pre">keeper.si
 <dt class="sig sig-object py" id="netflow.pose.similarity.distance_to_similarity_">
 <span class="sig-prename descclassname"><span class="pre">netflow.pose.similarity.</span></span><span class="sig-name descname"><span class="pre">distance_to_similarity_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/similarity.html#distance_to_similarity_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.similarity.distance_to_similarity_" title="Permalink to this definition">#</a></dt>
 <dd><p>Convert distance matrix to symmetric similarity measure.</p>
+<div class="math notranslate nohighlight">
+\[K = \sqrt{2\sigma_i\sigma_j / (\sigma_i^2 + \sigma_j^2)}\exp{-(x-y)^2 / (\sigma_x^2 + \sigma_y^2)}.\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -497,10 +497,11 @@ stored in <code class="docutils literal notranslate"><span class="pre">keeper.si
 <li><p><strong>n_neighbors</strong> ({<cite>int</cite>, <cite>None</cite>}) – K-th nearest neighbor (or number of nearest neighbors) to use for computing <code class="docutils literal notranslate"><span class="pre">sigmas</span></code>,
 <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>. (Uses <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">+</span> <span class="pre">1</span></code>, since each obs is it’s closest neighbor).
 If <cite>None</cite>, all neighbors are used.</p></li>
-<li><p><strong>method</strong> ({<cite>float</cite>, ‘mean’, ‘median’, ‘max’, ‘precomputed’}) – <p>Indicate how to compute sigma.</p>
+<li><p><strong>method</strong> ({<cite>float</cite>, <cite>int</cite>, ‘mean’, ‘median’, ‘max’, ‘precomputed’}) – <p>Indicate how to compute sigma.</p>
 <p>Options:</p>
 <ul>
-<li><p><cite>float</cite> : constance float to use as sigma</p></li>
+<li><p><cite>float</cite> : constant float to use as sigma</p></li>
+<li><p><cite>int</cite> : constant int to use as sigma</p></li>
 <li><p>’mean’ : mean of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
 <li><p>’median’ : median of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
 <li><p>’max’ : distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code>-nearest neighbor</p></li>
@@ -647,11 +648,11 @@ Returned if <code class="docutils literal notranslate"><span class="pre">return_
       </div>
     </a>
     <a class="right-next"
-       href="netflow.methods.html"
+       href="netflow.probe.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">netflow.methods</p>
+        <p class="prev-next-title">netflow.probe</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -674,6 +675,8 @@ Returned if <code class="docutils literal notranslate"><span class="pre">return_
   <nav class="bd-toc-nav page-toc">
     <ul class="current visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
 <li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
@@ -684,6 +687,7 @@ Returned if <code class="docutils literal notranslate"><span class="pre">return_
 <li class="toctree-l6 current toc-h6 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.pose.similarity</a></li>
 </ul>
 </li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.html">netflow.probe</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
@@ -695,25 +699,11 @@ Returned if <code class="docutils literal notranslate"><span class="pre">return_
 </li>
 </ul>
 </li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.keepers.html">netflow.keepers</a></li>
-<li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a><ul class="current nav section-nav flex-column">
-<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
-<li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.pose.similarity</a></li>
-</ul>
-</li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
 <li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
 </ul>
 
@@ -751,7 +741,7 @@ Returned if <code class="docutils literal notranslate"><span class="pre">return_
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2023, The netflow community.
+      © Copyright 2023-2024, The netflow community.
       <br/>
     
   </p>

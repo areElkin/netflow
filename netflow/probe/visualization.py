@@ -9,7 +9,7 @@ from cycler import cycler
 from lifelines import KaplanMeierFitter
 from lifelines.plotting import add_at_risk_counts
 from lifelines.statistics import logrank_test
-from matplotlib.colors import BoundaryNorm, Colormap
+from matplotlib.colors import BoundaryNorm, Colormap, to_rgba_array
 from matplotlib.lines import Line2D
 
 from .clustering import high_res_branch_graph
@@ -65,6 +65,7 @@ def plot_topology(G,
                   edge_font_weight='normal', # 5 was font_weight
                   node_font_family='sans-serif', # 1, 4 was font_family (same for nodes and edges)
                   edge_font_family='sans-serif', # 5 was font_family
+                  node_ticklabels_mapper=None,
                   node_bbox=None, # 4 was bbox
                   edge_bbox=None, # 5 was bbox
                   node_horizontalalignment='center', # 4 was horizontalalignment
@@ -196,6 +197,9 @@ def plot_topology(G,
         Font weight    
     {node,edge}_font_family : string (default='sans-serif')
         Font family
+    node_ticklabels_mapper : {`None`, `dict`} (default=None)
+        If provided, used to assign labels to numeric values in color-bar when a
+        discrete colormap is used.
     node_bbox : Matplotlib bbox, (default is Matplotlib's ax.text default)
         Specify text box properties (e.g. shape, color etc.) for node labels.
     edge_bbox : Matplotlib bbox, optional
@@ -258,10 +262,16 @@ def plot_topology(G,
         node_shape = [node_shape_mapper[k] for k in node_shape]
         
     if isinstance(node_color, Iterable) and not isinstance(node_color, str):
-        if node_vmin is None:
-            node_vmin = min(node_color)
-        if node_vmax is None:
-            node_vmax = max(node_color)
+        # check if sequence is float or strings
+        # if strings, check if colors or categories
+        
+        try:            
+            _ = to_rgba_array(node_color)
+        except:
+            if node_vmin is None:
+                node_vmin = min(node_color)
+            if node_vmax is None:
+                node_vmax = max(node_color)
 
     qualitative_cmaps = {'Pastel1': 9, 
                          'Pastel2': 8, 
@@ -288,7 +298,10 @@ def plot_topology(G,
                 node_boundaries = [k/qualitative_cmaps[node_cmap] for k in range(cur_vmin, cur_vmax+2)]
                 # ticks = [k/qualitative_cmaps[node_cmap] + 0.5*(1/qualitative_cmaps[node_cmap]) for k in range(max(node_color)+1)]
                 node_ticks = [k/qualitative_cmaps[node_cmap] + 0.5*(1/qualitative_cmaps[node_cmap]) for k in range(cur_vmin, cur_vmax+1)]
-                node_ticklabels = [str(k) for k in nc_set]
+                if node_ticklabels_mapper is None:
+                    node_ticklabels = [str(k) for k in nc_set]
+                else:
+                    node_ticklabels = [node_ticklabels_mapper[k] for k in nc_set]
                 node_norm = BoundaryNorm(node_boundaries, len(nc_set))
             else:
                 node_boundaries = None
@@ -551,9 +564,10 @@ def KM_between_groups(T, E, groups, min_group_size=10,
         if (len(group_a) >= min_group_size) and (len(group_b) >= min_group_size):
             lrp = logrank_test(T.loc[group_a], T.loc[group_b], 
                                event_observed_A=E.loc[group_a], 
-                               event_observed_B=E.loc[group_b])
+                               event_observed_B=E.loc[group_b])            
             lrp = lrp.p_value
-            ttl += f"\n{clus_a} vs {clus_b} :  p = {np.round(lrp, 4)}"
+            if lrp <=0.05:
+                ttl += f"\n{clus_a} vs {clus_b} :  p = {np.round(lrp, 4)}"
 
     if show_at_risk_counts:
         add_at_risk_counts(*kmfs, ax=ax)

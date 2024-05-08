@@ -1,4 +1,5 @@
 import networkx as nx
+import pandas as pd
 
 from netflow import InfoNet
 from netflow.methods.metrics import norm_features_as_sym_dist
@@ -8,10 +9,14 @@ from netflow import similarity as nfs
 from netflow._logging import _gen_logger, set_verbose
 logger = _gen_logger(__name__)
 
-# from importlib import reload
-# from netflow.pose import organization as nfo
-# nfo = reload(nfo)
-# TDA = nfo.TDA
+from importlib import reload
+from netflow.pose import organization as nfo
+nfo = reload(nfo)
+# from netflow.methods import classes as nfc
+# nfc = reload(nfc)
+# InfoNet = nfc.InfoNet
+TDA = nfo.TDA
+# logger.msg(f"*** UPDATED TDA ***")
 # logger.warning(f"Imported new TDA: {help(TDA)}")
 
 def _fuse_similarities_from_recipes(keeper, similarity_labels, recipes):
@@ -63,7 +68,7 @@ def _fuse_similarities_from_recipes(keeper, similarity_labels, recipes):
 
 def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None, n_branches=5, min_branch_size=6,
                         choose_largest_segment=False, flavor='haghverdi16', allow_kendall_tau_shift=False,
-                        smooth_corr=False, brute=True):
+                        smooth_corr=False, brute=True, verbose=None):
     """ Compute POSE from root with respect to distance.
 
     Parameters
@@ -128,30 +133,36 @@ def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None
         # find root from density
         if similarity_label is None:
             root = keeper.distance_density_argmin(dd.label)
+            # logger.msg(f"** Root from sim: root = {root}")
         else:
             # uncomment to use minimum density from distance:
-            # root = keeper.similarity_density_argmax(similarity_label)
+            root = keeper.similarity_density_argmax(similarity_label)
+                        
             
-            # uncomment to find root as farthest point from point leading to largest triangular ratio:
-            d = dd.to_frame()
-            max_d_pairs = d.idxmax()
-            sum_sq_max_d_pairs = max_d_pairs.to_frame('a').T.apply(lambda x: d.loc[x.name]**2 + d.loc[x.loc['a']]**2)
-            tip3 = sum_sq_max_d_pairs.idxmax()
+        # uncomment to find root as farthest point from point leading to largest triangular ratio:
+        # d = dd.to_frame()
+        # max_d_pairs = d.idxmax()  # 
+        # sum_max_d_pairs = max_d_pairs.to_frame('a').T.apply(lambda x: d.loc[x.name] + d.loc[x.loc['a']])
+        # tip3 = sum_max_d_pairs.idxmax()
 
-            max_d_pairs.name = 'tip2'
-            tip3.name = 'tip3'
-            tips = pd.concat([max_d_pairs, tip3], axis=1)
-            tri_ratio = tips.T.apply(lambda x: (d.loc[x.name, x.loc['tip3']]**2 + d.loc[x.loc['tip2'], x.loc['tip3']]**2) / (d.loc[x.name, x.loc['tip2']]**2)) # .hist(bins=100)
-            root_x = tri_ratio.idxmax()
-            root = d.loc[root_x].idxmax()
-            
+        # max_d_pairs.name = 'tip2'
+        # tip3.name = 'tip3'
+        # tips = pd.concat([max_d_pairs, tip3], axis=1)
+        # tri_ratio = tips.T.apply(lambda x: (d.loc[x.name, x.loc['tip3']] + d.loc[x.loc['tip2'], x.loc['tip3']]) / (d.loc[x.name, x.loc['tip2']])) # .hist(bins=100)
+
+        # root_x = tri_ratio.idxmax()
+        # root_lbl = d.loc[root_x].idxmax()
+        # # root_lbl = tri_ratio.idxmax()
+        # root = keeper.observation_index(root_lbl)
+        # logger.msg(f"setting root = {root_lbl}: {root}")
+
 
     # logger.msg(f"root = {root} type = {type(root)}.")
 
     tda = TDA(keeper, dd.label, label=None,  min_branch_size=min_branch_size,
               choose_largest_segment=choose_largest_segment,
               flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
-              root=root, smooth_corr=smooth_corr, brute=brute)
+              root=root, smooth_corr=smooth_corr, brute=brute, verbose=verbose)
 
     tda.branchings_segments(n_branches)
 
@@ -167,7 +178,7 @@ def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None
     nx.set_node_attributes(G_tda, pos, name='pos')
 
     G_tda_nn = tda.construct_pose_nn_topology(G_tda)
-    G_tda_mst = tda.construct_pose_mst_topology(G=G_tda)
+    # G_tda_mst = tda.construct_pose_mst_topology(G=G_tda)
 
     cur_key = "_".join(["POSE", dd.label, f"nbranches{n_branches}", f"min{min_branch_size}",
                         f"largestSeg{choose_largest_segment}", flavor, f"shift{allow_kendall_tau_shift}",
@@ -176,10 +187,10 @@ def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None
     # branch_record.name = cur_key
     G_tda.name = cur_key
     G_tda_nn.name = f"NN_{cur_key}"
-    G_tda_mst.name = f"MST_{cur_key}"
+    # G_tda_mst.name = f"MST_{cur_key}"
     # keeper.add_graph(G_tda, cur_key)
 
-    return tda, G_tda, G_tda_nn, G_tda_mst
+    return tda, G_tda, G_tda_nn # , G_tda_mst
             
 
 def run_pose(keeper, metrics_configs,
@@ -187,7 +198,7 @@ def run_pose(keeper, metrics_configs,
              density_normalize=True, fuse_recipes=None, root=None,
              n_branches=5, min_branch_size=6, choose_largest_segment=False,
              flavor='haghverdi16', allow_kendall_tau_shift=False,
-             smooth_corr=False, brute=True):
+             smooth_corr=False, brute=True, verbose=None):
     """ Run data to POSE pipeline.
 
     Specify data set(s) and metric(s) to be performed.
@@ -205,7 +216,7 @@ def run_pose(keeper, metrics_configs,
         The data, feature list configuration for computing metrics. The configurations
         are provided as a `tuple` of `tuples` where each metric configuration is a tuple
         of the form
-        ``('data_label', 'metric_name', 'graph_key', {'features': [], 'features_set_name': str, **kwargs})`` 
+        ``('data_label', 'metric_name', 'graph_key', {'features': [], 'feature_set_name': str, **kwargs})`` 
         where the `dict` has the optional keywords:
 
         - 'features' : A `list` of feature that the metric should be computed on.
@@ -277,23 +288,23 @@ def run_pose(keeper, metrics_configs,
             kwargs = config[3]
             if 'features' in kwargs:
                 features = kwargs.pop('features')
-                if 'features_set_name' in kwargs:
-                    features_set_name = kwargs.pop('features_set_name')
+                if 'feature_set_name' in kwargs:
+                    feature_set_name = kwargs.pop('feature_set_name')
                 else:
                     feature_set_name = f"feature_set_{feature_set_label_counter}"
                     feature_set_label_counter += 1
                     keeper.add_misc(features, feature_set_name)
             else:
                 features = None
-                feature_set_label = "all features"
+                feature_set_name = "all features"
         else:
             kwargs = {}
             features = None
-            feature_set_label = "all features"
+            feature_set_name = "all features"
 
         inet = InfoNet(keeper, graph_key, layer=data_label)
 
-        label = f"{data_label}_{metric_name}_{feature_set_label}"
+        label = f"{data_label}_{metric_name}_{feature_set_name}"
         if graph_key is not None:
             label = label + f"_graph_{graph_key}"
 
@@ -385,7 +396,6 @@ def run_pose(keeper, metrics_configs,
 
         # add similarity to keeper as distance
         keeper.add_distance(1. - keeper.similarities[sim_label].to_frame(), f"distance_from_{sim_label}")
-        
 
     # compute fused similarities:        
     if fuse_recipes is None:
@@ -420,22 +430,26 @@ def run_pose(keeper, metrics_configs,
             raise AssertionError("Unrecognized similarity for current distance label")
 
 
-        tda, G_tda, G_tda_nn, G_tda_mst = _pose_from_distance(keeper, distance_label, root=root,
-                                                              similarity_label=None, # sim_label,
-                                                              n_branches=n_branches, min_branch_size=min_branch_size,
-                                                              choose_largest_segment=choose_largest_segment, flavor=flavor,
-                                                              allow_kendall_tau_shift=allow_kendall_tau_shift,
-                                                              smooth_corr=smooth_corr, brute=brute)
+        print(f"Root for distance = {distance_label} ==> {root}.")
+        # tda, G_tda, G_tda_nn, G_tda_mst = _pose_from_distance(keeper, distance_label, root=root,
+        tda, G_tda, G_tda_nn = _pose_from_distance(keeper, distance_label, root=root,
+                                                   similarity_label=None, # sim_label,
+                                                   n_branches=n_branches, min_branch_size=min_branch_size,
+                                                   choose_largest_segment=choose_largest_segment, flavor=flavor,
+                                                   allow_kendall_tau_shift=allow_kendall_tau_shift,
+                                                   smooth_corr=smooth_corr, brute=brute, verbose=verbose)
 
         if 'root' not in G_tda.nodes[tda.root]:
             root_attr = {k: 1 if k == tda.root else 0 for k in G_tda}
             nx.set_node_attributes(G_tda, root_attr, name='root')
             nx.set_node_attributes(G_tda_nn, root_attr, name='root')
-            nx.set_node_attributes(G_tda_mst, root_attr, name='root')
+            # nx.set_node_attributes(G_tda_mst, root_attr, name='root')
 
         
         keeper.add_misc(tda, f"TDA_{G_tda.name}")
         keeper.add_graph(G_tda, G_tda.name)
         keeper.add_graph(G_tda_nn, G_tda_nn.name)
-        keeper.add_graph(G_tda_mst, G_tda_mst.name)
+        # keeper.add_graph(G_tda_mst, G_tda_mst.name)
         
+
+

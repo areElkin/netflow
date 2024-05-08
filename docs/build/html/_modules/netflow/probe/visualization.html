@@ -1,0 +1,789 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>netflow.probe.visualization &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/netflow/probe/visualization';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">netflow v0.0.dev Manual</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
+  <p class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">netflow.probe.visualization</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for netflow.probe.visualization</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
+
+<div class="viewcode-block" id="plot_topology"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.plot_topology">[docs]</a><span class="k">def</span> <span class="nf">plot_topology</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> 
+                  <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2, 3, 4, 5</span>
+                  <span class="n">with_node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># 1 was with_labels</span>
+                  <span class="n">with_edge_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2, 3, 4, 5</span>
+                  <span class="n">nodelist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># 1, 2, 3</span>
+                  <span class="n">edgelist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 3</span>
+                  <span class="n">node_size</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="c1"># 1, 2, 3</span>
+                  <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;#1f78b4&#39;</span><span class="p">,</span> <span class="c1"># 1, 2</span>
+                  <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="c1"># 1, 3</span>
+                  <span class="n">node_shape</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="c1"># 1, 2, 3</span>
+                  <span class="n">node_shape_mapper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">node_alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2 was alpha (same for nodes and edges)</span>
+                  <span class="n">edge_alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 3, 5 was alpha</span>
+                  <span class="n">node_label_alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 4 was alpha</span>
+                  <span class="n">edge_label_alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 5 was alpha</span>
+                  <span class="n">node_cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2 was cmap</span>
+                  <span class="n">edge_cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 3</span>
+                  <span class="n">node_vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2 was vmin</span>
+                  <span class="n">node_vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2 was vmax</span>
+                  <span class="n">edge_vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 3</span>
+                  <span class="n">edge_vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 3</span>
+                  <span class="n">border_linewidths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2 was linewidths</span>
+                  <span class="n">bordercolors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 2 was edgecolors</span>
+                  <span class="n">edge_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="c1"># 1, 3 was width                  </span>
+                  <span class="n">edge_style</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span> <span class="c1"># 1, 3 was style</span>
+                  <span class="n">edge_style_mapper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">node_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 4 was labels</span>
+                  <span class="n">edge_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># 5</span>
+                  <span class="n">node_font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="c1"># 1, 4 was font_size (same for nodes and edges)</span>
+                  <span class="n">edge_font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="c1"># 5 was font_size</span>
+                  <span class="n">node_font_color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="c1"># 1, 4 was font_color (same for nodes and edges)</span>
+                  <span class="n">edge_font_color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="c1"># 5 was font_color</span>
+                  <span class="n">node_font_weight</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="c1"># 1, 4 was font_weight (same for nodes and edges)</span>
+                  <span class="n">edge_font_weight</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="c1"># 5 was font_weight</span>
+                  <span class="n">node_font_family</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> <span class="c1"># 1, 4 was font_family (same for nodes and edges)</span>
+                  <span class="n">edge_font_family</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> <span class="c1"># 5 was font_family</span>
+                  <span class="n">node_bbox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 4 was bbox</span>
+                  <span class="n">edge_bbox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 5 was bbox</span>
+                  <span class="n">node_horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="c1"># 4 was horizontalalignment</span>
+                  <span class="n">edge_horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="c1"># 5 was horizontalalignment</span>
+                  <span class="n">node_verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="c1"># 4 was verticalalignment</span>
+                  <span class="n">edge_verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="c1"># 5 was verticalalignment</span>
+                  <span class="n">node_clip_on</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># 4 was clip_on</span>
+                  <span class="n">edge_clip_on</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># 5 was clip_on                  </span>
+                  <span class="n">margins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 2</span>
+                  <span class="n">min_source_margin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="c1"># 3</span>
+                  <span class="n">min_target_margin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="c1"># 3</span>
+                  <span class="n">edge_label_pos</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="c1"># 5 was label_pos                      </span>
+                  <span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># 5</span>
+                 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Draw the graph topology.</span>
+
+<span class="sd">    Draw the graph topology with NetworkX with options for </span>
+<span class="sd">    multiple node shapes. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : graph</span>
+<span class="sd">        A networkx graph    </span>
+<span class="sd">    pos : dictionary, optional</span>
+<span class="sd">        A dictionary with nodes as keys and positions as values.</span>
+<span class="sd">        If not specified a kamada kawai layout positioning will be computed.</span>
+<span class="sd">        See :py:mod:`networkx.drawing.layout` for functions that</span>
+<span class="sd">        compute node positions.    </span>
+<span class="sd">    with_{node,edge}_labels :  bool (default=False)</span>
+<span class="sd">        Set to True to draw labels on the nodes and edges.    </span>
+<span class="sd">    ax : Matplotlib Axes object, optional</span>
+<span class="sd">        Draw the graph in the specified Matplotlib axes.</span>
+<span class="sd">    nodelist : list (default=list(G))</span>
+<span class="sd">        Draw only specified nodes.</span>
+<span class="sd">    edgelist : list (default=list(G.edges()))</span>
+<span class="sd">        Draw only specified edges.</span>
+<span class="sd">    node_size : scalar or array (default=300)</span>
+<span class="sd">        Size of nodes.  If an array is specified it must be the</span>
+<span class="sd">        same length as nodelist.</span>
+<span class="sd">    node_color : color or array of colors (default=&#39;#1f78b4&#39;)</span>
+<span class="sd">        Node color. Can be a single color or a sequence of colors with the same</span>
+<span class="sd">        length as nodelist. Color can be string or rgb (or rgba) tuple of</span>
+<span class="sd">        floats from 0-1. If numeric values are specified they will be</span>
+<span class="sd">        mapped to colors using the cmap and vmin,vmax parameters. See</span>
+<span class="sd">        matplotlib.scatter for more details.</span>
+<span class="sd">    edge_color : color or array of colors (default=&#39;k&#39;)</span>
+<span class="sd">        Edge color. Can be a single color or a sequence of colors with the same</span>
+<span class="sd">        length as edgelist. Color can be string or rgb (or rgba) tuple of</span>
+<span class="sd">        floats from 0-1. If numeric values are specified they will be</span>
+<span class="sd">        mapped to colors using the edge_cmap and edge_vmin,edge_vmax parameters.</span>
+<span class="sd">    node_shape :  string or array of shapes  (default=&#39;o&#39;)</span>
+<span class="sd">        The shape of the node.  Can be a single shape or a sequence of shapes</span>
+<span class="sd">        with the same length as nodelist. Shape specification is as </span>
+<span class="sd">        matplotlib.scatter marker, one of &#39;os^&gt;v&lt;dph8&#39;.</span>
+<span class="sd">        Alternatively, to add a description of the node class represented by</span>
+<span class="sd">        the shape to the legend, provide a single node class label or a</span>
+<span class="sd">        sequence of node class labels with the same length as nodelist. If </span>
+<span class="sd">        shape speficiations are not one of &#39;os^&gt;v&lt;dph8&#39;, they are treated as </span>
+<span class="sd">        node class labels and are added to the legend. Use ``node_shape_mapper`` </span>
+<span class="sd">        to manually specify the shape for each class.</span>
+<span class="sd">    node_shape_mapper : None or dict (default=None)</span>
+<span class="sd">        A dictionary to map node class labels to shapes, keyed by node class labels</span>
+<span class="sd">        that is expected to have a key for all unique node class labels in ``node_shape``. </span>
+<span class="sd">        The default is to cycle through the possible shapes &#39;os^&gt;v&lt;dph8&#39;, which may </span>
+<span class="sd">        not be unique if there are more classes than unique markers. This is ignored</span>
+<span class="sd">        if ``node_shape`` contains the shapes directly.</span>
+<span class="sd">    node_alpha : float, array of floats or None (default=None)</span>
+<span class="sd">        The node transparency.  This can be a single alpha value,</span>
+<span class="sd">        in which case it will be applied to all the nodes of color. Otherwise,</span>
+<span class="sd">        if it is an array, the elements of alpha will be applied to the colors</span>
+<span class="sd">        in order (cycling through alpha multiple times if necessary).</span>
+<span class="sd">    edge_alpha : float or None (default=None)</span>
+<span class="sd">        The edge transparency.</span>
+<span class="sd">    node_label_alpha : float or None (default=None)</span>
+<span class="sd">        The node label text transparency</span>
+<span class="sd">    edge_label_alpha : float or None (default=None)</span>
+<span class="sd">        The text transparency</span>
+<span class="sd">    {node,edge}_cmap : Matplotlib colormap, optional</span>
+<span class="sd">        Colormap for mapping intensities of nodes and edges</span>
+<span class="sd">    {node,edge}_vmin,{node,edge}_vmax : float, optional</span>
+<span class="sd">        Minimum and maximum for node and edge colormap scaling</span>
+<span class="sd">    border_linewidths : scalar or sequence (default=1.0) </span>
+<span class="sd">        Line width of symbol border.</span>
+<span class="sd">    bordercolors : [None | scalar | sequence] (default = node_color)</span>
+<span class="sd">        Colors of node borders.    </span>
+<span class="sd">    edge_width : float or array of floats (default=1.0) </span>
+<span class="sd">        Line width of edges                          </span>
+<span class="sd">    edge_style : string or array of strings (default=solid line)</span>
+<span class="sd">        Edge line style. Can be a single style or a sequence of styles</span>
+<span class="sd">        with the same length as edgelist. Styles can be any of</span>
+<span class="sd">        &#39;-&#39;, &#39;--&#39;, &#39;-.&#39;, &#39;:&#39; or words like &#39;solid&#39; or &#39;dashed&#39;.</span>
+<span class="sd">        (See `matplotlib.patches.FancyArrowPatch`: `linestyle`)</span>
+<span class="sd">        Alternatively, to add a description of the edge class represented by</span>
+<span class="sd">        the style to the legend, provide a single edge class label or a</span>
+<span class="sd">        sequence of edge class labels with the same length as edgelist. If </span>
+<span class="sd">        style speficiations are not one of</span>
+<span class="sd">        [&#39;-&#39;, &#39;--&#39;, &#39;-.&#39;, &#39;:&#39;, &#39;solid&#39;, &#39;dashed&#39;, &#39;dotted&#39;, &#39;dashdot&#39;], they are treated </span>
+<span class="sd">        as edge  class labels and are added to the legend. Use ``edge_style_mapper`` </span>
+<span class="sd">        to manually specify the style for each class.</span>
+<span class="sd">    edge_style_mapper : None or dict (default=None)</span>
+<span class="sd">        A dictionary to map  edge class labels to styles, keyed by edge class </span>
+<span class="sd">        and is expected to have a key for all include all unique edge class labels in</span>
+<span class="sd">        ``edge_style``. </span>
+<span class="sd">        The default is to cycle through the possible edge styles [&#39;-&#39;, &#39;--&#39;, &#39;-.&#39;, &#39;:&#39;],    </span>
+<span class="sd">        which may not be unique if there are more classes than unique styles. </span>
+<span class="sd">        This is ignored if ``edge_style`` contains the styles directly.</span>
+<span class="sd">    node_labels : dictionary (default=None)</span>
+<span class="sd">        Node labels in a dictionary of text labels keyed by node</span>
+<span class="sd">    edge_labels : dictionary (default=None)</span>
+<span class="sd">        Edge labels in a dictionary of labels keyed by edge two-tuple.</span>
+<span class="sd">        Only labels for the keys in the dictionary are drawn.</span>
+<span class="sd">    {node,edge}_font_size : int (default=12 for nodes, 10 for edges)</span>
+<span class="sd">        Font size for text labels    </span>
+<span class="sd">    {node,edge}_font_color : string (default=&#39;k&#39; black)</span>
+<span class="sd">        Font color string</span>
+<span class="sd">    {node,edge}_font_weight : string (default=&#39;normal&#39;)</span>
+<span class="sd">        Font weight    </span>
+<span class="sd">    {node,edge}_font_family : string (default=&#39;sans-serif&#39;)</span>
+<span class="sd">        Font family</span>
+<span class="sd">    node_bbox : Matplotlib bbox, (default is Matplotlib&#39;s ax.text default)</span>
+<span class="sd">        Specify text box properties (e.g. shape, color etc.) for node labels.</span>
+<span class="sd">    edge_bbox : Matplotlib bbox, optional</span>
+<span class="sd">        Specify text box properties (e.g. shape, color etc.) for edge labels.</span>
+<span class="sd">        Default is {boxstyle=&#39;round&#39;, ec=(1.0, 1.0, 1.0), fc=(1.0, 1.0, 1.0)}.</span>
+<span class="sd">    {node,edge}_horizontalalignment : string (default=&#39;center&#39;)</span>
+<span class="sd">        Horizontal alignment {&#39;center&#39;, &#39;right&#39;, &#39;left&#39;}    </span>
+<span class="sd">    {node,edge}_verticalalignment : string (default=&#39;center&#39;)</span>
+<span class="sd">        Vertical alignment {&#39;center&#39;, &#39;top&#39;, &#39;bottom&#39;, &#39;baseline&#39;, &#39;center_baseline&#39;}</span>
+<span class="sd">    {node,edge}_clip_on : bool (default=True)</span>
+<span class="sd">        Turn on clipping of node labels at axis boundaries</span>
+<span class="sd">    margins : float or 2-tuple, optional</span>
+<span class="sd">        Sets the padding for axis autoscaling. Increase margin to prevent</span>
+<span class="sd">        clipping for nodes that are near the edges of an image. Values should</span>
+<span class="sd">        be in the range ``[0, 1]``. See :meth:`matplotlib.axes.Axes.margins`</span>
+<span class="sd">        for details. The default is `None`, which uses the Matplotlib default.</span>
+<span class="sd">    min_source_margin : int (default=0)</span>
+<span class="sd">        The minimum margin (gap) at the begining of the edge at the source.    </span>
+<span class="sd">    min_target_margin : int (default=0)</span>
+<span class="sd">        The minimum margin (gap) at the end of the edge at the target.</span>
+<span class="sd">    edge_label_pos : float (default=0.5)</span>
+<span class="sd">        Position of edge label along edge (0=head, 0.5=center, 1=tail)</span>
+<span class="sd">    rotate : bool (deafult=True)</span>
+<span class="sd">        Rotate edge labels to lie parallel to edges</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    networkx.draw</span>
+<span class="sd">    networkx.draw_networkx</span>
+<span class="sd">    networkx.draw_networkx_nodes</span>
+<span class="sd">    networkx.draw_networkx_edges</span>
+<span class="sd">    networkx.draw_networkx_labels</span>
+<span class="sd">    networkx.draw_networkx_edge_labels</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node_shape_options</span> <span class="o">=</span> <span class="s1">&#39;os^&gt;v&lt;dph8&#39;</span>
+    <span class="n">edge_style_options</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;-.&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;solid&#39;</span><span class="p">,</span> <span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="s1">&#39;dotted&#39;</span><span class="p">,</span> <span class="s1">&#39;dashdot&#39;</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">kamada_kawai_layout</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">nodelist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">nodelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">edgelist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">edgelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+
+    <span class="n">legend_handles</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># draw nodes for each shape</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_shape</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">node_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_shape</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">nodelist</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">node_shape</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">node_shape_options</span><span class="p">)):</span> <span class="c1"># plot for each shape without legend</span>
+        <span class="n">node_shape_mapper</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># plot for each shape with legend</span>
+        <span class="k">if</span> <span class="n">node_shape_mapper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_shape_mapper</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">node_shape</span><span class="p">)),</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">node_shape_options</span><span class="p">)))</span>
+        <span class="n">node_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_shape_mapper</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">node_shape</span><span class="p">]</span>
+        
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">node_vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">node_color</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node_vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">node_color</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">shape_class</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">node_shape</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_shape</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">shape_class</span><span class="p">]</span>
+        <span class="n">nodelist_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">nodelist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_size</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">node_size_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_size</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node_size_tmp</span> <span class="o">=</span> <span class="n">node_size</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">node_color_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_color</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node_color_tmp</span> <span class="o">=</span> <span class="n">node_color</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">border_linewidths</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">border_linewidths_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">border_linewidths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">border_linewidths_tmp</span> <span class="o">=</span> <span class="n">border_linewidths</span>
+        <span class="k">if</span> <span class="n">bordercolors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bordercolors_tmp</span> <span class="o">=</span> <span class="n">bordercolors</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bordercolors</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bordercolors</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">bordercolors_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">bordercolors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bordercolors_tmp</span> <span class="o">=</span> <span class="n">bordercolors</span>
+
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist_tmp</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="n">node_size_tmp</span><span class="p">,</span>                    
+                               <span class="n">node_color</span><span class="o">=</span><span class="n">node_color_tmp</span><span class="p">,</span> <span class="n">node_shape</span><span class="o">=</span><span class="n">shape_class</span><span class="p">,</span>
+                               <span class="n">alpha</span><span class="o">=</span><span class="n">node_alpha</span><span class="p">,</span> <span class="c1"># MAYBE CHANGE TO ALPHA BY NODE?</span>
+                               <span class="n">cmap</span><span class="o">=</span><span class="n">node_cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">node_vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">node_vmax</span><span class="p">,</span>
+                               <span class="n">linewidths</span><span class="o">=</span><span class="n">border_linewidths_tmp</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="n">bordercolors_tmp</span><span class="p">,</span>
+                               <span class="n">margins</span><span class="o">=</span><span class="n">margins</span><span class="p">,</span>
+                               <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">node_shape_mapper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">class_label</span><span class="p">,</span> <span class="n">class_shape</span> <span class="ow">in</span> <span class="n">node_shape_mapper</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">legend_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">class_shape</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                                         <span class="n">label</span><span class="o">=</span><span class="n">class_label</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                         <span class="n">markerfacecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+
+    <span class="c1"># draw edges for each style</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_style</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">edge_style</span> <span class="o">=</span> <span class="p">[</span><span class="n">edge_style</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">edgelist</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">edge_style</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">edge_style_options</span><span class="p">)):</span> <span class="c1"># plot for each style without legend</span>
+        <span class="n">edge_style_mapper</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># plot for each style with legend</span>
+        <span class="k">if</span> <span class="n">edge_style_mapper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">edge_style_mapper</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">edge_style</span><span class="p">)),</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">edge_style_options</span><span class="p">)))</span> 
+        <span class="n">edge_style</span> <span class="o">=</span> <span class="p">[</span><span class="n">edge_style_mapper</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">edge_style</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">edge_vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">edge_vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">edge_color</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">edge_vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">edge_vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">edge_color</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">edge_class</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">edge_style</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">edge_style</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">edge_class</span><span class="p">]</span>
+        <span class="n">edgelist_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">edgelist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_width</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">edge_width_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">edge_width</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edge_width_tmp</span> <span class="o">=</span> <span class="n">edge_width</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">edge_color_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">edge_color</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edge_color_tmp</span> <span class="o">=</span> <span class="n">edge_color</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">edgelist_tmp</span><span class="p">,</span> <span class="c1"># None, </span>
+                               <span class="n">width</span><span class="o">=</span><span class="n">edge_width_tmp</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="n">edge_color_tmp</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">edge_class</span><span class="p">,</span>
+                               <span class="n">alpha</span><span class="o">=</span><span class="n">edge_alpha</span><span class="p">,</span>
+                               <span class="n">edge_cmap</span><span class="o">=</span><span class="n">edge_cmap</span><span class="p">,</span> <span class="n">edge_vmin</span><span class="o">=</span><span class="n">edge_vmin</span><span class="p">,</span> <span class="n">edge_vmax</span><span class="o">=</span><span class="n">edge_vmax</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                               <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> 
+                               <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist</span><span class="p">,</span> 
+                               <span class="n">node_shape</span><span class="o">=</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="c1"># node_shape, # &#39;o&#39;,  </span>
+                               <span class="n">min_source_margin</span><span class="o">=</span><span class="n">min_source_margin</span><span class="p">,</span> <span class="n">min_target_margin</span><span class="o">=</span><span class="n">min_target_margin</span><span class="p">,</span>
+                               <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">edge_style_mapper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">class_label</span><span class="p">,</span> <span class="n">class_style</span> <span class="ow">in</span> <span class="n">edge_style_mapper</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">legend_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                                         <span class="n">label</span><span class="o">=</span><span class="n">class_label</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">class_style</span><span class="p">))</span>
+    
+
+    <span class="k">if</span> <span class="n">with_node_labels</span><span class="p">:</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">node_font_size</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="n">node_font_color</span><span class="p">,</span> 
+                                <span class="n">font_family</span><span class="o">=</span><span class="n">node_font_family</span><span class="p">,</span> <span class="n">font_weight</span><span class="o">=</span><span class="n">node_font_weight</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">node_label_alpha</span><span class="p">,</span> 
+                                <span class="n">bbox</span><span class="o">=</span><span class="n">node_bbox</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="n">node_horizontalalignment</span><span class="p">,</span> 
+                                <span class="n">verticalalignment</span><span class="o">=</span><span class="n">node_verticalalignment</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="n">node_clip_on</span><span class="p">,</span> 
+                                <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">with_edge_labels</span><span class="p">:</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edge_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="n">edge_labels</span><span class="p">,</span> <span class="n">label_pos</span><span class="o">=</span><span class="n">edge_label_pos</span><span class="p">,</span> 
+                          <span class="n">font_size</span><span class="o">=</span><span class="n">edge_font_size</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="n">edge_font_color</span><span class="p">,</span> 
+                          <span class="n">font_family</span><span class="o">=</span><span class="n">edge_font_family</span><span class="p">,</span> <span class="n">font_weight</span><span class="o">=</span><span class="n">edge_font_weight</span><span class="p">,</span> <span class="c1"># &#39;normal&#39;, </span>
+                          <span class="n">alpha</span><span class="o">=</span><span class="n">edge_label_alpha</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">edge_bbox</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="n">edge_horizontalalignment</span><span class="p">,</span>
+                          <span class="n">verticalalignment</span><span class="o">=</span><span class="n">edge_verticalalignment</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="n">rotate</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="n">edge_clip_on</span><span class="p">,</span>
+                         <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">legend_handles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend_handles</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ax</span></div>
+
+     
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023-2024, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

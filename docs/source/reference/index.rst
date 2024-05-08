@@ -45,7 +45,11 @@ API definition
 
   - :py:mod:`netflow.methods.classes`
 
-  - :py:mod:`netflow.methods.metrics`    
+  - :py:mod:`netflow.methods.metrics`
+
+* :py:mod:`netflow.probe`
+
+  - :py:mod:`netflow.probe.visualization`
 
 ..
    add :hidden: below to hide in main section and only
@@ -68,10 +72,11 @@ API definition
    To include them in the main page, include them in the previous
    toctree and remove  :hidden:
    
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :titlesonly:
+..
+   toctree::
+   .:maxdepth: 1
+   .:hidden:
+   .:titlesonly:
       
    netflow.metrics <generated/netflow.metrics>
    netflow.classes <generated/netflow.classes>
@@ -80,8 +85,9 @@ API definition
    netflow.checks <generated/netflow.checks>
    netflow.app <generated/netflow.app>
    netflow.keepers <generated/netflow.keepers>
-   netflow.pose <generated/netflow.pose>
+   netflow.pose <generated/netflow.pose>   
    netflow.methods <generated/netflow.methods>
+   netflow.probe <generated/netflow.probe>
 
 
 Indices and tables

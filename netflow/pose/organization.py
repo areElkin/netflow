@@ -939,6 +939,7 @@ class TDA:
             if the i-th segment is not the trunk. Otherwise, the i-th entry is a list of indices
             of the closest cell in each other (non-trunk) segment to the trunk root. 
         """
+
         # distances = distances if not isinstance(self.distances, pd.DataFrame) else distances.values
         
         indices_all = np.arange(self.distances.shape[0], dtype=int)
@@ -955,7 +956,9 @@ class TDA:
         #     tip_0 = np.argmax(self.distances[0])
         # else:
         #     tip_0 = np.argmax(self.distances[self.root])
-        tip_0 = np.argmax(self.distances[self.root])        
+        tip_0 = np.argmax(self.distances[self.root])
+        # tip_0 = self.root
+        # logger.msg(f"*** UPDATED TIP_0 ***")
         
         # get tip of other end (farthest from tip_0)
         tips_all = np.array([tip_0, np.argmax(self.distances[tip_0])])
@@ -1083,7 +1086,7 @@ class TDA:
                 continue
             third_tip = np.argmax(dseg)
 
-            # logger.warning(f"iseg = {iseg} made it to line 658 and 666")
+
             if third_maximizer is not None:
                 logger.warning(f"TODO: THIRD MAXIMIZER IS NOT NONE... IS THIS CORRECT???")
                 # find a fourth point that has maximal distance to all three

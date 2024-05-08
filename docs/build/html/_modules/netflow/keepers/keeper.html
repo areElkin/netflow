@@ -137,8 +137,8 @@
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -146,6 +146,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -241,8 +248,8 @@ document.write(`
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -250,6 +257,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -359,11 +373,17 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">.._utils</span> <span class="kn">import</span> <span class="n">_docstring_parameter</span><span class="p">,</span> <span class="n">_desc_distance</span><span class="p">,</span> <span class="n">_desc_data_distance</span>
-<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">checks</span>
+<span class="kn">from</span> <span class="nn">.._utils</span> <span class="kn">import</span> <span class="n">_docstring_parameter</span><span class="p">,</span> <span class="n">_desc_distance</span><span class="p">,</span> \
+    <span class="n">_desc_data_distance</span><span class="p">,</span> <span class="n">load_from_file</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">unstack_triu_</span>
+<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span><span class="p">,</span> <span class="n">set_verbose</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="DataKeeper"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper">[docs]</a><span class="k">class</span> <span class="nc">DataKeeper</span><span class="p">:</span>
@@ -437,7 +457,11 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">cur_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cur_data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cur_data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unrecognized type for data, must be one of [pandas.DataFrame, numpy.ndarray, dict].&quot;</span><span class="p">)</span>            </div>
 
 
 <div class="viewcode-block" id="DataKeeper.__getitem__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
@@ -464,6 +488,23 @@ document.write(`
     <span class="k">def</span> <span class="nf">observation_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Labels for each observation. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span>
+
+
+<div class="viewcode-block" id="DataKeeper.observation_index"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.observation_index">[docs]</a>    <span class="k">def</span> <span class="nf">observation_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation_label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return index of observation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observation_label : `str`</span>
+<span class="sd">            The observation label.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        observation_index : `int`</span>
+<span class="sd">            Index of observation in list of observation labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">observation_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">observation_label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">observation_index</span></div>
 
 
     <span class="c1"># @observation_labels.setter</span>
@@ -548,12 +589,41 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># np.ndarray</span>
             <span class="n">feature_labels</span> <span class="o">=</span> <span class="kc">None</span>        
 
+        <span class="n">checks</span><span class="o">.</span><span class="n">check_matrix_no_nan</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">checks</span><span class="o">.</span><span class="n">check_matrix_nonnegative</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_features_labels</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature_labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_features</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> features added to keeper.&quot;</span><span class="p">)</span></div></div>
-    
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> features added to keeper.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataKeeper.subset"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a new instance of DataKeeper restricted to subset of observations</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observations : `list`, </span>
+<span class="sd">            List of observations to include in the subset.</span>
+<span class="sd">            This is treated differently depending on the type of observation labels :</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `List` [`str`], ``observations`` can be of the form:</span>
+<span class="sd">        </span>
+<span class="sd">              * `List` [`str`], to reference observations by their `str` label or;</span>
+<span class="sd">              * `List` [`int`], to reference observations by their location index.</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `None` or `List` [`int`], ``observations`` must </span>
+<span class="sd">              be of the form `List` [`int`], to reference observations by their location index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data_subset : `DataKeeper`</span>
+<span class="sd">            A DataKeeper object restricted to the selected observations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_subset</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="n">observations</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">data_subset</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">observations</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_subset</span>    </div></div>
             
 
 <div class="viewcode-block" id="DataView"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView">[docs]</a><span class="k">class</span> <span class="nc">DataView</span><span class="p">:</span>
@@ -579,7 +649,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">num_observations</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_feature_labels</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">features_labels</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_features</span> <span class="o">=</span> <span class="n">dkeeper</span><span class="o">.</span><span class="n">num_features</span><span class="p">[</span><span class="n">label</span><span class="p">]</span></div>
-
+        
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -641,7 +711,7 @@ document.write(`
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        data : `numpy.ndarray`, (``len(observations)``, ``len(features)``)</span>
+<span class="sd">        data : `pandas.DataFrame`, (``len(observations)``, ``len(features)``)</span>
 <span class="sd">            The data subset where the :math:`ij^{th}` entry is the value of the</span>
 <span class="sd">            :math:`i^{th}` feature in ``features`` for the  :math:`j^{th}`</span>
 <span class="sd">            observation in ``observations``.</span>
@@ -650,17 +720,74 @@ document.write(`
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either observations or features must be provided.&quot;</span><span class="p">)</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
-        <span class="k">if</span> <span class="n">observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
-                <span class="n">observations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations</span><span class="p">]</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">observations</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span>            
+        <span class="c1"># if observations is not None:</span>
+        <span class="c1">#     if isinstance(observations[0], str):  # convert to location index</span>
+        <span class="c1">#         observations = [self._observation_labels.index(k) for k in observations]</span>
+        <span class="c1"># data = data[:, observations]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
+            <span class="n">observations_ix</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">observations_ix</span> <span class="o">=</span> <span class="n">observations</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">observations_ix</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
-                <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_feature_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">features</span><span class="p">]</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">features</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_labels</span>
+        <span class="c1"># if features is not None:</span>
+        <span class="c1">#     if isinstance(features[0], str):  # convert to location index</span>
+        <span class="c1">#         features = [self._feature_labels.index(k) for k in features]</span>
+        <span class="c1">#     data = data[features, :]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
+            <span class="n">features_ix</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_feature_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">features</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">features_ix</span> <span class="o">=</span> <span class="n">features</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">features_ix</span><span class="p">,</span> <span class="p">:]</span>
 
-        <span class="k">return</span> <span class="n">data</span></div></div>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">observations</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">features</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataView.observation_index"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.observation_index">[docs]</a>    <span class="k">def</span> <span class="nf">observation_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation_label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return index of observation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observation_label : `str`</span>
+<span class="sd">            The observation label.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        observation_index : `int`</span>
+<span class="sd">            Index of observation in list of observation labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">observation_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">observation_label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">observation_index</span></div>
+
+
+<div class="viewcode-block" id="DataView.feature_index"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.feature_index">[docs]</a>    <span class="k">def</span> <span class="nf">feature_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature_label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return index of feature.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        feature_label : `str`</span>
+<span class="sd">            The feature label.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        feature_index : `int`</span>
+<span class="sd">            Index of feature in list of feature labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">feature_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">feature_label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">feature_index</span></div>
+
+
+<div class="viewcode-block" id="DataView.to_frame"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.to_frame">[docs]</a>    <span class="k">def</span> <span class="nf">to_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return data as a pandas DataFrame &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                          <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">,</span>
+                          <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+    
 
         
 <div class="viewcode-block" id="DistanceKeeper"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper">[docs]</a><span class="k">class</span> <span class="nc">DistanceKeeper</span><span class="p">:</span>
@@ -733,7 +860,11 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;distance&#39;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">cur_distance</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cur_distance</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cur_distance</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unrecognized type for data, must be one of [pandas.DataFrame, numpy.ndarray, dict].&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DistanceKeeper.__getitem__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
@@ -803,9 +934,80 @@ document.write(`
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set observation labels.&quot;</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
+
+        <span class="n">checks</span><span class="o">.</span><span class="n">check_matrix_no_nan</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">checks</span><span class="o">.</span><span class="n">check_distance_matrix</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distance </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> between </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> observations added to keeper.&quot;</span><span class="p">)</span></div></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distance </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> between </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> observations added to keeper.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DistanceKeeper.add_stacked_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.add_stacked_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_stacked_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a symmetric distance from stacked Series to the keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : `pandas.Series`</span>
+<span class="sd">            The stacked distances of size (num_observations * (num_observations - 1) / 2,)</span>
+<span class="sd">            with a 2-multi-index of the pairwise observation labels.</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the input.</span>
+<span class="sd">        diag : `float`</span>
+<span class="sd">            Value used on diagonal. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check that label is not already in the keeper</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dubplicate label detected, </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> already exists in the keeper.&quot;</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">unstack_triu_</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="n">diag</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+        
+
+<div class="viewcode-block" id="DistanceKeeper.observation_index"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.observation_index">[docs]</a>    <span class="k">def</span> <span class="nf">observation_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation_label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return index of observation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observation_label : `str`</span>
+<span class="sd">            The observation label.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        observation_index : `int`</span>
+<span class="sd">            Index of observation in list of observation labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">observation_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">observation_label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">observation_index</span></div>
+
+
+<div class="viewcode-block" id="DistanceKeeper.subset"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a new instance of DistanceKeeper restricted to subset of observations</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observations : `list`, </span>
+<span class="sd">            List of observations to include in the subset.</span>
+<span class="sd">            This is treated differently depending on the type of observation labels :</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `List` [`str`], ``observations`` can be of the form:</span>
+<span class="sd">        </span>
+<span class="sd">              * `List` [`str`], to reference observations by their `str` label or;</span>
+<span class="sd">              * `List` [`int`], to reference observations by their location index.</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `None` or `List` [`int`], ``observations`` must </span>
+<span class="sd">              be of the form `List` [`int`], to reference observations by their location index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        distance_subset : `DistanceKeeper`</span>
+<span class="sd">            A DistnaceKeeper object restricted to the selected observations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">distance_subset</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="n">observations</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">distance_subset</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">observations</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">distance_subset</span></div></div>
+
 
 
 <div class="viewcode-block" id="DistanceView"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView">[docs]</a><span class="k">class</span> <span class="nc">DistanceView</span><span class="p">:</span>
@@ -883,7 +1085,7 @@ document.write(`
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        distance : `numpy.ndarray`, (``len(observations_a)``, ``len(observations_b)``)</span>
+<span class="sd">        distance : `pandas.DataFrame`, (``len(observations_a)``, ``len(observations_b)``)</span>
 <span class="sd">            The sub-matrix of distances where the :math:`ij^{th}` entry is the distance</span>
 <span class="sd">            between the :math:`i^{th}` observation in ``observations_a`` and the</span>
 <span class="sd">            :math:`j^{th}` observation in ``observations_b``.</span>
@@ -892,18 +1094,130 @@ document.write(`
         <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observations_a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
-                <span class="n">observations_a</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations_a</span><span class="p">]</span>
+            <span class="n">observations_a_ix</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations_a</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">observations_a_ix</span> <span class="o">=</span> <span class="n">observations_a</span>
 
         <span class="k">if</span> <span class="n">observations_b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">observations_b</span> <span class="o">=</span> <span class="n">observations_a</span>
+            <span class="n">observations_b_ix</span> <span class="o">=</span> <span class="n">observations_a_ix</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observations_b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># convert to location index</span>
-                <span class="n">observations_b</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations_b</span><span class="p">]</span>
+            <span class="n">observations_b_ix</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">observations_b</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">observations_b_ix</span> <span class="o">=</span> <span class="n">observations_b</span>
 
-        <span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">observations_a</span><span class="p">,</span> <span class="n">observations_b</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="n">distance</span></div></div>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">observations_a_ix</span><span class="p">,</span> <span class="n">observations_b_ix</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">distance</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">observations_a</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">observations_b</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DistanceView.observation_index"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.observation_index">[docs]</a>    <span class="k">def</span> <span class="nf">observation_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation_label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return index of observation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observation_label : `str`</span>
+<span class="sd">            The observation label.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        observation_index : `int`</span>
+<span class="sd">            Index of observation in list of observation labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">observation_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">observation_label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">observation_index</span></div>
+
+
+<div class="viewcode-block" id="DistanceView.to_frame"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.to_frame">[docs]</a>    <span class="k">def</span> <span class="nf">to_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return data as a pandas DataFrame &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                          <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">,</span>
+                          <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
         
 
-        
+<div class="viewcode-block" id="GraphKeeper"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper">[docs]</a><span class="k">class</span> <span class="nc">GraphKeeper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to store and handle multiple netowrks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graphs : {`networkx.Graph`, `dict` [`str&#39;, `networkx.Graph`]}</span>
+<span class="sd">        One or multiple networks.</span>
+
+<span class="sd">        The network(s) may be provided in multiple ways:</span>
+
+<span class="sd">        - `networkx.Graph` : A single network.</span>
+<span class="sd">          </span>
+<span class="sd">          * The network is placed in a `dict` with default label of the form</span>
+<span class="sd">            ``{&#39;graph&#39; : graphs}``.</span>
+<span class="sd">          * To use a customized label for the network, provide the network</span>
+<span class="sd">            as a `dict`, shown next.</span>
+<span class="sd">        - `dict` [`str`, `networkx.Graph`] : A single or multiple networks may</span>
+<span class="sd">          be provided as the value(s) of a `dict` keyed by a `str` that serves as</span>
+<span class="sd">          the netwwork descriptor or label for each input of the form</span>
+<span class="sd">          ``{&#39;graph_label&#39; : `networkx.Graph`}``.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The graph label is also set to the graph&#39;s name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GraphKeeper.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graphs</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="n">graphs</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graphs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">cur_graph</span> <span class="ow">in</span> <span class="n">graphs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="n">cur_graph</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">graphs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unrecognized type for graphs, must be one of [networkx.Graph or dict].&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GraphKeeper.__getitem__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="GraphKeeper.__contains__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__contains__">[docs]</a>    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span></div>
+
+
+<div class="viewcode-block" id="GraphKeeper.__iter__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">graph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">graph</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">graphs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A dictionary of all the graphs. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span>
+
+
+<div class="viewcode-block" id="GraphKeeper.add_graph"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.add_graph">[docs]</a>    <span class="k">def</span> <span class="nf">add_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a network to the keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        graph : `networkx.Graph`</span>
+<span class="sd">            The network.</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the network.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check that the label is not already in the keeper</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dupblicate label detected, </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> already exists in the keeper.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check that the graph is a networkx.Graph instance</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized type, graph must be networkx Graph.&quot;</span><span class="p">)</span>
+
+        <span class="n">graph</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">label</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">graph</span></div></div>
+
+    
 <div class="viewcode-block" id="Keeper"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper">[docs]</a><span class="k">class</span> <span class="nc">Keeper</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to store and handle data, distances and similarities between data points</span>
 <span class="sd">    (or observations), and miscellaneous related results.</span>
@@ -983,7 +1297,22 @@ document.write(`
 <span class="sd">    similarities : {`numpy.ndarray`, `pandas.DataFrame`, `dict` [`str`, `numpy.ndarray`], `dict` [`str`, `pandas.DataFrame`]}</span>
 <span class="sd">        One or multiple symmetric similarit(y/ies) between observations, where each similarity</span>
 <span class="sd">        matrix is size (num_observations, num_observations).</span>
-<span class="sd">        Similarit(y/ies) may be provided in multiple ways, analogous to ``distances``.:</span>
+<span class="sd">        Similarit(y/ies) may be provided in multiple ways, analogous to ``distances``.</span>
+<span class="sd">    graphs : : {`networkx.Graph`, `dict` [`str&#39;, `networkx.Graph`]}</span>
+<span class="sd">        One or multiple networks.</span>
+
+<span class="sd">        The network(s) may be provided in multiple ways:</span>
+
+<span class="sd">        - `networkx.Graph` : A single network.</span>
+<span class="sd">          </span>
+<span class="sd">          * The network is placed in a `dict` with default label of the form</span>
+<span class="sd">            ``{&#39;graph&#39; : graphs}``.</span>
+<span class="sd">          * To use a customized label for the network, provide the network</span>
+<span class="sd">            as a `dict`, shown next.</span>
+<span class="sd">        - `dict` [`str`, `networkx.Graph`] : A single or multiple networks may</span>
+<span class="sd">          be provided as the value(s) of a `dict` keyed by a `str` that serves as</span>
+<span class="sd">          the netwwork descriptor or label for each input of the form</span>
+<span class="sd">          ``{&#39;graph_label&#39; : `networkx.Graph`}``.</span>
 <span class="sd">    misc : `dict`</span>
 <span class="sd">        Miscellaneous data or results.</span>
 <span class="sd">    observation_labels : `list` [`str`], optional</span>
@@ -1018,11 +1347,14 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     
 <div class="viewcode-block" id="Keeper.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">similarities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">misc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">graphs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">misc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">outdir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">set_verbose</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">similarities</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one of data, distances, or similarities must be provided.&quot;</span><span class="p">)</span>
+        <span class="c1"># if (data is None) and (distances is None) and (similarities is None):</span>
+        <span class="c1">#     raise ValueError(&quot;At least one of data, distances, or similarities must be provided.&quot;)</span>
         
         <span class="c1"># check if observation labels given in data, distances or similarities:</span>
         <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1051,18 +1383,23 @@ document.write(`
                     
                     
         <span class="c1"># if no observation labels have been found at this point, set to default</span>
-        <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">num_observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_observations</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">observation_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">num_observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_observations</span><span class="p">,</span> \
+                <span class="s2">&quot;Inconsistent number of observation labels, length of observation_labels must equal num_observations&quot;</span>
             
         <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">observation_labels</span>
         <span class="c1"># self._num_observations = None if self._observation_labels is None else len(self._observation_labels)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="n">num_observations</span> <span class="c1"># len(self._observation_labels)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">distances</span><span class="p">,</span>
                                          <span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">similarities</span><span class="p">,</span>
                                             <span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span> <span class="o">=</span> <span class="n">GraphKeeper</span><span class="p">(</span><span class="n">graphs</span><span class="o">=</span><span class="n">graphs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_misc</span> <span class="o">=</span> <span class="n">misc</span> <span class="k">if</span> <span class="n">misc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span>
@@ -1073,7 +1410,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">=</span> <span class="n">outdir</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="p">,</span> <span class="n">Path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating directory </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created directory </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Keeper._check_num_observations"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper._check_num_observations">[docs]</a>    <span class="k">def</span> <span class="nf">_check_num_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1177,6 +1514,12 @@ document.write(`
 
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">graphs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; The networks. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span>
+    
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">misc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; The misc data. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_misc</span>
@@ -1201,8 +1544,8 @@ document.write(`
 
         <span class="c1"># return None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span>
-
-
+        
+        
 <div class="viewcode-block" id="Keeper.add_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a feature data set to the data keeper.</span>
 
@@ -1214,7 +1557,21 @@ document.write(`
 <span class="sd">            Reference label describing the data set.        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added data input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added data input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">num_observations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">observation_labels</span>            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">)]</span>
+
+            <span class="c1"># initialize distances and similarities:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Keeper.add_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_distance">[docs]</a>    <span class="k">def</span> <span class="nf">add_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
@@ -1228,7 +1585,50 @@ document.write(`
 <span class="sd">            Reference label describing the distance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added distance input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added distance input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">num_observations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">observation_labels</span>            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">)]</span>
+
+            <span class="c1"># initialize data and similarities</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Keeper.add_stacked_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_stacked_distance">[docs]</a>    <span class="k">def</span> <span class="nf">add_stacked_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a stacked distance array to the distance keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : `pandas.Series`</span>
+<span class="sd">            The stacked distances of size (num_observations * (num_observations - 1) / 2,)</span>
+<span class="sd">            with a 2-multi-index of the pairwise observation labels.</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the distance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="o">.</span><span class="n">add_stacked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added distance input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">num_observations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">observation_labels</span>            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">)]</span>
+
+            <span class="c1"># initialize data and similarities</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Keeper.add_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">add_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
@@ -1242,9 +1642,68 @@ document.write(`
 <span class="sd">            Reference label describing the similarity.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added similarity input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>    </div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added similarity input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">num_observations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">observation_labels</span>            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">)]</span>
+
+            <span class="c1"># initialize data and distances</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span></div>
 
 
+<div class="viewcode-block" id="Keeper.add_stacked_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_stacked_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">add_stacked_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a stacked similarity array to the similarity keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : `pandas.Series`</span>
+<span class="sd">            The stacked similarities of size (num_observations * (num_observations - 1) / 2,)</span>
+<span class="sd">            with a 2-multi-index of the pairwise observation labels.</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the similarity.</span>
+<span class="sd">        diag : `float`</span>
+<span class="sd">            Value used on diagonal. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="o">.</span><span class="n">add_stacked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="n">diag</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added similarity input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">num_observations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">observation_labels</span>            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">)]</span>
+
+            <span class="c1"># initialize data and distances</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Keeper.add_graph"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_graph">[docs]</a>    <span class="k">def</span> <span class="nf">add_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a network to the graph keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        graph : `networkx.Graph`</span>
+<span class="sd">            The network to add.</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing the network.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added graph input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
+
+        
 <div class="viewcode-block" id="Keeper.add_misc"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_misc">[docs]</a>    <span class="k">def</span> <span class="nf">add_misc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Add misc information to be stored.</span>
 
@@ -1260,7 +1719,435 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_misc</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added misc input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added misc input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="Keeper.load_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                  
+                  <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Load data from file into the keeper.</span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">                  </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name: {`str`, `pathlib.Path`} </span>
+<span class="sd">            Input data file name.</span>
+<span class="sd">        label : `str`, (default: &#39;data&#39;)</span>
+<span class="sd">            Reference label describing the data set.        </span>
+<span class="sd">        file_path: {`str` `pathlib.Path`}, optional (default: None)</span>
+<span class="sd">            File path. Empty string by default</span>
+<span class="sd">        file_format: `str`, optional (default: None)</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">            If `None`, ``file_format`` will be inferred from the file extension</span>
+<span class="sd">            in ``file_name``.</span>
+<span class="sd">            Currently, this is ignored.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        dtype</span>
+<span class="sd">            If provided, ensure to convert data type after loaded. </span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.read_csv``.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">load_from_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                              <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.load_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_distance">[docs]</a>    <span class="k">def</span> <span class="nf">load_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Load distance from file into the keeper. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        Assumed that the distance array is stored with the first row and first column as</span>
+<span class="sd">        the index and header, respectively.</span>
+<span class="sd">        </span>
+<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">                  </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name: {`str`, `pathlib.Path`} </span>
+<span class="sd">            Input distance file name.</span>
+<span class="sd">        label : `str`, (default: &#39;distance&#39;)</span>
+<span class="sd">            Reference label describing the data set.        </span>
+<span class="sd">        file_path: {`str` `pathlib.Path`}, optional (default: None)</span>
+<span class="sd">            File path. Empty string by default</span>
+<span class="sd">        file_format: `str`, optional (default: None)</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">            If `None`, ``file_format`` will be inferred from the file extension</span>
+<span class="sd">            in ``file_name``.</span>
+<span class="sd">            Currently, this is ignored.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.read_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">load_from_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                              <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="Keeper.load_stacked_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_stacked_distance">[docs]</a>    <span class="k">def</span> <span class="nf">load_stacked_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                              <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Load distance in stacked form from file, convert to unstacked form and store in the keeper. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion</span>
+<span class="sd">        (excluding self-pairs) and a single column with the pairwise distances.</span>
+<span class="sd">        </span>
+<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">                  </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name: {`str`, `pathlib.Path`} </span>
+<span class="sd">            Input distance file name.</span>
+<span class="sd">        label : `str`, (default: &#39;distance&#39;)</span>
+<span class="sd">            Reference label describing the data set.        </span>
+<span class="sd">        file_path: {`str` `pathlib.Path`}, optional (default: None)</span>
+<span class="sd">            File path. Empty string by default</span>
+<span class="sd">        file_format: `str`, optional (default: None)</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">            If `None`, ``file_format`` will be inferred from the file extension</span>
+<span class="sd">            in ``file_name``.</span>
+<span class="sd">            Currently, this is ignored.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.read_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">load_from_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                              <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="o">.</span><span class="n">add_stacked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.load_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">load_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;similarity&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Load similarity from file into the keeper. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        Assumed that the distance array is stored with the first row and first column as</span>
+<span class="sd">        the index and header, respectively.</span>
+<span class="sd">        </span>
+<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">                  </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name: {`str`, `pathlib.Path`} </span>
+<span class="sd">            Input similarity file name.</span>
+<span class="sd">        label : `str`, (default: &#39;similarity&#39;)</span>
+<span class="sd">            Reference label describing the data set.        </span>
+<span class="sd">        file_path: {`str` `pathlib.Path`}, optional (default: None)</span>
+<span class="sd">            File path. Empty string by default</span>
+<span class="sd">        file_format: `str`, optional (default: None)</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">            If `None`, ``file_format`` will be inferred from the file extension</span>
+<span class="sd">            in ``file_name``.</span>
+<span class="sd">            Currently, this is ignored.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.read_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">load_from_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                              <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_similarity</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.load_stacked_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_stacked_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">load_stacked_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;similarity&#39;</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                                <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Load similarity in stacked form from file, convert to unstacked form and store in the keeper. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion</span>
+<span class="sd">        (excluding self-pairs) and a single column with the pairwise distances.</span>
+<span class="sd">        </span>
+<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">                  </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name: {`str`, `pathlib.Path`} </span>
+<span class="sd">            Input distance file name.</span>
+<span class="sd">        label : `str`, (default: &#39;distance&#39;)</span>
+<span class="sd">            Reference label describing the data set.</span>
+<span class="sd">        diag : `float`</span>
+<span class="sd">            Value used on diagonal. </span>
+<span class="sd">        file_path: {`str` `pathlib.Path`}, optional (default: None)</span>
+<span class="sd">            File path. Empty string by default</span>
+<span class="sd">        file_format: `str`, optional (default: None)</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">            If `None`, ``file_format`` will be inferred from the file extension</span>
+<span class="sd">            in ``file_name``.</span>
+<span class="sd">            Currently, this is ignored.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.read_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">load_from_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                              <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="o">.</span><span class="n">add_stacked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.load_graph"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_graph">[docs]</a>    <span class="k">def</span> <span class="nf">load_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">file_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+                   <span class="n">source</span><span class="o">=</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Load network (edgelist) from file into graph and store in the keeper. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        Currently loads graph from edgelist. Future release will allow different</span>
+<span class="sd">        graph types (e.g., adjacency, graphml).</span>
+<span class="sd">        </span>
+<span class="sd">        Assumed that the edge-list is stored as two columns, where the first row</span>
+<span class="sd">        is labeled as source and target.</span>
+<span class="sd">        </span>
+<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">                  </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name: {`str`, `pathlib.Path`} </span>
+<span class="sd">            Input edge-list file name.</span>
+<span class="sd">        label : `str`, (default: &#39;graph&#39;)</span>
+<span class="sd">            Reference label describing the network.</span>
+<span class="sd">        file_path: {`str` `pathlib.Path`}, optional (default: None)</span>
+<span class="sd">            File path. Empty string by default</span>
+<span class="sd">        file_format: `str`, optional (default: None)</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">            If `None`, ``file_format`` will be inferred from the file extension</span>
+<span class="sd">            in ``file_name``.</span>
+<span class="sd">            Currently, this is ignored.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        source : {`str`, `int`} (default: &#39;source&#39;)</span>
+<span class="sd">            A valid column name (string or integer) for the source nodes</span>
+<span class="sd">            passed to ``networkx.from_pandas_edgelist``.</span>
+<span class="sd">        target : {`str`, `int`} (default: &#39;target&#39;)</span>
+<span class="sd">            A valid column name (string or integer) for the target nodes</span>
+<span class="sd">            passed to ``networkx.from_pandas_edgelist``.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.read_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">E</span> <span class="o">=</span> <span class="n">load_from_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                           <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_edgelist</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.save_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.save_data">[docs]</a>    <span class="k">def</span> <span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Save data to file. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
+<span class="sd">        Future releases will allow for other formats.</span>
+
+<span class="sd">        Data set is saved to the file named &#39;{self.outdir}/data_{label}.{file_format}&#39;.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing which data set to save.</span>
+<span class="sd">        file_format : `str`</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.to_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot store data - outdir was not set.&quot;</span><span class="p">)</span>
+
+        <span class="n">_fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;data_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">_fp</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File already exists, cannot save data to </span><span class="si">{</span><span class="n">_fp</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">_fp</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data set saved to </span><span class="si">{</span><span class="n">df</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.save_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.save_distance">[docs]</a>    <span class="k">def</span> <span class="nf">save_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Save distance to file. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
+<span class="sd">        Future releases will allow for other formats.</span>
+
+<span class="sd">        Distance is saved to the file named &#39;{self.outdir}/distance_{label}.{file_format}&#39;.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing which distance to save.</span>
+<span class="sd">        file_format : `str`</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.to_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot store distance - outdir was not set.&quot;</span><span class="p">)</span>
+
+        <span class="n">_fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;distance_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">_fp</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File already exists, cannot save distance to </span><span class="si">{</span><span class="n">_fp</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">_fp</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distance set saved to </span><span class="si">{</span><span class="n">_fp</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.save_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.save_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">save_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Save similarity to file. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
+<span class="sd">        Future releases will allow for other formats.</span>
+
+<span class="sd">        Similarity is saved to the file named &#39;{self.outdir}/similarity_{label}.{file_format}&#39;.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing which similarity to save.</span>
+<span class="sd">        file_format : `str`</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.to_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot store similarity - outdir was not set.&quot;</span><span class="p">)</span>
+
+        <span class="n">_fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;similarity_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">_fp</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File already exists, cannot save similarity to </span><span class="si">{</span><span class="n">_fp</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">_fp</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Similarities set saved to </span><span class="si">{</span><span class="n">_fp</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.save_misc"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.save_misc">[docs]</a>    <span class="k">def</span> <span class="nf">save_misc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Save misc data to file. </span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
+<span class="sd">        Future releases will allow for other formats.</span>
+
+<span class="sd">        Misc data is saved to the file named &#39;{self.outdir}/misc_{label}.{file_format}&#39;.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Reference label describing which misc data to save.</span>
+<span class="sd">        file_format : `str`</span>
+<span class="sd">            File format. Currently supported file formats: &#39;txt&#39;, &#39;csv&#39;, &#39;tsv&#39;.</span>
+<span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
+<span class="sd">            Delimiter to use.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional key-word arguments passed to ``pandas.to_csv``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot store misc data - outdir was not set.&quot;</span><span class="p">)</span>
+
+        <span class="n">_fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;misc_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">_fp</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File already exists, cannot save misc data to </span><span class="si">{</span><span class="n">_fp</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">_fp</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Misc data set saved to </span><span class="si">{</span><span class="n">_fp</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.observation_index"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.observation_index">[docs]</a>    <span class="k">def</span> <span class="nf">observation_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation_label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return index of observation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observation_label : `str`</span>
+<span class="sd">            The observation label.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        observation_index : `int`</span>
+<span class="sd">            Index of observation in list of observation labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">observation_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">observation_label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">observation_index</span></div>
+
+
+<div class="viewcode-block" id="Keeper.subset"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observations</span><span class="p">,</span> <span class="n">keep_misc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">keep_graphs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">outdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a new instance of Keeper restricted to subset of observations.</span>
+
+<span class="sd">        The default behavior is to not include misc or graphs in the Keeper subset.</span>
+<span class="sd">        This is because there is no check for which observations the misc and graphs</span>
+<span class="sd">        correspond to.</span>
+
+<span class="sd">        Warning: The subset keeper and all data it contains is not a copy.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        observations : `list`</span>
+<span class="sd">            List of observations to include in the subset.</span>
+<span class="sd">            This is treated differently depending on the type of observation labels :</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `List` [`str`], ``observations`` can be of the form:</span>
+<span class="sd">        </span>
+<span class="sd">              * `List` [`str`], to reference observations by their `str` label or;</span>
+<span class="sd">              * `List` [`int`], to reference observations by their location index.</span>
+
+<span class="sd">            - If ``self._observation_labels`` is `None` or `List` [`int`], ``observations`` must </span>
+<span class="sd">              be of the form `List` [`int`], to reference observations by their location index.</span>
+<span class="sd">        keep_misc : `bool`</span>
+<span class="sd">            If True, misc is added to the new Keeper. </span>
+<span class="sd">        keep_graphs : `bool`</span>
+<span class="sd">            If True, the graphs are added to the new Keeper.</span>
+<span class="sd">        outdir : {`None`, `str` `pathlib.Path`}</span>
+<span class="sd">            Global path where any results will be saved. If `None`, no results will be saved.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keeper_subset : `Keeper`</span>
+<span class="sd">            A Keeper object restricted to the selected observations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keeper_subset</span> <span class="o">=</span> <span class="n">Keeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="n">observations</span><span class="p">,</span> <span class="n">outdir</span><span class="o">=</span><span class="n">outdir</span><span class="p">)</span>
+        <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+        <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+        <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_similarities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarities</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">keep_misc</span><span class="p">:</span>
+            <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_misc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span>
+
+        <span class="k">if</span> <span class="n">keep_graphs</span><span class="p">:</span>
+            <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_graphs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span>
+
+        <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span>
+        <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">keeper_subset</span></div></div>
+            
+
 
         
 </pre></div>
@@ -1294,8 +2181,9 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
 
@@ -1325,7 +2213,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2023, The netflow community.
+      © Copyright 2023-2024, The netflow community.
       <br/>
     
   </p>

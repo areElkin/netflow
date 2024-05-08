@@ -137,8 +137,8 @@
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -146,6 +146,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -241,8 +248,8 @@ document.write(`
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -250,6 +257,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -370,6 +384,11 @@ document.write(`
 <span class="sd">A large portion of the code was taken from</span>
 <span class="sd">scanpy.tools._dpt.py and code related to</span>
 <span class="sd">the method :mod:`scanpy.tools._dpt.dpt`.</span>
+
+<span class="sd">Some noted differences made in scanpy implementation :</span>
+
+<span class="sd">  - Add smoothing when computing maximal correlation cutoff</span>
+<span class="sd">  - Include points not identified with any branch after split in the trunk (nonunique).</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span>
@@ -377,33 +396,492 @@ document.write(`
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pptree</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">issparse</span>
+
+<span class="c1"># from importlib import reload</span>
+<span class="c1"># pptree = reload(pptree)</span>
 
 <span class="c1"># import netflow.utils as utl</span>
 <span class="kn">import</span> <span class="nn">netflow.utils</span> <span class="k">as</span> <span class="nn">utl</span>
 <span class="c1"># from importlib import reload</span>
 <span class="c1"># reload(utl)</span>
-<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="c1"># from .._logging import logger, set_verbose ###</span>
+<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span><span class="p">,</span> <span class="n">set_verbose</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="c1"># RE: TODO: ADD OPTION FOR MULTIPLE ROOTS</span>
-<span class="c1">### RE: TODO: ADD OPTION TO SELECT ROOT, IF NOT PROVIDED</span>
 <span class="c1">### RE: TODO: CHECK HOW UNIQUE BRANCHES ARE DETERMINED</span>
 <span class="c1"># RE: TODO: CHECK WHICH TRANSITION MATRIX IS USED AND HOW IT&#39;S DEFINED</span>
 <span class="c1">### RE: TODO: CHECK HOW BRANCHING CONNECTIONS IS DEFINED WHEN THERE IS A TRUNK</span>
-<span class="c1">### RE: TODO: IF GIVE ROOT AS NAME OF DATA POINT (WHEN DISTANCES IS A DATAFRAME), CONVERT IT TO INT</span>
-<span class="c1">### RE: TODO: ADD OPTION FOR SMOOTHING CORR BEFORE FINDING MAX</span>
 <span class="c1"># RE: TODO: IF MAX CORR &lt; THRESH, MAYBE DON&quot;T INCLUDE BRANCH?</span>
 <span class="c1"># RE: TODO: ADD OPTION TO CHANGE ROOT AND UPDATE PSEUDOTIME, SEGS, AND ORDERING? -- this should be for earlier step in pipeline</span>
 <span class="c1"># RE: TODO: SHOULD -1 be included in segs_names_unique?</span>
 
+<div class="viewcode-block" id="TreeNode"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode">[docs]</a><span class="k">class</span> <span class="nc">TreeNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Node of a general tree data structure.</span>
+
+<span class="sd">    Each node is intended to refer to a branch.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name</span>
+<span class="sd">        Reference name of node (branch).</span>
+<span class="sd">    data : </span>
+<span class="sd">        Data associated with the node.</span>
+<span class="sd">        Intended to be a `list` of indices corresponding to the branch members.</span>
+<span class="sd">    children : `list` [`TreeNode`]</span>
+<span class="sd">        List of children `TreeNode` objects.</span>
+<span class="sd">    parent : `TreeNode`</span>
+<span class="sd">        Parent `TreeNode` object.</span>
+<span class="sd">    nonunique : `bool`</span>
+<span class="sd">        Indicate if node (branch) is the trunk.</span>
+<span class="sd">    unidentified : `bool`</span>
+<span class="sd">        Indicate if node (branch) is a set of points that were not identified</span>
+<span class="sd">        with a particular branch after splitting.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TreeNode.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nonunique</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unidentified</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nonunique</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name_string</span> <span class="o">=</span> <span class="s2">&quot; - &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">name_string</span><span class="p">,</span> <span class="s1">&#39;trunk&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_string</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; (n = </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonunique</span> <span class="o">=</span> <span class="n">nonunique</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unidentified</span> <span class="o">=</span> <span class="n">unidentified</span></div>
+
+
+    <span class="c1"># def __repr__(self):</span>
+    <span class="c1">#     return self.name</span>
+
+    
+<div class="viewcode-block" id="TreeNode.is_root"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.is_root">[docs]</a>    <span class="k">def</span> <span class="nf">is_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+        
+<div class="viewcode-block" id="TreeNode.is_leaf"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.is_leaf">[docs]</a>    <span class="k">def</span> <span class="nf">is_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+        
+<div class="viewcode-block" id="TreeNode.depth"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.depth">[docs]</a>    <span class="k">def</span> <span class="nf">depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Depth of current node. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_root</span><span class="p">():</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">depth</span><span class="p">()</span></div>
+
+        
+<div class="viewcode-block" id="TreeNode.add_child"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.add_child">[docs]</a>    <span class="k">def</span> <span class="nf">add_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; add child to node. &quot;&quot;&quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">TreeNode</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unrecognized type, node must be a TreeNode.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TreeNode.contains"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.contains">[docs]</a>    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Check if value is in data. &quot;&quot;&quot;</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">return</span> <span class="n">found</span></div>
+
+
+<div class="viewcode-block" id="TreeNode.disp"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cur_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pptree</span><span class="o">.</span><span class="n">print_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="p">,</span> <span class="s1">&#39;name_string&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">cur_name</span></div></div>
+
+
+<div class="viewcode-block" id="Tree"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree">[docs]</a><span class="k">class</span> <span class="nc">Tree</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tree implemenation as a collection of TreeNode objects.</span>
+
+<span class="sd">    Intended to represent the hierarchical branching.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Tree.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># self.height = 0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Tree.insert"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Insert a node into the Tree.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : `TreeNode`</span>
+<span class="sd">            Node to insert.</span>
+<span class="sd">        index : {`None`, `int`}</span>
+<span class="sd">            Index in list of nodes where the node should be inserted.</span>
+<span class="sd">            (Intended to match current structure for updating segments</span>
+<span class="sd">            until tree structure is fully leveraged (e.g., using tree</span>
+<span class="sd">            leaf nodes when searching for which segment to select).</span>
+
+<span class="sd">            If `None`, the node is appended to the end of the list.</span>
+<span class="sd">        parent : {`None`, `TreeNode`}</span>
+<span class="sd">            Parent node. If `None`, node is set as the root node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">=</span><span class="n">node</span>
+
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span></div>
+            
+
+<div class="viewcode-block" id="Tree.search"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bottom_up</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Search and return index of node in Tree by its name.</span>
+
+<span class="sd">        Assume no nodes at the same depth have the same name.</span>
+<span class="sd">        If more than one node has the same name, return the index</span>
+<span class="sd">        of the deepest node (farthest from root), when</span>
+<span class="sd">        ``bottom_up = True``, otherwise, return the index of the </span>
+<span class="sd">        shallowest (closest to root) node.</span>
+
+<span class="sd">        If no such node is found with the specified name, the</span>
+<span class="sd">        value -1 is returned.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name</span>
+<span class="sd">            Name of node to search for.</span>
+<span class="sd">        bottom_up : `bool`</span>
+<span class="sd">            Indicate if the index of the shallowest or deepest node</span>
+<span class="sd">            should be returned when more than one node has the same</span>
+<span class="sd">            name. It is assumed that no two nodes at the same depth</span>
+<span class="sd">            have the same name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index : `int`</span>
+<span class="sd">            Index of node in the tree. If node is not found, returns -1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[(</span><span class="n">ix</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span><span class="p">())</span> <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">bottom_up</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="c1"># found = False</span>
+        <span class="c1"># for ix, node in enumerate(self.nodes):</span>
+        <span class="c1">#     if node.name == name:</span>
+        <span class="c1">#         found = True</span>
+        <span class="c1">#         break</span>
+        <span class="c1"># index = ix if found else -1</span>
+        
+        <span class="k">return</span> <span class="n">index</span></div>
+
+
+<div class="viewcode-block" id="Tree.search_data"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.search_data">[docs]</a>    <span class="k">def</span> <span class="nf">search_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">bottom_up</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Search and return index of node in Tree with value in node data.</span>
+
+<span class="sd">        If the value is in the data of more than one node, return the index</span>
+<span class="sd">        of the deepest node (farthest from root), when</span>
+<span class="sd">        ``bottom_up = True``, otherwise, return the index of the shallowest </span>
+<span class="sd">        (closest to root) node.</span>
+
+<span class="sd">        If no such node is found with the specified value in its data, the</span>
+<span class="sd">        value -1 is returned.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value</span>
+<span class="sd">            Value in node data to search for.</span>
+<span class="sd">        bottom_up : `bool`</span>
+<span class="sd">            Indicate if the index of the shallowest or deepest node</span>
+<span class="sd">            should be returned when more than one node has the same</span>
+<span class="sd">            name. It is assumed that no two nodes at the same depth</span>
+<span class="sd">            have the same name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index : `int`</span>
+<span class="sd">            Index of node in the tree. If node is not found, returns -1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[(</span><span class="n">ix</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span><span class="p">())</span> <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">bottom_up</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="c1"># found = False</span>
+        <span class="c1"># for ix, node in enumerate(self.nodes):</span>
+        <span class="c1">#     if node.name == name:</span>
+        <span class="c1">#         found = True</span>
+        <span class="c1">#         break</span>
+        <span class="c1"># index = ix if found else -1</span>
+        
+        <span class="k">return</span> <span class="n">index</span></div>
+
+    
+<div class="viewcode-block" id="Tree.get_node"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return node by its index. &quot;&quot;&quot;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">node</span></div>
+
+    
+<div class="viewcode-block" id="Tree.root"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.root">[docs]</a>    <span class="k">def</span> <span class="nf">root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span></div>
+
+
+<div class="viewcode-block" id="Tree.max_depth"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.max_depth">[docs]</a>    <span class="k">def</span> <span class="nf">max_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return max depth of the tree. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">depth</span><span class="p">()</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Tree.all_data"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.all_data">[docs]</a>    <span class="k">def</span> <span class="nf">all_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return sorted set of all data points in all nodes in the tree. &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="Tree.get_leaves"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_leaves">[docs]</a>    <span class="k">def</span> <span class="nf">get_leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return indices of leaf nodes in the tree. &quot;&quot;&quot;</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">ix</span> <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="n">indices</span></div>
+
+
+<div class="viewcode-block" id="Tree.co_branch_indicator"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.co_branch_indicator">[docs]</a>    <span class="k">def</span> <span class="nf">co_branch_indicator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return binary symmetric `pandas.DataFrame` of size (num_data_points, num_data_points)</span>
+<span class="sd">        where the (i,j)-th entry is 1 if the i-th and j-th data points are found in the same node</span>
+<span class="sd">        (i.e., branch) and i is not the same data point as j. Otherwise, if i = j, or if the i-th</span>
+<span class="sd">        and j-th data points are not found in the same node, the (i.j)-th entry is 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">()</span>
+        <span class="n">co_tracker</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data_points</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">obs_a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_points</span><span class="p">):</span>
+            <span class="n">co_tracker</span><span class="p">[</span><span class="n">obs_a</span><span class="p">][</span><span class="n">obs_a</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_data</span><span class="p">(</span><span class="n">obs_a</span><span class="p">))</span>
+            <span class="k">assert</span> <span class="n">node</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">(),</span> <span class="s2">&quot;Expected leaf node.&quot;</span>
+
+            <span class="k">for</span> <span class="n">obs_b</span> <span class="ow">in</span> <span class="n">data_points</span><span class="p">[</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">obs_b</span><span class="p">):</span>
+                    <span class="n">co_tracker</span><span class="p">[</span><span class="n">obs_a</span><span class="p">][</span><span class="n">obs_b</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">co_tracker</span><span class="p">[</span><span class="n">obs_b</span><span class="p">][</span><span class="n">obs_a</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">co_tracker</span><span class="p">[</span><span class="n">obs_a</span><span class="p">][</span><span class="n">obs_b</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">co_tracker</span><span class="p">[</span><span class="n">obs_b</span><span class="p">][</span><span class="n">obs_a</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">co_tracker</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">co_tracker</span><span class="p">)</span>
+        <span class="c1"># ensure symmetric and sorted:</span>
+        <span class="n">co_tracker</span> <span class="o">=</span> <span class="n">co_tracker</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data_points</span><span class="p">,</span> <span class="n">data_points</span><span class="p">]</span> 
+        <span class="k">return</span> <span class="n">co_tracker</span></div></div>
+        
+        
+<div class="viewcode-block" id="_compute_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization._compute_transitions">[docs]</a><span class="k">def</span> <span class="nf">_compute_transitions</span><span class="p">(</span><span class="n">similarity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute transition matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    similarity : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">        Symmetric similarity measure (with 1s on the diagonal).</span>
+<span class="sd">    density_normalize : `bool`</span>
+<span class="sd">        The density rescaling of Coifman and Lafon (2006): Then only the</span>
+<span class="sd">        geometry of the data matters, not the sampled density.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    transitions_asym : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">        Asymmetric Transition matrix.</span>
+<span class="sd">    transitions_sym : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">        Symmetric Transition matrix.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Code copied from `scanpy.neighbors`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+    <span class="c1"># set diagonal to zero:</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    
+    <span class="c1"># density normalization as of Coifman et al. (2005)</span>
+    <span class="c1"># ensures that kernel matrix is independent of sampling density</span>
+    <span class="k">if</span> <span class="n">density_normalize</span><span class="p">:</span>
+        <span class="c1"># q[i] is an estimate for the sampling density at point i</span>
+        <span class="c1"># it&#39;s also the degree of the underlying graph</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">issparse</span><span class="p">(</span><span class="n">W</span><span class="p">):</span>
+            <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">q</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Q</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">q</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">Q</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">W</span>
+
+    <span class="c1"># asym transitions</span>
+    <span class="c1"># z[i] is the row sum of K</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">issparse</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">z</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">transitions_asym</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">@</span> <span class="n">K</span>
+
+    <span class="c1"># sym transitions</span>
+    <span class="c1"># z[i] is the square root of the row sum of K</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">issparse</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">z</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">transitions_sym</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">@</span> <span class="n">K</span> <span class="o">@</span> <span class="n">Z</span>
+
+    <span class="c1"># to compute first eigenvector phi0 if did density normalization (from matlab code):</span>
+    <span class="c1"># D1_ = np.asarray(K.sum(axis=0))</span>
+    <span class="c1"># phi0 = D1_ / np.sqrt(np.power(D1_, 2).sum())  # TODO: check if ever need this to be sparse</span>
+
+    <span class="k">return</span> <span class="n">transitions_asym</span><span class="p">,</span> <span class="n">transitions_sym</span></div>
+
+
+<div class="viewcode-block" id="compute_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.compute_transitions">[docs]</a><span class="k">def</span> <span class="nf">compute_transitions</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute symmetric and asymmetric transition matrices and store in keeper.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    keeper : `netflow.Keeper`</span>
+<span class="sd">        The keeper object.</span>
+<span class="sd">    similarity_key : `str`</span>
+<span class="sd">        Reference key to the `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">        symmetric similarity measure (with 1s on the diagonal) stored in the similarities</span>
+<span class="sd">        in the keeper.</span>
+<span class="sd">    density_normalize : `bool`</span>
+<span class="sd">        The density rescaling of Coifman and Lafon (2006): Then only the</span>
+<span class="sd">        geometry of the data matters, not the sampled density.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Adds the following to the keeper.misc (with 0s on the diagonals):</span>
+<span class="sd">        transitions_asym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            Asymmetric Transition matrix.</span>
+<span class="sd">        transitions_sym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            Symmetric Transition matrix.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Code primarily copied from `scanpy.neighbors`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">similarity</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">similarity_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+    
+    <span class="n">transitions_asym</span><span class="p">,</span> <span class="n">transitions_sym</span> <span class="o">=</span> <span class="n">_compute_transitions</span><span class="p">(</span><span class="n">similarity</span><span class="o">=</span><span class="n">similarity</span><span class="p">,</span>
+                                                             <span class="n">density_normalize</span><span class="o">=</span><span class="n">density_normalize</span><span class="p">)</span>
+
+    <span class="n">asym_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;transitions_asym_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">sym_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;transitions_sym_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="c1"># if label is not None:</span>
+    <span class="c1">#     asym_label = &quot;_&quot;.join([asym_label, label])</span>
+    <span class="c1">#     sym_label = &quot;_&quot;.join([sym_label, label])</span>
+
+    <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">transitions_asym</span><span class="p">,</span> <span class="n">asym_label</span><span class="p">)</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">transitions_sym</span><span class="p">,</span> <span class="n">sym_label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization._dpt_from_augmented_sym_transitions">[docs]</a><span class="k">def</span> <span class="nf">_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Return the diffusion pseudotime metric between observations,</span>
+<span class="sd">    computed from the symmetric transitions.</span>
+
+<span class="sd">    .. Note::</span>
+
+<span class="sd">        - :math:`T` is the symmetric transition matrix</span>
+<span class="sd">        - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`</span>
+<span class="sd">        - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    T : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">        Symmetric transitions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dpt : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">        Pairwise-observation Diffusion pseudotime distances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">utl</span><span class="o">.</span><span class="n">compute_eigen</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="s2">&quot;decrease&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">evals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Largest eigenvalue is expected to be close to 1, found to be </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">evals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">evals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected second largest eigenvalue to be less than 1, found to be </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">evals</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">EVALS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">evals</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">evals</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">evecs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">@</span> <span class="n">EVALS</span> <span class="o">@</span> <span class="n">evecs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">dpt</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dpt</span></div>
+
+
+<div class="viewcode-block" id="dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.dpt_from_augmented_sym_transitions">[docs]</a><span class="k">def</span> <span class="nf">dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the diffusion pseudotime metric between observations,</span>
+<span class="sd">    computed from the symmetric transitions.</span>
+
+<span class="sd">    .. Note::</span>
+
+<span class="sd">        - :math:`T` is the symmetric transition matrix</span>
+<span class="sd">        - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`</span>
+<span class="sd">        - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    key : `str`</span>
+<span class="sd">        Reference ID for the symmetric transitions `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">        stored in ``keeper.misc``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dpt : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">        Pairwise-observation Diffusion pseudotime distances are stored</span>
+<span class="sd">        in keeper.distances[&quot;dpt_from_{key}&quot;].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">dpt</span> <span class="o">=</span> <span class="n">_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="n">dpt</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;dpt_from_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    
 
 <div class="viewcode-block" id="PseudoOrdering"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.PseudoOrdering">[docs]</a><span class="k">class</span> <span class="nc">PseudoOrdering</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Pseudo-ordering of observations (e.g., samples). </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute pseudo-organization transitions and distance from similarity.</span>
+
+<span class="sd">    Pseudo-ordering of observations (e.g., samples). </span>
 
 <span class="sd">    Represent data matrix as a graph of associations (i.e., edges) among data points (i.e., observations or nodes).</span>
 
 <span class="sd">    Results are stored to the keeper as a `dict`.</span>
+
+<span class="sd">    .. Note::</span>
+
+<span class="sd">        Code primarily copied from `scanpy.neighbors`.</span>
+<span class="sd">        Code makes attributes ``._transitions_asym`` and ``._transitions_sym`` available in the object.</span>
+<span class="sd">        Code makes ``transitions_asym`` and ``transitions_sym`` available in similarity keeper.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -413,12 +891,21 @@ document.write(`
 <span class="sd">        The label used to reference the similarity matrix stored in ``keeper.similarities``,</span>
 <span class="sd">        of size (n_observations, n_observations).</span>
 <span class="sd">    label : str</span>
-<span class="sd">        Label used to store resulting organization schema in ``keeper.misc[label]``.</span>
+<span class="sd">        Label used to store resulting organization schema in ``keeper.misc[label]``</span>
+<span class="sd">        and used to store transition matrices in ``keeper.similarities[&quot;transitions_{label}&quot;]``</span>
+<span class="sd">        and ``keeper.similarities[transitions_Psym_{label}&quot;]``.</span>
 <span class="sd">    root : `int`</span>
 <span class="sd">        Index of root obs that pesudo-ordering is computed from (``root &gt; 0``).</span>
+<span class="sd">    density_normalize : `bool`</span>
+<span class="sd">        The density rescaling of Coifman and Lafon (2006): Then only the</span>
+<span class="sd">            geometry of the data matters, not the sampled density.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-<div class="viewcode-block" id="PseudoOrdering.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.PseudoOrdering.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PseudoOrdering.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.PseudoOrdering.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">density_normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">set_verbose</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+            
         <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span> <span class="o">=</span> <span class="n">keeper</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
@@ -430,6 +917,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="c1"># None # convert `_distances` to `similarity` measure.</span>
 
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">density_normalize</span> <span class="o">=</span> <span class="n">density_normalize</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_transitions_asym</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_transitions_sym</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -478,13 +966,16 @@ document.write(`
     <span class="c1">#         self.compute_norm_features()        </span>
 
     <span class="c1">#     if self._method_sigma == &#39;precomputed&#39;:</span>
-    <span class="c1">#         self._similarities = similarity_measure_(self._distances, self._n_neighbors, self._method_sigma, sigmas=self._sigmas, knn=self._knn, indices=self._nn_indices)</span>
+    <span class="c1">#         self._similarities = similarity_measure_(self._distances, self._n_neighbors,</span>
+    <span class="c1">#                                                  self._method_sigma, sigmas=self._sigmas, knn=self._knn,</span>
+    <span class="c1">#                                                  indices=self._nn_indices)</span>
     <span class="c1">#     else:</span>
     <span class="c1">#         # if not yet computed, compute sigmas so computation performed only once and save values</span>
     <span class="c1">#         if (self._sigmas is None) or (self._knn and (self._nn_indices is None)):</span>
     <span class="c1">#             self.compute_sigma_knn()</span>
                 
-    <span class="c1">#         self._similarities = similarity_measure_(self._distances, self._n_neighbors, &#39;precomputed&#39;, sigmas=self._sigmas, knn=self._knn, indices=self._nn_indices)</span>
+    <span class="c1">#         self._similarities = similarity_measure_(self._distances, self._n_neighbors, &#39;precomputed&#39;,</span>
+    <span class="c1">#                                                  sigmas=self._sigmas, knn=self._knn, indices=self._nn_indices)</span>
 
 <div class="viewcode-block" id="PseudoOrdering.compute_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.PseudoOrdering.compute_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">compute_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute transition matrix.</span>
@@ -502,7 +993,7 @@ document.write(`
 <span class="sd">        Makes attributes ``.transitions_sym`` and ``.transitions`` available.</span>
 
 <span class="sd">        Notes</span>
-<span class="sd">        --------</span>
+<span class="sd">        -----</span>
 <span class="sd">        Code copied from `scanpy.neighbors`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -691,20 +1182,36 @@ document.write(`
 <span class="sd">        If a very small branch is detected upon splitting, shift away from</span>
 <span class="sd">        maximum correlation in Kendall tau criterion of [Haghverdi16]_ to</span>
 <span class="sd">        stabilize the splitting.</span>
-<span class="sd">    root : `int`</span>
-<span class="sd">        Index of root obs that pesudo-ordering is computed from (``root &gt; 0``).</span>
+<span class="sd">    root : {`int`, `str`</span>
+<span class="sd">        Root observation from which pesudo-ordering is computed.</span>
+
+<span class="sd">        Options :</span>
+
+<span class="sd">        - `None` : Default row index of smallest distance (off-diagonal) is used as the root.</span>
+<span class="sd">        - `int` : Index of root observation (``root &gt; 0``).</span>
+<span class="sd">        - `str` : Observation label.</span>
 <span class="sd">    smooth_corr : `bool`, default = `False`</span>
 <span class="sd">        If `True`, smooth correlations before identifying cut points for branch splitting.</span>
+<span class="sd">    brute : `bool`</span>
+<span class="sd">        If `True`, data points not associated with any branch upon split are combined with</span>
+<span class="sd">        undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,</span>
+<span class="sd">        not associated with any branch (and assigned branch index -1).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
 <div class="viewcode-block" id="TDA.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TDA.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># distances,</span>
                  <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">choose_largest_segment</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;haghverdi16&#39;</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="c1"># TODO: set root upfront and call _set_pseudotime after distance is computed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span> <span class="o">=</span> <span class="n">keeper</span>
+        <span class="c1"># self.keeper = keeper</span>
+
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">set_verbose</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_observations</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">num_observations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_branch_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">assert</span> <span class="n">min_branch_size</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;As an integer, `min_branch_size` must be greater than 2.&quot;</span>
@@ -717,20 +1224,35 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">flavor</span> <span class="o">=</span> <span class="n">flavor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">allow_kendall_tau_shift</span> <span class="o">=</span> <span class="n">allow_kendall_tau_shift</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pseudotime</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># set root as index of row with largest distance</span>
             <span class="c1"># logger.msg(f&quot;Suggesting root node -- to be implemented....&quot;)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># self.root = np.unravel_index(np.argmin(self.distances, axis=None), self.distances.shape)[0] - includes diagonal of zeros</span>
+            <span class="n">d_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">d_tmp</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="o">*</span><span class="n">d_tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span> <span class="o">=</span> <span class="n">d_tmp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_tmp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span> <span class="n">d_tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Suggested root set as index </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
-
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># self.root = self.distances.observation_index(root)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+            <span class="c1"># self.root = keeper.observation_labels.index(self.root)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">root</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_observations</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected value for root of type int, must be 0 &lt;= root &lt; num_observations.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unexpected type for root, must be `None`, int or str.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># self.root = root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pseudotime</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_pseudotime</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">smooth_corr</span> <span class="o">=</span> <span class="n">smooth_corr</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smooth_corr</span> <span class="o">=</span> <span class="n">smooth_corr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">brute</span> <span class="o">=</span> <span class="n">brute</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">()</span></div>
+        
 
         
 <div class="viewcode-block" id="TDA.detect_branches"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TDA.detect_branches">[docs]</a>    <span class="k">def</span> <span class="nf">detect_branches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_branches</span><span class="p">):</span>
@@ -754,15 +1276,20 @@ document.write(`
 <span class="sd">        </span>
 <span class="sd">          * List of arrays of length (number of segments) where Each entry stores the</span>
 <span class="sd">            indices of the two tip points of each segment.</span>
-<span class="sd">        - segs_undecided :</span>
+<span class="sd">        - segs_undecided : </span>
 <span class="sd">        </span>
 <span class="sd">          * ?</span>
-<span class="sd">        - segs_adjacency :</span>
+<span class="sd">        - segs_adjacency : `list`</span>
 <span class="sd">        </span>
-<span class="sd">          * ?</span>
-<span class="sd">        - segs_connects :</span>
+<span class="sd">          * List of lists of the same length as  ``segs``, , where the i-th entry is a list</span>
+<span class="sd">            with the index of the trunk, if the i-th segment is not the trunk. Otherwise,</span>
+<span class="sd">            the i-th entry is a list with the indices of all other segments beside the trunk. </span>
+<span class="sd">        - segs_connects : `list`</span>
 <span class="sd">        </span>
-<span class="sd">          * ?</span>
+<span class="sd">          * List of lists of the same length as ``segs``, where the i-th entry is a list of</span>
+<span class="sd">            the form [index of data point in the trunk closest to the root of the i-th segment], </span>
+<span class="sd">            if the i-th segment is not the trunk. Otherwise, the i-th entry is a list of indices</span>
+<span class="sd">            of the closest cell in each other (non-trunk) segment to the trunk root. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># distances = distances if not isinstance(self.distances, pd.DataFrame) else distances.values</span>
         
@@ -770,25 +1297,39 @@ document.write(`
         <span class="c1"># branch_hierarchy = [indices_all]  # keep record</span>
         <span class="n">segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">indices_all</span><span class="p">]</span>
 
-        <span class="c1"># get first tip (farthest from root)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">tip_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">tip_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">TreeNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">indices_all</span><span class="p">,</span> <span class="n">nonunique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unidentified</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
+        <span class="c1"># segs_by_index = [[0]*indices_all.shape[0]] # HERE</span>
+
+        <span class="c1"># get first tip (farthest from root)</span>
+        <span class="c1"># if self.root is None:</span>
+        <span class="c1">#     tip_0 = np.argmax(self.distances[0])</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     tip_0 = np.argmax(self.distances[self.root])</span>
+        <span class="n">tip_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">])</span>        
+        
         <span class="c1"># get tip of other end (farthest from tip_0)</span>
         <span class="n">tips_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">tip_0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">tip_0</span><span class="p">])])</span>
+
+        <span class="c1"># net_distance = self.distances[self.root] + self.distances[tip_0]</span>
+        <span class="c1"># tip_1 = np.argmax(net_distance)</span>
+        <span class="c1"># tips_all = np.array([tip_0, tip_1]) ### CHANGED HERE</span>
+        <span class="c1"># tips_all = np.array([self.root, tip_0]) ### CHANGED HERE</span>
+        
         <span class="c1"># branch_tips = [tips_all]  # keep record</span>
         <span class="n">segs_tips</span> <span class="o">=</span> <span class="p">[</span><span class="n">tips_all</span><span class="p">]</span>
-
+        
         <span class="n">segs_connects</span> <span class="o">=</span> <span class="p">[[]]</span>
         <span class="n">segs_undecided</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span>
         <span class="n">segs_adjacency</span> <span class="o">=</span> <span class="p">[[]]</span>
-        <span class="n">segs_terminate_branching</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>  <span class="c1"># RE added - to indicate if segment has already been branched as much as possible </span>
+        <span class="n">segs_terminate_branching</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>  <span class="c1"># RE added - to indicate if segment has already been branched as much as possible</span>
+        <span class="c1"># RE added - to account for points that are not associated with any branch after split</span>
+        <span class="c1"># Note: if brute = True, unidentified points are included in trunk</span>
+        <span class="n">unidentified_points</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>          
         
         <span class="k">for</span> <span class="n">ibranch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_branches</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*ibranch = </span><span class="si">{</span><span class="n">ibranch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span><span class="si">}</span><span class="s2"> segs = </span><span class="si">{</span><span class="n">segs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># logger.warning(f&quot;*{len(segs)} segs = {segs}&quot;)</span>
             <span class="n">iseg</span><span class="p">,</span> <span class="n">tips3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_segment</span><span class="p">(</span><span class="n">segs</span><span class="p">,</span> <span class="n">segs_tips</span><span class="p">,</span> <span class="n">segs_undecided</span><span class="p">,</span> <span class="n">segs_terminate_branching</span><span class="p">)</span>
             <span class="c1"># logger.warning(f&quot;*iseg = {iseg}, tips3 = {tips3}, selected_seg = {segs[iseg]}&quot;)</span>
             <span class="k">if</span> <span class="n">iseg</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
@@ -808,6 +1349,7 @@ document.write(`
                 <span class="n">iseg</span><span class="p">,</span>
                 <span class="n">tips3</span><span class="p">,</span>
                 <span class="n">segs_terminate_branching</span><span class="p">,</span>
+                <span class="n">unidentified_points</span><span class="p">,</span>
             <span class="p">)</span>
             
             <span class="c1"># RE START MODIFIED - added to indicate when segment should not be further branched</span>
@@ -831,9 +1373,9 @@ document.write(`
                     <span class="bp">self</span><span class="o">.</span><span class="n">segs_connects</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">segs_connects</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
                 <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">segs_adjacency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segs_adjacency</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">segs_connects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segs_connects</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segs_connects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segs_connects</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
 
-        <span class="c1"># RE: Add for points that weren&#39;t found in any of the resulting segments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unidentified_points</span> <span class="o">=</span> <span class="n">unidentified_points</span></div>
 
 
 <div class="viewcode-block" id="TDA.select_segment"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TDA.select_segment">[docs]</a>    <span class="k">def</span> <span class="nf">select_segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">segs</span><span class="p">,</span> <span class="n">segs_tips</span><span class="p">,</span> <span class="n">segs_undecided</span><span class="p">,</span> <span class="n">segs_terminate_branching</span><span class="p">):</span>
@@ -844,7 +1386,7 @@ document.write(`
 <span class="sd">        iseg</span>
 <span class="sd">            Index identifying the position within the list of line segments.</span>
 <span class="sd">        tips3</span>
-<span class="sd">            Positions of tips within chosen segment.</span>
+<span class="sd">            Positions of tips within chosen segment (local indices of tips relative to the segment).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">scores_tips</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">),</span> <span class="mi">4</span><span class="p">))</span>
         <span class="n">allindices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
@@ -894,12 +1436,17 @@ document.write(`
 
             <span class="c1"># logger.warning(f&quot;iseg = {iseg} made it to line 658 and 666&quot;)</span>
             <span class="k">if</span> <span class="n">third_maximizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TODO: THIRD MAXIMIZER IS NOT NONE... IS THIS CORRECT???&quot;</span><span class="p">)</span>
                 <span class="c1"># find a fourth point that has maximal distance to all three</span>
                 <span class="n">dseg</span> <span class="o">+=</span> <span class="n">Dseg</span><span class="p">[</span><span class="n">third_tip</span><span class="p">]</span>
                 <span class="n">fourth_tip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dseg</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">fourth_tip</span> <span class="o">!=</span> <span class="n">tips</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">fourth_tip</span> <span class="o">!=</span> <span class="n">third_tip</span><span class="p">:</span>
+                <span class="c1"># should it be &gt;&gt;&gt; if fourth_tip != tips[third_maximizer] and fourth_tip != third_tip: ... and &gt;&gt;&gt; tips[third_maximizer] = fourth_tip ???</span>
+                <span class="k">if</span> <span class="n">fourth_tip</span> <span class="o">!=</span> <span class="n">tips</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">fourth_tip</span> <span class="o">!=</span> <span class="n">third_tip</span><span class="p">:</span> 
+                    <span class="c1"># dseg -= Dseg[tips[1]] # RE CHANGED TO COMPUTE BEFORE UPDATING TIP</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TODO: tip1 changed from </span><span class="si">{</span><span class="n">tips</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">fourth_tip</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
                     <span class="n">tips</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fourth_tip</span>
-                    <span class="n">dseg</span> <span class="o">-=</span> <span class="n">Dseg</span><span class="p">[</span><span class="n">tips</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                    <span class="n">dseg</span> <span class="o">-=</span> <span class="n">Dseg</span><span class="p">[</span><span class="n">tips</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="c1"># OLD WAY COMPUTED AFTER UPDATING TIP --- should it be dseg += Dseg[tips[1]]?</span>
+                    <span class="c1"># dseg = Dseg[tips[0]] + Dseg[tips[1]] # RE ADDED SECOND NEW WAY OPTION:</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">dseg</span> <span class="o">-=</span> <span class="n">Dseg</span><span class="p">[</span><span class="n">third_tip</span><span class="p">]</span>
             <span class="n">tips3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tips</span><span class="p">,</span> <span class="n">third_tip</span><span class="p">)</span>
@@ -945,7 +1492,8 @@ document.write(`
         
 
 <div class="viewcode-block" id="TDA.detect_branching"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TDA.detect_branching">[docs]</a>    <span class="k">def</span> <span class="nf">detect_branching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">segs</span><span class="p">,</span> <span class="n">segs_tips</span><span class="p">,</span> <span class="n">segs_connects</span><span class="p">,</span> <span class="n">segs_undecided</span><span class="p">,</span>
-                         <span class="n">segs_adjacency</span><span class="p">,</span> <span class="n">iseg</span><span class="p">,</span> <span class="n">tips3</span><span class="p">,</span> <span class="n">segs_terminate_branching</span><span class="p">):</span>
+                         <span class="n">segs_adjacency</span><span class="p">,</span> <span class="n">iseg</span><span class="p">,</span> <span class="n">tips3</span><span class="p">,</span> <span class="n">segs_terminate_branching</span><span class="p">,</span>
+                         <span class="n">unidentified_points</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Detect branching on a given segment and update list parameters in place.</span>
 
 <span class="sd">        Parameters</span>
@@ -957,9 +1505,15 @@ document.write(`
 <span class="sd">        iseg</span>
 <span class="sd">            Position of segment under study in segs.</span>
 <span class="sd">        tips3</span>
-<span class="sd">            The three tip points. They form a &#39;triangle&#39; that contains the data.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            The three tip points local index relative to the seg.</span>
+<span class="sd">            They form a &#39;triangle&#39; that contains the data.</span>
+<span class="sd">        unidentified_points : `set`</span>
+<span class="sd">            Points that are not associated with any branch after splitting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
         <span class="n">seg</span> <span class="o">=</span> <span class="n">segs</span><span class="p">[</span><span class="n">iseg</span><span class="p">]</span>
+
+        <span class="n">seg_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">iseg</span><span class="p">,</span> <span class="n">bottom_up</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        
         <span class="n">Dseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="n">seg</span><span class="p">)]</span>
         <span class="c1"># logger.warning(f&quot;*seg = {seg}&quot;)</span>
 
@@ -970,23 +1524,41 @@ document.write(`
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># RE ADDED THIS CONDITION</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No unique branch detected - removed from consideration.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ssegs</span><span class="p">,</span> <span class="n">ssegs_tips</span><span class="p">,</span> <span class="n">ssegs_adjacency</span><span class="p">,</span> <span class="n">ssegs_connects</span><span class="p">,</span> <span class="n">trunk</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="n">ssegs</span><span class="p">,</span> <span class="n">ssegs_tips</span><span class="p">,</span> <span class="n">ssegs_adjacency</span><span class="p">,</span> <span class="n">ssegs_connects</span><span class="p">,</span> <span class="n">trunk</span><span class="p">,</span> <span class="n">unidentified</span> <span class="o">=</span> <span class="n">result</span>
 
             <span class="c1"># map back to global indices</span>
+            <span class="n">unidentified</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="n">unidentified</span><span class="p">]</span> <span class="c1"># record data points not associated with any branch</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;* </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unidentified</span><span class="p">)</span><span class="si">}</span><span class="s2"> unclaimed points.&quot;</span><span class="p">)</span>
+            
             <span class="k">for</span> <span class="n">iseg_new</span><span class="p">,</span> <span class="n">seg_new</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ssegs</span><span class="p">):</span>
                 <span class="n">ssegs</span><span class="p">[</span><span class="n">iseg_new</span><span class="p">]</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="n">seg_new</span><span class="p">]</span>
                 <span class="n">ssegs_tips</span><span class="p">[</span><span class="n">iseg_new</span><span class="p">]</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="n">ssegs_tips</span><span class="p">[</span><span class="n">iseg_new</span><span class="p">]]</span>
-                <span class="n">ssegs_connects</span><span class="p">[</span><span class="n">iseg_new</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="n">ssegs_connects</span><span class="p">[</span><span class="n">iseg_new</span><span class="p">]])</span>            
+                <span class="n">ssegs_connects</span><span class="p">[</span><span class="n">iseg_new</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="n">ssegs_connects</span><span class="p">[</span><span class="n">iseg_new</span><span class="p">]])</span>
 
+            <span class="c1"># RE ADDED - update unidentified points</span>
+            <span class="n">unidentified_points</span> <span class="o">=</span> <span class="n">unidentified_points</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">unidentified</span><span class="p">)</span>
+            
             <span class="c1"># remove previous segment</span>
             <span class="n">segs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">iseg</span><span class="p">)</span>
             <span class="n">segs_tips</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">iseg</span><span class="p">)</span>
 
             <span class="c1"># insert trunk/undecided_cells at same position</span>
+            <span class="n">cur_tree_node</span> <span class="o">=</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">iseg</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ssegs</span><span class="p">[</span><span class="n">trunk</span><span class="p">],</span>
+                                     <span class="n">parent</span><span class="o">=</span><span class="n">seg_node</span><span class="p">,</span> <span class="n">nonunique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unidentified</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="c1"># logger.warning(f&quot;** {type(cur_tree_node)}&quot;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">cur_tree_node</span><span class="p">,</span>
+                             <span class="n">parent</span><span class="o">=</span><span class="n">seg_node</span><span class="p">)</span>
             <span class="n">segs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">iseg</span><span class="p">,</span> <span class="n">ssegs</span><span class="p">[</span><span class="n">trunk</span><span class="p">])</span>
             <span class="n">segs_tips</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">iseg</span><span class="p">,</span> <span class="n">ssegs_tips</span><span class="p">[</span><span class="n">trunk</span><span class="p">])</span>
 
             <span class="c1"># append other segments</span>
+            <span class="n">num_segs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ixseg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ssegs</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">ix</span> <span class="o">!=</span> <span class="n">trunk</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">TreeNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">ix</span><span class="o">+</span><span class="n">num_segs</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ixseg</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">seg_node</span><span class="p">,</span>
+                                              <span class="n">nonunique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unidentified</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                                     <span class="n">parent</span><span class="o">=</span><span class="n">seg_node</span><span class="p">)</span>
+                    
             <span class="n">segs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">seg</span> <span class="k">for</span> <span class="n">iseg</span><span class="p">,</span> <span class="n">seg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ssegs</span><span class="p">)</span> <span class="k">if</span> <span class="n">iseg</span> <span class="o">!=</span> <span class="n">trunk</span><span class="p">]</span>
             <span class="n">segs_tips</span> <span class="o">+=</span> <span class="p">[</span>
                 <span class="n">seg_tips</span> <span class="k">for</span> <span class="n">iseg</span><span class="p">,</span> <span class="n">seg_tips</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ssegs_tips</span><span class="p">)</span> <span class="k">if</span> <span class="n">iseg</span> <span class="o">!=</span> <span class="n">trunk</span>
@@ -1225,6 +1797,13 @@ document.write(`
         <span class="k">for</span> <span class="n">iseg</span><span class="p">,</span> <span class="n">seg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ssegs</span><span class="p">):</span>
             <span class="n">masks</span><span class="p">[</span><span class="n">iseg</span><span class="p">][</span><span class="n">seg</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>                
         <span class="n">nonunique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">masks</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;* </span><span class="si">{</span><span class="n">nonunique</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> nonunique points.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># RE START MODIFIED - to account for points not associated with any branch</span>
+        <span class="n">unidentified</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">masks</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;* </span><span class="si">{</span><span class="n">unidentified</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> unidentified points.&quot;</span><span class="p">)</span>        
+        <span class="c1"># RE END MODIFIED</span>
+        
         <span class="c1"># RE START MODIFIED - uncomment to match how original paper defines unique</span>
         <span class="c1"># if len(ssegs) == 3:</span>
         <span class="c1">#     allbranches = np.sum(masks, axis=0) == len(ssegs)</span>
@@ -1272,7 +1851,17 @@ document.write(`
             
             <span class="n">ssegs_tips</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">firsttip</span><span class="p">,</span> <span class="n">secondtip</span><span class="p">])</span> <span class="c1"># RE: SHOULD BE CHANGED</span>
             <span class="c1"># RE MODIFIED END</span>
+
+        <span class="c1"># RE START MODIFIED - to account for points not associated with any branch</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">brute</span><span class="p">:</span>
+            <span class="n">nonunique</span> <span class="o">=</span> <span class="n">nonunique</span> <span class="o">|</span> <span class="n">unidentified</span>
+        <span class="c1"># RE END MODIFIED</span>
         <span class="n">undecided_cells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Dseg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)[</span><span class="n">nonunique</span><span class="p">]</span>
+
+        <span class="c1"># RE START MODIFIED - to account for points not associated with any branch</span>
+        <span class="n">unidentified_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Dseg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)[</span><span class="n">unidentified</span><span class="p">]</span>
+        <span class="c1"># RE END MODIFIED</span>
+        
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">undecided_cells</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ssegs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">undecided_cells</span><span class="p">)</span>
@@ -1377,7 +1966,7 @@ document.write(`
             <span class="p">]</span>
             <span class="n">ssegs_connects</span> <span class="o">=</span> <span class="p">[[</span><span class="n">closest_point_in_1</span><span class="p">],</span> <span class="p">[</span><span class="n">closest_point_in_0</span><span class="p">]]</span>
 
-        <span class="k">return</span> <span class="n">ssegs</span><span class="p">,</span> <span class="n">ssegs_tips</span><span class="p">,</span> <span class="n">ssegs_adjacency</span><span class="p">,</span> <span class="n">ssegs_connects</span><span class="p">,</span> <span class="n">trunk</span>            </div>
+        <span class="k">return</span> <span class="n">ssegs</span><span class="p">,</span> <span class="n">ssegs_tips</span><span class="p">,</span> <span class="n">ssegs_adjacency</span><span class="p">,</span> <span class="n">ssegs_connects</span><span class="p">,</span> <span class="n">trunk</span><span class="p">,</span> <span class="n">unidentified_points</span>            </div>
 
         
 <div class="viewcode-block" id="TDA._detect_branching_single_haghverdi16"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TDA._detect_branching_single_haghverdi16">[docs]</a>    <span class="k">def</span> <span class="nf">_detect_branching_single_haghverdi16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Dseg</span><span class="p">,</span> <span class="n">tips</span><span class="p">):</span>
@@ -1697,7 +2286,9 @@ document.write(`
 
 
 <div class="viewcode-block" id="TDA.set_segs_names"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.TDA.set_segs_names">[docs]</a>    <span class="k">def</span> <span class="nf">set_segs_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a single array that stores integer segment labels. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a single array that stores integer segment labels.</span>
+
+<span class="sd">        -1 indicates observations that are not in any segment. &quot;&quot;&quot;</span>
         <span class="c1"># RE START MODIFIED - otherwise points that aren&#39;t in any segment are not differentiated from first segment.</span>
         <span class="c1"># segs_names = np.zeros(self.distances.shape[0], dtype=np.int8)</span>
         <span class="n">segs_names</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
@@ -1723,14 +2314,13 @@ document.write(`
 <span class="sd">        -----</span>
 <span class="sd">        Writes : </span>
 
-<span class="sd">        - indices : np.ndarray</span>
-<span class="sd">              Index array of shape n, which stores an ordering of the data points</span>
+<span class="sd">        - indices : np.ndarray (num_observations,)</span>
+<span class="sd">              Index array, which stores an ordering of the data points</span>
 <span class="sd">              with respect to increasing segment index and increasing pseudotime.</span>
-<span class="sd">        - changepoints : np.ndarray</span>
+<span class="sd">        - changepoints : np.ndarray, (num_segs - 1,)</span>
 <span class="sd">              Index array of shape len(ssegs)-1, which stores the indices of</span>
 <span class="sd">              points where the segment index changes, with respect to the ordering</span>
 <span class="sd">              of indices.</span>
-<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># within segs_tips, order tips according to pseudotime</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1799,14 +2389,32 @@ document.write(`
 
 <span class="sd">            .. code-block:: py</span>
 
-<span class="sd">               {&#39;branch&#39; : (int) -1, 0, 1, ... where -1 indicates the data point was not identified with a branch,</span>
+<span class="sd">               {&#39;branch&#39; : (`int`) -1, 0, 1, ... where -1 indicates the data point was not identified with a branch,</span>
 <span class="sd">                                   &#39;undecided&#39; : (bool) True if the data point is part of a trunk and False otherwise,</span>
-<span class="sd">                                   &#39;name&#39; : (str) Original label if given data was a dataframe, otherwise the same as the node id}</span>
+<span class="sd">                                   &#39;name&#39; : (str) Original label if given data was a dataframe, otherwise the same as the node id,</span>
+<span class="sd">                &#39;unidentified&#39; : (0 or 1) 1 if data point was ever not associated with any branch upon split,</span>
+<span class="sd">                                   0 otherwise.,</span>
+<span class="sd">               }</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 
         <span class="n">segs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordered_segs</span><span class="p">()</span>
+
+        <span class="c1"># # get points where each branch starts:</span>
+        <span class="c1"># if self.segs_names_unique[0] == -1:</span>
+        <span class="c1">#     x0 = self.changepoints[0]</span>
+        <span class="c1">#     changepoints = self.changepoints[1:]</span>
+        <span class="c1"># else: </span>
+        <span class="c1">#     x0 = 0</span>
+        <span class="c1">#     changepoints = self.changepoints</span>
+
+        <span class="c1"># # extract individual branches:</span>
+        <span class="c1"># segs = []</span>
+        <span class="c1"># for x1 in changepoints:</span>
+        <span class="c1">#     segs.append(self.indices[x0:x1])</span>
+        <span class="c1">#     x0 = x1</span>
+        <span class="c1"># segs.append(self.indices[x0:])</span>
 
         <span class="c1"># add missing data points:</span>
         <span class="n">missing_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">segs</span><span class="p">))</span>
@@ -1814,10 +2422,11 @@ document.write(`
         <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">missing_nodes</span><span class="p">},</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;undecided&#39;</span><span class="p">)</span>
 
         <span class="c1"># add edges within branch:</span>
-        <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">seg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">segs</span><span class="p">):</span>
-            <span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">connection</span><span class="o">=</span><span class="s1">&#39;intra-branch&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">seg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">segs</span><span class="p">):</span>            
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">connection</span><span class="o">=</span><span class="s1">&#39;intra-branch&#39;</span><span class="p">)</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;branch&#39;</span><span class="p">:</span> <span class="n">ix</span><span class="p">,</span> <span class="s1">&#39;undecided&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">segs_undecided</span><span class="p">[</span><span class="n">ix</span><span class="p">]}</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">})</span>
 
         <span class="c1"># add edges connecting branches:</span>
@@ -1827,7 +2436,10 @@ document.write(`
         <span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">inter_branch_edges</span><span class="p">,</span> <span class="n">connection</span><span class="o">=</span><span class="s1">&#39;inter-branch&#39;</span><span class="p">)</span>
 
         <span class="c1"># add node names:</span>
-        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">num_observations</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_observations</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+
+        <span class="c1"># add if node was ever an unidentified point:</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unidentified_points</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;unidentified&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">G</span></div>
 
@@ -1922,8 +2534,9 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
 
@@ -1953,7 +2566,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2023, The netflow community.
+      © Copyright 2023-2024, The netflow community.
       <br/>
     
   </p>
