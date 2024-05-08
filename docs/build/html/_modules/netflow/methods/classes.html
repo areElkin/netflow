@@ -137,8 +137,8 @@
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -146,6 +146,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -241,8 +248,8 @@ document.write(`
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -250,6 +257,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -358,6 +372,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
@@ -367,11 +382,13 @@ document.write(`
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">sc_stats</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="c1"># from .._logging import logger</span>
+<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span><span class="p">,</span> <span class="n">set_verbose</span>
 <span class="kn">from</span> <span class="nn">..checks</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.metrics</span> <span class="kn">import</span> <span class="n">pairwise_observation_euc_distances</span><span class="p">,</span> <span class="n">pairwise_observation_wass_distances</span>
 
 <span class="kn">import</span> <span class="nn">netflow.utils</span> <span class="k">as</span> <span class="nn">utl</span>
+
 <span class="c1"># from importlib import reload</span>
 <span class="c1"># reload(utl)</span>
 <span class="c1"># kendall_tau_ = utl.kendall_tau_</span>
@@ -387,6 +404,8 @@ document.write(`
 <span class="c1"># # heat_kernel = utl.heat_kernel</span>
 <span class="c1"># construct_anisotropic_laplacian_matrix = utl.construct_anisotropic_laplacian_matrix</span>
 
+<span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
 <div class="viewcode-block" id="InfoNet"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet">[docs]</a><span class="k">class</span> <span class="nc">InfoNet</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to compute information flow on a network and correlation between network modules</span>
 
@@ -395,20 +414,20 @@ document.write(`
 <span class="sd">    keeper : `netflow.Keeper`</span>
 <span class="sd">        The keeper object that stores the data of size (n_features, n_observations).</span>
 <span class="sd">    graph_key : &#39;str&#39;</span>
-<span class="sd">        The key to the graph in the misc keeper that should be used.</span>
+<span class="sd">        The key to the graph in the graph keeper that should be used.</span>
 <span class="sd">    layer : `str`</span>
-<span class="sd">        The key to the data in the data keeper that should be used, default = &#39;data&#39;.</span>
-<span class="sd">    label : `str`</span>
-<span class="sd">        The key in misc where output will be stored in the keeper, default = &#39;infonet&#39;.</span>
-<span class="sd">    outdir : {`None`, `Path`, `str`}</span>
-<span class="sd">        Path to store results. If `None`, results are not saved.</span>
+<span class="sd">        The key to the data in the data keeper that should be used.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-<div class="viewcode-block" id="InfoNet.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keeper</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span>
-                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;infonet&#39;</span><span class="p">,</span>
-                 <span class="n">outdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="InfoNet.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keeper</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="n">G</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">graph_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># logger.msg(&quot;INFONET HAS BEEN ENTERED&quot;)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">set_verbose</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+        <span class="n">G</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># keeper.misc[graph_key].copy()</span>
         <span class="n">check_connected_graph</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
         <span class="n">check_graph_no_self_loops</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 
@@ -447,6 +466,28 @@ document.write(`
                 <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating directory </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="InfoNet.invariant_measures"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.invariant_measures">[docs]</a>    <span class="k">def</span> <span class="nf">invariant_measures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;IM&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the invariant measure for each observation using data as node weights.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            Label of key used to store invariant measures in the data keeper.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Makes the invariant measures attribute of size (n_observations, n_observations)</span>
+<span class="sd">        in ``keeper.data[label]`` available.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">IM</span> <span class="o">=</span> <span class="n">utl</span><span class="o">.</span><span class="n">invariant_measure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">IM</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Not yet implemented&quot;</span><span class="p">)</span></div>
+        
 
             
 <div class="viewcode-block" id="InfoNet.spearmanr"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.spearmanr">[docs]</a>    <span class="k">def</span> <span class="nf">spearmanr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -720,10 +761,10 @@ document.write(`
         <span class="k">return</span> <span class="n">neighborhood</span><span class="p">,</span> <span class="n">sub_profiles</span></div>
 
 
-<div class="viewcode-block" id="InfoNet.pairwise_observation_neighborhood_wass_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.pairwise_observation_neighborhood_wass_distance">[docs]</a>    <span class="k">def</span> <span class="nf">pairwise_observation_neighborhood_wass_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
-                                                   <span class="n">graph_distances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                                   <span class="n">proc</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                                   <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="InfoNet.pairwise_observation_neighborhood_wass_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.pairwise_observation_neighborhood_wass_distance">[docs]</a>    <span class="k">def</span> <span class="nf">pairwise_observation_neighborhood_wass_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                        <span class="n">graph_distances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                        <span class="n">proc</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                        <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute observation-pairwise Wasserstein distances between the profiles over node neighborhood.</span>
 
 <span class="sd">        Parameters</span>
@@ -771,9 +812,8 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        profiles : `pandas.DataFrame`</span>
-<span class="sd">            Profiles that are normalized and treated as probability distributions for computing Wasserstein distance,</span>
-<span class="sd">            where rows are features and columns are observations.</span>
+<span class="sd">        profiles : `pandas.DataFrame` (n_features, n_observations)</span>
+<span class="sd">            Profiles that Euclidean distance is computed between. </span>
 <span class="sd">        node : `int`</span>
 <span class="sd">            Node in the graph to compute the neighborhood on.</span>
 <span class="sd">        include_self : `bool`</span>
@@ -1072,7 +1112,7 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        nodes : {`None`, `list` [`int`])}</span>
+<span class="sd">        nodes : {`None`, `list` [`str`])}</span>
 <span class="sd">            List of nodes to compute neighborhood distances on. If `None`, all genes with at least 2 neighbors is used.</span>
 <span class="sd">        include_self : `bool`</span>
 <span class="sd">            If `True`, add node in neighborhood which will result in computing normalized profile over the neighborhood.</span>
@@ -1188,7 +1228,7 @@ document.write(`
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        nodes : {`None`, `list`, [`int`]}</span>
-<span class="sd">            List of nodes to compute neighborhood distances on. If `None`, all genes with at least 2 neighbors is used.</span>
+<span class="sd">            List of nodes to compute neighborhood distances on. If `None`, all nodes with at least 2 neighbors are used.</span>
 <span class="sd">        include_self : `bool`</span>
 <span class="sd">            If `True`, add node in neighborhood which will result in computing normalized profile over the neighborhood.</span>
 <span class="sd">            If `False`, node is not included in neighborhood which results in computing the transition distribution over the neighborhood.</span>
@@ -1267,7 +1307,256 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">eds</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
         <span class="c1"># return eds</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="InfoNet.pairwise_observation_profile_wass_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.pairwise_observation_profile_wass_distance">[docs]</a>    <span class="k">def</span> <span class="nf">pairwise_observation_profile_wass_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                   <span class="n">graph_distances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;wass_dist_observation_pairwise_profiles_t0&#39;</span><span class="p">,</span>
+                                                   <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise profile Wasserstein distances&#39;</span><span class="p">,</span>
+                                                   <span class="n">proc</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                   <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute observation-pairwise Wasserstein distances between the profiles over selected features.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        features : {`None`, `list` [`str`])}</span>
+<span class="sd">            List of features to compute profile distances on. If `None`, all features are used.</span>
+<span class="sd">        graph_distances : `numpy.ndarray`, (n, n)</span>
+<span class="sd">            A matrix of node-pairwise graph distances between the :math:`n` nodes (ordered from :math:`0, 1, ..., n-1`).</span>
+<span class="sd">            If `None`, use hop distance.</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Label that resulting Wasserstein distances are saved in ``keeper.distances`` and</span>
+<span class="sd">            name of file to store stacked results.</span>
+<span class="sd">        desc : `str`</span>
+<span class="sd">            Description for progress bar.</span>
+<span class="sd">        measure_cutoff : `float`</span>
+<span class="sd">            Threshold for treating values in profiles as zero, default = 1e-6.</span>
+<span class="sd">        proc : `int`</span>
+<span class="sd">            Number of processor used for multiprocessing. (Default value = cpu_count()). </span>
+<span class="sd">        chunksize : `int`</span>
+<span class="sd">            Chunksize to allocate for multiprocessing.</span>
+<span class="sd">        solvr : `str`</span>
+<span class="sd">            Solver to pass to POT library for computing Wasserstein distance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wds : `pandas.DataFrame`</span>
+<span class="sd">            Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names.</span>
+<span class="sd">            This is saved in ``keeper.distances`` with the key ``label``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.</span>
+<span class="sd">        Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">        nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
+<span class="sd">        the previously computed and saved results before saving and returning the combined results.</span>
+
+<span class="sd">        Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein distance</span>
+<span class="sd">        and do not provide any further information.</span>
+
+<span class="sd">        To do: specify if nodes in input are ids or node names and check that loaded data has correct type int or str for nodes</span>
+
+<span class="sd">        SAVED TO DISTANCES</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># logger.msg(&quot;&gt;&gt;&gt; ENTERED FN&quot;)</span>
+        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name2node</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">features</span><span class="p">]</span>
+        
+        <span class="n">pw_obs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observations</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pw_obs</span><span class="p">)</span><span class="si">}</span><span class="s2"> pw-obs&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">wds_prior</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># fname = self.outdir / f&quot;wass_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{&#39;&#39; if include_self else &#39;out&#39;}_self.csv&quot;</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                
+                <span class="n">wds_prior</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded saved observation pairwise profile Wasserstein distances from </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> profiles of size </span><span class="si">{</span><span class="n">wds_prior</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+                <span class="n">n_orig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pw_obs</span><span class="p">)</span>
+                
+                <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; n_orig = {n_orig}&quot;)</span>
+                <span class="c1"># pw_obs = [k for k in pw_obs if k not in set(wds_prior.index)]</span>
+                <span class="c1"># n_update = len(pw_obs)</span>
+                <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; n_update / n_orig = {n_update} / {n_orig}.&quot;)</span>
+                <span class="c1"># if n_update &lt; n_orig:</span>
+                <span class="c1">#     if n_update == 0:</span>
+                <span class="k">if</span> <span class="n">wds_prior</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pw_obs</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+                        <span class="c1"># logger.msg(f&quot;Loading observation pairwise profile Wasserstein distances from {label}.csv.&quot;)</span>
+                        <span class="c1"># return wds_prior</span>
+                        <span class="c1"># self.keeper.add_misc(wds_prior, label)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; WD TO UPDATE&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wds_prior</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+                            <span class="n">wds_prior</span> <span class="o">=</span> <span class="n">wds_prior</span><span class="p">[</span><span class="n">wds_prior</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; WD to stacked distance&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_stacked_distance</span><span class="p">(</span><span class="n">wds_prior</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; stacked distance updated - should return now.&quot;</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">None</span>
+                    
+                    <span class="c1"># logger.msg(f&quot;Computing observation pairwise profile Wasserstein distances between {n_update}/{n_orig} pairwise observations.&quot;)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wds_prior</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">profiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">graph_distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Computing graph hop distances.&quot;</span><span class="p">)</span>
+            <span class="c1"># TO DO: SHOULDN&quot;T COMPUTE ALL DISTANCES HERE</span>
+            <span class="n">graph_distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>            
+        <span class="n">graph_distances</span> <span class="o">=</span> <span class="n">graph_distances</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">features</span><span class="p">)]</span>
+
+        <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; {len(pw_obs)} pw-obs left to compute&quot;)</span>
+
+        <span class="n">wds</span> <span class="o">=</span> <span class="n">pairwise_observation_wass_distances</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span>
+                                                  <span class="n">graph_distances</span><span class="p">,</span> <span class="n">proc</span><span class="o">=</span><span class="n">proc</span><span class="p">,</span> <span class="n">pairwise_obs_list</span><span class="o">=</span><span class="n">pw_obs</span><span class="p">,</span>
+                                                  <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+                                                  <span class="n">measure_cutoff</span><span class="o">=</span><span class="n">measure_cutoff</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="n">solvr</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;pairwise-profiles&quot;</span><span class="p">)</span>
+        <span class="n">wds</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;WD&#39;</span>
+
+
+        <span class="k">if</span> <span class="n">wds_prior</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">wds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">wds_prior</span><span class="p">,</span> <span class="n">wds</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># only save if new wds were computed:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+                <span class="n">wds</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observation pairwise profile Wasserstein distances saved to </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; wds made it to here with shape </span><span class="si">{</span><span class="n">wds</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="c1">## self.keeper.add_misc(wds, label)</span>
+
+        <span class="c1"># ensure wds is a Series and not a DataFrame</span>
+        <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; wds is a {type(wds)}&quot;)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wds</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">wds</span> <span class="o">=</span> <span class="n">wds</span><span class="p">[</span><span class="n">wds</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; wds is now a {type(wds)}&quot;)</span>
+
+        <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; ABOUT TO SAVE WDS TO KEEPER AS STACKED DISTANCE: type={type(wds)}, size={wds.shape}.&quot;)</span>
+
+        <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; {help(self.keeper.add_stacked_distance)}.&quot;)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_stacked_distance</span><span class="p">(</span><span class="n">wds</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="c1"># return wds</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="InfoNet.pairwise_observation_profile_euc_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.pairwise_observation_profile_euc_distance">[docs]</a>    <span class="k">def</span> <span class="nf">pairwise_observation_profile_euc_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;euc_dist_observation_pairwise_profiles_t0&#39;</span><span class="p">,</span>
+                                                  <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise profile Euclidean distances&#39;</span><span class="p">,</span>
+                                                  <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute observation-pairwise Euclidean distances between the profiles over selected features.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        features : {`None`, `list`, [`int`]}</span>
+<span class="sd">            List of features to compute profile distances on. If `None`, all features are used.</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Label that resulting Euclidean distances are saved in ``keeper.distances`` and</span>
+<span class="sd">            name of file to store stacked results.</span>
+<span class="sd">        desc : `str`</span>
+<span class="sd">            Description for progress bar.</span>
+<span class="sd">        normalize : `bool`</span>
+<span class="sd">            If `True`, normalize neighborhood profiles to sum to 1.</span>
+<span class="sd">        **kwargs : `dict`</span>
+<span class="sd">            Extra arguments to metric, passed to `scipy.spatial.distance.cdist`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        eds : `pandas.DataFrame`</span>
+<span class="sd">            Euclidean distances between pairwise observations where rows are observation-pairs and columns are node names.</span>
+<span class="sd">            This is saved in ``keeper.distances`` with the key ``label``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If ``object.outdir`` is not `None`, Euclidean distances are saved to file.</span>
+<span class="sd">        Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">        nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
+<span class="sd">        the previously computed and saved results before saving and returning the combined results.</span>
+
+<span class="sd">        SAVES TO DISTANCES</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name2node</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">features</span><span class="p">]</span>
+
+        <span class="n">pw_obs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observations</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">eds_prior</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">_self_normalized.csv&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>                
+                <span class="n">eds_prior</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded saved observation pairwise profile Euclidean distances from </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> profiles of size </span><span class="si">{</span><span class="n">eds_prior</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+                <span class="n">n_orig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pw_obs</span><span class="p">)</span>
+                <span class="c1"># pw_obs = [k for k in pw_obs if k not in set(eds_prior.index)]</span>
+                <span class="c1"># n_update = len(pw_obs)</span>
+                
+                <span class="c1"># if n_update &lt; n_orig:</span>
+                <span class="c1">#     if n_update == 0:</span>
+                <span class="k">if</span> <span class="n">eds_prior</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">n_orig</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+                        <span class="c1"># return eds_prior</span>
+                        <span class="c1"># self.keeper.add_misc(eds_prior, label)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">eds_prior</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+                            <span class="n">eds_prior</span> <span class="o">=</span> <span class="n">eds_prior</span><span class="p">[</span><span class="n">eds_prior</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_stacked_distance</span><span class="p">(</span><span class="n">eds_prior</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">None</span>
+
+                    <span class="c1"># logger.msg(f&quot;Computing observation pairwise profile Euclidean distances between {n_update}/{n_orig} pairwise observations.&quot;)</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#     eds_prior = None</span>
+
+        <span class="c1"># if len(pw_obs)&gt;0:</span>
+        <span class="n">profiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+            <span class="n">profiles</span> <span class="o">=</span> <span class="n">profiles</span> <span class="o">/</span> <span class="n">profiles</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">eds</span> <span class="o">=</span> <span class="n">pairwise_observation_euc_distances</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span>
+                                                 <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># line 1025</span>
+        <span class="n">eds</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ED&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">eds</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observation pairwise profile Euclidean distances saved to </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            
+        <span class="c1"># if eds_prior is not None:</span>
+        <span class="c1">#     eds = pd.concat([eds_prior, eds], axis=0)</span>
+        <span class="c1"># if self.outdir is not None:</span>
+        <span class="c1">#     eds.to_csv(self.outdir / fname, header=True, index=True)</span>
+        <span class="c1">#     logger.msg(f&quot;Observation pairwise profile Euclidean distances saved to {str(fname)}.&quot;)</span>
+
+
+        <span class="c1"># ensure wds is a Series and not a DataFrame</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">eds</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="p">[</span><span class="n">eds</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+        <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; Euc - type(eds) = {type(eds)}&quot;)</span>
+            
+        <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; ABOUT TO SAVE EUC TO KEEPER AS STACKED DISTANCE: type={type(eds)}, size={eds.shape}.&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_stacked_distance</span><span class="p">(</span><span class="n">eds</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>        
+        <span class="c1"># return eds</span>
         <span class="k">return</span> <span class="kc">None</span></div></div>
+
+
 
             
 
@@ -1395,8 +1684,9 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
 
@@ -1426,7 +1716,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2023, The netflow community.
+      © Copyright 2023-2024, The netflow community.
       <br/>
     
   </p>

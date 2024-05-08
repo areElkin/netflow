@@ -15,6 +15,7 @@ Modules
       
       keepers
       pose
+      probe
       methods
       classes
       metrics
@@ -26,8 +27,8 @@ Modules
 
 
 
-===========================     ==================================================
-:py:mod:`netflow`
-:py:mod:`netflow.keepers`       Store and manipulate data
-:py:mod:`~netflow.metrics`      Metrics
-===========================     ==================================================		   
+.. ===========================     ==================================================
+.. :py:mod:`netflow`
+.. :py:mod:`netflow.keepers`       Store and manipulate data
+.. :py:mod:`~netflow.metrics`      Metrics
+.. ===========================     ==================================================		   

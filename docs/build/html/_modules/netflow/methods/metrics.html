@@ -137,8 +137,8 @@
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -146,6 +146,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -241,8 +248,8 @@ document.write(`
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -250,6 +257,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -364,7 +378,10 @@ document.write(`
 <span class="kn">import</span> <span class="nn">scipy</span>
 
 <span class="kn">import</span> <span class="nn">netflow.utils</span> <span class="k">as</span> <span class="nn">utl</span>
-<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="c1"># from .._logging import logger</span>
+<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="n">linprog_status</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;Optimization proceeding nominally.&#39;</span><span class="p">,</span>
@@ -531,15 +548,16 @@ document.write(`
      <span class="n">n</span> <span class="o">=</span> <span class="n">profiles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>     
      <span class="n">eds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">profiles</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">profiles</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
                         <span class="n">index</span><span class="o">=</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
-     <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">eds</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">eds</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
+     <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">eds</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">eds</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
      <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;level_0&#39;</span><span class="p">:</span> <span class="s1">&#39;observation_a&#39;</span><span class="p">,</span> <span class="s1">&#39;level_1&#39;</span><span class="p">:</span> <span class="s1">&#39;observation_b&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;observation_a&#39;</span><span class="p">,</span> <span class="s1">&#39;observation_b&#39;</span><span class="p">])</span>
      <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
      <span class="k">return</span> <span class="n">eds</span></div>
 
 
-<div class="viewcode-block" id="pairwise_observation_wass_distances"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.pairwise_observation_wass_distances">[docs]</a><span class="k">def</span> <span class="nf">pairwise_observation_wass_distances</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">graph_distances</span><span class="p">,</span> <span class="n">proc</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                   <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="pairwise_observation_wass_distances"><a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.pairwise_observation_wass_distances">[docs]</a><span class="k">def</span> <span class="nf">pairwise_observation_wass_distances</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">graph_distances</span><span class="p">,</span> <span class="n">proc</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span>
+                                        <span class="n">pairwise_obs_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                        <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute observation-pairwise Wasserstein distances between the profiles on a fixed weighted graph.</span>
 
 <span class="sd">    Parameters</span>
@@ -552,7 +570,12 @@ document.write(`
 <span class="sd">    measure_cutoff : `float`</span>
 <span class="sd">        Threshold for treating values in profiles as zero, default = 1e-6.</span>
 <span class="sd">    proc : `int`</span>
-<span class="sd">        Number of processor used for multiprocessing. (Default value = cpu_count()). </span>
+<span class="sd">        Number of processor used for multiprocessing. (Default value = cpu_count()).</span>
+<span class="sd">    pairwise_obs_list : `list` [2-`tuple`]</span>
+<span class="sd">        (Optional) Provide restricted list of pairwise observations that the Wasserstein distance should be</span>
+<span class="sd">        computed between. Observations are expected to be the columns of ``profiles``.</span>
+<span class="sd">        If not provided, the pairwise Wasserstein distance is computed between every two observations</span>
+<span class="sd">        in ``profiles``.</span>
 <span class="sd">    chunksize : `int`</span>
 <span class="sd">        Chunksize to allocate for multiprocessing.</span>
 <span class="sd">    solvr : `str`</span>
@@ -567,6 +590,10 @@ document.write(`
     <span class="c1"># wds = np.zeros([1, int(0.5 * n * (n-1))])</span>
     <span class="c1"># print(f&quot;wds = {wds.shape}.&quot;)</span>
     <span class="c1"># print(f&quot;wds[0] = {wds[0].shape}.&quot;)</span>
+
+    <span class="k">if</span> <span class="n">pairwise_obs_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pairwise_obs_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="mi">2</span><span class="p">))</span>
+        
     <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>            
             <span class="c1"># logger.msg(f&quot;Profiles shape = {n}&quot;)</span>
@@ -585,7 +612,7 @@ document.write(`
                                <span class="n">measure_cutoff</span><span class="o">=</span><span class="n">measure_cutoff</span><span class="p">,</span>
                                <span class="n">solvr</span><span class="o">=</span><span class="n">solvr</span><span class="p">,</span>
                                <span class="n">flag</span><span class="o">=</span><span class="n">flag</span><span class="p">),</span>
-                       <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)),</span>
+                       <span class="n">pairwise_obs_list</span><span class="p">,</span>
                        <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">)</span>
 
         <span class="c1"># logger.msg(f&quot;wds = {wds}.&quot;)</span>
@@ -831,8 +858,9 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
 
@@ -862,7 +890,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2023, The netflow community.
+      © Copyright 2023-2024, The netflow community.
       <br/>
     
   </p>

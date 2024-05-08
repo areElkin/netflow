@@ -12,6 +12,7 @@ import scipy.cluster.hierarchy as sch
 import scipy.sparse.csgraph as scg
 import scipy.spatial.distance as ssd
 import scipy.stats as sc_stats
+from scipy.sparse import issparse
 import seaborn as sns
 from sklearn.utils import check_random_state
 from typing import (
@@ -629,6 +630,53 @@ def gauss_conv(array, window_size=5, smoothness=2.5):
 
     smoothed_array = np.convolve(array, gauss_filter, mode='full')
     return smoothed_array
+
+
+def invariant_measure(profile, G=None, adj=None):
+    """ Compute the invariant measure of the profile (node weights) on the network.
+
+    ..Note:: Either the graph ``G`` or the adjacency matrix ``adj`` must be provided.
+
+    Parameters
+    ----------
+    profiles : {`pandas.DataFrame` (n_features, n_observations), `numpy.ndarray` (n_features, n_observations)}
+        The network profile used as node weights for the initial condition of the random walk.
+    G : `networkx.Graph`
+        The graph used to compute the adjacency matrix. Note, this is ignored if ``adj`` is
+        provided. If ``profile`` is a `pandas.DataFrame`, the node ids in ``G`` are expected to
+        match the ``profile`` index. Otherwise, ``list(G)`` is expected to match the
+        ``profile`` order.
+    adj : {`numpy.ndarray`, `scipy.sparse.csr_matrix`} (n_features, n_features)
+        The (binary) adjacency matrix. Rows and columns are expected to be in the same
+        order as in ``profiles``. Note, if provided, ``G`` is ignored.
+
+    Returns
+    -------
+    IM : `numpy.ndarray` (n_features, n_observations)
+        The invariant measures whose features and observations are in the same order as ``profiles``.
+    """
+    if isinstance(profiles, pd.DataFrame):
+        nodelist = profiles.index.tolist()
+    else:
+        nodelist = list(range(profiles.shape[0]))
+
+    if adj is None:
+        if G is None:
+            raise AssertionError("Either the graph or the adjacency matrix must be provided.")
+        else:
+            adj = nx.adjacency_matrix(G, nodelist=nodelist, weight=None)
+
+    W = adj.dot(profiles) 
+    W = np.multiply(W, profiles) 
+    Z = W.sum(axis=0)
+    IM = W / Z
+    
+
+    
+
+    
+        
+        
     
     
     

@@ -24,6 +24,7 @@
       get_times
       heat_kernel
       interaction_iterator
+      invariant_measure
       kendall_tau_
       pij
       spearmanr_

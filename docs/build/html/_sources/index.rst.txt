@@ -37,22 +37,20 @@ multi-modal and multi-scale features.
 
     .. grid-item-card::
 
-        API reference
-	^^^^^^^^^^^^^
+        User guide
+	^^^^^^^^^^
 
-	The reference guide contains a detailed description of
-	the netflow API. The reference describes how the methods work and which parameters can
-        be used. It assumes that you have an understanding of the key concepts.
+	The user guide contains an overview of the key netflow modules and uses with some
+	useful background and explanations.
 
         +++
 
-        .. button-ref:: netflow-api
+        .. button-ref:: netflow-ug
             :expand:
             :color: secondary
             :click-parent:
 
-            To the reference guide
-
+            To the user guide
 
     .. grid-item-card::
 
@@ -70,6 +68,24 @@ multi-modal and multi-scale features.
 
             To the tutorials
 
+    .. grid-item-card::
+
+        API reference
+	^^^^^^^^^^^^^
+
+	The reference guide contains a detailed description of
+	the netflow API. The reference describes how the methods work and which parameters can
+        be used. It assumes that you have an understanding of the key concepts.
+
+        +++
+
+        .. button-ref:: netflow-api
+            :expand:
+            :color: secondary
+            :click-parent:
+
+            To the reference guide
+
 	
    
 .. toctree::
@@ -77,8 +93,9 @@ multi-modal and multi-scale features.
    :hidden:
 
    Installation <building/index>
-   API reference <reference/index>
+   User guide <overview/index>
    Tutorials <tutorial/index>
+   API reference <reference/index>
    References <references>
 
 

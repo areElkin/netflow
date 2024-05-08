@@ -13,7 +13,8 @@ import pandas as pd
 
 from .. import checks
 from .._utils import _docstring_parameter, _desc_distance, \
-    _desc_data_distance, load_from_file, unstack_triu_
+    _desc_data_distance, load_from_file
+from ..utils import unstack_triu_
 from .._logging import _gen_logger, set_verbose
 
 logger = _gen_logger(__name__)
@@ -81,6 +82,9 @@ class DataKeeper:
 
     def __init__(self, data=None, observation_labels=None):        
         self._data = {}
+        if observation_labels is not None:
+            if len(observation_labels) != len(set(observation_labels)):
+                raise ValueError("Observation labels must be unique")
         self._observation_labels = observation_labels
         self._num_observations = None if observation_labels is None else len(observation_labels)
         self._features_labels = {}
@@ -215,15 +219,19 @@ class DataKeeper:
         
         if isinstance(data, pd.DataFrame):
             if self._observation_labels is None:
+                if len(set(data.columns)) != data.shape[1]:
+                    raise ValueError("Observation labels must be unique")
                 self._observation_labels = data.columns.tolist()
                 logger.debug("Set observation labels.")
+            if len(set(data.index)) != data.shape[0]:
+                raise ValueError("feature labels must be unique")
             feature_labels = data.index.tolist()
             data = data[self._observation_labels].values
         else:  # np.ndarray
             feature_labels = None        
-
+        
         checks.check_matrix_no_nan(data)
-        checks.check_matrix_nonnegative(data)
+        # checks.check_matrix_nonnegative(data)
         self._data[label] = data
         self._features_labels[label] = feature_labels
         self._num_features[label] = data.shape[0]
@@ -486,6 +494,9 @@ class DistanceKeeper:
 
     def __init__(self, data=None, observation_labels=None):
         self._data = {}
+        if observation_labels is not None:
+            if len(observation_labels) != len(set(observation_labels)):
+                raise ValueError("Observation labels must be unique")
         self._observation_labels = observation_labels
         self._num_observations = None if observation_labels is None else len(observation_labels)
 
@@ -563,6 +574,8 @@ class DistanceKeeper:
 
         if isinstance(data, pd.DataFrame):
             if self._observation_labels is None:
+                if len(set(data.columns)) != data.shape[1]:
+                    raise ValueError("Observation labels must be unique")
                 self._observation_labels = data.columns.tolist()
                 logger.debug("Set observation labels.")
             data = data.loc[self._observation_labels, self._observation_labels].values
@@ -575,7 +588,7 @@ class DistanceKeeper:
 
         logger.debug(f"Distance {label} between {data.shape[0]} observations added to keeper.")
 
-    def add_stacked_data(self, data, label):
+    def add_stacked_data(self, data, label, diag=0.):
         """ Add a symmetric distance from stacked Series to the keeper.
 
         Parameters
@@ -585,12 +598,14 @@ class DistanceKeeper:
             with a 2-multi-index of the pairwise observation labels.
         label : `str`
             Reference label describing the input.
+        diag : `float`
+            Value used on diagonal. 
         """
         # Check that label is not already in the keeper
         if label in self._data:
             raise KeyError(f"Dubplicate label detected, {label} already exists in the keeper.")
 
-        data = unstack_triu_(data, diag=0., index=keeper.observation_labels)
+        data = unstack_triu_(data, diag=diag, index=self.observation_labels)
 
         self.add_data(data, label)
         
@@ -764,6 +779,25 @@ class DistanceView:
                           columns=self.observation_labels,
                           index=self.observation_labels)
         return df
+
+
+    def density(self):
+        """ Return density of each observation
+
+        The density of an observation is its net distance to all other
+        observations. This should be minimized for distances and maximized
+        for similarities.
+        
+        Returns
+        -------
+        d : `pandas.Series`
+            The densities indexed by the observations.
+        """
+        d = self.to_frame().sum(axis=0)
+        return d
+            
+            
+        
         
 
 class GraphKeeper:
@@ -1018,6 +1052,8 @@ class Keeper:
             observation_labels = [f"X{i}" for i in range(num_observations)]
 
         if (observation_labels is not None) and (num_observations is not None):
+            if len(observation_labels) != len(set(observation_labels)):
+                raise ValueError("Observation labels must be unique")
             assert len(observation_labels) == num_observations, \
                 "Inconsistent number of observation labels, length of observation_labels must equal num_observations"
             
@@ -1233,6 +1269,35 @@ class Keeper:
         self._check_num_observations()
 
 
+    def add_stacked_distance(self, data, label):
+        """ Add a stacked distance array to the distance keeper.
+
+        Parameters
+        ----------
+        data : `pandas.Series`
+            The stacked distances of size (num_observations * (num_observations - 1) / 2,)
+            with a 2-multi-index of the pairwise observation labels.
+        label : `str`
+            Reference label describing the distance.
+        """
+        self._distances.add_stacked_data(data, label)
+        logger.msg(f"Added distance input {label} to the keeper.")
+
+        # If not yet initialized, update keeper observation_labels and num_observations
+        if self._num_observations is None:
+            self._num_observations = self._distances[label].num_observations
+            self._observation_labels = self._distances[label].observation_labels            
+            if self._distances[label]._observation_labels is None:
+                self._observation_labels = [f"X{i}" for i in range(self._num_observations)]
+
+            # initialize data and similarities
+            self._data = DataKeeper(observation_labels=self._observation_labels)
+            self._similarities = DistanceKeeper(observation_labels=self._observation_labels)
+
+        self._check_observation_labels()
+        self._check_num_observations()
+
+
     def add_similarity(self, data, label):
         """ Add a similarity array to the similarity keeper.
 
@@ -1244,6 +1309,37 @@ class Keeper:
             Reference label describing the similarity.
         """
         self._similarities.add_data(data, label)
+        logger.msg(f"Added similarity input {label} to the keeper.")
+
+        # If not yet initialized, update keeper observation_labels and num_observations
+        if self._num_observations is None:
+            self._num_observations = self._similarities[label].num_observations
+            self._observation_labels = self._similarities[label].observation_labels            
+            if self._similarities[label]._observation_labels is None:
+                self._observation_labels = [f"X{i}" for i in range(self._num_observations)]
+
+            # initialize data and distances
+            self._data = DataKeeper(observation_labels=self._observation_labels)
+            self._distances = DistanceKeeper(observation_labels=self._observation_labels)
+
+        self._check_observation_labels()
+        self._check_num_observations()
+    
+        
+    def add_stacked_similarity(self, data, label, diag=1.):
+        """ Add a stacked similarity array to the similarity keeper.
+
+        Parameters
+        ----------
+        data : `pandas.Series`
+            The stacked similarities of size (num_observations * (num_observations - 1) / 2,)
+            with a 2-multi-index of the pairwise observation labels.
+        label : `str`
+            Reference label describing the similarity.
+        diag : `float`
+            Value used on diagonal. 
+        """
+        self._similarities.add_stacked_data(data, label, diag=diag)
         logger.msg(f"Added similarity input {label} to the keeper.")
 
         # If not yet initialized, update keeper observation_labels and num_observations
@@ -1364,8 +1460,9 @@ class Keeper:
                               delimiter=delimiter, header=0, index_col=0, **kwargs)
         self.add_distance(data, label)
 
-    def load_distance(self, file_name, label='distance', file_path=None, file_format=None,
-                      delimiter=',', **kwargs):
+        
+    def load_stacked_distance(self, file_name, label='distance', file_path=None, file_format=None,
+                              delimiter=',', **kwargs):
         """ Load distance in stacked form from file, convert to unstacked form and store in the keeper. 
 
         .. Note::
@@ -1396,8 +1493,7 @@ class Keeper:
         """        
         data = load_from_file(file_name, file_path=file_path, file_format=file_format,
                               delimiter=delimiter, header=0, index_col=(0, 1), **kwargs)
-        self.add_stacked_distance(data, label)
-
+        self._distances.add_stacked_data(data, label)
 
 
     def load_similarity(self, file_name, label='similarity', file_path=None, file_format=None,
@@ -1433,6 +1529,44 @@ class Keeper:
         data = load_from_file(file_name, file_path=file_path, file_format=file_format,
                               delimiter=delimiter, header=0, index_col=0, **kwargs)
         self.add_similarity(data, label)
+
+
+    def load_stacked_similarity(self, file_name, label='similarity', diag=1.,
+                                file_path=None, file_format=None,
+                                delimiter=',', **kwargs):
+        """ Load similarity in stacked form from file, convert to unstacked form and store in the keeper. 
+
+        .. Note::
+
+        Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion
+        (excluding self-pairs) and a single column with the pairwise distances.
+        
+        Currently loads data using ``pandas.read_csv``.
+        Additional formats will be added in the future.
+                  
+        Parameters
+        ----------
+        file_name: {`str`, `pathlib.Path`} 
+            Input distance file name.
+        label : `str`, (default: 'distance')
+            Reference label describing the data set.
+        diag : `float`
+            Value used on diagonal. 
+        file_path: {`str` `pathlib.Path`}, optional (default: None)
+            File path. Empty string by default
+        file_format: `str`, optional (default: None)
+            File format. Currently supported file formats: 'txt', 'csv', 'tsv'.
+            If `None`, ``file_format`` will be inferred from the file extension
+            in ``file_name``.
+            Currently, this is ignored.
+        delimiter: `str`, optional (default: ',')
+            Delimiter to use.
+        **kwargs
+            Additional key-word arguments passed to ``pandas.read_csv``.
+        """        
+        data = load_from_file(file_name, file_path=file_path, file_format=file_format,
+                              delimiter=delimiter, header=0, index_col=(0, 1), **kwargs)
+        self._similarities.add_stacked_data(data, label)
 
 
     def load_graph(self, file_name, label='graph', file_path=None,
@@ -1679,6 +1813,89 @@ class Keeper:
         keeper_subset._check_observation_labels()
 
         return keeper_subset
+
+
+    def distance_density(self, label):
+        """ Compute each observation's density from a distance.
+
+        The density of an observation is its net distance to all other observations.
+
+        Parameters
+        ----------
+        label : `str`
+            The reference label for the distance.
+
+        Returns
+        -------
+        density : `pandas.Series`
+            The densities indexed by the observation labels.
+        """
+        density = self.distances[label].density()
+        return density
+
+
+    def distance_density_argmin(self, label):
+        """ Find the observation with the largest density from a distnace.
+
+        The density of an observation is its net distance to all other observations.
+
+        Parameters
+        ----------
+        label : `str`
+            The reference label for the distance.
+
+        Returns
+        -------
+        obs : `int`
+            The index of the observation with the smallest density.
+        """
+        density = self.distances[label].density()
+        obs = density.idxmin(axis=0)
+        obs = self.observation_labels.index(obs)
+        return obs
+
+
+    def similarity_density(self, label):
+        """ Compute each observation's density from a similarity.
+
+        The density of an observation is its net similarity to all other observations.
+
+        Parameters
+        ----------
+        label : `str`
+            The reference label for the similarity.
+
+        Returns
+        -------
+        density : `pandas.Series`
+            The densities indexed by the observation labels.
+        """
+        density = self.similarities[label].density()
+        return density
+
+
+    def similarity_density_argmax(self, label):
+        """ Find the observation with the largest density from a similarity.
+
+        The density of an observation is its net similarity to all other observations.
+
+        Parameters
+        ----------
+        label : `str`
+            The reference label for the similarity.
+
+        Returns
+        -------
+        obs : `str`
+            The label of the observation with the largest density.
+        """
+        density = self.similarities[label].density()
+        obs = density.idxmax(axis=0)
+        obs = self.observation_labels.index(obs)
+        return obs
+
+
+    
             
 
 

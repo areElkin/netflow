@@ -137,8 +137,8 @@
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -146,6 +146,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -241,8 +248,8 @@ document.write(`
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../reference/index.html">
-                        API reference
+                      <a class="nav-link nav-internal" href="../../../overview/index.html">
+                        User guide
                       </a>
                     </li>
                 
@@ -250,6 +257,13 @@ document.write(`
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../tutorial/index.html">
                         Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API reference
                       </a>
                     </li>
                 
@@ -503,6 +517,10 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert distance matrix to symmetric similarity measure.</span>
 
+<span class="sd">    .. math::</span>
+
+<span class="sd">       K = \sqrt{2\sigma_i\sigma_j / (\sigma_i^2 + \sigma_j^2)}\exp{-(x-y)^2 / (\sigma_x^2 + \sigma_y^2)}.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    d : `numpy.ndarray`, (n_observations, n_observations)</span>
@@ -511,12 +529,13 @@ document.write(`
 <span class="sd">        K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,</span>
 <span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it&#39;s closest neighbor).</span>
 <span class="sd">        If `None`, all neighbors are used.</span>
-<span class="sd">    method : {`float`, &#39;mean&#39;, &#39;median&#39;, &#39;max&#39;, &#39;precomputed&#39;}</span>
+<span class="sd">    method : {`float`, `int`, &#39;mean&#39;, &#39;median&#39;, &#39;max&#39;, &#39;precomputed&#39;}</span>
 <span class="sd">        Indicate how to compute sigma.</span>
 
 <span class="sd">        Options:</span>
 
-<span class="sd">        - `float` : constance float to use as sigma</span>
+<span class="sd">        - `float` : constant float to use as sigma</span>
+<span class="sd">        - `int` : constant int to use as sigma</span>
 <span class="sd">        - &#39;mean&#39; : mean of distance to ``n_neighbors`` nearest neighbors</span>
 <span class="sd">        - &#39;median&#39; : median of distance to ``n_neighbors`` nearest neighbors</span>
 <span class="sd">        - &#39;max&#39; : distance to ``n_neighbors``-nearest neighbor</span>
@@ -536,6 +555,8 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
         <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">method</span><span class="p">]</span><span class="o">*</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">method</span><span class="p">)]</span><span class="o">*</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>        
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;precomputed&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">sigmas</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -550,13 +571,14 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">sigmas</span> <span class="o">=</span> <span class="n">sigma_knn_</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Uncrecognized type for `method`, must be `float` or `str`.&quot;</span><span class="p">)</span>        
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Uncrecognized type for `method`, must be `float`, `int`, or `str`.&quot;</span><span class="p">)</span>        
 
     <span class="n">sigmas_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     
     <span class="n">Num</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span> <span class="n">sigmas</span><span class="p">)</span>
     <span class="n">Den</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">sigmas_sq</span><span class="p">,</span> <span class="n">sigmas_sq</span><span class="p">)</span>
     <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Num</span> <span class="o">/</span> <span class="n">Den</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">Den</span><span class="p">))</span> <span class="c1"># TO DO: integral may not sum to 1</span>
+    <span class="c1"># K = np.sqrt(Num / Den) * np.exp(-np.power(d, 2) / (Den)) # TO DO: integral may not sum to 1    </span>
 
     <span class="k">if</span> <span class="n">knn</span><span class="p">:</span>  <span class="c1"># restrict to nearest neighbors (symmetric)</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
@@ -597,7 +619,8 @@ document.write(`
 
 <span class="sd">        Options:</span>
 
-<span class="sd">        - `float` : constance float to use as sigma</span>
+<span class="sd">        - `float` : constant float to use as sigma</span>
+<span class="sd">        - `int` : constant int to use as sigma</span>
 <span class="sd">        - &#39;mean&#39; : mean of distance to ``n_neighbors`` nearest neighbors</span>
 <span class="sd">        - &#39;median&#39; : median of distance to ``n_neighbors`` nearest neighbors</span>
 <span class="sd">        - &#39;max&#39; : distance to ``n_neighbors``-nearest neighbor</span>
@@ -624,8 +647,13 @@ document.write(`
 <span class="sd">        stored in ``keeper.similarities[label]`` instead of being returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">sigmas</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">sigmas</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">method</span><span class="o">==</span><span class="s1">&#39;precomputed&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sigmas</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigmas</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">sigmas</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must pass sigmas key when method=&#39;precomputed&#39;.&quot;</span><span class="p">)</span>
+            
     <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
     <span class="n">K</span> <span class="o">=</span> <span class="n">distance_to_similarity_</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="n">sigmas</span><span class="p">,</span>
@@ -635,8 +663,6 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">keeper</span><span class="o">.</span><span class="n">add_similarity</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
-
-
 </pre></div>
 
                 </article>
@@ -668,8 +694,9 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
 
@@ -699,7 +726,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2023, The netflow community.
+      © Copyright 2023-2024, The netflow community.
       <br/>
     
   </p>

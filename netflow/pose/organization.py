@@ -23,6 +23,10 @@ Some noted differences made in scanpy implementation :
 
   - Add smoothing when computing maximal correlation cutoff
   - Include points not identified with any branch after split in the trunk (nonunique).
+
+To do:
+
+  - Set branchable aspect of TreeNode.
 """
 
 from typing import Tuple, Optional, Sequence, List
@@ -77,8 +81,10 @@ class TreeNode:
     unidentified : `bool`
         Indicate if node (branch) is a set of points that were not identified
         with a particular branch after splitting.
+    branchable : `bool`
+        Indicate if node can potentially be further branched.
     """
-    def __init__(self, name='root', data=None, children=None, parent=None, nonunique=None, unidentified=None):
+    def __init__(self, name='root', data=None, children=None, parent=None, nonunique=None, unidentified=None, branchable=True):
         self.name = name
         self.name_string = str(name)
         if nonunique:
@@ -93,7 +99,8 @@ class TreeNode:
                 self.add_child(child)
 
         self.nonunique = nonunique
-        self.unidentified = unidentified
+        self.unidentified = unidentified        
+        self.branchable = branchable # True # indicate if branch can be further split
 
 
     # def __repr__(self):
@@ -123,7 +130,13 @@ class TreeNode:
 
         
     def add_child(self, node):
-        """ add child to node. """
+        """ Add child to node.
+
+        Parameters
+        ----------
+        node : `TreeNode`
+            The child node.
+        """
         node.parent = self
         if isinstance(node, TreeNode):
             self.children.append(node)
@@ -173,10 +186,12 @@ class Tree:
             Parent node. If `None`, node is set as the root node.
         """
         if parent is not None:
+            if self.root is None:
+                raise AssertionError("The tree must be initialized with the root node before adding a node with its parent.")
             parent.add_child(node)
         else:
             if self.root is None:
-                self.root=node
+                self.root = node
 
         if index is None:
             self.nodes.append(node)
@@ -187,7 +202,7 @@ class Tree:
     def search(self, name, bottom_up=True):
         """ Search and return index of node in Tree by its name.
 
-        Assume no nodes at the same depth have the same name.
+        Assumes no nodes at the same depth have the same name.
         If more than one node has the same name, return the index
         of the deepest node (farthest from root), when
         ``bottom_up = True``, otherwise, return the index of the 
@@ -627,7 +642,7 @@ class PseudoOrdering:
         Makes attributes ``.transitions_sym`` and ``.transitions`` available.
 
         Notes
-        --------
+        -----
         Code copied from `scanpy.neighbors`.
         """
 
@@ -809,14 +824,14 @@ class TDA:
         If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
         (``0 < min_branch_size < 1``).
     choose_largest_segment : `bool`
-        ?
+        If `True`, select largest segment for branching.
     flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
-        ?
+        Branching algorithm (based on `scanpy` implementation).
     allow_kendall_tau_shift : `bool`
         If a very small branch is detected upon splitting, shift away from
         maximum correlation in Kendall tau criterion of [Haghverdi16]_ to
         stabilize the splitting.
-    root : {`int`, `str`
+    root : {`int`, `str`, `None`}
         Root observation from which pesudo-ordering is computed.
 
         Options :
@@ -895,9 +910,8 @@ class TDA:
         Parameters
         ----------
         n_branches : `int`
-            Number of branches to look for (`n_branches` > 0).
+            Number of branch splits to perform (``n_branches > 0``).
     
-
         Notes
         -----
         Writes : 
@@ -925,13 +939,15 @@ class TDA:
             if the i-th segment is not the trunk. Otherwise, the i-th entry is a list of indices
             of the closest cell in each other (non-trunk) segment to the trunk root. 
         """
+
         # distances = distances if not isinstance(self.distances, pd.DataFrame) else distances.values
         
         indices_all = np.arange(self.distances.shape[0], dtype=int)
         # branch_hierarchy = [indices_all]  # keep record
         segs = [indices_all]
 
-        self.tree.insert(TreeNode(name=0, data=indices_all, nonunique=False, unidentified=False))
+        self.tree.insert(TreeNode(name=0, data=indices_all, nonunique=False, unidentified=False,
+                                  branchable=True if self.check_min_branch_size(indices_all) else False))
 
         # segs_by_index = [[0]*indices_all.shape[0]] # HERE
 
@@ -940,7 +956,9 @@ class TDA:
         #     tip_0 = np.argmax(self.distances[0])
         # else:
         #     tip_0 = np.argmax(self.distances[self.root])
-        tip_0 = np.argmax(self.distances[self.root])        
+        tip_0 = np.argmax(self.distances[self.root])
+        # tip_0 = self.root
+        # logger.msg(f"*** UPDATED TIP_0 ***")
         
         # get tip of other end (farthest from tip_0)
         tips_all = np.array([tip_0, np.argmax(self.distances[tip_0])])
@@ -1068,7 +1086,7 @@ class TDA:
                 continue
             third_tip = np.argmax(dseg)
 
-            # logger.warning(f"iseg = {iseg} made it to line 658 and 666")
+
             if third_maximizer is not None:
                 logger.warning(f"TODO: THIRD MAXIMIZER IS NOT NONE... IS THIS CORRECT???")
                 # find a fourth point that has maximal distance to all three
@@ -1157,6 +1175,7 @@ class TDA:
         result = self._detect_branch(Dseg, tips3, seg)        
         if result is None: # RE ADDED THIS CONDITION
             logger.warning(f"No unique branch detected - removed from consideration.")
+            seg_node.branchable = False
         else:
             ssegs, ssegs_tips, ssegs_adjacency, ssegs_connects, trunk, unidentified = result
 
@@ -1178,7 +1197,8 @@ class TDA:
 
             # insert trunk/undecided_cells at same position
             cur_tree_node = TreeNode(name=iseg, data=ssegs[trunk],
-                                     parent=seg_node, nonunique=True, unidentified=False)
+                                     parent=seg_node, nonunique=True, unidentified=False,
+                                     branchable=True if self.check_min_branch_size(ssegs[trunk]) else False)
             # logger.warning(f"** {type(cur_tree_node)}")
             self.tree.insert(cur_tree_node,
                              parent=seg_node)
@@ -1190,7 +1210,8 @@ class TDA:
             for ix, ixseg in enumerate(ssegs):
                 if ix != trunk:
                     self.tree.insert(TreeNode(name=ix+num_segs, data=ixseg, parent=seg_node,
-                                              nonunique=False, unidentified=False),
+                                              nonunique=False, unidentified=False,
+                                              branchable=True if self.check_min_branch_size(ixseg) else False),
                                      parent=seg_node)
                     
             segs += [seg for iseg, seg in enumerate(ssegs) if iseg != trunk]
@@ -1995,7 +2016,7 @@ class TDA:
         """ returns List[array] of segments where the ``i-th`` entry has the sorted indices
         corresponding to the ``i-th`` branch.
         """
-        # determine branches
+        # determine branches        
         if self.segs_names_unique[0] == -1:
             x0 = self.changepoints[0]
             changepoints = self.changepoints[1:]
@@ -2028,8 +2049,7 @@ class TDA:
                                    'name' : (str) Original label if given data was a dataframe, otherwise the same as the node id,
                 'unidentified' : (0 or 1) 1 if data point was ever not associated with any branch upon split,
                                    0 otherwise.,
-               }
-        
+               }        
         """
         G = nx.Graph()
 
@@ -2056,12 +2076,17 @@ class TDA:
         nx.set_node_attributes(G, {k: False for k in missing_nodes}, name='undecided')
 
         # add edges within branch:
-        for ix, seg in enumerate(segs):            
+        for ix, seg in enumerate(segs):
+            
             if len(seg) == 1:
                 G.add_node(seg[0])
             else:
                 G.add_edges_from(zip(seg, seg[1:]), connection='intra-branch')
             nx.set_node_attributes(G, {v: {'branch': ix, 'undecided': self.segs_undecided[ix]} for v in seg})
+
+            # update tree label
+            # nd = self.tree.nodes[self.tree.search_data(seg[0])]
+            # nd.name_string = nd.name_string + f" |-> branch {ix}"
 
         # add edges connecting branches:
         segs_connects_triu = sp.sparse.triu(self.segs_connects).tocsr()
@@ -2075,7 +2100,119 @@ class TDA:
         # add if node was ever an unidentified point:
         nx.set_node_attributes(G, {v: 1 if v in self.unidentified_points else 0 for v in G}, name='unidentified')
 
+        nx.set_edge_attributes(G, {ee: self.distances[ee[0], ee[1]] for ee in G.edges()}, name="distance")
+        nx.set_edge_attributes(G, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in G.edges()}, name="inverted_distance")
+
         return G
+
+
+    
+    def construct_pose_nn_topology(self, G=None):
+        """ Construct pose topology with edges between nearest neighbors (nn).
+
+        Parameters
+        ----------
+        G : `networkx.Graph`
+            (Optional) If provided, nearest-neighbor edges are added to a copy of the graph.
+            If not provided, the graph returned from `self.construct_topology()` is used.
+
+        Returns
+        -------
+        Gnn : `networkx.Graph`
+            The updated graph with nearest neighbor edges and edge attribute "edge_origin"
+            with the possible values :
+
+            - "POSE" : for edges in the original graph that are not nearest neighbor edges
+            - "NN" : for nearest neighbor edges that were not in the original graph
+            - "POSE + NN" : for edges in the original graph that are also nearest neighbor edges
+        """
+        if G is None:
+            Gnn = self.construct_topology()
+        else:
+            Gnn = G.copy()
+        d = self.distances
+        d = d + (np.max(d)+1e-3)*np.eye(*d.shape)
+        nn = np.argmin(d, axis=0)
+        nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
+        nn_edges = list(set(nn_edges))
+
+        pose_edges = list(set([tuple(sorted(ee)) for ee in Gnn.edges()]))
+
+        nn_unique_edges = list(set(nn_edges) - set(pose_edges))
+        pose_unique_edges = list(set(pose_edges) - set(nn_edges))
+        nn_pose_edges = list(set(nn_edges) & set(pose_edges))
+
+        if len(nn_unique_edges) + len(nn_pose_edges) != len(nn_edges):
+            raise AssertionError("Unexpected number of nearest-neighbor edges.")
+
+        Gnn.add_edges_from(nn_unique_edges)
+
+        nx.set_edge_attributes(Gnn, {**{ee: "POSE + NN" for ee in nn_pose_edges},
+                                     **{ee: "NN" for ee in nn_unique_edges},
+                                     **{ee: "POSE" for ee in pose_unique_edges}},
+                               name="edge_origin")
+
+        nx.set_edge_attributes(Gnn, {ee: self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="distance")
+        nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
+
+        return Gnn
+
+
+    def construct_pose_mst_topology(self, G=None):
+        """ Construct pose topology with minimum spanning tree (MST) edges. 
+
+        Parameters
+        ----------
+        G : `networkx.Graph`
+            (Optional) If provided, MST edges are added to a copy of the graph.
+            If not provided, the graph returned from `self.construct_topology()` is used.
+
+        Returns
+        -------
+        Gmst : `networkx.Graph`
+            The updated graph with MST edges and edge attribute "edge_origin"
+            with the possible values :
+
+            - "POSE" : for edges in the original graph that are not MST edges
+            - "MST" : for MST edges that were not in the original graph
+            - "POSE + MST" : for edges in the original graph that are also MST edges
+        """
+        if G is None:
+            G = self.construct_topology()
+        else:
+            G = G.copy()
+        
+        d = pd.DataFrame(self.distances)
+        edgelist = utl.stack_triu_(d)
+        edgelist.name = 'weight'
+        edgelist = edgelist.reset_index().rename(columns={'level_0': 'source', 'level_1': 'target'})
+        Gfull = nx.from_pandas_edgelist(edgelist, edge_attr='weight')
+        Gmst = nx.minimum_spanning_tree(Gfull)
+
+        mst_edges = [tuple(sorted([i,j])) for i,j in Gmst.edges()]
+        mst_edges = list(set(mst_edges))
+
+        pose_edges = list(set([tuple(sorted(ee)) for ee in G.edges()]))
+
+        mst_unique_edges = list(set(mst_edges) - set(pose_edges))
+        pose_unique_edges = list(set(pose_edges) - set(mst_edges))
+        mst_pose_edges = list(set(mst_edges) & set(pose_edges))
+
+        if len(mst_unique_edges) + len(mst_pose_edges) != len(mst_edges):
+            raise AssertionError("Unexpected number of MST edges.")
+
+        G.add_edges_from(mst_unique_edges)
+
+        nx.set_edge_attributes(G, {**{ee: "POSE + MST" for ee in mst_pose_edges},
+                                   **{ee: "MST" for ee in mst_unique_edges},
+                                   **{ee: "POSE" for ee in pose_unique_edges}},
+                               name="edge_origin")
+
+        nx.set_edge_attributes(G, {ee: self.distances[ee[0], ee[1]] for ee in G.edges()}, name="distance")
+        nx.set_edge_attributes(G, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in G.edges()}, name="inverted_distance")
+
+        return G
+
 
         
     def branchings_segments(self, n_branches):
@@ -2115,6 +2252,12 @@ class TDA:
         self.pseudotime = self.distances[self.root].copy()
 
         self.pseudotime /= np.max(self.pseudotime[self.pseudotime < np.inf])
+
+
+
+
+
+        
 
 
 """

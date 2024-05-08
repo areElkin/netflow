@@ -78,7 +78,7 @@ def set_verbose(logger, verbose="ERROR"): # "ERROR"):
 
     Parameters
     ----------
-    verbose: {"DEBUG", "TRACE", "INFO", "WARN", "MSG","ERROR"}
+    verbose: {"DEBUG", "TRACE", "INFO", "WARN", "MSG", "ERROR"}
         Verbose level. (Default = "ERROR")
 
         Options :
@@ -116,8 +116,9 @@ def set_verbose(logger, verbose="ERROR"): # "ERROR"):
     for handler in logger.handlers:
         # to check the type of the handler to target a specific outputter, e.g., uncomment the if statement:
         # if isinstance(handler, type(logging.StreamHandler())):
-        handler.setLevel(level)
-        logger.msg(f"Logging verbosity set to {level}.")
+        if handler.level != level:
+            handler.setLevel(level)
+            logger.msg(f"Logging verbosity set to {level}.")
 
 
 
