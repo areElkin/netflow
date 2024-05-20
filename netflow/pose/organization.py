@@ -53,6 +53,7 @@ from .._logging import _gen_logger, set_verbose
 
 logger = _gen_logger(__name__)
 
+# RE: TODO: check how branches are connected to each other if flavor != 'haghverdi16'
 # RE: TODO: ADD OPTION FOR MULTIPLE ROOTS
 ### RE: TODO: CHECK HOW UNIQUE BRANCHES ARE DETERMINED
 # RE: TODO: CHECK WHICH TRANSITION MATRIX IS USED AND HOW IT'S DEFINED
@@ -60,6 +61,92 @@ logger = _gen_logger(__name__)
 # RE: TODO: IF MAX CORR < THRESH, MAYBE DON"T INCLUDE BRANCH?
 # RE: TODO: ADD OPTION TO CHANGE ROOT AND UPDATE PSEUDOTIME, SEGS, AND ORDERING? -- this should be for earlier step in pipeline
 # RE: TODO: SHOULD -1 be included in segs_names_unique?
+
+def get_pose(keeper, key, label, n_branches, until_branched=False, 
+             root=None, min_branch_size=5, choose_largest_segment=False,
+             flavor='haghverdi16', allow_kendall_tau_shift=False,
+             smooth_corr=False, brute=True, split=True, verbose=None):
+    """ Compute the pose and saved to keeper.
+
+    Parameters
+    ----------
+    keeper : `netflow.Keeper`
+        The keeper object that stores the distance matrix of size (n_observations, n_observations).
+    key : `str`
+        The label used to reference the distance matrix stored in ``keeper.distances``,
+        of size (n_observations, n_observations).
+    label : `str`
+        Label used to store resulting schema in ``keeper.misc[label]`` and POSE topology in
+        ``keeper.graphs[label]``..
+    n_branches : `int`
+            Number of branch splits to perform (``n_branches > 0``).
+    until_branched : `bool`
+            If `True`, iteratively find segment to branch and perform branching
+            until a segement is successfully branched or no branchable segments
+            remain. Otherwise, if `False`, attempt to perform branching only once 
+            on the next potentially branchable segment.
+    root : {`None`, `int`, 'density', 'ratio'}
+        The root. If `None`, 'density' is used.
+
+        options
+        -------
+        - `int` : index of observation
+        - 'density' : select observation with minimal distance-density
+        - 'ratio' : select observation which leads to maximal triangular ratio distance
+    min_branch_size : {`int`, `float`}
+        During recursive splitting of branches, only consider splitting a branch with at least
+        ``min_branch_size > 2`` data points.
+        If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
+        (``0 < min_branch_size < 1``).
+    choose_largest_segment : `bool`
+        If `True`, select largest segment for branching.
+    flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
+        Branching algorithm (based on `scanpy` implementation).
+    allow_kendall_tau_shift : `bool`
+        If a very small branch is detected upon splitting, shift away from
+        maximum correlation in Kendall tau criterion of [Haghverdi16]_ to
+        stabilize the splitting.
+    smooth_corr : `bool`, default = `False`
+        If `True`, smooth correlations before identifying cut points for branch splitting.
+    brute : `bool`
+        If `True`, data points not associated with any branch upon split are combined with
+        undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,
+        not associated with any branch (and assigned branch index -1).
+    split : `bool` (default = True)
+            if `True`, split segment into multiple branches. Otherwise,
+            determine a single branching off of the main segment.
+            This is ignored if flavor is not 'haghverdi16'.
+            If `True`, ``brute`` is ignored.
+
+    Returns
+    -------
+    Writes the following to the keeper :
+
+      - poser : `POSER`
+
+        * The poser object with the pseudo-organizational branching structure
+          is stored in ``keeper.misc['poser_{label}']``.
+      - G_pose : `networkx.Graph`    
+
+        * The resulting pose topology is stored in ``keeper.graphs['pose_{label}']``.
+      - G_pose_nn : `networkx.Graph`
+
+        * The resulting pose + nearest-neighbor (nn) topology is stored in
+          ``keeper.graphs['pose_nn_{label}]``.
+    """
+    poser = POSER(keeper, key, root=root,
+                  min_branch_size=min_branch_size, choose_largest_segment=choose_largest_segment,
+                  flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
+                  smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
+    G_pose = poser.branchings_segments(n_branches, until_branched=until_branched)
+    G_pose.name = 'pose_' + label
+    keeper.add_misc(poser, 'poser_' + label)
+    keeper.add_graph(G_pose, 'pose_' + label)
+
+    G_pose_nn = poser.construct_pose_nn_topology(G_pose)
+    G_pose_nn.name = 'pose_nn_' + label
+    keeper.add_graph(G_pose_nn, 'pose_nn_' + label)
+
 
 class TreeNode:
     """ Node of a general tree data structure.
@@ -1239,6 +1326,11 @@ class POSER:
     """
     Parameters
     ----------
+    keeper : `netflow.Keeper`
+        The keeper object that stores the distance matrix of size (n_observations, n_observations).
+    key : `str`
+        The label used to reference the distance matrix stored in ``keeper.distances``,
+        of size (n_observations, n_observations).
     root : {`None`, `int`, 'density', 'ratio'}
         The root. If `None`, 'density' is used.
 
@@ -1247,6 +1339,25 @@ class POSER:
         - `int` : index of observation
         - 'density' : select observation with minimal distance-density
         - 'ratio' : select observation which leads to maximal triangular ratio distance
+    min_branch_size : {`int`, `float`}
+        During recursive splitting of branches, only consider splitting a branch with at least
+        ``min_branch_size > 2`` data points.
+        If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
+        (``0 < min_branch_size < 1``).
+    choose_largest_segment : `bool`
+        If `True`, select largest segment for branching.
+    flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
+        Branching algorithm (based on `scanpy` implementation).
+    allow_kendall_tau_shift : `bool`
+        If a very small branch is detected upon splitting, shift away from
+        maximum correlation in Kendall tau criterion of [Haghverdi16]_ to
+        stabilize the splitting.
+    smooth_corr : `bool`, default = `False`
+        If `True`, smooth correlations before identifying cut points for branch splitting.
+    brute : `bool`
+        If `True`, data points not associated with any branch upon split are combined with
+        undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,
+        not associated with any branch (and assigned branch index -1).
     split : `bool` (default = True)
             if `True`, split segment into multiple branches. Otherwise,
             determine a single branching off of the main segment.
@@ -1256,7 +1367,7 @@ class POSER:
     def __init__(self, keeper, key, root=None,
                  min_branch_size=5, choose_largest_segment=False,
                  flavor='haghverdi16', allow_kendall_tau_shift=False,
-                 smooth_corr=False, brute=True, split=True, verbose=None):
+                 smooth_corr=True, brute=True, split=True, verbose=None):
 
         if verbose is not None:
             set_verbose(logger, verbose)
@@ -1594,11 +1705,6 @@ class POSER:
         return imax
 
 
-    # REMOVE
-    def _detect_branching_haghverdi162(self, Dseg: np.ndarray, tips: np.ndarray):
-         a = self.__detect_branching_haghverdi16(Dseg, tips)
-         return a
-        
     def __detect_branching_haghverdi16(self, Dseg: np.ndarray, tips: np.ndarray) -> np.ndarray:
         """
         Detect branching on given segment.
@@ -2182,10 +2288,9 @@ class POSER:
 
         return branched_flag
                 
-        
 
     def detect_branches(self, n_branches, until_branched=False):
-        """
+        """ Detect up to ``n_branches`` branchings and update tree in place.
 
         Parameters
         ----------
@@ -2301,6 +2406,7 @@ class POSER:
                                    }
 
         G = self._construct_topology(segs)
+        
         return G
 
 
@@ -3334,10 +3440,6 @@ class TDA:
             ssegs.append(self.__detect_branching_haghverdi16(Dseg, tips[p]))
         return ssegs
 
-    # REMOVE
-    def _detect_branching_haghverdi162(self, Dseg: np.ndarray, tips: np.ndarray):
-         a = self.__detect_branching_haghverdi16(Dseg, tips)
-         return a
 
     def _detect_branching_single_wolf17_tri(self, Dseg, tips):
         # all pairwise distances
