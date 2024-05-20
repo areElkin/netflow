@@ -171,8 +171,11 @@ class TreeNode:
         with a particular branch after splitting.
     branchable : `bool`
         Indicate if node can potentially be further branched.
+    is_trunk : `bool`
+        Indicate if node referes to undecided trunk branch.
     """
-    def __init__(self, name='root', data=None, children=None, parent=None, nonunique=None, unidentified=None, branchable=True):
+    def __init__(self, name='root', data=None, children=None, parent=None,
+                 nonunique=None, unidentified=None, branchable=True, is_trunk=None):
         self.name = name
         self.name_string = str(name)
         if nonunique:
@@ -189,6 +192,14 @@ class TreeNode:
         self.nonunique = nonunique
         self.unidentified = unidentified        
         self.branchable = branchable # True # indicate if branch can be further split
+        self.is_trunk = is_trunk # undecided
+
+        self.tips = None
+        self.score = None
+        self.connections = None
+
+        # used to indicate the order in which nodes are inserted and as unique identifier
+        self._counter = None         
 
 
     def __repr__(self):
@@ -255,311 +266,15 @@ class Tree:
         self.root = None
         # self.height = 0
         self.nodes = []
-
-    def insert(self, node, index=None, parent=None):
-        """ Insert a node into the Tree.
-
-        Parameters
-        ----------
-        node : `TreeNode`
-            Node to insert.
-        index : {`None`, `int`}
-            Index in list of nodes where the node should be inserted.
-            (Intended to match current structure for updating segments
-            until tree structure is fully leveraged (e.g., using tree
-            leaf nodes when searching for which segment to select).
-
-            If `None`, the node is appended to the end of the list.
-        parent : {`None`, `TreeNode`}
-            Parent node. If `None`, node is set as the root node.
-        """
-        if parent is not None:
-            if self.root is None:
-                raise AssertionError("The tree must be initialized with the root node before adding a node with its parent.")
-            parent.add_child(node)
-        else:
-            if self.root is None:
-                self.root = node
-
-        if index is None:
-            self.nodes.append(node)
-        else:
-            self.nodes.insert(index, node)
-            
-
-    def search(self, name, bottom_up=True):
-        """ Search and return index of node in Tree by its name.
-
-        Assumes no nodes at the same depth have the same name.
-        If more than one node has the same name, return the index
-        of the deepest node (farthest from root), when
-        ``bottom_up = True``, otherwise, return the index of the 
-        shallowest (closest to root) node.
-
-        If no such node is found with the specified name, the
-        value -1 is returned.
-        
-        Parameters
-        ----------
-        name
-            Name of node to search for.
-        bottom_up : `bool`
-            Indicate if the index of the shallowest or deepest node
-            should be returned when more than one node has the same
-            name. It is assumed that no two nodes at the same depth
-            have the same name.
-
-        Returns
-        -------
-        index : `int`
-            Index of node in the tree. If node is not found, returns -1.
-        """
-        nodes = [(ix, node.depth()) for ix, node in enumerate(self.nodes) if node.name == name]
-        if len(nodes) == 0:
-            index = -1
-        else:
-            nodes = sorted(nodes, key=itemgetter(1))
-            if bottom_up:
-                index = nodes[-1][0]
-            else:
-                index = nodes[0][0]
-        
-        # found = False
-        # for ix, node in enumerate(self.nodes):
-        #     if node.name == name:
-        #         found = True
-        #         break
-        # index = ix if found else -1
-        
-        return index
-
-
-    def search_data(self, value, bottom_up=True):
-        """ Search and return index of node in Tree with value in node data.
-
-        If the value is in the data of more than one node, return the index
-        of the deepest node (farthest from root), when
-        ``bottom_up = True``, otherwise, return the index of the shallowest 
-        (closest to root) node.
-
-        If no such node is found with the specified value in its data, the
-        value -1 is returned.
-        
-        Parameters
-        ----------
-        value
-            Value in node data to search for.
-        bottom_up : `bool`
-            Indicate if the index of the shallowest or deepest node
-            should be returned when more than one node has the same
-            name. It is assumed that no two nodes at the same depth
-            have the same name.
-
-        Returns
-        -------
-        index : `int`
-            Index of node in the tree. If node is not found, returns -1.
-        """
-        nodes = [(ix, node.depth()) for ix, node in enumerate(self.nodes) if node.contains(value)]
-        if len(nodes) == 0:
-            index = -1
-        else:
-            nodes = sorted(nodes, key=itemgetter(1))
-            if bottom_up:
-                index = nodes[-1][0]
-            else:
-                index = nodes[0][0]
-        
-        # found = False
-        # for ix, node in enumerate(self.nodes):
-        #     if node.name == name:
-        #         found = True
-        #         break
-        # index = ix if found else -1
-        
-        return index
-
-    
-    def get_node(self, index):
-        """ Return node by its index. """
-        node = self.nodes[index]
-        return node
-
-    
-    def root(self):
-        return self.root
-
-
-    def max_depth(self):
-        """ Return max depth of the tree. """
-        return max([node.depth() for node in self.nodes])
-
-
-    def all_data(self):
-        """ Return sorted set of all data points in all nodes in the tree. """
-        data = set()
-        for node in self.nodes:
-            data = data | set(node.data)
-
-        data = sorted(data)
-        return data
-
-
-    def get_leaves(self):
-        """ Return indices of leaf nodes in the tree. """
-        indices = [ix for ix, node in enumerate(self.nodes) if node.is_leaf()]
-        return indices
-
-
-    def co_branch_indicator(self):
-        """ Return binary symmetric `pandas.DataFrame` of size (num_data_points, num_data_points)
-        where the (i,j)-th entry is 1 if the i-th and j-th data points are found in the same node
-        (i.e., branch) and i is not the same data point as j. Otherwise, if i = j, or if the i-th
-        and j-th data points are not found in the same node, the (i.j)-th entry is 0.
-        """
-        data_points = self.all_data()
-        co_tracker = {k: {} for k in data_points}
-        for ix, obs_a in enumerate(data_points):
-            co_tracker[obs_a][obs_a] = 0
-            node = self.get_node(self.search_data(obs_a))
-            assert node.is_leaf(), "Expected leaf node."
-
-            for obs_b in data_points[ix+1:]:
-                if node.contains(obs_b):
-                    co_tracker[obs_a][obs_b] = 1
-                    co_tracker[obs_b][obs_a] = 1
-                else:
-                    co_tracker[obs_a][obs_b] = 0
-                    co_tracker[obs_b][obs_a] = 0
-
-        co_tracker = pd.DataFrame(co_tracker)
-        # ensure symmetric and sorted:
-        co_tracker = co_tracker.loc[data_points, data_points] 
-        return co_tracker
-
-
-class TreeNode2:
-    """ Node of a general tree data structure.
-
-    Each node is intended to refer to a branch.
-
-    Parameters
-    ----------
-    name
-        Reference name of node (branch).
-    data 
-        Data associated with the node.
-        Intended to be a `list` of indices corresponding to the branch members.
-    children : `list` [`TreeNode2`]
-        List of children `TreeNode2` objects.
-    parent : `TreeNode2`
-        Parent `TreeNode2` object.
-    nonunique : `bool`
-        Indicate if node (branch) is the trunk.
-    unidentified : `bool`
-        Indicate if node (branch) is a set of points that were not identified
-        with a particular branch after splitting.
-    branchable : `bool`
-        Indicate if node can potentially be further branched.
-    is_trunk : `bool`
-        Indicate if node referes to undecided trunk branch.
-    """
-    def __init__(self, name='root', data=None, children=None, parent=None,
-                 nonunique=None, unidentified=None, branchable=True, is_trunk=None):
-        self.name = name
-        self.name_string = str(name)
-        if nonunique:
-            self.name_string = " - ".join([self.name_string, 'trunk'])
-        if data is not None:
-            self.name_string = self.name_string + f" (n = {len(data)})"
-        self.data = data
-        self.parent = parent        
-        self.children = []
-        if children is not None:
-            for child in children:
-                self.add_child(child)
-
-        self.nonunique = nonunique
-        self.unidentified = unidentified        
-        self.branchable = branchable # True # indicate if branch can be further split
-        self.is_trunk = is_trunk # undecided
-
-        self.tips = None
-        self.score = None
-        self.connections = None
-
-        # used to indicate the order in which nodes are inserted and as unique identifier
-        self._counter = None         
-
-
-    def __repr__(self):
-        return self.name_string
-
-    
-    def is_root(self):
-        if self.parent is None:
-            return True
-        else:
-            return False
-
-        
-    def is_leaf(self):
-        if len(self.children) == 0:
-            return True
-        else:
-            return False
-
-        
-    def depth(self):
-        """ Depth of current node. """
-        if self.is_root():
-            return 0
-        else:
-            return 1 + self.parent.depth()
-
-        
-    def add_child(self, node):
-        """ Add child to node.
-
-        Parameters
-        ----------
-        node : `TreeNode2`
-            The child node.
-        """
-        node.parent = self
-        if isinstance(node, TreeNode2):
-            self.children.append(node)
-        else:
-            raise TypeError("Unrecognized type, node must be a TreeNode2.")
-
-
-    def contains(self, value):
-        """ Check if value is in data. """
-        found = value in self.data
-        return found
-
-
-    def disp(self):
-        cur_name = self.name
-        self.name = str(self.name)
-        pptree.print_tree(self, 'children', 'name_string')
-        self.name = cur_name
-
-        
-class Tree2:
-    """
-    Tree implemenation as a collection of TreeNode objects.
-
-    Intended to represent the hierarchical branching.
-    """
-    def __init__(self):
-        self.root = None
-        # self.height = 0
-        self.nodes = []
         self._counter = 0
         # self.node_adjacency = ddict(list)
         self.node_connection = [] # ddict(list)
 
+
+    def disp(self):
+        self.tree.root.disp()
+        
+
     def insert(self, node, index=None, parent=None):
         """ Insert a node into the Tree.
 
@@ -579,7 +294,7 @@ class Tree2:
         """
         if parent is not None:
             if self.root is None:
-                raise AssertionError("The tree must be initialized with the root node before adding a node with its parent.")
+                raise AssertionError("The first node inserted into the tree must be the root node with no parent.")
             parent.add_child(node)
         else:
             if self.root is None:
@@ -589,9 +304,6 @@ class Tree2:
             self.nodes.append(node)
         else:
             self.nodes.insert(index, node)
-        node._counter = self._counter
-        self._counter += 1
-            
 
 
     def get_node_from_name(self, name, bottom_up=True):
@@ -618,14 +330,14 @@ class Tree2:
 
         Returns
         -------
-        node : `TreeNode2`
+        node : `TreeNode`
             Node in the tree. If node is not found, returns `None`.
         """
         index = self.search(name, bottom_up=bottom_up)
         node = self.nodes[index]
         return node
-        
-        
+            
+
     def search(self, name, bottom_up=True):
         """ Search and return index of node in Tree by its name.
 
@@ -740,7 +452,7 @@ class Tree2:
 
         Returns
         -------
-        node : `TreeNode2`
+        node : `TreeNode`
             Node in the tree. If node is not found, returns `None`.
         """
         index = self._search_counter(counter)
@@ -775,7 +487,7 @@ class Tree2:
             index = nodes[0]
         
         return index
-
+    
     
     def root(self):
         return self.root
@@ -800,12 +512,12 @@ class Tree2:
         """ Return indices of leaf nodes in the tree. """
         indices = [ix for ix, node in enumerate(self.nodes) if node.is_leaf()]
         return indices
-
+    
 
     def get_leaves(self):
-        """ Return leaf nodes in the tree. """
-        leaves = [node for node in self.nodes if node.is_leaf()]
-        return leaves
+        """ Return indices of leaf nodes in the tree. """
+        indices = [ix for ix, node in enumerate(self.nodes) if node.is_leaf()]
+        return indices
 
 
     def co_branch_indicator(self):
@@ -1123,13 +835,13 @@ class POSER:
         self.pseudo_dist = None # was pseudotime
         self._set_pseudo_dist()
 
-        self.tree = Tree2()        
+        self.tree = Tree()        
         # initialize the tree
         seg = np.arange(self.distances.shape[0], dtype=int)
-        node = TreeNode2(name=0, data=seg,
-                         nonunique=False, unidentified=False,
-                         branchable=True if self.check_min_branch_size(seg) else False,
-                         is_trunk=False)
+        node = TreeNode(name=0, data=seg,
+                        nonunique=False, unidentified=False,
+                        branchable=True if self.check_min_branch_size(seg) else False,
+                        is_trunk=False)
         # get tips:
         # tip_0 = root
         # get first tip (farthest from root)
@@ -1153,7 +865,7 @@ class POSER:
 
         Returns
         -------
-        node : `TreeNode2`
+        node : `TreeNode`
             The node corresponding to the selected segment.
             If no nodes are branchable, returns None.
         """        
@@ -1872,11 +1584,11 @@ class POSER:
 
     
     def detect_branching(self, node):
-        """ Detect branching on a given segment and update TreeNode2 parameters in place.
+        """ Detect branching on a given segment and update TreeNode parameters in place.
 
         Parameters
         ----------
-        node : `TreeNode2`
+        node : `TreeNode`
             The node of the segment to be branched.
 
         Returns
@@ -1921,7 +1633,7 @@ class POSER:
             self.unidentified_points = self.unidentified_points | set(unidentified)
 
             # insert trunk/undecided_cells with same name
-            cur_trunk_node = TreeNode2(name=node.name, data=ssegs[trunk],
+            cur_trunk_node = TreeNode(name=node.name, data=ssegs[trunk],
                                       parent=node, nonunique=True, unidentified=False,
                                       branchable=True if self.check_min_branch_size(ssegs[trunk]) else False,
                                       is_trunk=trunk_undecided,
@@ -1936,11 +1648,11 @@ class POSER:
             num_segs = len(self.tree.get_leaves())
             for ix, (ixseg, ixseg_tips) in enumerate(zip(ssegs, ssegs_tips)):
                 if ix != trunk:
-                    cur_node = TreeNode2(name=ix+num_segs, data=ixseg, parent=node,
-                                         nonunique=False, unidentified=False,
-                                         branchable=True if self.check_min_branch_size(ixseg) else False,
-                                         is_trunk=False,
-                                         )
+                    cur_node = TreeNode(name=ix+num_segs, data=ixseg, parent=node,
+                                        nonunique=False, unidentified=False,
+                                        branchable=True if self.check_min_branch_size(ixseg) else False,
+                                        is_trunk=False,
+                                        )
                     cur_node.tips = ixseg_tips
                     self.tree.insert(cur_node, parent=node)
                     cur_nodes.append(cur_node._counter)
@@ -2043,7 +1755,7 @@ class POSER:
 
         Returns
         -------
-        tree : `Tree2`
+        tree : `Tree`
             The tree with up to `n_branches` branchings.
             If ``n_branches`` is more than or equal to the number of
             branchings in the tree, the original tree is returned.
@@ -2053,19 +1765,19 @@ class POSER:
             tree = self.tree
         else:
             n_branches = min(n_branches, len(self.branched_ordering))
-            tree = Tree2()
+            tree = Tree()
 
             node = self.branched_ordering[0]
-            new_node = TreeNode2(name=node.name, data=node.data,
-                                 nonunique=node.nonunique, unidentified=node.unidentified,
-                                 branchable=node.branchable, is_trunk=node.is_trunk)
+            new_node = TreeNode(name=node.name, data=node.data,
+                                nonunique=node.nonunique, unidentified=node.unidentified,
+                                branchable=node.branchable, is_trunk=node.is_trunk)
             tree.insert(new_node)
             for ix, node in enumerate(self.branched_orderings[:n_branches]):
                 parent = tree.get_node_from_name(node.name, bottom_up=True)
                 for child in sorted(node.children, key=lambda x: x._counter):
-                    new_node = TreeNode2(name=child.name, data=child.data, parent=parent,
-                                 nonunique=child.nonunique, unidentified=child.unidentified,
-                                 branchable=child.branchable, is_trunk=child.is_trunk)
+                    new_node = TreeNode(name=child.name, data=child.data, parent=parent,
+                                        nonunique=child.nonunique, unidentified=child.unidentified,
+                                        branchable=child.branchable, is_trunk=child.is_trunk)
                     tree.insert(new_node, parent=parent)
 
             # mx = max([k._counter for k in tree.nodes])
