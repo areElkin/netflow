@@ -3,19 +3,20 @@ import pandas as pd
 
 from netflow import InfoNet
 from netflow.methods.metrics import norm_features_as_sym_dist
-from netflow.pose.organization import compute_transitions, dpt_from_augmented_sym_transitions, TDA
+from netflow.pose.organization import compute_transitions, dpt_from_augmented_sym_transitions, \
+    POSER, get_pose # TDA
 from netflow.pose.similarity import sigma_knn
 from netflow import similarity as nfs
 from netflow._logging import _gen_logger, set_verbose
 logger = _gen_logger(__name__)
 
-from importlib import reload
-from netflow.pose import organization as nfo
-nfo = reload(nfo)
+# from importlib import reload
+# from netflow.pose import organization as nfo
+# nfo = reload(nfo)
 # from netflow.methods import classes as nfc
 # nfc = reload(nfc)
 # InfoNet = nfc.InfoNet
-TDA = nfo.TDA
+# TDA = nfo.TDA
 # logger.msg(f"*** UPDATED TDA ***")
 # logger.warning(f"Imported new TDA: {help(TDA)}")
 
@@ -66,7 +67,8 @@ def _fuse_similarities_from_recipes(keeper, similarity_labels, recipes):
     return fused_similarity_labels
 
 
-def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None, n_branches=5, min_branch_size=6,
+def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None, n_branches=5, until_branched=False,
+                        min_branch_size=6, split=True,
                         choose_largest_segment=False, flavor='haghverdi16', allow_kendall_tau_shift=False,
                         smooth_corr=False, brute=True, verbose=None):
     """ Compute POSE from root with respect to distance.
@@ -87,17 +89,29 @@ def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None
             distance to all other observations is used) use observation furthest from observation
             with largest ratio of triangular distance to chord distance.
         - `int` : Index of root observation (``root > 0``).
-        - `str` : Observation label.
+        - `str` : Observation label.    
     similarity_label : {`None`, `str`}
         If ``root`` is `None`, use the similarity to set the observation with the largest
         density as ``root``. If not provided, ``root`` is set as the observation with the
         smallest net distance to all other observations.
         This is ignored if ``root`` is not `None`.
+    n_branches : `int`
+        Number of branch splits to perform (``n_branches > 0``).
+    until_branched : `bool`
+            If `True`, iteratively find segment to branch and perform branching
+            until a segement is successfully branched or no branchable segments
+            remain. Otherwise, if `False`, attempt to perform branching only once 
+            on the next potentially branchable segment.
     min_branch_size : {`int`, `float`}
         During recursive splitting of branches, only consider splitting a branch with at least
         ``min_branch_size > 2`` data points.
         If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
         (``0 < min_branch_size < 1``).
+    split : `bool` (default = True)
+            if `True`, split segment into multiple branches. Otherwise,
+            determine a single branching off of the main segment.
+            This is ignored if flavor is not 'haghverdi16'.
+            If `True`, ``brute`` is ignored.
     choose_largest_segment : `bool`
         If `True`, select largest segment for branching.
     flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
@@ -111,9 +125,7 @@ def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None
     brute : `bool`
         If `True`, data points not associated with any branch upon split are combined with
         undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,
-        not associated with any branch (and assigned branch index -1).
-    n_branches : `int`
-        Number of branch splits to perform (``n_branches > 0``).
+        not associated with any branch (and assigned branch index -1).    
 
     Returns
     -------
@@ -159,44 +171,64 @@ def _pose_from_distance(keeper, distance_label, root=None, similarity_label=None
 
     # logger.msg(f"root = {root} type = {type(root)}.")
 
-    tda = TDA(keeper, dd.label, label=None,  min_branch_size=min_branch_size,
-              choose_largest_segment=choose_largest_segment,
-              flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
-              root=root, smooth_corr=smooth_corr, brute=brute, verbose=verbose)
+    # tda = TDA(keeper, dd.label, label=None,  min_branch_size=min_branch_size,
+    #           choose_largest_segment=choose_largest_segment,
+    #           flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
+    #           root=root, smooth_corr=smooth_corr, brute=brute, verbose=verbose)
 
-    tda.branchings_segments(n_branches)
+    # tda.branchings_segments(n_branches)
 
-    G_tda = tda.construct_topology()    
-    nx.set_node_attributes(G_tda, {k: tda.pseudotime[k] for k in G_tda}, name="pseudo-distance to root")
-    
-    pos = nx.layout.kamada_kawai_layout(G_tda)
-    # pos_d = pd.DataFrame(data=tda.distances).to_dict()
-    # pos = nx.layout.kamada_kawai_layout(G_tda, dist=pos_d)
-    # nx.set_edge_attributes(G_tda, {ee: tda.distances[ee[0], ee[1]] for ee in G_tda.edges()}, name="weight")
-    # pos = nx.layout.kamada_kawai_layout(G_tda, weight='weight')
-    # pos = nx.layout.kamada_kawai_layout(G_tda, weight='distance')
-    nx.set_node_attributes(G_tda, pos, name='pos')
+    # G_tda = tda.construct_topology()    
+    # nx.set_node_attributes(G_tda, {k: tda.pseudotime[k] for k in G_tda}, name="pseudo-distance to root")
 
-    G_tda_nn = tda.construct_pose_nn_topology(G_tda)
-    # G_tda_mst = tda.construct_pose_mst_topology(G=G_tda)
-
-    cur_key = "_".join(["POSE", dd.label, f"nbranches{n_branches}", f"min{min_branch_size}",
+    cur_key = "_".join([dd.label, f"nbranches{n_branches}", f"untilBranched{until_branched}",
+                        f"min{min_branch_size}", f"split{split}",
                         f"largestSeg{choose_largest_segment}", flavor, f"shift{allow_kendall_tau_shift}",
                         f"smooth{smooth_corr}", f"brute{brute}", f"root{root}"])
+
+    if f"poser_{cur_key}" not in keeper.misc:
+        get_pose(keeper, dd.label, cur_key,  n_branches, until_branched=until_branched,
+                 root=root, min_branch_size=min_branch_size,
+                 choose_largest_segment=choose_largest_segment,
+                 flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
+                 smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
+    else:
+        logger.warning(f"Loading previously computed pose for {cur_key}.")
+    poser = keeper.misc[f"poser_{cur_key}"]
+    G_pose = keeper.graphs[f"pose_{cur_key}"]
+    G_pose_nn = keeper.graphs[f"pose_nn_{cur_key}"]
+
+    nx.set_node_attributes(G_pose, {k: poser.pseudo_dist[k] for k in G_pose}, name="pseudo-distance to root")
+    nx.set_node_attributes(G_pose_nn, {k: poser.pseudo_dist[k] for k in G_pose_nn}, name="pseudo-distance to root")
+    
+    # pos = nx.layout.kamada_kawai_layout(G_pose)    
+    # # pos_d = pd.DataFrame(data=tda.distances).to_dict()
+    # # pos = nx.layout.kamada_kawai_layout(G_tda, dist=pos_d)
+    # # nx.set_edge_attributes(G_tda, {ee: tda.distances[ee[0], ee[1]] for ee in G_tda.edges()}, name="weight")
+    # # pos = nx.layout.kamada_kawai_layout(G_tda, weight='weight')
+    # # pos = nx.layout.kamada_kawai_layout(G_tda, weight='distance')
+    # nx.set_node_attributes(G_pose, pos, name='pos')
+    # nx.set_node_attributes(G_pose_nn, pos, name='pos')
+
+    # G_tda_nn = tda.construct_pose_nn_topology(G_tda)
+    # G_tda_mst = tda.construct_pose_mst_topology(G=G_tda)
+
     # branch_record = pd.Series(dict(G_tda.nodes.data(data='branch', default=-1))).rename(index=dict(G_tda.nodes.data(data='name')))
     # branch_record.name = cur_key
-    G_tda.name = cur_key
-    G_tda_nn.name = f"NN_{cur_key}"
+
+    # G_tda.name = cur_key
+    # G_tda_nn.name = f"NN_{cur_key}"
     # G_tda_mst.name = f"MST_{cur_key}"
     # keeper.add_graph(G_tda, cur_key)
 
-    return tda, G_tda, G_tda_nn # , G_tda_mst
+    return poser, G_pose, G_pose_nn  # tda, G_tda, G_tda_nn # , G_tda_mst
             
 
 def run_pose(keeper, metrics_configs,
              sigma_config={'n_neighbors': 5, 'method': 'max', 'knn': False},
              density_normalize=True, fuse_recipes=None, root=None,
-             n_branches=5, min_branch_size=6, choose_largest_segment=False,
+             n_branches=5, until_branched=False, min_branch_size=6,
+             split=True, choose_largest_segment=False,
              flavor='haghverdi16', allow_kendall_tau_shift=False,
              smooth_corr=False, brute=True, verbose=None):
     """ Run data to POSE pipeline.
@@ -254,11 +286,23 @@ def run_pose(keeper, metrics_configs,
             other observations is used
         - `int` : Index of root observation (``root > 0``).
         - `str` : Observation label.
+    n_branches : `int`
+        Number of branch splits to perform (``n_branches > 0``).
+    until_branched : `bool`
+            If `True`, iteratively find segment to branch and perform branching
+            until a segement is successfully branched or no branchable segments
+            remain. Otherwise, if `False`, attempt to perform branching only once 
+            on the next potentially branchable segment.
     min_branch_size : {`int`, `float`}
         During recursive splitting of branches, only consider splitting a branch with at least
         ``min_branch_size > 2`` data points.
         If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
         (``0 < min_branch_size < 1``).
+    split : `bool` (default = True)
+            if `True`, split segment into multiple branches. Otherwise,
+            determine a single branching off of the main segment.
+            This is ignored if flavor is not 'haghverdi16'.
+            If `True`, ``brute`` is ignored.
     choose_largest_segment : `bool`
         If `True`, select largest segment for branching.
     flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
@@ -272,9 +316,7 @@ def run_pose(keeper, metrics_configs,
     brute : `bool`
         If `True`, data points not associated with any branch upon split are combined with
         undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,
-        not associated with any branch (and assigned branch index -1).
-    n_branches : `int`
-        Number of branch splits to perform (``n_branches > 0``).
+        not associated with any branch (and assigned branch index -1).   
     """
     # Compute distances
     feature_set_label_counter = 1
@@ -432,23 +474,30 @@ def run_pose(keeper, metrics_configs,
 
         print(f"Root for distance = {distance_label} ==> {root}.")
         # tda, G_tda, G_tda_nn, G_tda_mst = _pose_from_distance(keeper, distance_label, root=root,
-        tda, G_tda, G_tda_nn = _pose_from_distance(keeper, distance_label, root=root,
-                                                   similarity_label=None, # sim_label,
-                                                   n_branches=n_branches, min_branch_size=min_branch_size,
-                                                   choose_largest_segment=choose_largest_segment, flavor=flavor,
-                                                   allow_kendall_tau_shift=allow_kendall_tau_shift,
-                                                   smooth_corr=smooth_corr, brute=brute, verbose=verbose)
+        # tda, G_tda, G_tda_nn = _pose_from_distance(keeper, distance_label, root=root,
+        #                                            similarity_label=None, # sim_label,
+        #                                            n_branches=n_branches, min_branch_size=min_branch_size,
+        #                                            choose_largest_segment=choose_largest_segment, flavor=flavor,
+        #                                            allow_kendall_tau_shift=allow_kendall_tau_shift,
+        #                                            smooth_corr=smooth_corr, brute=brute, verbose=verbose)
+        poser, G_pose, G_pose_nn = _pose_from_distance(keeper, distance_label, root=root,
+                                                       similarity_label=None, # sim_label,
+                                                       n_branches=n_branches, until_branched=until_branched,
+                                                       min_branch_size=min_branch_size, split=split,
+                                                       choose_largest_segment=choose_largest_segment, flavor=flavor,
+                                                       allow_kendall_tau_shift=allow_kendall_tau_shift,
+                                                       smooth_corr=smooth_corr, brute=brute, verbose=verbose)
 
-        if 'root' not in G_tda.nodes[tda.root]:
-            root_attr = {k: 1 if k == tda.root else 0 for k in G_tda}
-            nx.set_node_attributes(G_tda, root_attr, name='root')
-            nx.set_node_attributes(G_tda_nn, root_attr, name='root')
-            # nx.set_node_attributes(G_tda_mst, root_attr, name='root')
+        if 'root' not in G_pose.nodes[poser.root]:
+            root_attr = {k: 1 if k == poser.root else 0 for k in G_pose}
+            nx.set_node_attributes(G_pose, root_attr, name='root')
+            nx.set_node_attributes(G_pose_nn, root_attr, name='root')
+            # nx.set_node_attributes(G_pose_mst, root_attr, name='root')
 
         
-        keeper.add_misc(tda, f"TDA_{G_tda.name}")
-        keeper.add_graph(G_tda, G_tda.name)
-        keeper.add_graph(G_tda_nn, G_tda_nn.name)
+        # keeper.add_misc(tda, f"TDA_{G_tda.name}")
+        # keeper.add_graph(G_tda, G_tda.name)
+        # keeper.add_graph(G_tda_nn, G_tda_nn.name)
         # keeper.add_graph(G_tda_mst, G_tda_mst.name)
         
 
