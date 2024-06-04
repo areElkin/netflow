@@ -272,7 +272,7 @@ class Tree:
 
 
     def disp(self):
-        self.tree.root.disp()
+        print(self.tree.root.disp())
         
 
     def insert(self, node, index=None, parent=None):
@@ -304,6 +304,9 @@ class Tree:
             self.nodes.append(node)
         else:
             self.nodes.insert(index, node)
+
+        node._counter = self._counter
+        self._counter += 1
 
 
     def get_node_from_name(self, name, bottom_up=True):
@@ -515,9 +518,9 @@ class Tree:
     
 
     def get_leaves(self):
-        """ Return indices of leaf nodes in the tree. """
-        indices = [ix for ix, node in enumerate(self.nodes) if node.is_leaf()]
-        return indices
+        """ Return leaf nodes in the tree. """
+        leaves = [node for node in self.nodes if node.is_leaf()]
+        return leaves
 
 
     def co_branch_indicator(self):
@@ -817,7 +820,8 @@ class POSER:
         self.brute = brute
         self.split = split
 
-        root = root or "density"
+        if root is None:
+            root = "density"
         if isinstance(root, str):
             if root == 'density':
                 root = keeper.distance_density_argmin(key)
@@ -871,7 +875,9 @@ class POSER:
         """        
         selected_segs = []
         segs = self.tree.get_leaves()
+        
         for iseg, seg in enumerate(segs):
+            
             if not seg.branchable:
                 continue
 
@@ -907,6 +913,7 @@ class POSER:
                 tips = [np.where(allindices[seg.data] == tip)[0][0] for tip in seg.tips] # local index of tips in the seg
                 # find the third point on the seg that has maximal added distance from the two tip points:
                 dseg = Dseg[tips[0]] + Dseg[tips[1]]
+                
                 if not np.isfinite(dseg).any():
                     seg.branchable = False
                     continue
@@ -1220,11 +1227,18 @@ class POSER:
                 [2, 0, 1],  #             -"-                       third tip
             ]
         else:
-            ps = [[2, 0, 1]]
+            # ps = [[2, 0, 1]]
+            ps = [[1, 2, 0]]
 
         for i, p in enumerate(ps):
             # logger.warning(f"*iterating p: i = {i}")
             ssegs.append(self.__detect_branching_haghverdi16(Dseg, tips[p]))
+
+        
+        # if not self.split:
+        #     # add main portion of branch
+        #     ssegs.append(list(set(range(Dseg.shape[0])) - set(ssegs[0])))
+            
         return ssegs
 
 
@@ -1506,14 +1520,27 @@ class POSER:
                 # RE END MODIFIED
 
         else:
+            if len(ssegs) < 1:
+                return None
+                
             branch_seg = ssegs[0]
             main_seg = [k for k in range(Dseg.shape[0]) if k not in branch_seg]
+            if len(main_seg) == 0:
+                return None
             ssegs = [main_seg, branch_seg]
 
             # compute new tips within new segments
-            ssegs_tips = [list(tips[:2])]
-            branch_tips = self.identify_local_tips(Dseg, branch_seg, tips[2])
-            ssegs_tips.append(branch_tips)
+            # ssegs_tips = [list(tips[:2])]
+            # branch_tips = self.identify_local_tips(Dseg, branch_seg, tips[2])
+            # ssegs_tips.append(branch_tips)
+            ssegs_tips = [self.identify_local_tips(Dseg,
+                                                   ss,
+                                                   tt) for ss, tt in zip([main_seg,
+                                                                          branch_seg],
+                                                                         [tips[0],
+                                                                          tips[1], # tips[2],
+                                                                          ])]
+            
 
             # ssegs_connects = [[]]*len(ssegs) # [[], []]
             # point in branch closest to the main segment
@@ -1527,7 +1554,7 @@ class POSER:
             # RE END MODIFIED
             # point in main segment closest to the identified branch point
             closest_cell_b = main_seg[
-                np.argmin(Dseg[closest_cell][main_seg])
+                np.argmin(Dseg[closest_cell_a][main_seg])
             ]
             # RE START MODIFIED
             # # ssegs_connects[-1].append(closest_cell)
@@ -1645,20 +1672,23 @@ class POSER:
             
             # append other segments
             cur_nodes = []
-            num_segs = len(self.tree.get_leaves())
+            # num_segs = len(self.tree.get_leaves())
+            num_segs = max([k.name for k in self.tree.get_leaves()])
             for ix, (ixseg, ixseg_tips) in enumerate(zip(ssegs, ssegs_tips)):
                 if ix != trunk:
-                    cur_node = TreeNode(name=ix+num_segs, data=ixseg, parent=node,
+                    cur_node = TreeNode(name=num_segs+1, # ix+num_segs,
+                                        data=ixseg, parent=node,
                                         nonunique=False, unidentified=False,
                                         branchable=True if self.check_min_branch_size(ixseg) else False,
                                         is_trunk=False,
                                         )
+                    num_segs += 1
                     cur_node.tips = ixseg_tips
                     self.tree.insert(cur_node, parent=node)
                     cur_nodes.append(cur_node._counter)
                 else:
                     cur_nodes.append(cur_trunk_node._counter)
-
+            
             # update edges between nodes
             # for i, adj in enumerate(ssegs_adjacency):
             #     self.tree.node_adjacency[cur_nodes[i]] += [cur_nodes[j] for j in adj]
