@@ -318,6 +318,7 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
@@ -999,6 +1000,23 @@ Distance may be interchanged with similarity, but distance is used for simplicit
 <dd><p>The distance matrix.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.density">
+<span class="sig-name descname"><span class="pre">density</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceView.density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.density" title="Permalink to this definition">#</a></dt>
+<dd><p>Return density of each observation</p>
+<p>The density of an observation is its net distance to all other
+observations. This should be minimized for distances and maximized
+for similarities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>d</strong> – The densities indexed by the observations.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>pandas.Series</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceView.label">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceView.label" title="Permalink to this definition">#</a></dt>
@@ -1432,16 +1450,444 @@ with a 2-multi-index of the pairwise observation labels.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions">
+<span class="sig-name descname"><span class="pre">compute_dpt_from_augmented_sym_transitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_dpt_from_augmented_sym_transitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the diffusion pseudotime metric between observations,
+computed from the symmetric transitions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T\)</span> is the symmetric transition matrix</p></li>
+<li><p><span class="math notranslate nohighlight">\(M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)\)</span></p></li>
+<li><p>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>dpt(x,z) = ||M(x, .) - M(y, .)||^2</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<cite>str</cite>) – Reference ID for the symmetric transitions <cite>numpy.ndarray</cite>, (n_observations, n_observations)
+stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dpt</strong> – Pairwise-observation Diffusion pseudotime distances are stored
+in keeper.distances[“dpt_from_{key}”].</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>numpy.ndarray</cite>, (n_observations, n_observations)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_dpt_from_similarity">
+<span class="sig-name descname"><span class="pre">compute_dpt_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_dpt_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_dpt_from_similarity" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the diffusion pseudotime metric between observations,
+computed from similarity</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This entails computing the augmented symmetric transitions.</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span> is the symmetric transition matrix</p></li>
+<li><p><span class="math notranslate nohighlight">\(M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)\)</span></p></li>
+<li><p>:math:<a href="#id3"><span class="problematic" id="id4">`</span></a>dpt(x,z) = ||M(x, .) - M(y, .)||^2</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>similarity_key</strong> (<cite>str</cite>) – Reference key to the <cite>numpy.ndarray</cite>, (n_observations, n_observations)
+symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+in the keeper.</p></li>
+<li><p><strong>density_normalize</strong> (<cite>bool</cite>) – The density rescaling of Coifman and Lafon (2006): Then only the
+geometry of the data matters, not the sampled density.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl>
+<dt>transitions_asym<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Asymmetric Transition matrix (with 0s on the diagonal) added to
+<a href="#id5"><span class="problematic" id="id6">``</span></a>keeper.misc[f”transitions_asym_{similarity_key}”].</p>
+</dd>
+<dt>transitions_sym<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Symmetric Transition matrix (with 0s on the diagonal) added to
+<a href="#id7"><span class="problematic" id="id8">``</span></a>keeper.misc[f”transitions_sym_{similarity_key}”].</p>
+</dd>
+<dt>dpt<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Pairwise-observation Diffusion pseudotime distances are stored
+in keeper.distances[“dpt_from_transitions_asym_{similarity_key}”].</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The following are stored in the keeper</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_sigmas">
+<span class="sig-name descname"><span class="pre">compute_sigmas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_nn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_sigmas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_sigmas" title="Permalink to this definition">#</a></dt>
+<dd><p>Set sigma for each obs as the distance to its k-th neighbor from keeper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance_key</strong> (<cite>str</cite>) – The label used to reference the distance matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>,
+of size (n_observations, n_observations).</p></li>
+<li><p><strong>label</strong> ({<cite>None</cite>, <cite>str</cite>}) – <p>If provided, this is appended to the context tag
+(<code class="docutils literal notranslate"><span class="pre">tag</span> <span class="pre">=</span> <span class="pre">f&quot;{method}{n_neighbors}nn_{distance_key}&quot;</span></code>). The key used to store the
+results defaults to the tag when <code class="docutils literal notranslate"><span class="pre">label</span></code> is not provided: <code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">=</span> <span class="pre">tag</span></code>. Otherwise,
+the key is set to: <code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">=</span> <span class="pre">tag</span> <span class="pre">+</span> <span class="pre">&quot;-&quot;</span> <span class="pre">+</span> <span class="pre">label</span></code>. The resulting sigmas
+are stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc['sigmas_'</span> <span class="pre">+</span> <span class="pre">key]</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">return_nn</span></code> is <cite>True</cite>,
+nearest neighbor indices are stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc['nn_indices_'</span> <span class="pre">+</span> <span class="pre">key]</span></code> and nearest
+neighbor distances are stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc['nn_distances_'</span> <span class="pre">+</span> <span class="pre">key]</span></code>.</p>
+</p></li>
+<li><p><strong>n_neighbors</strong> ({<cite>int</cite>, <cite>None</cite>}) – K-th nearest neighbor (or number of nearest neighbors) to use for computing <code class="docutils literal notranslate"><span class="pre">sigmas</span></code>,
+<code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>. (Uses <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">+</span> <span class="pre">1</span></code>, since each obs is it’s closest neighbor).
+If <cite>None</cite>, all neighbors are used.</p></li>
+<li><p><strong>method</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'max'}</em>) – <p>Indicate how to compute sigma.</p>
+<p>Options:</p>
+<ul>
+<li><p>’mean’ : mean of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
+<li><p>’median’ : median of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
+<li><p>’max’ : distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code>-nearest neighbor</p></li>
+</ul>
+</p></li>
+<li><p><strong>return_nn</strong> (<cite>bool</cite>) – If <cite>True</cite>, also store indices and distances of <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>sigmas</strong> (<cite>numpy.ndarray</cite>, (n_observations, )) – The distance to the k-th nearest neighbor for all rows in <code class="docutils literal notranslate"><span class="pre">d</span></code>.
+Sigmas represent the kernel width representing each data point’s accessible neighbors.
+Written to <code class="docutils literal notranslate"><span class="pre">keeper.misc['sigmas_'</span> <span class="pre">+</span> <span class="pre">key]</span></code>.</p></li>
+<li><p><strong>indices</strong> (<cite>numpy.ndarray</cite>, (n_observations, )) – Indices of nearest neighbors where each row corresponds to an observation.
+Written, if <code class="docutils literal notranslate"><span class="pre">return_nn</span></code> is <cite>True</cite>, to <code class="docutils literal notranslate"><span class="pre">keeper.misc['nn_indices_'</span> <span class="pre">+</span> <span class="pre">key]</span></code>.</p></li>
+<li><p><strong>distances</strong> (<cite>numpy.ndarray</cite>, (n_observations, <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">+</span> <span class="pre">1</span></code>)) – Distances to nearest neighbors where each row corresponds to an obs.
+Written, if <code class="docutils literal notranslate"><span class="pre">return_nn</span></code> is <cite>True</cite>, to <code class="docutils literal notranslate"><span class="pre">keeper.misc['nn_distances_'</span> <span class="pre">+</span> <span class="pre">key]</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_similarity_from_distance">
+<span class="sig-name descname"><span class="pre">compute_similarity_from_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputed_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_similarity_from_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_similarity_from_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert distance matrix to symmetric similarity measure.</p>
+<p>The resulting similarity is written to the similarity keeper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance_key</strong> (<cite>str</cite>) – The label used to reference the distance matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>,
+of size (n_observations, n_observations).</p></li>
+<li><p><strong>n_neighbors</strong> ({<cite>int</cite>, <cite>None</cite>}) – K-th nearest neighbor (or number of nearest neighbors) to use for computing <code class="docutils literal notranslate"><span class="pre">sigmas</span></code>,
+<code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>. (Uses <code class="docutils literal notranslate"><span class="pre">n_neighbors</span> <span class="pre">+</span> <span class="pre">1</span></code>, since each obs is it’s closest neighbor).
+If <cite>None</cite>, all neighbors are used.</p></li>
+<li><p><strong>method</strong> ({<cite>float</cite>, ‘mean’, ‘median’, ‘max’, ‘precomputed’}) – <p>Indicate how to compute sigma.</p>
+<p>Options:</p>
+<ul>
+<li><p><cite>float</cite> : constant float to use as sigma</p></li>
+<li><p><cite>int</cite> : constant int to use as sigma</p></li>
+<li><p>’mean’ : mean of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
+<li><p>’median’ : median of distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors</p></li>
+<li><p>’max’ : distance to <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code>-nearest neighbor</p></li>
+<li><p>’precomputed’ : precomputed values extracted from <code class="docutils literal notranslate"><span class="pre">keeper.misc[f&quot;sigmas_{key}&quot;]</span></code> as a <cite>numpy.ndarray</cite> of size (n_observations, ).</p></li>
+</ul>
+</p></li>
+<li><p><strong>precomputed_method</strong> (<em>{'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'max'}</em>) – This is ignored if <cite>method</cite> is not <cite>‘precomputed’</cite>. When <cite>method</cite> is <cite>‘precomputed’</cite>, specify the method that
+was previously used for computing sigmas. See <cite>method</cite> for description of options.</p></li>
+<li><p><strong>label</strong> ({<cite>None</cite>, <cite>str</cite>}) – If provided, this is appended to the context tag (<code class="docutils literal notranslate"><span class="pre">tag</span> <span class="pre">=</span> <span class="pre">f&quot;{method}{n_neighbors}nn_{distance_key}&quot;</span></code>)
+The key used to store the resulting similarity matrix of size (n_observations, n_observations)
+in <code class="docutils literal notranslate"><span class="pre">keeper.similarities[f&quot;similarity_{key}]</span></code> defaults to the tag when <code class="docutils literal notranslate"><span class="pre">label</span></code> is not provided: <code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">=</span> <span class="pre">tag</span></code>. Otherwise,
+the key is set to: <code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">=</span> <span class="pre">tag</span> <span class="pre">+</span> <span class="pre">&quot;-&quot;</span> <span class="pre">+</span> <span class="pre">label</span></code>.</p></li>
+<li><p><strong>knn</strong> (<cite>bool</cite>) – If <cite>True</cite>, restrict similarity measure to be non-zero only between <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> nearest neighbors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>K</strong> – Symmetric similarity measure.
+Written to <code class="docutils literal notranslate"><span class="pre">keeper.similarities[key]</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>numpy.ndarray</cite>, (n_observations, n_observations)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_transitions_from_similarity">
+<span class="sig-name descname"><span class="pre">compute_transitions_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_transitions_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_transitions_from_similarity" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute symmetric and asymmetric transition matrices and store in keeper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Code primarily copied from <cite>scanpy.neighbors</cite>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>similarity_key</strong> (<cite>str</cite>) – Reference key to the <cite>numpy.ndarray</cite>, (n_observations, n_observations)
+symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+in the keeper.</p></li>
+<li><p><strong>density_normalize</strong> (<cite>bool</cite>) – The density rescaling of Coifman and Lafon (2006): Then only the
+geometry of the data matters, not the sampled density.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl>
+<dt>transitions_asym_{similarity_key}<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Asymmetric Transition matrix.</p>
+</dd>
+<dt>transitions_sym_{similarity_key}<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Symmetric Transition matrix.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Adds the following to <cite>keeper.misc</cite> (with 0s on the diagonals)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.construct_pose">
+<span class="sig-name descname"><span class="pre">construct_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose_largest_segment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flavor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'haghverdi16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_kendall_tau_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_branches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">until_branched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.construct_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.construct_pose" title="Permalink to this definition">#</a></dt>
+<dd><p>Construct the POSE from specified distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the distance matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>,
+of size (n_observations, n_observations).</p></li>
+<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, ‘density’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
+<ul>
+<li><p><cite>int</cite> : index of observation</p></li>
+<li><p>’density’ : select observation with minimal distance-density</p></li>
+<li><p>’ratio’ : select observation which leads to maximal triangular ratio distance</p></li>
+</ul>
+</p></li>
+<li><p><strong>min_branch_size</strong> ({<cite>int</cite>, <cite>float</cite>}) – During recursive splitting of branches, only consider splitting a branch with at least
+<code class="docutils literal notranslate"><span class="pre">min_branch_size</span> <span class="pre">&gt;</span> <span class="pre">2</span></code> data points.
+If a <cite>float</cite>, <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> refers to the fraction of the total number of data points
+(<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">min_branch_size</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>).</p></li>
+<li><p><strong>choose_largest_segment</strong> (<cite>bool</cite>) – If <cite>True</cite>, select largest segment for branching.</p></li>
+<li><p><strong>flavor</strong> (<em>{'haghverdi16'</em><em>, </em><em>'wolf17_tri'</em><em>, </em><em>'wolf17_bi'</em><em>, </em><em>'wolf17_bi_un'}</em>) – Branching algorithm (based on <cite>scanpy</cite> implementation).</p></li>
+<li><p><strong>allow_kendall_tau_shift</strong> (<cite>bool</cite>) – If a very small branch is detected upon splitting, shift away from
+maximum correlation in Kendall tau criterion of <a class="reference internal" href="../../references.html#haghverdi16" id="id9"><span>[Haghverdi16]</span></a> to
+stabilize the splitting.</p></li>
+<li><p><strong>smooth_corr</strong> (<cite>bool</cite>, default = <cite>False</cite>) – If <cite>True</cite>, smooth correlations before identifying cut points for branch splitting.</p></li>
+<li><p><strong>brute</strong> (<cite>bool</cite>) – If <cite>True</cite>, data points not associated with any branch upon split are combined with
+undecided (trunk) points. Otherwise, if <cite>False</cite>, they are treated as individual islands,
+not associated with any branch (and assigned branch index -1).</p></li>
+<li><p><strong>split</strong> (<cite>bool</cite> (default = True)) – if <cite>True</cite>, split segment into multiple branches. Otherwise,
+determine a single branching off of the main segment.
+This is ignored if flavor is not ‘haghverdi16’.
+If <cite>True</cite>, <code class="docutils literal notranslate"><span class="pre">brute</span></code> is ignored.</p></li>
+<li><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branches to look for (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p></li>
+<li><p><strong>until_branched</strong> (<cite>bool</cite>) – <p>If <cite>True</cite>, iteratively find segment to branch and perform branching
+until a segement is successfully branched or no branchable segments
+remain. Otherwise, if <cite>False</cite>, attempt to perform branching only once
+on the next potentially branchable segment.</p>
+<p>..note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">only</span> <span class="n">applicable</span> <span class="n">when</span> <span class="n">branching</span> <span class="ow">is</span> <span class="n">being</span> <span class="n">performed</span><span class="o">.</span> <span class="n">If</span> <span class="n">previous</span>
+<span class="n">iterations</span> <span class="n">of</span> <span class="n">branching</span> <span class="n">has</span> <span class="n">already</span> <span class="n">been</span> <span class="n">performed</span><span class="p">,</span> <span class="n">it</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">possible</span> <span class="n">to</span>
+<span class="n">identify</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">iterations</span> <span class="n">where</span> <span class="n">no</span> <span class="n">branching</span> <span class="n">was</span> <span class="n">performed</span><span class="o">.</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>poser</strong> (<cite>netflow.pose.POSER</cite>) – The object used to construct the POSE.</p></li>
+<li><p><strong>G_poser_nn</strong> (<cite>networkx.Graph</cite>) – The updated graph with nearest neighbor edges and edge attribute “edge_origin”
+with the possible values :</p>
+<ul>
+<li><p>”POSE” : for edges in the original graph that are not nearest neighbor edges</p></li>
+<li><p>”NN” : for nearest neighbor edges that were not in the original graph</p></li>
+<li><p>”POSE + NN” : for edges in the original graph that are also nearest neighbor edges</p></li>
+</ul>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.convert_similarity_to_distance">
+<span class="sig-name descname"><span class="pre">convert_similarity_to_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.convert_similarity_to_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.convert_similarity_to_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert a similarity to a distance.</p>
+<p>The distance, computed as 1-similarity, is added to the distance keeper
+with the key <code class="docutils literal notranslate"><span class="pre">&quot;distance_from_&quot;</span> <span class="pre">+</span> <span class="pre">similarity_key</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>similarity_key</strong> (<cite>str</cite>) – The similiratiy reference key.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>d<span class="classifier">The new distance is saved to the keeper in</span></dt><dd><p><a href="#id10"><span class="problematic" id="id11">``</span></a>keeper.distances[f”distance_from_{similarity_key}”].</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The following are saved to the distance keeper</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#netflow.keepers.keeper.Keeper.data" title="Permalink to this definition">#</a></dt>
 <dd><p>The feature data sets.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.distance_density">
+<span class="sig-name descname"><span class="pre">distance_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.distance_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.distance_density" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute each observation’s density from a distance.</p>
+<p>The density of an observation is its net distance to all other observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<cite>str</cite>) – The reference label for the distance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>density</strong> – The densities indexed by the observation labels.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.Series</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.distance_density_argmin">
+<span class="sig-name descname"><span class="pre">distance_density_argmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.distance_density_argmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.distance_density_argmin" title="Permalink to this definition">#</a></dt>
+<dd><p>Find the observation with the largest density from a distnace.</p>
+<p>The density of an observation is its net distance to all other observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<cite>str</cite>) – The reference label for the distance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>obs</strong> – The index of the observation with the smallest density.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.distances">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">distances</span></span><a class="headerlink" href="#netflow.keepers.keeper.Keeper.distances" title="Permalink to this definition">#</a></dt>
 <dd><p>The distances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_feature_nbhd">
+<span class="sig-name descname"><span class="pre">euc_distance_pairwise_observation_feature_nbhd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_self</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.euc_distance_pairwise_observation_feature_nbhd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_feature_nbhd" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Euclidean distances between feature neighborhoods of every two observations</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">object.outdir</span></code> is not <cite>None</cite>, Euclidean distances are saved to file every 10 iterations.
+Before starting the computation, check if the file exists. If so, load and remove already computed
+nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
+the previously computed and saved results before saving and returning the combined results.</p>
+<p>Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Euclidean
+distance and do not provide any further information.</p>
+<p>The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by
+<code class="docutils literal notranslate"><span class="pre">self.misc[f&quot;{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;]</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_key</strong> (<cite>str</cite>) – The key to the data in the data keeper that should be used.</p></li>
+<li><p><strong>graph_key</strong> (<em>'str'</em>) – The key to the graph in the graph keeper that should be used.
+(Does not have to include all features in the data)</p></li>
+<li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features (nodes) to compute neighborhood distances on.
+If <cite>None</cite>, all features are used.</p></li>
+<li><p><strong>include_self</strong> (<cite>bool</cite>) – If <cite>True</cite>, add node in neighborhood which will result in computing normalized profile over the neighborhood.
+If <cite>False</cite>, node is not included in neighborhood which results in computing the transition distribution
+over the neighborhood.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
+and name of file to store stacked results.</p></li>
+<li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
+<li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
+<li><p><strong>**kwargs</strong> (<cite>dict</cite>) – Extra arguments to metric, passed to <cite>scipy.spatial.distance.cdist</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>eds</strong> – Euclidean distances between pairwise observations where rows are observation-pairs and columns are
+feature (node) names.
+saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code> with the key
+<code class="docutils literal notranslate"><span class="pre">f&quot;{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_profile">
+<span class="sig-name descname"><span class="pre">euc_distance_pairwise_observation_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.euc_distance_pairwise_observation_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_profile" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Euclidean distances between feature profiles of every two observations</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">object.outdir</span></code> is not <cite>None</cite>, Euclidean distances are saved to file.
+Before starting the computation, check if the file exists. If so, load and remove already computed
+nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
+the previously computed and saved results before saving and returning the combined results.</p>
+<p>Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+distance and do not provide any further information.</p>
+<p>The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
+and can be accessed by <code class="docutils literal notranslate"><span class="pre">self.distances[f'{data_key}_{label}_euc_dist_observation_pairwise_profiles']</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_key</strong> (<cite>str</cite>) – The key to the data in the data keeper that should be used.</p></li>
+<li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features to compute profile distances on. If <cite>None</cite>, all features are used.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
+name of file to store stacked results.</p></li>
+<li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
+<li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
+<li><p><strong>**kwargs</strong> (<cite>dict</cite>) – Extra arguments to metric, passed to <cite>scipy.spatial.distance.cdist</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>eds</strong> – Euclidean distances between pairwise profiles where rows are observation-pairs and columns are node names,
+saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> with the key <code class="docutils literal notranslate"><span class="pre">f'{data_key}_{label}_euc_dist_observation_pairwise_profiles'</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.fuse_similarities">
+<span class="sig-name descname"><span class="pre">fuse_similarities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fused_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.fuse_similarities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.fuse_similarities" title="Permalink to this definition">#</a></dt>
+<dd><p>Fuse similarities in the keeper</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>similarity_keys</strong> (<cite>list</cite>) – Reference keys of similiraties to fuse.</p></li>
+<li><p><strong>weights</strong> (<cite>list</cite>) – (Optional) Weight each similarity contributes to the fused similarity.
+Should be the same length as <code class="docutils literal notranslate"><span class="pre">similarity_keys</span></code>.
+If not provided, default behavior is to apply uniform weights.</p></li>
+<li><p><strong>fused_key</strong> (<cite>str</cite>) – (Optional) Specify key used to store the fused similarity in the keeper.
+Default behavior is to fuse the keys of the original similarities.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>fused_sim : The fused similarity, where the reference key, if not provided,
+is fused from the original labels.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The following is added to the similarity keeper</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -1724,6 +2170,42 @@ Future releases will allow for other formats.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.similarity_density">
+<span class="sig-name descname"><span class="pre">similarity_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.similarity_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.similarity_density" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute each observation’s density from a similarity.</p>
+<p>The density of an observation is its net similarity to all other observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<cite>str</cite>) – The reference label for the similarity.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>density</strong> – The densities indexed by the observation labels.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.Series</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.similarity_density_argmax">
+<span class="sig-name descname"><span class="pre">similarity_density_argmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.similarity_density_argmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.similarity_density_argmax" title="Permalink to this definition">#</a></dt>
+<dd><p>Find the observation with the largest density from a similarity.</p>
+<p>The density of an observation is its net similarity to all other observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<cite>str</cite>) – The reference label for the similarity.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>obs</strong> – The label of the observation with the largest density.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>str</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.subset">
 <span class="sig-name descname"><span class="pre">subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_misc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_graphs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.subset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.subset" title="Permalink to this definition">#</a></dt>
 <dd><p>Return a new instance of Keeper restricted to subset of observations.</p>
@@ -1757,6 +2239,101 @@ be of the form <cite>List</cite> [<cite>int</cite>], to reference observations b
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>Keeper</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.wass_distance_pairwise_observation_feature_nbhd">
+<span class="sig-name descname"><span class="pre">wass_distance_pairwise_observation_feature_nbhd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_self</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_distances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.wass_distance_pairwise_observation_feature_nbhd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.wass_distance_pairwise_observation_feature_nbhd" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Wasserstein distances between feature neighborhoods of every two observations</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">object.outdir</span></code> is not <cite>None</cite>, Wasserstein distances are saved to file every 10 iterations.
+Before starting the computation, check if the file exists. If so, load and remove already computed
+nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+the previously computed and saved results before saving and returning the combined results.</p>
+<p>Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+distance and do not provide any further information.</p>
+<p>The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by
+<code class="docutils literal notranslate"><span class="pre">self.misc[f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;]</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_key</strong> (<cite>str</cite>) – The key to the data in the data keeper that should be used.</p></li>
+<li><p><strong>graph_key</strong> (<em>'str'</em>) – The key to the graph in the graph keeper that should be used.
+(Does not have to include all features in the data)</p></li>
+<li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features (nodes) to compute neighborhood distances on.
+If <cite>None</cite>, all features are used.</p></li>
+<li><p><strong>include_self</strong> (<cite>bool</cite>) – If <cite>True</cite>, add node in neighborhood which will result in computing normalized profile over the neighborhood.
+If <cite>False</cite>, node is not included in neighborhood which results in computing the transition distribution
+over the neighborhood.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
+and name of file to store stacked results.</p></li>
+<li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the
+<span class="math notranslate nohighlight">\(n\)</span> nodes (ordered from <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span>).
+If <cite>None</cite>, use hop distance.</p></li>
+<li><p><strong>edge_weight</strong> ({<cite>None</cite>, <cite>str</cite>}) – The edge attribute used as the weight for computed the graph distances. This is
+ignored if <code class="docutils literal notranslate"><span class="pre">graph_distances</span></code> is provided, If <cite>None</cite>, no edge weight is used.</p></li>
+<li><p><strong>measure_cutoff</strong> (<cite>float</cite>) – Threshold for treating values in profiles as zero, default = 1e-6.</p></li>
+<li><p><strong>proc</strong> (<cite>int</cite>) – Number of processor used for multiprocessing. (Default value = cpu_count()).</p></li>
+<li><p><strong>chunksize</strong> (<cite>int</cite>) – Chunksize to allocate for multiprocessing.</p></li>
+<li><p><strong>solvr</strong> (<cite>str</cite>) – Solver to pass to POT library for computing Wasserstein distance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>wds</strong> – Wasserstein distances between pairwise observations where rows are observation-pairs and columns are
+feature (node) names.
+saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code> with the key
+<code class="docutils literal notranslate"><span class="pre">f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.wass_distance_pairwise_observation_profile">
+<span class="sig-name descname"><span class="pre">wass_distance_pairwise_observation_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_distances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.wass_distance_pairwise_observation_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.wass_distance_pairwise_observation_profile" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Wasserstein distances between feature profiles of every two observations</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">object.outdir</span></code> is not <cite>None</cite>, Wasserstein distances are saved to file every 10 iterations.
+Before starting the computation, check if the file exists. If so, load and remove already computed
+nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+the previously computed and saved results before saving and returning the combined results.</p>
+<p>Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+distance and do not provide any further information.</p>
+<p>The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
+and can be accessed by <code class="docutils literal notranslate"><span class="pre">self.distances[f'{data_key}_{label}_wass_dist_observation_pairwise_profiles']</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_key</strong> (<cite>str</cite>) – The key to the data in the data keeper that should be used.</p></li>
+<li><p><strong>graph_key</strong> (<em>'str'</em>) – The key to the graph in the graph keeper that should be used.
+(Does not have to include all features in the data)</p></li>
+<li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features to compute profile distances on. If <cite>None</cite>, all features are used.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
+name of file to store stacked results.</p></li>
+<li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the <span class="math notranslate nohighlight">\(n\)</span> nodes (ordered from <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span>).
+If <cite>None</cite>, use hop distance.</p></li>
+<li><p><strong>edge_weight</strong> ({<cite>None</cite>, <cite>str</cite>}) – The edge attribute used as the weight for computed the graph distances. This is
+ignored if <code class="docutils literal notranslate"><span class="pre">graph_distances</span></code> is provided, If <cite>None</cite>, no edge weight is used.</p></li>
+<li><p><strong>measure_cutoff</strong> (<cite>float</cite>) – Threshold for treating values in profiles as zero, default = 1e-6.</p></li>
+<li><p><strong>proc</strong> (<cite>int</cite>) – Number of processor used for multiprocessing. (Default value = cpu_count()).</p></li>
+<li><p><strong>chunksize</strong> (<cite>int</cite>) – Chunksize to allocate for multiprocessing.</p></li>
+<li><p><strong>solvr</strong> (<cite>str</cite>) – Solver to pass to POT library for computing Wasserstein distance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>wds</strong> – Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names,
+saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> with the key <code class="docutils literal notranslate"><span class="pre">f'{data_key}_{label}_wass_dist_observation_pairwise_profiles'</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
 </dd>
 </dl>
 </dd></dl>

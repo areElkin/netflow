@@ -373,15 +373,22 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">checks</span>
 <span class="kn">from</span> <span class="nn">.._utils</span> <span class="kn">import</span> <span class="n">_docstring_parameter</span><span class="p">,</span> <span class="n">_desc_distance</span><span class="p">,</span> \
-    <span class="n">_desc_data_distance</span><span class="p">,</span> <span class="n">load_from_file</span>
+    <span class="n">_desc_data_distance</span><span class="p">,</span> <span class="n">load_from_file</span><span class="p">,</span> <span class="n">fuse_labels</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">unstack_triu_</span>
+<span class="kn">from</span> <span class="nn">..methods.classes</span> <span class="kn">import</span> <span class="n">InfoNet</span>
+<span class="kn">from</span> <span class="nn">..pose</span> <span class="kn">import</span> <span class="n">similarity</span> <span class="k">as</span> <span class="n">nfs</span>
+<span class="kn">from</span> <span class="nn">..pose.organization</span> <span class="kn">import</span> <span class="n">compute_transitions</span><span class="p">,</span> <span class="n">dpt_from_augmented_sym_transitions</span><span class="p">,</span> <span class="n">POSER</span>
+<span class="c1"># import netflow.InfoNet as InfoNet</span>
 <span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span><span class="p">,</span> <span class="n">set_verbose</span>
+
+
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -448,6 +455,9 @@ document.write(`
 
 <div class="viewcode-block" id="DataKeeper.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>        
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation labels must be unique&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">observation_labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_features_labels</span> <span class="o">=</span> <span class="p">{}</span>
@@ -582,15 +592,19 @@ document.write(`
         
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span> <span class="o">!=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation labels must be unique&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set observation labels.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">))</span> <span class="o">!=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;feature labels must be unique&quot;</span><span class="p">)</span>
             <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># np.ndarray</span>
             <span class="n">feature_labels</span> <span class="o">=</span> <span class="kc">None</span>        
-
+        
         <span class="n">checks</span><span class="o">.</span><span class="n">check_matrix_no_nan</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">checks</span><span class="o">.</span><span class="n">check_matrix_nonnegative</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># checks.check_matrix_nonnegative(data)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_features_labels</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature_labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_features</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -853,6 +867,9 @@ document.write(`
 
 <div class="viewcode-block" id="DistanceKeeper.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation labels must be unique&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">observation_labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">observation_labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span>
 
@@ -930,6 +947,8 @@ document.write(`
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span> <span class="o">!=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation labels must be unique&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set observation labels.&quot;</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
@@ -1005,7 +1024,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">distance_subset</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="n">observations</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="n">distance_subset</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">observations</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">distance_subset</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations_a</span><span class="o">=</span><span class="n">observations</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">distance_subset</span></div></div>
 
 
@@ -1132,7 +1151,26 @@ document.write(`
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
                           <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">,</span>
                           <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span></div></div>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="DistanceView.density"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.density">[docs]</a>    <span class="k">def</span> <span class="nf">density</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return density of each observation</span>
+
+<span class="sd">        The density of an observation is its net distance to all other</span>
+<span class="sd">        observations. This should be minimized for distances and maximized</span>
+<span class="sd">        for similarities.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        d : `pandas.Series`</span>
+<span class="sd">            The densities indexed by the observations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div></div>
+            
+            
+        
         
 
 <div class="viewcode-block" id="GraphKeeper"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper">[docs]</a><span class="k">class</span> <span class="nc">GraphKeeper</span><span class="p">:</span>
@@ -1387,6 +1425,8 @@ document.write(`
             <span class="n">observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_observations</span><span class="p">)]</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">observation_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">num_observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation labels must be unique&quot;</span><span class="p">)</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_labels</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_observations</span><span class="p">,</span> \
                 <span class="s2">&quot;Inconsistent number of observation labels, length of observation_labels must equal num_observations&quot;</span>
             
@@ -1557,14 +1597,15 @@ document.write(`
 <span class="sd">            Reference label describing the data set.        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added data input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added data input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
 
         <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">num_observations</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">observation_labels</span>            
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">)]</span>
+            <span class="c1"># if self._data[label]._observation_labels is None:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">_observation_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span><span class="p">)]</span>
 
             <span class="c1"># initialize distances and similarities:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span> <span class="o">=</span> <span class="n">DistanceKeeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_labels</span><span class="p">)</span>
@@ -1585,7 +1626,7 @@ document.write(`
 <span class="sd">            Reference label describing the distance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added distance input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added distance input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
 
         <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1614,7 +1655,7 @@ document.write(`
 <span class="sd">            Reference label describing the distance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_distances</span><span class="o">.</span><span class="n">add_stacked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added distance input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added distance input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
 
         <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1642,7 +1683,7 @@ document.write(`
 <span class="sd">            Reference label describing the similarity.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added similarity input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added similarity input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
 
         <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1657,8 +1698,8 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span></div>
-
-
+    
+        
 <div class="viewcode-block" id="Keeper.add_stacked_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_stacked_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">add_stacked_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Add a stacked similarity array to the similarity keeper.</span>
 
@@ -1673,7 +1714,7 @@ document.write(`
 <span class="sd">            Value used on diagonal. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_similarities</span><span class="o">.</span><span class="n">add_stacked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="n">diag</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added similarity input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added similarity input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span>
 
         <span class="c1"># If not yet initialized, update keeper observation_labels and num_observations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_observations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1701,7 +1742,7 @@ document.write(`
 <span class="sd">            Reference label describing the network.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added graph input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added graph input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
 
         
 <div class="viewcode-block" id="Keeper.add_misc"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_misc">[docs]</a>    <span class="k">def</span> <span class="nf">add_misc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
@@ -1719,7 +1760,7 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_misc</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added misc input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added misc input </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> to the keeper.&quot;</span><span class="p">)</span></div>
     
 
 <div class="viewcode-block" id="Keeper.load_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                  
@@ -2145,11 +2186,691 @@ document.write(`
         <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_check_num_observations</span><span class="p">()</span>
         <span class="n">keeper_subset</span><span class="o">.</span><span class="n">_check_observation_labels</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">keeper_subset</span></div></div>
-            
+        <span class="k">return</span> <span class="n">keeper_subset</span></div>
 
+
+<div class="viewcode-block" id="Keeper.distance_density"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.distance_density">[docs]</a>    <span class="k">def</span> <span class="nf">distance_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute each observation&#39;s density from a distance.</span>
+
+<span class="sd">        The density of an observation is its net distance to all other observations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            The reference label for the distance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        density : `pandas.Series`</span>
+<span class="sd">            The densities indexed by the observation labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">density</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">density</span></div>
+
+
+<div class="viewcode-block" id="Keeper.distance_density_argmin"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.distance_density_argmin">[docs]</a>    <span class="k">def</span> <span class="nf">distance_density_argmin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Find the observation with the largest density from a distnace.</span>
+
+<span class="sd">        The density of an observation is its net distance to all other observations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            The reference label for the distance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        obs : `int`</span>
+<span class="sd">            The index of the observation with the smallest density.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">density</span><span class="p">()</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">density</span><span class="o">.</span><span class="n">idxmin</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obs</span></div>
+
+
+<div class="viewcode-block" id="Keeper.similarity_density"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.similarity_density">[docs]</a>    <span class="k">def</span> <span class="nf">similarity_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute each observation&#39;s density from a similarity.</span>
+
+<span class="sd">        The density of an observation is its net similarity to all other observations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            The reference label for the similarity.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        density : `pandas.Series`</span>
+<span class="sd">            The densities indexed by the observation labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">density</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">density</span></div>
+
+
+<div class="viewcode-block" id="Keeper.similarity_density_argmax"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.similarity_density_argmax">[docs]</a>    <span class="k">def</span> <span class="nf">similarity_density_argmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Find the observation with the largest density from a similarity.</span>
+
+<span class="sd">        The density of an observation is its net similarity to all other observations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            The reference label for the similarity.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        obs : `str`</span>
+<span class="sd">            The label of the observation with the largest density.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">density</span><span class="p">()</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">density</span><span class="o">.</span><span class="n">idxmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obs</span></div>
+
+
+<div class="viewcode-block" id="Keeper.wass_distance_pairwise_observation_profile"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.wass_distance_pairwise_observation_profile">[docs]</a>    <span class="k">def</span> <span class="nf">wass_distance_pairwise_observation_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_key</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span>
+                                                   <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                   <span class="n">graph_distances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                   <span class="n">proc</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                   <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute Wasserstein distances between feature profiles of every two observations</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">          If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.</span>
+<span class="sd">          Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">          nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
+<span class="sd">          the previously computed and saved results before saving and returning the combined results.</span>
+
+<span class="sd">          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
+<span class="sd">          distance and do not provide any further information.</span>
+
+<span class="sd">          The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)</span>
+<span class="sd">          and can be accessed by ``self.distances[f&#39;{data_key}_{label}_wass_dist_observation_pairwise_profiles&#39;]``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_key : `str`</span>
+<span class="sd">            The key to the data in the data keeper that should be used.</span>
+<span class="sd">        graph_key : &#39;str&#39;</span>
+<span class="sd">            The key to the graph in the graph keeper that should be used.</span>
+<span class="sd">            (Does not have to include all features in the data)</span>
+<span class="sd">        features : {`None`, `list` [`str`])}</span>
+<span class="sd">            List of features to compute profile distances on. If `None`, all features are used.</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Label that resulting Wasserstein distances are saved in ``keeper.distances`` and</span>
+<span class="sd">            name of file to store stacked results.</span>
+<span class="sd">        graph_distances : `numpy.ndarray`, (n, n)</span>
+<span class="sd">            A matrix of node-pairwise graph distances between the :math:`n` nodes (ordered from :math:`0, 1, ..., n-1`).</span>
+<span class="sd">            If `None`, use hop distance.</span>
+<span class="sd">        edge_weight : {`None`, `str`}</span>
+<span class="sd">            The edge attribute used as the weight for computed the graph distances. This is</span>
+<span class="sd">            ignored if ``graph_distances`` is provided, If `None`, no edge weight is used.</span>
+<span class="sd">        measure_cutoff : `float`</span>
+<span class="sd">            Threshold for treating values in profiles as zero, default = 1e-6.</span>
+<span class="sd">        proc : `int`</span>
+<span class="sd">            Number of processor used for multiprocessing. (Default value = cpu_count()). </span>
+<span class="sd">        chunksize : `int`</span>
+<span class="sd">            Chunksize to allocate for multiprocessing.</span>
+<span class="sd">        solvr : `str`</span>
+<span class="sd">            Solver to pass to POT library for computing Wasserstein distance.    </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wds : `pandas.DataFrame`</span>
+<span class="sd">            Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names,</span>
+<span class="sd">            saved in ``keeper.distances`` with the key ``f&#39;{data_key}_{label}_wass_dist_observation_pairwise_profiles&#39;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">graph_distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">graph_distances</span> <span class="o">=</span> <span class="n">inet</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">edge_weight</span><span class="p">)</span>
+
+        <span class="n">inet</span><span class="o">.</span><span class="n">pairwise_observation_profile_wass_distance</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">graph_distances</span><span class="o">=</span><span class="n">graph_distances</span><span class="p">,</span> 
+                                                        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_wass_dist_observation_pairwise_profiles&#39;</span><span class="p">,</span>
+                                                        <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise profile Wasserstein distances&#39;</span><span class="p">,</span>
+                                                        <span class="n">proc</span><span class="o">=</span><span class="n">proc</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+                                                        <span class="n">measure_cutoff</span><span class="o">=</span><span class="n">measure_cutoff</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="n">solvr</span><span class="p">)</span></div>
 
         
+<div class="viewcode-block" id="Keeper.euc_distance_pairwise_observation_profile"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_profile">[docs]</a>    <span class="k">def</span> <span class="nf">euc_distance_pairwise_observation_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_key</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                  <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute Euclidean distances between feature profiles of every two observations</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">          If ``object.outdir`` is not `None`, Euclidean distances are saved to file.</span>
+<span class="sd">          Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">          nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with</span>
+<span class="sd">          the previously computed and saved results before saving and returning the combined results.</span>
+
+<span class="sd">          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
+<span class="sd">          distance and do not provide any further information.</span>
+
+<span class="sd">          The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)</span>
+<span class="sd">          and can be accessed by ``self.distances[f&#39;{data_key}_{label}_euc_dist_observation_pairwise_profiles&#39;]``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_key : `str`</span>
+<span class="sd">            The key to the data in the data keeper that should be used.</span>
+<span class="sd">        features : {`None`, `list` [`str`])}</span>
+<span class="sd">            List of features to compute profile distances on. If `None`, all features are used.</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Label that resulting Wasserstein distances are saved in ``keeper.distances`` and</span>
+<span class="sd">            name of file to store stacked results.</span>
+<span class="sd">        metric : `str`</span>
+<span class="sd">            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</span>
+<span class="sd">        normalize : `bool`</span>
+<span class="sd">            If `True`, normalize neighborhood profiles to sum to 1.</span>
+<span class="sd">        **kwargs : `dict`</span>
+<span class="sd">            Extra arguments to metric, passed to `scipy.spatial.distance.cdist`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        eds : `pandas.DataFrame`</span>
+<span class="sd">            Euclidean distances between pairwise profiles where rows are observation-pairs and columns are node names,</span>
+<span class="sd">            saved in ``keeper.distances`` with the key ``f&#39;{data_key}_{label}_euc_dist_observation_pairwise_profiles&#39;``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_key</span><span class="p">)</span>
+
+        <span class="n">inet</span><span class="o">.</span><span class="n">pairwise_observation_profile_euc_distance</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
+                                                       <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_euc_dist_observation_pairwise_profiles&#39;</span><span class="p">,</span>
+                                                       <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise profile Euclidean distances&#39;</span><span class="p">,</span>
+                                                       <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.wass_distance_pairwise_observation_feature_nbhd"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.wass_distance_pairwise_observation_feature_nbhd">[docs]</a>    <span class="k">def</span> <span class="nf">wass_distance_pairwise_observation_feature_nbhd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_key</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span>
+                                                        <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                        <span class="n">graph_distances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                        <span class="n">proc</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                        <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute Wasserstein distances between feature neighborhoods of every two observations</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">          If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.</span>
+<span class="sd">          Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">          nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
+<span class="sd">          the previously computed and saved results before saving and returning the combined results.</span>
+
+<span class="sd">          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
+<span class="sd">          distance and do not provide any further information.</span>
+
+<span class="sd">          The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by</span>
+<span class="sd">          ``self.misc[f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;]``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_key : `str`</span>
+<span class="sd">            The key to the data in the data keeper that should be used.</span>
+<span class="sd">        graph_key : &#39;str&#39;</span>
+<span class="sd">            The key to the graph in the graph keeper that should be used.</span>
+<span class="sd">            (Does not have to include all features in the data)</span>
+<span class="sd">        features : {`None`, `list` [`str`])}</span>
+<span class="sd">            List of features (nodes) to compute neighborhood distances on.</span>
+<span class="sd">            If `None`, all features are used.</span>
+<span class="sd">        include_self : `bool`</span>
+<span class="sd">            If `True`, add node in neighborhood which will result in computing normalized profile over the neighborhood.</span>
+<span class="sd">            If `False`, node is not included in neighborhood which results in computing the transition distribution</span>
+<span class="sd">            over the neighborhood.</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Label that resulting Wasserstein distances are saved in ``keeper.misc`` </span>
+<span class="sd">            and name of file to store stacked results.</span>
+<span class="sd">        graph_distances : `numpy.ndarray`, (n, n)</span>
+<span class="sd">            A matrix of node-pairwise graph distances between the</span>
+<span class="sd">            :math:`n` nodes (ordered from :math:`0, 1, ..., n-1`).</span>
+<span class="sd">            If `None`, use hop distance.</span>
+<span class="sd">        edge_weight : {`None`, `str`}</span>
+<span class="sd">            The edge attribute used as the weight for computed the graph distances. This is</span>
+<span class="sd">            ignored if ``graph_distances`` is provided, If `None`, no edge weight is used.</span>
+<span class="sd">        measure_cutoff : `float`</span>
+<span class="sd">            Threshold for treating values in profiles as zero, default = 1e-6.</span>
+<span class="sd">        proc : `int`</span>
+<span class="sd">            Number of processor used for multiprocessing. (Default value = cpu_count()). </span>
+<span class="sd">        chunksize : `int`</span>
+<span class="sd">            Chunksize to allocate for multiprocessing.</span>
+<span class="sd">        solvr : `str`</span>
+<span class="sd">            Solver to pass to POT library for computing Wasserstein distance.    </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wds : `pandas.DataFrame`</span>
+<span class="sd">            Wasserstein distances between pairwise observations where rows are observation-pairs and columns are</span>
+<span class="sd">            feature (node) names.</span>
+<span class="sd">            saved in ``keeper.misc`` with the key</span>
+<span class="sd">            ``f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">graph_distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">graph_distances</span> <span class="o">=</span> <span class="n">inet</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">edge_weight</span><span class="p">)</span>
+
+        <span class="n">inet</span><span class="o">.</span><span class="n">multiple_pairwise_observation_neighborhood_wass_distance</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="n">include_self</span><span class="p">,</span>
+                                                                      <span class="n">graph_distances</span><span class="o">=</span><span class="n">graph_distances</span><span class="p">,</span>
+                                                                      <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">_wass_dist_observation_pairwise_nbhds_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self&quot;</span><span class="p">,</span>
+                                                                      <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise 1-hop nbhd Wasserstein distances&#39;</span><span class="p">,</span>
+                                                                      <span class="n">proc</span><span class="o">=</span><span class="n">proc</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+                                                                      <span class="n">measure_cutoff</span><span class="o">=</span><span class="n">measure_cutoff</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="n">solvr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.euc_distance_pairwise_observation_feature_nbhd"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_feature_nbhd">[docs]</a>    <span class="k">def</span> <span class="nf">euc_distance_pairwise_observation_feature_nbhd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_key</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span>
+                                                        <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                        <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute Euclidean distances between feature neighborhoods of every two observations</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">          If ``object.outdir`` is not `None`, Euclidean distances are saved to file every 10 iterations.</span>
+<span class="sd">          Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">          nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with</span>
+<span class="sd">          the previously computed and saved results before saving and returning the combined results.</span>
+
+<span class="sd">          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Euclidean</span>
+<span class="sd">          distance and do not provide any further information.</span>
+
+<span class="sd">          The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by</span>
+<span class="sd">          ``self.misc[f&quot;{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;]``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_key : `str`</span>
+<span class="sd">            The key to the data in the data keeper that should be used.</span>
+<span class="sd">        graph_key : &#39;str&#39;</span>
+<span class="sd">            The key to the graph in the graph keeper that should be used.</span>
+<span class="sd">            (Does not have to include all features in the data)</span>
+<span class="sd">        features : {`None`, `list` [`str`])}</span>
+<span class="sd">            List of features (nodes) to compute neighborhood distances on.</span>
+<span class="sd">            If `None`, all features are used.</span>
+<span class="sd">        include_self : `bool`</span>
+<span class="sd">            If `True`, add node in neighborhood which will result in computing normalized profile over the neighborhood.</span>
+<span class="sd">            If `False`, node is not included in neighborhood which results in computing the transition distribution</span>
+<span class="sd">            over the neighborhood.</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Label that resulting Wasserstein distances are saved in ``keeper.misc`` </span>
+<span class="sd">            and name of file to store stacked results.</span>
+<span class="sd">        metric : `str`</span>
+<span class="sd">            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</span>
+<span class="sd">        normalize : `bool`</span>
+<span class="sd">            If `True`, normalize neighborhood profiles to sum to 1.</span>
+<span class="sd">        **kwargs : `dict`</span>
+<span class="sd">            Extra arguments to metric, passed to `scipy.spatial.distance.cdist`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        eds : `pandas.DataFrame`</span>
+<span class="sd">            Euclidean distances between pairwise observations where rows are observation-pairs and columns are</span>
+<span class="sd">            feature (node) names.</span>
+<span class="sd">            saved in ``keeper.misc`` with the key</span>
+<span class="sd">            ``f&quot;{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_key</span><span class="p">)</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">_euc_dist_observation_pairwise_nbhds_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self&quot;</span>
+        <span class="k">if</span> <span class="n">normalize</span> <span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">label</span><span class="p">,</span> <span class="s1">&#39;normalized&#39;</span><span class="p">])</span>
+        <span class="n">inet</span><span class="o">.</span><span class="n">multiple_pairwise_observation_neighborhood_euc_distance</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="n">include_self</span><span class="p">,</span>
+                                                                     <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+                                                                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise 1-hop nbhd Euclidean distances&#39;</span><span class="p">,</span>
+                                                                     <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.compute_sigmas"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_sigmas">[docs]</a>    <span class="k">def</span> <span class="nf">compute_sigmas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance_key</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">method</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Set sigma for each obs as the distance to its k-th neighbor from keeper.</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        distance_key : `str`</span>
+<span class="sd">            The label used to reference the distance matrix stored in ``keeper.distances``,</span>
+<span class="sd">            of size (n_observations, n_observations).</span>
+<span class="sd">        label : {`None`, `str`}</span>
+<span class="sd">            If provided, this is appended to the context tag</span>
+<span class="sd">            (``tag = f&quot;{method}{n_neighbors}nn_{distance_key}&quot;``). The key used to store the</span>
+<span class="sd">            results defaults to the tag when ``label`` is not provided: ``key = tag``. Otherwise,</span>
+<span class="sd">            the key is set to: ``key = tag + &quot;-&quot; + label``. The resulting sigmas</span>
+<span class="sd">            are stored in ``keeper.misc[&#39;sigmas_&#39; + key]``.</span>
+<span class="sd">            </span>
+<span class="sd">            If ``return_nn`` is `True`,</span>
+<span class="sd">            nearest neighbor indices are stored in ``keeper.misc[&#39;nn_indices_&#39; + key]`` and nearest</span>
+<span class="sd">            neighbor distances are stored in ``keeper.misc[&#39;nn_distances_&#39; + key]``.</span>
+<span class="sd">        n_neighbors : {`int`, `None`}</span>
+<span class="sd">            K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,</span>
+<span class="sd">            ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it&#39;s closest neighbor).</span>
+<span class="sd">            If `None`, all neighbors are used.</span>
+<span class="sd">        method : {&#39;mean&#39;, &#39;median&#39;, &#39;max&#39;}</span>
+<span class="sd">            Indicate how to compute sigma.</span>
+
+<span class="sd">            Options:</span>
+
+<span class="sd">            - &#39;mean&#39; : mean of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">            - &#39;median&#39; : median of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">            - &#39;max&#39; : distance to ``n_neighbors``-nearest neighbor</span>
+<span class="sd">        return_nn : `bool`</span>
+<span class="sd">            If `True`, also store indices and distances of ``n_neighbors`` nearest neighbors.</span>
+<span class="sd">    </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sigmas : `numpy.ndarray`, (n_observations, )</span>
+<span class="sd">            The distance to the k-th nearest neighbor for all rows in ``d``.</span>
+<span class="sd">            Sigmas represent the kernel width representing each data point&#39;s accessible neighbors.</span>
+<span class="sd">            Written to ``keeper.misc[&#39;sigmas_&#39; + key]``.</span>
+<span class="sd">        indices : `numpy.ndarray`, (n_observations, )</span>
+<span class="sd">            Indices of nearest neighbors where each row corresponds to an observation.</span>
+<span class="sd">            Written, if ``return_nn`` is `True`, to ``keeper.misc[&#39;nn_indices_&#39; + key]``.</span>
+<span class="sd">        distances : `numpy.ndarray`, (n_observations, ``n_neighbors + 1``)</span>
+<span class="sd">            Distances to nearest neighbors where each row corresponds to an obs.</span>
+<span class="sd">            Written, if ``return_nn`` is `True`, to ``keeper.misc[&#39;nn_distances_&#39; + key]``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}{</span><span class="n">n_neighbors</span><span class="si">}</span><span class="s2">nn_</span><span class="si">{</span><span class="n">distance_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">tag</span><span class="p">,</span> <span class="n">label</span><span class="p">])</span>
+        
+        <span class="n">nfs</span><span class="o">.</span><span class="n">sigma_knn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance_key</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">tag</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span>
+                      <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="n">return_nn</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.compute_similarity_from_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_similarity_from_distance">[docs]</a>    <span class="k">def</span> <span class="nf">compute_similarity_from_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance_key</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">precomputed_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                         <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert distance matrix to symmetric similarity measure.</span>
+
+<span class="sd">        The resulting similarity is written to the similarity keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        distance_key : `str`</span>
+<span class="sd">            The label used to reference the distance matrix stored in ``keeper.distances``,</span>
+<span class="sd">            of size (n_observations, n_observations).    </span>
+<span class="sd">        n_neighbors : {`int`, `None`}</span>
+<span class="sd">            K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,</span>
+<span class="sd">            ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it&#39;s closest neighbor).</span>
+<span class="sd">            If `None`, all neighbors are used.</span>
+<span class="sd">        method : {`float`, &#39;mean&#39;, &#39;median&#39;, &#39;max&#39;, &#39;precomputed&#39;}</span>
+<span class="sd">            Indicate how to compute sigma.</span>
+
+<span class="sd">            Options:</span>
+
+<span class="sd">            - `float` : constant float to use as sigma</span>
+<span class="sd">            - `int` : constant int to use as sigma</span>
+<span class="sd">            - &#39;mean&#39; : mean of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">            - &#39;median&#39; : median of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">            - &#39;max&#39; : distance to ``n_neighbors``-nearest neighbor</span>
+<span class="sd">            - &#39;precomputed&#39; : precomputed values extracted from ``keeper.misc[f&quot;sigmas_{key}&quot;]`` as a `numpy.ndarray` of size (n_observations, ).</span>
+<span class="sd">        precomputed_method : {&#39;mean&#39;, &#39;median&#39;, &#39;max&#39;}</span>
+<span class="sd">            This is ignored if `method` is not `&#39;precomputed&#39;`. When `method` is `&#39;precomputed&#39;`, specify the method that</span>
+<span class="sd">            was previously used for computing sigmas. See `method` for description of options.</span>
+<span class="sd">        label : {`None`, `str`}</span>
+<span class="sd">            If provided, this is appended to the context tag (``tag = f&quot;{method}{n_neighbors}nn_{distance_key}&quot;``)</span>
+<span class="sd">            The key used to store the resulting similarity matrix of size (n_observations, n_observations)</span>
+<span class="sd">            in ``keeper.similarities[f&quot;similarity_{key}]`` defaults to the tag when ``label`` is not provided: ``key = tag``. Otherwise,</span>
+<span class="sd">            the key is set to: ``key = tag + &quot;-&quot; + label``.        </span>
+<span class="sd">        knn : `bool`</span>
+<span class="sd">            If `True`, restrict similarity measure to be non-zero only between ``n_neighbors`` nearest neighbors.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        K : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            Symmetric similarity measure. </span>
+<span class="sd">            Written to ``keeper.similarities[key]``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">!=</span> <span class="s1">&#39;precomputed&#39;</span><span class="p">:</span>
+            <span class="n">precomputed_method</span> <span class="o">=</span> <span class="n">method</span>
+            
+        <span class="n">tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">precomputed_method</span><span class="p">)</span><span class="si">}{</span><span class="n">n_neighbors</span><span class="si">}</span><span class="s2">nn_</span><span class="si">{</span><span class="n">distance_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">tag</span><span class="p">,</span> <span class="n">label</span><span class="p">])</span>
+            
+        <span class="n">nfs</span><span class="o">.</span><span class="n">distance_to_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance_key</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
+                                   <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;similarity_</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;sigmas_</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                   <span class="n">knn</span><span class="o">=</span><span class="n">knn</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Keeper.convert_similarity_to_distance"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.convert_similarity_to_distance">[docs]</a>    <span class="k">def</span> <span class="nf">convert_similarity_to_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Convert a similarity to a distance.</span>
+
+<span class="sd">        The distance, computed as 1-similarity, is added to the distance keeper</span>
+<span class="sd">        with the key ``&quot;distance_from_&quot; + similarity_key``</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        similarity_key : `str`</span>
+<span class="sd">            The similiratiy reference key.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The following are saved to the distance keeper:</span>
+
+<span class="sd">            d : The new distance is saved to the keeper in</span>
+<span class="sd">               ``keeper.distances[f&quot;distance_from_{similarity_key}&quot;].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">similarity_key</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;distance_from_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        
+        
+<div class="viewcode-block" id="Keeper.fuse_similarities"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.fuse_similarities">[docs]</a>    <span class="k">def</span> <span class="nf">fuse_similarities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_keys</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fused_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Fuse similarities in the keeper</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        similarity_keys : `list`</span>
+<span class="sd">            Reference keys of similiraties to fuse.</span>
+<span class="sd">        weights : `list`</span>
+<span class="sd">            (Optional) Weight each similarity contributes to the fused similarity.</span>
+<span class="sd">            Should be the same length as ``similarity_keys``.</span>
+<span class="sd">            If not provided, default behavior is to apply uniform weights.</span>
+<span class="sd">        fused_key : `str`</span>
+<span class="sd">            (Optional) Specify key used to store the fused similarity in the keeper.</span>
+<span class="sd">            Default behavior is to fuse the keys of the original similarities.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The following is added to the similarity keeper :</span>
+
+<span class="sd">          - fused_sim : The fused similarity, where the reference key, if not provided,</span>
+<span class="sd">            is fused from the original labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">similarity_keys</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;``weights`` must have the same number of values as ``similarity_keys``.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fused_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>            
+            <span class="n">fused_key</span> <span class="o">=</span> <span class="n">fuse_labels</span><span class="p">(</span><span class="n">similarity_keys</span><span class="p">)</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">similarity_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span>
+
+        <span class="n">fused_sim</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">similarity_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+            <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span>
+            <span class="n">fused_sim</span> <span class="o">=</span> <span class="n">fused_sim</span> <span class="o">+</span> <span class="n">s</span>
+
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">similarity_keys</span><span class="p">)</span>
+            <span class="n">fused_sim</span> <span class="o">=</span> <span class="n">fused_sim</span> <span class="o">/</span> <span class="n">n</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_similarity</span><span class="p">(</span><span class="n">fused_sim</span><span class="p">,</span> <span class="n">fused_key</span><span class="p">)</span></div>
+        
+        
+<div class="viewcode-block" id="Keeper.compute_transitions_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_transitions_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_transitions_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute symmetric and asymmetric transition matrices and store in keeper.</span>
+
+<span class="sd">        .. note:: Code primarily copied from `scanpy.neighbors`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        similarity_key : `str`</span>
+<span class="sd">            Reference key to the `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            symmetric similarity measure (with 1s on the diagonal) stored in the similarities</span>
+<span class="sd">            in the keeper.</span>
+<span class="sd">        density_normalize : `bool`</span>
+<span class="sd">            The density rescaling of Coifman and Lafon (2006): Then only the</span>
+<span class="sd">            geometry of the data matters, not the sampled density.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Adds the following to `keeper.misc` (with 0s on the diagonals):</span>
+<span class="sd">            transitions_asym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">                Asymmetric Transition matrix.</span>
+<span class="sd">            transitions_sym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">                Symmetric Transition matrix.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">compute_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="o">=</span><span class="n">density_normalize</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.compute_dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the diffusion pseudotime metric between observations,</span>
+<span class="sd">        computed from the symmetric transitions.</span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">            - :math:`T` is the symmetric transition matrix</span>
+<span class="sd">            - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`</span>
+<span class="sd">            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : `str`</span>
+<span class="sd">            Reference ID for the symmetric transitions `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            stored in ``keeper.misc``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dpt : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            Pairwise-observation Diffusion pseudotime distances are stored</span>
+<span class="sd">            in keeper.distances[&quot;dpt_from_{key}&quot;].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.compute_dpt_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the diffusion pseudotime metric between observations,</span>
+<span class="sd">        computed from similarity </span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            - This entails computing the augmented symmetric transitions.</span>
+<span class="sd">            - :math:`T` is the symmetric transition matrix</span>
+<span class="sd">            - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`</span>
+<span class="sd">            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        similarity_key : `str`</span>
+<span class="sd">            Reference key to the `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            symmetric similarity measure (with 1s on the diagonal) stored in the similarities</span>
+<span class="sd">            in the keeper.</span>
+<span class="sd">        density_normalize : `bool`</span>
+<span class="sd">            The density rescaling of Coifman and Lafon (2006): Then only the</span>
+<span class="sd">            geometry of the data matters, not the sampled density.</span>
+
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The following are stored in the keeper :</span>
+<span class="sd">           transitions_asym : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">                Asymmetric Transition matrix (with 0s on the diagonal) added to</span>
+<span class="sd">                ``keeper.misc[f&quot;transitions_asym_{similarity_key}&quot;].</span>
+<span class="sd">           transitions_sym : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">                Symmetric Transition matrix (with 0s on the diagonal) added to</span>
+<span class="sd">                ``keeper.misc[f&quot;transitions_sym_{similarity_key}&quot;].</span>
+<span class="sd">        </span>
+<span class="sd">           dpt : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">               Pairwise-observation Diffusion pseudotime distances are stored</span>
+<span class="sd">               in keeper.distances[&quot;dpt_from_transitions_asym_{similarity_key}&quot;].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_transitions_from_similarity</span><span class="p">(</span><span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">)</span>
+        <span class="n">T_sym_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;transitions_sym_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T_sym_key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.construct_pose"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.construct_pose">[docs]</a>    <span class="k">def</span> <span class="nf">construct_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">choose_largest_segment</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;haghverdi16&#39;</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">n_branches</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Construct the POSE from specified distance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : `str`</span>
+<span class="sd">            The label used to reference the distance matrix stored in ``keeper.distances``,</span>
+<span class="sd">            of size (n_observations, n_observations).</span>
+<span class="sd">        root : {`None`, `int`, &#39;density&#39;, &#39;ratio&#39;}</span>
+<span class="sd">            The root. If `None`, &#39;density&#39; is used.</span>
+
+<span class="sd">            options</span>
+<span class="sd">            -------</span>
+<span class="sd">            - `int` : index of observation</span>
+<span class="sd">            - &#39;density&#39; : select observation with minimal distance-density</span>
+<span class="sd">            - &#39;ratio&#39; : select observation which leads to maximal triangular ratio distance</span>
+<span class="sd">        min_branch_size : {`int`, `float`}</span>
+<span class="sd">            During recursive splitting of branches, only consider splitting a branch with at least</span>
+<span class="sd">            ``min_branch_size &gt; 2`` data points.</span>
+<span class="sd">            If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points</span>
+<span class="sd">            (``0 &lt; min_branch_size &lt; 1``).</span>
+<span class="sd">        choose_largest_segment : `bool`</span>
+<span class="sd">            If `True`, select largest segment for branching.</span>
+<span class="sd">        flavor : {&#39;haghverdi16&#39;, &#39;wolf17_tri&#39;, &#39;wolf17_bi&#39;, &#39;wolf17_bi_un&#39;}</span>
+<span class="sd">            Branching algorithm (based on `scanpy` implementation).</span>
+<span class="sd">        allow_kendall_tau_shift : `bool`</span>
+<span class="sd">            If a very small branch is detected upon splitting, shift away from</span>
+<span class="sd">            maximum correlation in Kendall tau criterion of [Haghverdi16]_ to</span>
+<span class="sd">            stabilize the splitting.</span>
+<span class="sd">        smooth_corr : `bool`, default = `False`</span>
+<span class="sd">            If `True`, smooth correlations before identifying cut points for branch splitting.</span>
+<span class="sd">        brute : `bool`</span>
+<span class="sd">            If `True`, data points not associated with any branch upon split are combined with</span>
+<span class="sd">            undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,</span>
+<span class="sd">            not associated with any branch (and assigned branch index -1).</span>
+<span class="sd">        split : `bool` (default = True)</span>
+<span class="sd">                if `True`, split segment into multiple branches. Otherwise,</span>
+<span class="sd">                determine a single branching off of the main segment.</span>
+<span class="sd">                This is ignored if flavor is not &#39;haghverdi16&#39;.</span>
+<span class="sd">                If `True`, ``brute`` is ignored.</span>
+<span class="sd">        n_branches : `int`</span>
+<span class="sd">            Number of branches to look for (``n_branches &gt; 0``).</span>
+<span class="sd">        until_branched : `bool`</span>
+<span class="sd">            If `True`, iteratively find segment to branch and perform branching</span>
+<span class="sd">            until a segement is successfully branched or no branchable segments</span>
+<span class="sd">            remain. Otherwise, if `False`, attempt to perform branching only once </span>
+<span class="sd">            on the next potentially branchable segment.</span>
+
+<span class="sd">            ..note::</span>
+
+<span class="sd">              This is only applicable when branching is being performed. If previous</span>
+<span class="sd">              iterations of branching has already been performed, it is not possible to</span>
+<span class="sd">              identify the number of iterations where no branching was performed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        poser : `netflow.pose.POSER`</span>
+<span class="sd">            The object used to construct the POSE.</span>
+<span class="sd">        G_poser_nn : `networkx.Graph`</span>
+<span class="sd">            The updated graph with nearest neighbor edges and edge attribute &quot;edge_origin&quot;</span>
+<span class="sd">            with the possible values :</span>
+
+<span class="sd">            - &quot;POSE&quot; : for edges in the original graph that are not nearest neighbor edges</span>
+<span class="sd">            - &quot;NN&quot; : for nearest neighbor edges that were not in the original graph</span>
+<span class="sd">            - &quot;POSE + NN&quot; : for edges in the original graph that are also nearest neighbor edges</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">poser</span> <span class="o">=</span> <span class="n">POSER</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="n">min_branch_size</span><span class="p">,</span>
+                      <span class="n">choose_largest_segment</span><span class="o">=</span><span class="n">choose_largest_segment</span><span class="p">,</span>
+                      <span class="n">flavor</span><span class="o">=</span><span class="n">flavor</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="n">allow_kendall_tau_shift</span><span class="p">,</span>
+                      <span class="n">smooth_corr</span><span class="o">=</span><span class="n">smooth_corr</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="n">brute</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="n">G_poser</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">branchings_segments</span><span class="p">(</span><span class="n">n_branches</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="n">until_branched</span><span class="p">)</span>
+        <span class="n">G_poser_nn</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">construct_pose_nn_topology</span><span class="p">(</span><span class="n">G_poser</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">poser</span><span class="p">,</span> <span class="n">G_poser_nn</span></div></div>
+
 </pre></div>
 
                 </article>

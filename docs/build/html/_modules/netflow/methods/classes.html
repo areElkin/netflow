@@ -388,7 +388,6 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.metrics</span> <span class="kn">import</span> <span class="n">pairwise_observation_euc_distances</span><span class="p">,</span> <span class="n">pairwise_observation_wass_distances</span>
 
 <span class="kn">import</span> <span class="nn">netflow.utils</span> <span class="k">as</span> <span class="nn">utl</span>
-
 <span class="c1"># from importlib import reload</span>
 <span class="c1"># reload(utl)</span>
 <span class="c1"># kendall_tau_ = utl.kendall_tau_</span>
@@ -415,6 +414,7 @@ document.write(`
 <span class="sd">        The keeper object that stores the data of size (n_features, n_observations).</span>
 <span class="sd">    graph_key : &#39;str&#39;</span>
 <span class="sd">        The key to the graph in the graph keeper that should be used.</span>
+<span class="sd">        (Does not have to include all features in the data)</span>
 <span class="sd">    layer : `str`</span>
 <span class="sd">        The key to the data in the data keeper that should be used.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -427,33 +427,39 @@ document.write(`
         <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">set_verbose</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 
-        <span class="n">G</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># keeper.misc[graph_key].copy()</span>
-        <span class="n">check_connected_graph</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-        <span class="n">check_graph_no_self_loops</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span>        
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded data: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded graph: </span><span class="si">{</span><span class="n">G</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded data: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">graph_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># keeper.misc[graph_key].copy()</span>
+            <span class="n">check_connected_graph</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+            <span class="n">check_graph_no_self_loops</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded graph: </span><span class="si">{</span><span class="n">G</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
+                <span class="c1"># G = nx.convert_node_labels_to_integers(G, label_attribute=&#39;name&#39;)</span>
+                <span class="c1"># Note: need nodes to line up with order in data</span>
+                <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+                <span class="c1"># nx.relabel_nodes(G, {k: ix for ix, k in enumerate(self.data.feature_labels)}, copy=False)</span>
+                <span class="n">nx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">num_features</span><span class="p">))),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">G</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name2node</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+            <span class="c1"># self.data = data.rename(index=self.name2node)</span>
+            <span class="c1"># self.features = data.index.tolist()[:]</span>
+            <span class="c1"># self.observations = data.columns.tolist()[:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name2node</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">name2node</span><span class="p">]</span> <span class="c1"># HERE!!! </span>
+            <span class="c1"># assert self.features == list(range(len(self.G))), &quot;Graph features are not ordered according to data features.&quot;</span>
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">]),</span> \
+                <span class="s2">&quot;Features in the graph are not ordered according to the data features.&quot;</span>
+            <span class="k">assert</span> <span class="nb">max</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">))</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Features in the graph are not consecutively ordered.&quot;</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name2node</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">))))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span> <span class="o">=</span> <span class="n">keeper</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
-            <span class="c1"># G = nx.convert_node_labels_to_integers(G, label_attribute=&#39;name&#39;)</span>
-            <span class="c1"># Note: need nodes to line up with order in data</span>
-            <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
-            <span class="c1"># nx.relabel_nodes(G, {k: ix for ix, k in enumerate(self.data.feature_labels)}, copy=False)</span>
-            <span class="n">nx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">num_features</span><span class="p">))),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            
-        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">G</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name2node</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-
-        <span class="c1"># self.data = data.rename(index=self.name2node)</span>
-        <span class="c1"># self.features = data.index.tolist()[:]</span>
-        <span class="c1"># self.observations = data.columns.tolist()[:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name2node</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">))),</span> <span class="s2">&quot;Graph features are not ordered according to data features.&quot;</span>
-        
         <span class="bp">self</span><span class="o">.</span><span class="n">observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">observation_labels</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># can be used to reference data to be used for subsequent analysis</span>
@@ -793,7 +799,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nbhd</span><span class="p">,</span> <span class="n">profiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighborhood_profiles</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="n">include_self</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">graph_distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;Computing graph hop distances.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Computing graph hop distances.&quot;</span><span class="p">)</span>
             <span class="n">graph_distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># graph_distances = graph_distances[np.ix_(profiles.index.tolist(), profiles.index.tolist())]</span>
@@ -819,6 +825,8 @@ document.write(`
 <span class="sd">        include_self : `bool`</span>
 <span class="sd">            If `True`, include node in neighborhood.</span>
 <span class="sd">            If `False`, node is not included in neighborhood.</span>
+<span class="sd">        metric : `str`</span>
+<span class="sd">            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</span>
 <span class="sd">        normalize : `bool`</span>
 <span class="sd">            If `True`, normalize neighborhood profiles to sum to 1.</span>
 <span class="sd">        **kwargs : `dict`</span>
@@ -1163,12 +1171,14 @@ document.write(`
             <span class="n">wds_prior</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># fname = self.outdir / f&quot;wass_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{&#39;&#39; if include_self else &#39;out&#39;}_self.csv&quot;</span>
-            <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;wass_dist_observation_pairwise_1hop_nbhd_profiles_</span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2">_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self.csv&quot;</span>
+            <span class="c1"># fname = f&quot;wass_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{&#39;&#39; if include_self else &#39;out&#39;}_self.csv&quot;</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">.csv&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
                 
-                <span class="n">wds_prior</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded saved observation pairwise 1-hop neighborhood Wasserstein distances from </span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2"> profiles of size </span><span class="si">{</span><span class="n">wds_prior</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="n">wds_prior</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>                
+                <span class="c1"># logger.msg(f&quot;Loaded saved observation pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles of size {wds_prior.shape}.&quot;)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded saved observation pairwise 1-hop neighborhood Wasserstein distances from </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> profiles of size </span><span class="si">{</span><span class="n">wds_prior</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
                 <span class="n">n_orig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
                 <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wds_prior</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
                 <span class="n">n_update</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
@@ -1177,9 +1187,9 @@ document.write(`
                         <span class="c1"># logger.msg(f&quot;Loading observation pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles.&quot;)</span>
                         <span class="c1"># return wds_prior</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">wds_prior</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-                        <span class="k">return</span> <span class="kc">None</span>
-                    
-                    <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computing observation pairwise 1-hop neighborhood Wasserstein distances from </span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2"> profiles on </span><span class="si">{</span><span class="n">n_update</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_orig</span><span class="si">}</span><span class="s2"> nodes.&quot;</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">None</span>                    
+                    <span class="c1"># logger.msg(f&quot;Computing observation pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles on {n_update}/{n_orig} nodes.&quot;)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computing observation pairwise 1-hop neighborhood Wasserstein distances from </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> profiles on </span><span class="si">{</span><span class="n">n_update</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_orig</span><span class="si">}</span><span class="s2"> nodes.&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">wds_prior</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1213,7 +1223,8 @@ document.write(`
             <span class="n">wds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">wds_prior</span><span class="p">,</span> <span class="n">wds</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">wds</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observation pairwise 1-hop neighborhood Wasserstein distances on </span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2"> saved to </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="c1"># logger.msg(f&quot;Observation pairwise 1-hop neighborhood Wasserstein distances on {profiles_desc} saved to {str(fname)}.&quot;)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observation pairwise 1-hop neighborhood Wasserstein distances on </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> saved to </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>            
 
         <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">wds</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
         <span class="c1"># return wds</span>
@@ -1238,6 +1249,8 @@ document.write(`
 <span class="sd">            Description for progress bar.</span>
 <span class="sd">        profiles_desc : `str`, default = &quot;t0&quot;</span>
 <span class="sd">            Description of profiles used in name of file to store results.</span>
+<span class="sd">        metric : `str`</span>
+<span class="sd">            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</span>
 <span class="sd">        normalize : `bool`</span>
 <span class="sd">            If `True`, normalize neighborhood profiles to sum to 1.</span>
 <span class="sd">        **kwargs : `dict`</span>
@@ -1265,14 +1278,17 @@ document.write(`
             <span class="n">fname</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">eds_prior</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-                <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;euc_dist_observation_pairwise_1hop_nbhd_profiles_</span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2">_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self_normalized.csv&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;euc_dist_observation_pairwise_1hop_nbhd_profiles_</span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2">_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self.csv&quot;</span>
+            <span class="c1"># if normalize:</span>
+            <span class="c1">#     fname = f&quot;euc_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{&#39;&#39; if include_self else &#39;out&#39;}_self_normalized.csv&quot;</span>
+                
+            <span class="c1"># else:</span>
+            <span class="c1">#     fname = f&quot;euc_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{&#39;&#39; if include_self else &#39;out&#39;}_self.csv&quot;</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">.csv&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>                
                 <span class="n">eds_prior</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded saved observation pairwise 1-hop neighborhood Euclidean distances from </span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2"> profiles of size </span><span class="si">{</span><span class="n">eds_prior</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="c1"># logger.msg(f&quot;Loaded saved observation pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles of size {eds_prior.shape}.&quot;)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded saved observation pairwise 1-hop neighborhood Euclidean distances from </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> profiles of size </span><span class="si">{</span><span class="n">eds_prior</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
                 <span class="n">n_orig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
                 <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">eds_prior</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
                 <span class="n">n_update</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
@@ -1281,7 +1297,8 @@ document.write(`
                         <span class="c1"># return eds_prior</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">eds_prior</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
                         <span class="k">return</span> <span class="kc">None</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computing observation pairwise 1-hop neighborhood Euclidean distances from </span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2"> profiles on </span><span class="si">{</span><span class="n">n_update</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_orig</span><span class="si">}</span><span class="s2"> nodes.&quot;</span><span class="p">)</span>
+                    <span class="c1"># logger.msg(f&quot;Computing observation pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles on {n_update}/{n_orig} nodes.&quot;)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computing observation pairwise 1-hop neighborhood Euclidean distances from </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> profiles on </span><span class="si">{</span><span class="n">n_update</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">n_orig</span><span class="si">}</span><span class="s2"> nodes.&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">eds_prior</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1303,7 +1320,8 @@ document.write(`
             <span class="n">eds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">eds_prior</span><span class="p">,</span> <span class="n">eds</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">eds</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observation pairwise 1-hop neighborhood Euclidean distances on </span><span class="si">{</span><span class="n">profiles_desc</span><span class="si">}</span><span class="s2"> saved to </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="c1"># logger.msg(f&quot;Observation pairwise 1-hop neighborhood Euclidean distances on {profiles_desc} saved to {str(fname)}.&quot;)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observation pairwise 1-hop neighborhood Euclidean distances on </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> saved to </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">eds</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
         <span class="c1"># return eds</span>
@@ -1367,7 +1385,7 @@ document.write(`
         
         <span class="n">pw_obs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observations</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pw_obs</span><span class="p">)</span><span class="si">}</span><span class="s2"> pw-obs&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; computing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pw_obs</span><span class="p">)</span><span class="si">}</span><span class="s2"> pw-obs distances&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1430,7 +1448,7 @@ document.write(`
                 <span class="n">wds</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observation pairwise profile Wasserstein distances saved to </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; wds made it to here with shape </span><span class="si">{</span><span class="n">wds</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="c1"># logger.msg(f&quot;&gt;&gt;&gt; wds made it to here with shape {wds.shape}.&quot;)</span>
 
         <span class="c1">## self.keeper.add_misc(wds, label)</span>
 
@@ -1463,6 +1481,8 @@ document.write(`
 <span class="sd">            name of file to store stacked results.</span>
 <span class="sd">        desc : `str`</span>
 <span class="sd">            Description for progress bar.</span>
+<span class="sd">        metric : `str`</span>
+<span class="sd">            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</span>
 <span class="sd">        normalize : `bool`</span>
 <span class="sd">            If `True`, normalize neighborhood profiles to sum to 1.</span>
 <span class="sd">        **kwargs : `dict`</span>
@@ -1478,13 +1498,13 @@ document.write(`
 <span class="sd">        -----</span>
 <span class="sd">        If ``object.outdir`` is not `None`, Euclidean distances are saved to file.</span>
 <span class="sd">        Before starting the computation, check if the file exists. If so, load and remove already computed</span>
-<span class="sd">        nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
+<span class="sd">        nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with</span>
 <span class="sd">        the previously computed and saved results before saving and returning the combined results.</span>
 
 <span class="sd">        SAVES TO DISTANCES</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">)</span> <span class="c1"># list(self.G)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name2node</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">features</span><span class="p">]</span>
 
@@ -1534,9 +1554,9 @@ document.write(`
         <span class="c1"># line 1025</span>
         <span class="n">eds</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ED&#39;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">eds</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">/</span> <span class="n">fname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observation pairwise profile Euclidean distances saved to </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="c1"># if self.outdir is not None:</span>
+        <span class="c1">#     eds.to_csv(self.outdir / fname, header=True, index=True)</span>
+        <span class="c1">#     logger.msg(f&quot;Observation pairwise profile Euclidean distances saved to {str(fname)}.&quot;)</span>
             
         <span class="c1"># if eds_prior is not None:</span>
         <span class="c1">#     eds = pd.concat([eds_prior, eds], axis=0)</span>

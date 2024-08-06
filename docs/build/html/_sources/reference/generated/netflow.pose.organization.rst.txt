@@ -15,6 +15,8 @@
    
       compute_transitions
       dpt_from_augmented_sym_transitions
+      get_pose
+      root_max_ratio
    
    
 
@@ -24,7 +26,7 @@
 
    .. autosummary::
    
-      PseudoOrdering
+      POSER
       TDA
       Tree
       TreeNode

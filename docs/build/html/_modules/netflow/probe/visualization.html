@@ -367,9 +367,22 @@ document.write(`
 <span></span><span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
+<span class="kn">from</span> <span class="nn">lifelines</span> <span class="kn">import</span> <span class="n">KaplanMeierFitter</span>
+<span class="kn">from</span> <span class="nn">lifelines.plotting</span> <span class="kn">import</span> <span class="n">add_at_risk_counts</span>
+<span class="kn">from</span> <span class="nn">lifelines.statistics</span> <span class="kn">import</span> <span class="n">logrank_test</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">BoundaryNorm</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">,</span> <span class="n">to_rgba_array</span>
 <span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
+
+<span class="kn">from</span> <span class="nn">.clustering</span> <span class="kn">import</span> <span class="n">high_res_branch_graph</span>
+<span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span><span class="p">,</span> <span class="n">set_verbose</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="plot_topology"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.plot_topology">[docs]</a><span class="k">def</span> <span class="nf">plot_topology</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> 
                   <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2, 3, 4, 5</span>
@@ -381,6 +394,16 @@ document.write(`
                   <span class="n">node_size</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="c1"># 1, 2, 3</span>
                   <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;#1f78b4&#39;</span><span class="p">,</span> <span class="c1"># 1, 2</span>
                   <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="c1"># 1, 3</span>
+                  <span class="n">node_cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">edge_cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">node_cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;location&#39;</span><span class="p">:</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mf">0.01</span><span class="p">},</span>
+                  <span class="n">edge_cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;location&#39;</span><span class="p">:</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">},</span>
+                  <span class="n">node_cbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">edge_cbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">node_cbar_labelpad</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1">#  (default = -10),</span>
+                  <span class="n">edge_cbar_labelpad</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">node_cbar_label_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">edge_cbar_label_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">node_shape</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="c1"># 1, 2, 3</span>
                   <span class="n">node_shape_mapper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">node_alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2 was alpha (same for nodes and edges)</span>
@@ -393,6 +416,8 @@ document.write(`
                   <span class="n">node_vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2 was vmax</span>
                   <span class="n">edge_vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 3</span>
                   <span class="n">edge_vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 3</span>
+                  <span class="n">node_cmap_drawedges</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">edge_cmap_drawedges</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">border_linewidths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 2 was linewidths</span>
                   <span class="n">bordercolors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 2 was edgecolors</span>
                   <span class="n">edge_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="c1"># 1, 3 was width                  </span>
@@ -400,6 +425,8 @@ document.write(`
                   <span class="n">edge_style_mapper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">node_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 1, 4 was labels</span>
                   <span class="n">edge_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># 5</span>
+                  <span class="n">node_show_legend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">edge_show_legend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">node_font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="c1"># 1, 4 was font_size (same for nodes and edges)</span>
                   <span class="n">edge_font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="c1"># 5 was font_size</span>
                   <span class="n">node_font_color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="c1"># 1, 4 was font_color (same for nodes and edges)</span>
@@ -408,6 +435,7 @@ document.write(`
                   <span class="n">edge_font_weight</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="c1"># 5 was font_weight</span>
                   <span class="n">node_font_family</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> <span class="c1"># 1, 4 was font_family (same for nodes and edges)</span>
                   <span class="n">edge_font_family</span><span class="o">=</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> <span class="c1"># 5 was font_family</span>
+                  <span class="n">node_ticklabels_mapper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">node_bbox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 4 was bbox</span>
                   <span class="n">edge_bbox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># 5 was bbox</span>
                   <span class="n">node_horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="c1"># 4 was horizontalalignment</span>
@@ -458,6 +486,18 @@ document.write(`
 <span class="sd">        length as edgelist. Color can be string or rgb (or rgba) tuple of</span>
 <span class="sd">        floats from 0-1. If numeric values are specified they will be</span>
 <span class="sd">        mapped to colors using the edge_cmap and edge_vmin,edge_vmax parameters.</span>
+<span class="sd">    {node,edge}_cbar : bool (default = False)</span>
+<span class="sd">        If `True`, show color bar for node and edge colors.</span>
+<span class="sd">        This is ignored if {node,edge}_color is a str.</span>
+<span class="sd">    {node,edge}_cbar_kws : dict</span>
+<span class="sd">        Optional keyword arguments passed to `matplotlib.pyplot.colorbar` for</span>
+<span class="sd">        the node and edge colorbars.</span>
+<span class="sd">    {node,edge}_cbar_label : {`None`, `str`}</span>
+<span class="sd">        Optional label for node and edge colorbar, if displayed.</span>
+<span class="sd">    {node,edge}_cbar_labelpad : {`None`, `int`} (default = -10)</span>
+<span class="sd">        Optional padding for node and edge colorbar label, if displayed.</span>
+<span class="sd">    {node,edge}_cbar_label_y : {`None`, `float`}</span>
+<span class="sd">        Optional y position for node and edge colorbar label, if displayed.</span>
 <span class="sd">    node_shape :  string or array of shapes  (default=&#39;o&#39;)</span>
 <span class="sd">        The shape of the node.  Can be a single shape or a sequence of shapes</span>
 <span class="sd">        with the same length as nodelist. Shape specification is as </span>
@@ -489,6 +529,11 @@ document.write(`
 <span class="sd">        Colormap for mapping intensities of nodes and edges</span>
 <span class="sd">    {node,edge}_vmin,{node,edge}_vmax : float, optional</span>
 <span class="sd">        Minimum and maximum for node and edge colormap scaling</span>
+<span class="sd">    {node,edge}_cmap_drawedges : `bool`</span>
+<span class="sd">        Whether to draw lines at color boundries on node,edge colorbar.</span>
+<span class="sd">        This is ignored if no colorbar is being shown.</span>
+<span class="sd">        Default behavior is to draw edges for a discrete colormap and</span>
+<span class="sd">        not for continuous colormaps.</span>
 <span class="sd">    border_linewidths : scalar or sequence (default=1.0) </span>
 <span class="sd">        Line width of symbol border.</span>
 <span class="sd">    bordercolors : [None | scalar | sequence] (default = node_color)</span>
@@ -519,6 +564,10 @@ document.write(`
 <span class="sd">    edge_labels : dictionary (default=None)</span>
 <span class="sd">        Edge labels in a dictionary of labels keyed by edge two-tuple.</span>
 <span class="sd">        Only labels for the keys in the dictionary are drawn.</span>
+<span class="sd">    {node,edge}_show_legend : `bool`</span>
+<span class="sd">        If `True`, add legend with node shape or edge style.</span>
+<span class="sd">        Default is `True`, but this is ignored if ``node_shape`` or</span>
+<span class="sd">        ``edge_style`` is not provided.</span>
 <span class="sd">    {node,edge}_font_size : int (default=12 for nodes, 10 for edges)</span>
 <span class="sd">        Font size for text labels    </span>
 <span class="sd">    {node,edge}_font_color : string (default=&#39;k&#39; black)</span>
@@ -527,6 +576,9 @@ document.write(`
 <span class="sd">        Font weight    </span>
 <span class="sd">    {node,edge}_font_family : string (default=&#39;sans-serif&#39;)</span>
 <span class="sd">        Font family</span>
+<span class="sd">    node_ticklabels_mapper : {`None`, `dict`} (default=None)</span>
+<span class="sd">        If provided, used to assign labels to numeric values in color-bar when a</span>
+<span class="sd">        discrete colormap is used.</span>
 <span class="sd">    node_bbox : Matplotlib bbox, (default is Matplotlib&#39;s ax.text default)</span>
 <span class="sd">        Specify text box properties (e.g. shape, color etc.) for node labels.</span>
 <span class="sd">    edge_bbox : Matplotlib bbox, optional</span>
@@ -563,6 +615,19 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">node_shape_options</span> <span class="o">=</span> <span class="s1">&#39;os^&gt;v&lt;dph8&#39;</span>
     <span class="n">edge_style_options</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;-.&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;solid&#39;</span><span class="p">,</span> <span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="s1">&#39;dotted&#39;</span><span class="p">,</span> <span class="s1">&#39;dashdot&#39;</span><span class="p">]</span>
+
+    <span class="n">qualitative_cmaps</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Pastel1&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> 
+                         <span class="s1">&#39;Pastel2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> 
+                         <span class="s1">&#39;Paired&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> 
+                         <span class="s1">&#39;Accent&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>                         
+                         <span class="s1">&#39;Dark2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> 
+                         <span class="s1">&#39;Set1&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> 
+                         <span class="s1">&#39;Set2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> 
+                         <span class="s1">&#39;Set3&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+                         <span class="s1">&#39;tab10&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> 
+                         <span class="s1">&#39;tab20&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> 
+                         <span class="s1">&#39;tab20b&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> 
+                         <span class="s1">&#39;tab20c&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span> 
     
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -576,6 +641,17 @@ document.write(`
     <span class="k">if</span> <span class="n">edgelist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">edgelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
 
+    <span class="k">if</span> <span class="n">node_cmap_drawedges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node_cbar</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">node_cmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>        
+            <span class="n">node_cmap_drawedges</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">node_cmap</span> <span class="ow">in</span> <span class="n">qualitative_cmaps</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node_cmap_drawedges</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">edge_cmap_drawedges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">edge_cbar</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">edge_cmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>        
+            <span class="n">edge_cmap_drawedges</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">edge_cmap</span> <span class="ow">in</span> <span class="n">qualitative_cmaps</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edge_cmap_drawedges</span> <span class="o">=</span> <span class="kc">False</span>
+    
     <span class="n">legend_handles</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># draw nodes for each shape</span>
@@ -589,10 +665,131 @@ document.write(`
         <span class="n">node_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_shape_mapper</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">node_shape</span><span class="p">]</span>
         
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">node_vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">node_vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">node_color</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">node_vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">node_vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">node_color</span><span class="p">)</span>
+        <span class="c1"># check if sequence is float or strings</span>
+        <span class="c1"># if strings, check if colors or categories</span>
+        
+        <span class="k">try</span><span class="p">:</span>            
+            <span class="n">_</span> <span class="o">=</span> <span class="n">to_rgba_array</span><span class="p">(</span><span class="n">node_color</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node_vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">node_color</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node_vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">node_color</span><span class="p">)</span>       
+
+    <span class="c1"># for node colorbar:</span>
+    <span class="k">if</span> <span class="n">node_cbar</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">node_cmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">nc_set</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">node_color</span> <span class="k">if</span> <span class="n">node_vmin</span> <span class="o">&lt;=</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">node_vmax</span><span class="p">]))</span>
+        <span class="n">cur_vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nc_set</span><span class="p">)</span>
+        <span class="n">cur_vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nc_set</span><span class="p">)</span>        
+        <span class="k">if</span> <span class="n">node_cmap</span> <span class="ow">in</span> <span class="n">qualitative_cmaps</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">node_vmax</span> <span class="o">=</span> <span class="n">qualitative_cmaps</span><span class="p">[</span><span class="n">node_cmap</span><span class="p">]</span>            
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nc_set</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">qualitative_cmaps</span><span class="p">[</span><span class="n">node_cmap</span><span class="p">]:</span>
+                <span class="c1"># node_boundaries = [k/qualitative_cmaps[node_cmap] for k in range(max(node_color)+2)]</span>
+                <span class="n">node_boundaries</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">/</span><span class="n">qualitative_cmaps</span><span class="p">[</span><span class="n">node_cmap</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">cur_vmax</span><span class="o">+</span><span class="mi">2</span><span class="p">)]</span>
+                <span class="c1"># ticks = [k/qualitative_cmaps[node_cmap] + 0.5*(1/qualitative_cmaps[node_cmap]) for k in range(max(node_color)+1)]</span>
+                <span class="n">node_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">/</span><span class="n">qualitative_cmaps</span><span class="p">[</span><span class="n">node_cmap</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">qualitative_cmaps</span><span class="p">[</span><span class="n">node_cmap</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">cur_vmax</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+                <span class="k">if</span> <span class="n">node_ticklabels_mapper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">node_ticklabels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nc_set</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">node_ticklabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_ticklabels_mapper</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nc_set</span><span class="p">]</span>
+                <span class="n">node_norm</span> <span class="o">=</span> <span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">node_boundaries</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nc_set</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">node_cmap_drawedges</span><span class="p">:</span>
+                    <span class="c1"># node_boundaries = np.append(np.append(nc_set[0], np.array(nc_set[:-1]) + (np.diff(nc_set) / 2)), nc_set[-1]) # nc_set                    </span>
+                    <span class="n">node_boundaries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">nc_set</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
+                                                <span class="n">nc_set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> 
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">node_boundaries</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">node_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">cur_vmax</span><span class="p">]</span>
+                <span class="n">node_ticklabels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">))]</span>            
+                <span class="n">node_norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cur_vmax</span><span class="p">)</span>            
+        <span class="k">else</span><span class="p">:</span>            
+            <span class="c1"># if cur_vmax - cur_vmin &lt; 1e-6:</span>
+            <span class="c1">#     cur_vmax += 1e-3</span>
+            <span class="c1">#     cur_vmin -+ 1e-3 </span>
+            <span class="c1">#     if isinstance(cur_vmax, float):</span>
+            <span class="c1">#         cur_vmax += 1e-3</span>
+            <span class="c1">#         cur_vmin -+ 1e-3</span>
+            <span class="c1">#     else:</span>
+            <span class="c1">#         cur_vmax += 1</span>
+            <span class="c1">#         cur_vmin -+ 1</span>
+            <span class="c1"># node_vmax=None</span>
+            <span class="c1"># nc_set = sorted(set(node_color))            </span>
+            <span class="k">if</span> <span class="n">node_cmap_drawedges</span><span class="p">:</span>
+                <span class="n">nc_set</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">node_color</span> <span class="k">if</span> <span class="n">node_vmin</span> <span class="o">&lt;=</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">node_vmax</span><span class="p">]))</span>
+                <span class="c1"># node_boundaries = np.append(np.append(nc_set[0], np.array(nc_set[:-1]) + (np.diff(nc_set) / 2)), nc_set[-1]) # nc_set</span>
+                <span class="c1"># node_boundaries = np.append(np.append(nc_set[0]-(np.diff(nc_set[:2])/2), np.array(nc_set[:-1]) + (np.diff(nc_set) / 2)),</span>
+                <span class="c1">#                                 nc_set[-1] + (np.diff(nc_set[-2:]) / 2)) </span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nc_set</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">node_boundaries</span> <span class="o">=</span> <span class="p">[</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1e-3</span><span class="p">]</span>
+                    <span class="n">node_ticks</span> <span class="o">=</span> <span class="n">nc_set</span>
+                    <span class="n">node_ticklabels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">))]</span>
+                    <span class="n">node_norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-3</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">node_boundaries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">nc_set</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
+                                                <span class="n">nc_set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+                    <span class="n">node_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">cur_vmax</span><span class="p">]</span>
+                    <span class="n">node_ticklabels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">))]</span>
+                    <span class="n">node_norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cur_vmax</span><span class="p">)</span>
+                
+            <span class="k">else</span><span class="p">:</span>                
+                <span class="n">node_boundaries</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="n">cur_vmax</span> <span class="o">&gt;</span> <span class="n">cur_vmin</span><span class="p">:</span>
+                    <span class="n">node_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">cur_vmax</span><span class="p">]</span>
+                    <span class="n">node_ticklabels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">))]</span>
+                    <span class="n">node_norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cur_vmax</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">node_boundaries</span> <span class="o">=</span> <span class="p">[</span><span class="n">cur_vmin</span><span class="o">-</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">cur_vmin</span><span class="o">+</span><span class="mf">1e-3</span><span class="p">]</span>
+                    <span class="n">node_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">cur_vmin</span><span class="p">]</span>
+                    <span class="n">node_ticklabels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">))]</span>
+                    <span class="c1"># node_norm = plt.Normalize(vmin=nc_set[0], vmax=nc_set[0]+1e-3)</span>
+                    <span class="n">node_norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span><span class="n">nc_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-3</span><span class="p">)</span>
+            <span class="c1"># node_ticks = [cur_vmin, cur_vmax]</span>
+            <span class="c1"># node_ticklabels = [str(np.round(nc_set[0], 2)), str(np.round(nc_set[-1], 2))]</span>
+            <span class="c1"># node_norm = plt.Normalize(vmin=cur_vmin, vmax=cur_vmax)</span>
+
+    <span class="c1"># for edge colorbar:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">edge_vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">edge_vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">edge_color</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">edge_vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">edge_vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">edge_color</span><span class="p">)</span>
+            
+    <span class="k">if</span> <span class="n">edge_cbar</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">edge_cmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        
+        <span class="n">ec_set</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">edge_color</span> <span class="k">if</span> <span class="n">edge_vmin</span> <span class="o">&lt;=</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">edge_vmax</span><span class="p">]))</span>
+        <span class="n">cur_vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ec_set</span><span class="p">)</span>
+        <span class="n">cur_vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ec_set</span><span class="p">)</span>
+        <span class="c1"># if edge_cmap in qualitative_cmaps.keys():</span>
+        <span class="c1">#     edge_vmax = qualitative_cmaps[edge_cmap]            </span>
+        <span class="c1">#     if len(ec_set) &lt;= qualitative_cmaps[edge_cmap]:</span>
+        <span class="c1">#         # edge_boundaries = [k/qualitative_cmaps[edge_cmap] for k in range(max(edge_color)+2)]</span>
+        <span class="c1">#         edge_boundaries = [k/qualitative_cmaps[edge_cmap] for k in range(cur_vmin, cur_vmax+2)]</span>
+        <span class="c1">#         # ticks = [k/qualitative_cmaps[edge_cmap] + 0.5*(1/qualitative_cmaps[edge_cmap]) for k in range(max(edge_color)+1)]</span>
+        <span class="c1">#         edge_ticks = [k/qualitative_cmaps[edge_cmap] + 0.5*(1/qualitative_cmaps[edge_cmap]) for k in range(cur_vmin, cur_vmax+1)]</span>
+        <span class="c1">#         edge_ticklabels = [str(k) for k in ec_set]</span>
+        <span class="c1">#         edge_norm = BoundaryNorm(edge_boundaries, len(ec_set))</span>
+        <span class="c1">#     else:</span>
+        <span class="c1">#         edge_boundaries = None</span>
+        <span class="c1">#         edge_ticks = [cur_vmin, cur_vmax]</span>
+        <span class="c1">#         edge_ticklabels = [str(np.round(ec_set[0], 2)), str(np.round(ec_set[-1], 2))]            </span>
+        <span class="c1">#         edge_norm = plt.Normalize(vmin=cur_vmin, vmax=cur_vmax)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     # edge_vmax=None</span>
+        <span class="c1">#     # ec_set = sorted(set(edge_color))</span>
+        <span class="c1">#     edge_boundaries = None</span>
+        <span class="c1">#     edge_ticks = [cur_vmin, cur_vmax]</span>
+        <span class="c1">#     edge_ticklabels = [str(np.round(ec_set[0], 3)), str(np.round(ec_set[-1], 3))]</span>
+        <span class="c1">#     edge_norm = plt.Normalize(vmin=cur_vmin, vmax=cur_vmax)</span>
+        <span class="k">if</span> <span class="n">edge_cmap_drawedges</span><span class="p">:</span>
+            <span class="c1"># edge_boundaries = np.append(np.append(ec_set[0], np.array(ec_set[:-1]) + (np.diff(ec_set) / 2)), ec_set[-1]) # ec_set</span>
+            <span class="n">edge_boundaries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ec_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ec_set</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ec_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ec_set</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
+                                        <span class="n">ec_set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ec_set</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edge_boundaries</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">edge_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">cur_vmax</span><span class="p">]</span>
+        <span class="n">edge_ticklabels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">ec_set</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">ec_set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">))]</span>
+        <span class="n">edge_norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cur_vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cur_vmax</span><span class="p">)</span>
         
     <span class="k">for</span> <span class="n">shape_class</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">node_shape</span><span class="p">):</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_shape</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">shape_class</span><span class="p">]</span>
@@ -624,11 +821,15 @@ document.write(`
                                <span class="n">margins</span><span class="o">=</span><span class="n">margins</span><span class="p">,</span>
                                <span class="p">)</span>
 
+        
     <span class="k">if</span> <span class="n">node_shape_mapper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">class_label</span><span class="p">,</span> <span class="n">class_shape</span> <span class="ow">in</span> <span class="n">node_shape_mapper</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">legend_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">class_shape</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
-                                         <span class="n">label</span><span class="o">=</span><span class="n">class_label</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                         <span class="n">markerfacecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+        <span class="n">node_show_legend</span> <span class="o">=</span>  <span class="kc">True</span> <span class="k">if</span> <span class="n">node_show_legend</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">node_show_legend</span>
+        <span class="k">if</span> <span class="n">node_show_legend</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">class_label</span><span class="p">,</span> <span class="n">class_shape</span> <span class="ow">in</span> <span class="n">node_shape_mapper</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">legend_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">class_shape</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                                             <span class="n">label</span><span class="o">=</span><span class="n">class_label</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                             <span class="n">markerfacecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+                    
 
     <span class="c1"># draw edges for each style</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_style</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -639,13 +840,7 @@ document.write(`
         <span class="k">if</span> <span class="n">edge_style_mapper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">edge_style_mapper</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">edge_style</span><span class="p">)),</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">edge_style_options</span><span class="p">)))</span> 
         <span class="n">edge_style</span> <span class="o">=</span> <span class="p">[</span><span class="n">edge_style_mapper</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">edge_style</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">edge_vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">edge_vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">edge_color</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">edge_vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">edge_vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">edge_color</span><span class="p">)</span>
-
+    
     <span class="k">for</span> <span class="n">edge_class</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">edge_style</span><span class="p">):</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">edge_style</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">edge_class</span><span class="p">]</span>
         <span class="n">edgelist_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">edgelist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
@@ -658,10 +853,12 @@ document.write(`
             <span class="n">edge_color_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">edge_color</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">edge_color_tmp</span> <span class="o">=</span> <span class="n">edge_color</span>
+        
         <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">edgelist_tmp</span><span class="p">,</span> <span class="c1"># None, </span>
                                <span class="n">width</span><span class="o">=</span><span class="n">edge_width_tmp</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="n">edge_color_tmp</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">edge_class</span><span class="p">,</span>
                                <span class="n">alpha</span><span class="o">=</span><span class="n">edge_alpha</span><span class="p">,</span>
-                               <span class="n">edge_cmap</span><span class="o">=</span><span class="n">edge_cmap</span><span class="p">,</span> <span class="n">edge_vmin</span><span class="o">=</span><span class="n">edge_vmin</span><span class="p">,</span> <span class="n">edge_vmax</span><span class="o">=</span><span class="n">edge_vmax</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                               <span class="n">edge_cmap</span><span class="o">=</span><span class="n">edge_cmap</span><span class="p">,</span>
+                               <span class="n">edge_vmin</span><span class="o">=</span><span class="n">edge_vmin</span><span class="p">,</span> <span class="n">edge_vmax</span><span class="o">=</span><span class="n">edge_vmax</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
                                <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> 
                                <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist</span><span class="p">,</span> 
                                <span class="n">node_shape</span><span class="o">=</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="c1"># node_shape, # &#39;o&#39;,  </span>
@@ -669,9 +866,11 @@ document.write(`
                                <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">edge_style_mapper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">class_label</span><span class="p">,</span> <span class="n">class_style</span> <span class="ow">in</span> <span class="n">edge_style_mapper</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">legend_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
-                                         <span class="n">label</span><span class="o">=</span><span class="n">class_label</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">class_style</span><span class="p">))</span>
+        <span class="n">edge_show_legend</span> <span class="o">=</span>  <span class="kc">True</span> <span class="k">if</span> <span class="n">edge_show_legend</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">edge_show_legend</span>
+        <span class="k">if</span> <span class="n">edge_show_legend</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">class_label</span><span class="p">,</span> <span class="n">class_style</span> <span class="ow">in</span> <span class="n">edge_style_mapper</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">legend_handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                                             <span class="n">label</span><span class="o">=</span><span class="n">class_label</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">class_style</span><span class="p">))</span>
     
 
     <span class="k">if</span> <span class="n">with_node_labels</span><span class="p">:</span>
@@ -692,9 +891,538 @@ document.write(`
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">legend_handles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">legend</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend_handles</span><span class="p">)</span>
 
+    <span class="c1"># add colorbars</span>
+    <span class="c1"># for node colorbar:    </span>
+    <span class="k">if</span> <span class="n">node_cbar</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">node_cmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">node_sm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">node_cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">node_norm</span><span class="p">)</span>
+        <span class="n">node_sm</span><span class="o">.</span><span class="n">_A</span> <span class="o">=</span> <span class="p">[]</span>        
+
+        <span class="n">cur_node_cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">node_sm</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">node_ticks</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">node_boundaries</span><span class="p">,</span>                                     
+                                     <span class="n">drawedges</span><span class="o">=</span><span class="n">node_cmap_drawedges</span><span class="p">,</span> <span class="o">**</span><span class="n">node_cbar_kws</span><span class="p">)</span>
+
+        <span class="n">pad_node_ticklabels</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">node_ticklabels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cur_node_cbar</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">(</span><span class="n">node_ticklabels</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_ticklabels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_ticklabels</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">pad_node_ticklabels</span> <span class="o">=</span> <span class="kc">True</span>
+                
+        <span class="n">node_cbar_label</span> <span class="o">=</span> <span class="s2">&quot;nodes&quot;</span> <span class="k">if</span> <span class="n">node_cbar_label</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;nodes: &quot;</span> <span class="o">+</span> <span class="n">node_cbar_label</span>
+        <span class="k">if</span> <span class="n">node_cbar_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_cbar_labelpad</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span> <span class="k">if</span> <span class="p">(((</span><span class="n">node_cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">node_cmap</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">qualitative_cmaps</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">pad_node_ticklabels</span><span class="p">))</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># -30</span>
+
+        <span class="n">cur_node_cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">node_cbar_label</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="n">node_cbar_labelpad</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">node_cbar_label_y</span><span class="p">)</span>
+    
+    <span class="c1"># for edge colorbar:</span>
+    <span class="k">if</span> <span class="n">edge_cbar</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">edge_cmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">edge_sm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">edge_cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">edge_norm</span><span class="p">)</span>
+        <span class="n">edge_sm</span><span class="o">.</span><span class="n">_A</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="n">cur_edge_cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">edge_sm</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">edge_ticks</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">edge_boundaries</span><span class="p">,</span>
+                                     <span class="n">drawedges</span><span class="o">=</span><span class="n">edge_cmap_drawedges</span><span class="p">,</span> <span class="o">**</span><span class="n">edge_cbar_kws</span><span class="p">)</span>
+
+        <span class="n">edge_cbar_label</span> <span class="o">=</span> <span class="s2">&quot;edges&quot;</span> <span class="k">if</span> <span class="n">edge_cbar_label</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;edges: &quot;</span> <span class="o">+</span> <span class="n">edge_cbar_label</span>
+        <span class="k">if</span> <span class="n">edge_cbar_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">edge_cbar_labelpad</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span> <span class="c1"># -30            </span>
+        <span class="n">cur_edge_cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">edge_cbar_label</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="n">edge_cbar_labelpad</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">edge_cbar_label_y</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">edge_ticklabels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cur_edge_cbar</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">(</span><span class="n">edge_ticklabels</span><span class="p">);</span>
+    
     <span class="k">return</span> <span class="n">ax</span></div>
 
-     
+
+<div class="viewcode-block" id="KM_between_groups"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.KM_between_groups">[docs]</a><span class="k">def</span> <span class="nf">KM_between_groups</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">min_group_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                      <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">show_censors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ci_show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                      <span class="n">show_at_risk_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                      <span class="n">ttl</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; KM analysis for each group, with log-rank p-values.</span>
+
+<span class="sd">    Note: Does not check if any observation appears in more than one group</span>
+<span class="sd">    before plotting the KM curve. However, common observations are removed</span>
+<span class="sd">    before computing the log-rank p-value.</span>
+
+<span class="sd">    If ax is provided, any artists are removed from the legend and set</span>
+<span class="sd">    to not be visible.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    T : `pandas.Series`</span>
+<span class="sd">        Time to event.</span>
+<span class="sd">    E : `pandas.Series`</span>
+<span class="sd">        Indicate if event occured (1) or not (0).</span>
+<span class="sd">    groups </span>
+<span class="sd">        ?</span>
+<span class="sd">    min_group_size : `int`</span>
+<span class="sd">        Minimum group size to be included in analysis.</span>
+<span class="sd">    figsize </span>
+<span class="sd">        Figure size.  </span>
+<span class="sd">    ttl : `str`, optional</span>
+<span class="sd">        Figure title.</span>
+<span class="sd">    colors : `dict`</span>
+<span class="sd">        (Optional) Colors to plot lines, keyed by group label.</span>
+<span class="sd">    ax : `matplotlib.axes._axes.Axes`</span>
+<span class="sd">        (Optional) the axis to use for plotting the survival curves.</span>
+<span class="sd">    **kwargs : `dict`</span>
+<span class="sd">        Key-word arguments passed to `lifelines.KaplanMeierFitter.plot`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+    
+    <span class="n">c_record</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># to remove any old legend for making a gif:</span>
+        <span class="k">for</span> <span class="n">_artist</span>  <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">lines</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">collections</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">patches</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">images</span><span class="p">:</span> <span class="c1"># put this before you call the &#39;mean&#39; plot function.</span>
+            <span class="n">_artist</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">_artist</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">kmfs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># first remove observations with NaN survival data:</span>
+    <span class="n">obs_nan</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">T</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">obs_nan</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">obs_nan</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">E</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obs_nan</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">obs_nan</span><span class="p">)</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">obs_nan</span><span class="p">)</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">obs_nan</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">group_label</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">unique</span><span class="p">()):</span>
+        <span class="n">group_members</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">groups</span> <span class="o">==</span> <span class="n">group_label</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_members</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_group_size</span><span class="p">:</span>
+            <span class="n">c_record</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_label</span><span class="p">)</span>
+            
+            <span class="n">kmf</span> <span class="o">=</span> <span class="n">KaplanMeierFitter</span><span class="p">()</span>
+            <span class="n">kmf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_members</span><span class="p">],</span> <span class="n">E</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_members</span><span class="p">],</span> 
+                    <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">group_label</span><span class="si">}</span><span class="s2"> (n = </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">group_members</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="n">kmfp</span> <span class="o">=</span> <span class="n">kmf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">show_censors</span><span class="o">=</span><span class="n">show_censors</span><span class="p">,</span> <span class="n">ci_show</span><span class="o">=</span><span class="n">ci_show</span><span class="p">,</span>
+                            <span class="n">c</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">colors</span><span class="p">[</span><span class="n">group_label</span><span class="p">],</span>
+                            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">kmfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmf</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">clus_a</span><span class="p">,</span> <span class="n">clus_b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">group_a</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">groups</span><span class="o">==</span><span class="n">clus_a</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">group_b</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">groups</span><span class="o">==</span><span class="n">clus_b</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">intersect_ab</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">group_a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">group_b</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersect_ab</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">intersect_ab</span><span class="p">)</span><span class="si">}</span><span class="s2"> observations found in both </span><span class="si">{</span><span class="n">clus_a</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">clus_b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">group_a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">group_a</span><span class="p">)</span> <span class="o">-</span> <span class="n">intersect_ab</span><span class="p">)</span>
+            <span class="n">group_b</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">group_b</span><span class="p">)</span> <span class="o">-</span> <span class="n">intersect_ab</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">group_a</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_group_size</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">group_b</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_group_size</span><span class="p">):</span>
+            <span class="n">lrp</span> <span class="o">=</span> <span class="n">logrank_test</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_a</span><span class="p">],</span> <span class="n">T</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_b</span><span class="p">],</span> 
+                               <span class="n">event_observed_A</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_a</span><span class="p">],</span> 
+                               <span class="n">event_observed_B</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_b</span><span class="p">])</span>            
+            <span class="n">lrp</span> <span class="o">=</span> <span class="n">lrp</span><span class="o">.</span><span class="n">p_value</span>
+            <span class="k">if</span> <span class="n">lrp</span> <span class="o">&lt;=</span><span class="mf">0.05</span><span class="p">:</span>
+                <span class="n">ttl</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">clus_a</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">clus_b</span><span class="si">}</span><span class="s2"> :  p = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">lrp</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">if</span> <span class="n">show_at_risk_counts</span><span class="p">:</span>
+        <span class="n">add_at_risk_counts</span><span class="p">(</span><span class="o">*</span><span class="n">kmfs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">xlabel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;logrank </span><span class="si">{</span><span class="n">ttl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">);</span></div>
+
+
+<div class="viewcode-block" id="alpha_numeric_sorted"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.alpha_numeric_sorted">[docs]</a><span class="k">def</span> <span class="nf">alpha_numeric_sorted</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Sort the given iterable alpha-numerically.&quot;&quot;&quot;</span> 
+    <span class="n">convert</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">text</span> 
+    <span class="n">alphanum_key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="p">[</span> <span class="n">convert</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;([0-9]+)&#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="p">]</span> 
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="n">alphanum_key</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="dotplot"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.dotplot">[docs]</a><span class="k">def</span> <span class="nf">dotplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size_exponent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+            <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+            <span class="n">cbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbar_labelpad</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbar_label_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">cbar_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> 
+            <span class="n">size_legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size_legend_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; plot dotplots with prescribed color and shape</span>
+
+<span class="sd">    Dots are plotted via `matplotlib.pyplot.scatter`.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x</span>
+<span class="sd">    y</span>
+<span class="sd">    c</span>
+<span class="sd">    s</span>
+<span class="sd">    size_exponent</span>
+<span class="sd">    marker</span>
+<span class="sd">    cmap</span>
+<span class="sd">    vmin</span>
+<span class="sd">    vmax</span>
+<span class="sd">    norm</span>
+<span class="sd">    cbar_label</span>
+<span class="sd">    cbar_labelpad</span>
+<span class="sd">    cbar_label_y</span>
+<span class="sd">    cbar_kwargs : `dict`</span>
+<span class="sd">    ax</span>
+<span class="sd">    figsize</span>
+<span class="sd">    size_legend_kwargs</span>
+<span class="sd">    size_legend_label</span>
+<span class="sd">    kwargs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;jet&#39;</span>
+    <span class="k">if</span> <span class="n">marker</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span>
+
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;linewidths&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">lw</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;linewidths&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lw</span> <span class="o">=</span> <span class="mi">1</span>
+        
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))):</span>
+        <span class="k">if</span> <span class="n">size_legend_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">size_legend_kwargs</span> <span class="o">=</span>  <span class="p">{</span><span class="s1">&#39;loc&#39;</span> <span class="p">:</span> <span class="s1">&#39;center left&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;bbox_to_anchor&#39;</span> <span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)}</span>
+        <span class="c1"># if size_legend_label is None:</span>
+        <span class="c1">#     size_legend_label = None        </span>
+        <span class="n">size_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">size_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="n">size_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">size_min</span><span class="p">,</span> <span class="n">size_max</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># markersizes</span>
+        <span class="k">if</span> <span class="n">size_min</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">size_max</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">dot_range</span> <span class="o">=</span> <span class="n">size_max</span> <span class="o">-</span> <span class="n">size_min</span> <span class="c1"># size_range</span>
+            <span class="n">size_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">size_range</span> <span class="o">-</span> <span class="n">size_min</span><span class="p">)</span> <span class="o">/</span> <span class="n">dot_range</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">size_values</span> <span class="o">=</span> <span class="n">size_range</span>
+
+        <span class="k">if</span> <span class="n">size_exponent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">size_values</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># size = size_values**size_exponent</span>
+            <span class="c1"># size = size * (size_max - size_min) + size_min</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">size_values</span><span class="o">*</span><span class="mi">10</span> <span class="o">+</span> <span class="n">size_min</span>
+
+        <span class="n">legend_markers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+                                 <span class="n">markerfacecolor</span><span class="o">=</span><span class="s2">&quot;lightgray&quot;</span><span class="p">,</span>
+                                 <span class="n">markersize</span><span class="o">=</span><span class="n">ms</span><span class="p">,</span> <span class="n">markeredgewidth</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span>
+                                 <span class="n">markeredgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">ms</span> <span class="ow">in</span> <span class="n">size</span><span class="p">]</span>
+        <span class="n">lgd</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">legend_markers</span><span class="p">,</span>                          
+                         <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span> <span class="k">for</span> <span class="n">ms</span> <span class="ow">in</span> <span class="n">size_range</span><span class="p">],</span>
+                         <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">size_legend_label</span><span class="p">,</span> <span class="o">**</span><span class="n">size_legend_kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">size_exponent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">**</span><span class="n">size_exponent</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]):</span>
+        <span class="n">xx</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">x_ref</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x_ref</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">alpha_numeric_sorted</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>        
+        <span class="n">xx</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_ref</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+        <span class="n">x_ref</span> <span class="o">=</span> <span class="p">{</span><span class="n">vv</span><span class="p">:</span> <span class="n">kk</span> <span class="k">for</span> <span class="n">kk</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">x_ref</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]):</span>
+        <span class="n">yy</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">y_ref</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">y_ref</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">alpha_numeric_sorted</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))))</span>        
+        <span class="n">yy</span> <span class="o">=</span> <span class="p">[</span><span class="n">y_ref</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+        <span class="n">y_ref</span> <span class="o">=</span> <span class="p">{</span><span class="n">vv</span><span class="p">:</span> <span class="n">kk</span> <span class="k">for</span> <span class="n">kk</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">y_ref</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="c1"># ax.scatter(x, y, s=s,</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
+               <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+    <span class="n">x_ticks</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>    
+    <span class="n">x_labels</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">x_ref</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x_ref</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">x_ticks</span><span class="p">]</span>
+
+    <span class="n">y_ticks</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">yy</span><span class="p">))</span>    
+    <span class="n">y_labels</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">y_ref</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">y_ref</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">y_ticks</span><span class="p">]</span>
+    
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">x_labels</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">y_labels</span><span class="p">)</span>
+    <span class="c1"># _ = ax.set_xticks(sorted(set(x)))</span>
+    <span class="c1"># _ = ax.set_yticks(sorted(set(y)))</span>
+
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cbar_labelpad</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cbar_labelpad</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span> <span class="c1"># -30</span>
+        <span class="c1"># cbar_label_y = cbar_label_y or 0.5</span>
+        <span class="k">if</span> <span class="n">cbar_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cbar_label</span> <span class="o">=</span> <span class="s1">&#39;mean value&#39;</span>
+        <span class="k">if</span> <span class="n">cbar_kwargs</span><span class="p">:</span>
+            <span class="n">cbar_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;location&#39;</span><span class="p">:</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="s1">&#39;pad&#39;</span><span class="p">:</span><span class="mf">0.01</span><span class="p">}</span> 
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="c1"># ticks=[vmin, vmax],</span>
+                          <span class="o">**</span><span class="n">cbar_kwargs</span><span class="p">,</span>
+                         <span class="p">)</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">cbar_label</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="n">cbar_labelpad</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">cbar_label_y</span><span class="p">)</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">vmax</span><span class="p">,</span> <span class="mi">2</span><span class="p">))])</span></div>
+
+
+
+<div class="viewcode-block" id="_branch_order"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._branch_order">[docs]</a><span class="k">def</span> <span class="nf">_branch_order</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">Ghr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get ordered branches starting with longest branch. &quot;&quot;&quot;</span>
+    <span class="n">nl</span> <span class="o">=</span> <span class="p">[</span><span class="n">_largest_branch</span><span class="p">(</span><span class="n">G_tda</span><span class="p">)]</span>
+    <span class="n">nl_update</span> <span class="o">=</span> <span class="n">nl</span><span class="p">[:]</span> <span class="c1"># [_largest_branch(G_tda)]</span>
+    <span class="n">ix</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ghr</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nl</span><span class="p">:</span>
+            <span class="n">nbhd</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Ghr</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="c1"># _neighboring_branches(G_tda, k) #  # changed</span>
+            <span class="n">new_nbhd</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nbhd</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nl_update</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_nbhd</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">aa</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Ghr</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="n">new_nbhd</span><span class="p">)</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">())</span>
+            <span class="n">nl_update</span> <span class="o">=</span> <span class="n">nl_update</span> <span class="o">+</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">aa</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;n_members&#39;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">nl_update</span><span class="p">[:]</span> 
+        <span class="n">ix</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">ix</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ghr</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Failed to converge&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nl_update</span></div>
+
+
+
+<div class="viewcode-block" id="_branch_member_labels"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._branch_member_labels">[docs]</a><span class="k">def</span> <span class="nf">_branch_member_labels</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">branch</span><span class="p">):</span>
+    <span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G_tda</span> <span class="k">if</span> <span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">branch</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">members</span></div>
+
+
+<div class="viewcode-block" id="_branch_member_indices"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._branch_member_indices">[docs]</a><span class="k">def</span> <span class="nf">_branch_member_indices</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">branch</span><span class="p">):</span>
+    <span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G_tda</span> <span class="k">if</span> <span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">branch</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">members</span></div>
+
+
+<div class="viewcode-block" id="_sorted_members"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._sorted_members">[docs]</a><span class="k">def</span> <span class="nf">_sorted_members</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">branch</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="p">[</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G_tda</span> <span class="k">if</span> <span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;root&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">root</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+    <span class="n">branch_labels</span> <span class="o">=</span> <span class="n">_branch_member_labels</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+    <span class="n">members</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">root</span><span class="p">,</span> <span class="n">branch_labels</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">members</span></div>
+
+
+<div class="viewcode-block" id="_largest_branch"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._largest_branch">[docs]</a><span class="k">def</span> <span class="nf">_largest_branch</span><span class="p">(</span><span class="n">G_tda</span><span class="p">):</span>
+    <span class="n">branches</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;branch&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">branches</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">branches</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">])}</span>
+    <span class="n">ix</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">count</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ix</span></div>
+
+
+<div class="viewcode-block" id="_trace_sin"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._trace_sin">[docs]</a><span class="k">def</span> <span class="nf">_trace_sin</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">period</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;period must be greater than 0.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">h</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;h must be greater than 0.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolution</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;resolution must be greater than 0.&quot;</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">n_points</span><span class="o">*</span><span class="n">resolution</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">period</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">pos</span></div>
+
+
+<div class="viewcode-block" id="_curve_sin"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._curve_sin">[docs]</a><span class="k">def</span> <span class="nf">_curve_sin</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>  <span class="n">start</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h </span>
+<span class="sd">        height</span>
+<span class="sd">    a  </span>
+<span class="sd">        period</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">n_points</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+    <span class="c1"># t = np.linspace(start, start + n_points*2, n_points)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">t</span> <span class="c1"># r(t) * np.cos(t)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="c1"># r(t) * np.sin(t)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">pos</span></div>
+
+
+<div class="viewcode-block" id="_curve_trace"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._curve_trace">[docs]</a><span class="k">def</span> <span class="nf">_curve_trace</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>  <span class="n">start</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Trace out the wavy spiral curve.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : `float`</span>
+<span class="sd">        Affects radius of the wave. Larger values result in a tighter wave.</span>
+<span class="sd">    h : `float`</span>
+<span class="sd">        Affects how tight and long the spiral is. Smaller values result in</span>
+<span class="sd">        a tighter, longer  spiral</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">C</span><span class="p">:</span> <span class="n">a</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>  <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">t</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">C</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">C</span><span class="p">:</span> <span class="n">a</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">C</span><span class="p">));</span>    
+    <span class="n">r</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">radius</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">h</span><span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">r</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">r</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">pos</span></div>
+
+<span class="c1"># testing</span>
+
+
+
+<div class="viewcode-block" id="_interbranch_edges"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._interbranch_edges">[docs]</a><span class="k">def</span> <span class="nf">_interbranch_edges</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">branch_a</span><span class="p">,</span> <span class="n">branch_b</span><span class="p">):</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">ee</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">G_tda</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span> <span class="k">if</span> <span class="p">((</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="n">branch_a</span><span class="p">,</span>
+                                                                              <span class="n">branch_b</span><span class="p">])</span> <span class="ow">and</span> \
+                                            <span class="p">(</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="n">branch_a</span><span class="p">,</span>
+                                                                              <span class="n">branch_b</span><span class="p">])</span> <span class="ow">and</span> \
+                                            <span class="p">(</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;branch&#39;</span><span class="p">]))]</span>
+
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">ee</span> <span class="k">if</span> <span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">branch_a</span> <span class="k">else</span> <span class="p">(</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]</span>    
+    <span class="k">return</span> <span class="n">edges</span></div>
+
+
+<div class="viewcode-block" id="_neighboring_branches"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._neighboring_branches">[docs]</a><span class="k">def</span> <span class="nf">_neighboring_branches</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">branch</span><span class="p">):</span>
+    <span class="n">members</span> <span class="o">=</span> <span class="n">_branch_member_indices</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+    <span class="n">branches</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">G_tda</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">members</span><span class="p">):</span>
+            <span class="n">branches</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;branch&#39;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">branch</span> <span class="ow">in</span> <span class="n">branches</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Branch shouldn&#39;t be included...&quot;</span><span class="p">)</span>
+        <span class="n">branches</span> <span class="o">=</span> <span class="n">branches</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">branch</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">branches</span></div>
+
+
+<div class="viewcode-block" id="sin_layout"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.sin_layout">[docs]</a><span class="k">def</span> <span class="nf">sin_layout</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Node positions for sinusoidal layout of branches &quot;&quot;&quot;</span>
+    <span class="n">Ghr</span> <span class="o">=</span> <span class="n">high_res_branch_graph</span><span class="p">(</span><span class="n">G_tda</span><span class="p">)</span>
+    <span class="n">ix_ref</span> <span class="o">=</span> <span class="p">{</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G_tda</span><span class="p">}</span>
+
+    <span class="n">ordered_branches</span> <span class="o">=</span> <span class="n">_branch_order</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">Ghr</span><span class="p">)</span>
+    <span class="n">wavy_spiral_record</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># first branch - longest branch</span>
+    <span class="n">branch_0</span> <span class="o">=</span> <span class="n">ordered_branches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># _largest_branch(G_tda)    </span>
+    <span class="n">cur_branch_labels</span> <span class="o">=</span> <span class="n">_sorted_members</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">branch_0</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">cur_branch_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ix_ref</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cur_branch_labels</span><span class="p">]</span>
+    <span class="c1"># n_0 = len(cur_branch_labels)</span>
+
+    <span class="n">POS</span> <span class="o">=</span> <span class="n">_trace_sin</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                     <span class="n">resolution</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">period</span><span class="p">)</span>
+
+    <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_0</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nodelist&#39;</span><span class="p">:</span> <span class="n">cur_branch_labels</span><span class="p">,</span>
+                                    <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">,</span> <span class="n">POS</span><span class="p">))}</span>
+
+    <span class="k">for</span> <span class="n">branch_1</span> <span class="ow">in</span> <span class="n">ordered_branches</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">cur_branch_labels</span> <span class="o">=</span> <span class="n">_sorted_members</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">branch_1</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">cur_branch_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ix_ref</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cur_branch_labels</span><span class="p">]</span>
+
+        <span class="n">POS</span> <span class="o">=</span> <span class="n">_trace_sin</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                         <span class="n">resolution</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="n">period</span><span class="p">)</span>
+
+        <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nodelist&#39;</span><span class="p">:</span> <span class="n">cur_branch_labels</span><span class="p">,</span>
+                                        <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">,</span> <span class="n">POS</span><span class="p">))}</span>
+
+        <span class="n">branch_x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">Ghr</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">branch_1</span><span class="p">))</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="o">.</span><span class="n">keys</span><span class="p">()))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">connecting_edges</span> <span class="o">=</span> <span class="n">_interbranch_edges</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">branch_x</span><span class="p">,</span> <span class="n">branch_1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">local_pos_source</span> <span class="o">=</span> <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_x</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">][</span><span class="n">connecting_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">local_pos_target</span> <span class="o">=</span> <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">][</span><span class="n">connecting_edges</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="n">xy_min_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_x</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy_max_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_x</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy_min_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy_max_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">local_pos_source</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">local_pos_target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">xy_max_target</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">xy_min_source</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">sep</span><span class="p">))</span>
+
+        <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="p">[</span><span class="n">dx</span><span class="p">,</span> <span class="o">-</span><span class="n">dy</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="c1"># nodelist = []</span>
+    <span class="n">POS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">wavy_spiral_record</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># nodelist += v[&#39;nodelist&#39;]</span>
+        <span class="n">POS</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">POS</span><span class="p">,</span> <span class="o">**</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]}</span>
+
+    <span class="k">return</span> <span class="n">POS</span></div>
+
+
+<div class="viewcode-block" id="wavy_curve_layout"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.wavy_curve_layout">[docs]</a><span class="k">def</span> <span class="nf">wavy_curve_layout</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+                      <span class="n">sep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Node positions for wavy spiral layout of branches &quot;&quot;&quot;</span>
+    <span class="n">Ghr</span> <span class="o">=</span> <span class="n">high_res_branch_graph</span><span class="p">(</span><span class="n">G_tda</span><span class="p">)</span>
+    <span class="n">ix_ref</span> <span class="o">=</span> <span class="p">{</span><span class="n">G_tda</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G_tda</span><span class="p">}</span>
+
+    <span class="n">ordered_branches</span> <span class="o">=</span> <span class="n">_branch_order</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">Ghr</span><span class="p">)</span>
+    <span class="n">wavy_spiral_record</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># first branch - longest branch</span>
+    <span class="n">branch_0</span> <span class="o">=</span> <span class="n">ordered_branches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># _largest_branch(G_tda)    </span>
+    <span class="n">cur_branch_labels</span> <span class="o">=</span> <span class="n">_sorted_members</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">branch_0</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">cur_branch_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ix_ref</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cur_branch_labels</span><span class="p">]</span>
+    <span class="n">n_0</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">)</span>
+
+    <span class="n">POS</span> <span class="o">=</span> <span class="n">_curve_trace</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span>
+                       <span class="n">h</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">,</span>
+                       <span class="n">start</span><span class="o">=</span><span class="n">t_start</span><span class="p">)</span>
+    <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_0</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nodelist&#39;</span><span class="p">:</span> <span class="n">cur_branch_labels</span><span class="p">,</span>
+                                    <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">,</span> <span class="n">POS</span><span class="p">))}</span>
+
+    <span class="k">for</span> <span class="n">branch_1</span> <span class="ow">in</span> <span class="n">ordered_branches</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">cur_branch_labels</span> <span class="o">=</span> <span class="n">_sorted_members</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">branch_1</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">cur_branch_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ix_ref</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cur_branch_labels</span><span class="p">]</span>
+
+        <span class="n">POS</span> <span class="o">=</span> <span class="n">_curve_trace</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span>
+                           <span class="n">h</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">t_start</span><span class="p">)</span>
+        
+        <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nodelist&#39;</span><span class="p">:</span> <span class="n">cur_branch_labels</span><span class="p">,</span>
+                                        <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cur_branch_labels</span><span class="p">,</span> <span class="n">POS</span><span class="p">))}</span>
+
+        <span class="n">branch_x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">Ghr</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">branch_1</span><span class="p">))</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="o">.</span><span class="n">keys</span><span class="p">()))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">connecting_edges</span> <span class="o">=</span> <span class="n">_interbranch_edges</span><span class="p">(</span><span class="n">G_tda</span><span class="p">,</span> <span class="n">branch_x</span><span class="p">,</span> <span class="n">branch_1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="n">local_pos_source</span> <span class="o">=</span> <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_x</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">][</span><span class="n">connecting_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>        
+        <span class="n">local_pos_target</span> <span class="o">=</span> <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">][</span><span class="n">connecting_edges</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="n">xy_min_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_x</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy_max_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_x</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy_min_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy_max_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">local_pos_source</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">local_pos_target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">xy_max_target</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">xy_min_source</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">sep</span><span class="p">))</span> 
+        
+        <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="p">[</span><span class="n">dx</span><span class="p">,</span> <span class="o">-</span><span class="n">dy</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">wavy_spiral_record</span><span class="p">[</span><span class="n">branch_1</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="c1"># # determine which corner to add plot to</span>
+        <span class="c1"># if np.abs(local_pos_source[0] - xy_min_source[0]) &lt; np.abs(local_pos_source[0] - xy_max_source[0]):</span>
+        <span class="c1">#     # sign_x = -1</span>
+        <span class="c1">#     delta_x = xy_min_source[0] - xy_max_target[0]</span>
+        <span class="c1">#     # print(&#39;left&#39;)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     # sign_x = 1</span>
+        <span class="c1">#     delta_x = (xy_max_source[0] - xy_min_target[0])</span>
+        <span class="c1">#     # print(&#39;right&#39;)</span>
+        <span class="c1"># if np.abs(local_pos_source[1] - xy_min_source[1]) &lt; np.abs(local_pos_source[1] - xy_max_source[1]):</span>
+        <span class="c1">#     # sign_y = -1</span>
+        <span class="c1">#     delta_y = xy_min_source[1] - xy_max_target[1]</span>
+        <span class="c1">#     # print(&#39;bottom&#39;)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     delta_y = xy_max_source[1] - xy_min_target[1]</span>
+        <span class="c1">#     # print(&#39;top&#39;)</span>
+        <span class="c1"># # update positions</span>
+        <span class="c1"># wavy_spiral_record[branch_1][&#39;pos&#39;] = {k: (v-[delta_x, delta_y]) for k,v in wavy_spiral_record[branch_1][&#39;pos&#39;].items()}</span>
+
+    <span class="c1"># nodelist = []</span>
+    <span class="n">POS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">wavy_spiral_record</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># nodelist += v[&#39;nodelist&#39;]</span>
+        <span class="n">POS</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">POS</span><span class="p">,</span> <span class="o">**</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]}</span>
+
+    <span class="k">return</span> <span class="n">POS</span></div>
+
 </pre></div>
 
                 </article>

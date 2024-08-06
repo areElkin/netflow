@@ -318,6 +318,7 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
@@ -435,7 +436,8 @@ document.write(`
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>keeper</strong> (<cite>netflow.Keeper</cite>) – The keeper object that stores the data of size (n_features, n_observations).</p></li>
-<li><p><strong>graph_key</strong> (<em>'str'</em>) – The key to the graph in the graph keeper that should be used.</p></li>
+<li><p><strong>graph_key</strong> (<em>'str'</em>) – The key to the graph in the graph keeper that should be used.
+(Does not have to include all features in the data)</p></li>
 <li><p><strong>layer</strong> (<cite>str</cite>) – The key to the data in the data keeper that should be used.</p></li>
 </ul>
 </dd>
@@ -722,6 +724,7 @@ If <cite>False</cite>, node is not included in neighborhood which results in com
 <li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Euclidean distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>.</p></li>
 <li><p><strong>desc</strong> (<cite>str</cite>) – Description for progress bar.</p></li>
 <li><p><strong>profiles_desc</strong> (<cite>str</cite>, default = “t0”) – Description of profiles used in name of file to store results.</p></li>
+<li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
 <li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>dict</cite>) – Extra arguments to metric, passed to <cite>scipy.spatial.distance.cdist</cite>.</p></li>
 </ul>
@@ -833,6 +836,7 @@ If <cite>False</cite>, node is not included in neighborhood which results in com
 <li><p><strong>node</strong> (<cite>int</cite>) – Node in the graph to compute the neighborhood on.</p></li>
 <li><p><strong>include_self</strong> (<cite>bool</cite>) – If <cite>True</cite>, include node in neighborhood.
 If <cite>False</cite>, node is not included in neighborhood.</p></li>
+<li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
 <li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>dict</cite>) – Extra arguments to metric, passed to scipy.spatial.distance.cdist.</p></li>
 </ul>
@@ -884,6 +888,7 @@ If <cite>None</cite>, use hop distance.</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Euclidean distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
 name of file to store stacked results.</p></li>
 <li><p><strong>desc</strong> (<cite>str</cite>) – Description for progress bar.</p></li>
+<li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
 <li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>dict</cite>) – Extra arguments to metric, passed to <cite>scipy.spatial.distance.cdist</cite>.</p></li>
 </ul>
@@ -899,7 +904,7 @@ This is saved in <code class="docutils literal notranslate"><span class="pre">ke
 <p class="rubric">Notes</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">object.outdir</span></code> is not <cite>None</cite>, Euclidean distances are saved to file.
 Before starting the computation, check if the file exists. If so, load and remove already computed
-nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
 the previously computed and saved results before saving and returning the combined results.</p>
 <p>SAVES TO DISTANCES</p>
 </dd></dl>
