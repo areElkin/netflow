@@ -27,5 +27,6 @@
    :toctree:
    :recursive:
 
+   netflow.probe.clustering
    netflow.probe.visualization
 

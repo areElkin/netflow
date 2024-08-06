@@ -13,7 +13,12 @@ netflow.probe.visualization
 
    .. autosummary::
    
+      KM_between_groups
+      alpha_numeric_sorted
+      dotplot
       plot_topology
+      sin_layout
+      wavy_curve_layout
    
    
 

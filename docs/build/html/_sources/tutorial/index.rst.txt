@@ -10,8 +10,43 @@ TO DO: UPDATE WITH TUTORIALS
 
     .. grid-item-card::
 
-        POSE pipeline - MM
+        Keeper
+	^^^^^^
+
+	This tutorial walks through the Keeper data structure.
+
+        +++
+
+        .. button-ref:: notebooks/keeper_tutorial
+            :expand:
+            :color: secondary
+            :click-parent:
+
+            Keeper tutorial
+
+    .. grid-item-card::
+
+        POSE pipeline - BC
 	^^^^^^^^^^^^^^^^^^
+
+	This tutorial walks through the POSE pipeline for a single modality.
+	The pipeline is demonstrated on breast cancer (BC) rna data
+	from TCGA.
+
+        +++
+
+        .. button-ref:: notebooks/poser_tutorial_BC_rna
+            :expand:
+            :color: secondary
+            :click-parent:
+
+            BC POSE tutorial
+	    
+
+    .. grid-item-card::
+
+        POSE pipeline - MM (OLD)
+	^^^^^^^^^^^^^^^^^^^^^^^^
 
 	This tutorial walks through the POSE pipeline for a single modality.
 	The pipeline is demonstrated on multiple myeloma (MM) rna data
@@ -29,8 +64,8 @@ TO DO: UPDATE WITH TUTORIALS
 
     .. grid-item-card::
 
-        POSE pipeline - BC
-	^^^^^^^^^^^^^^^^^^
+        POSE pipeline - BC (OLD)
+	^^^^^^^^^^^^^^^^^^^^^^^^
 
 	This tutorial walks through the POSE pipeline for a single modality.
 	The pipeline is demonstrated on breast cancer (BC) rna data

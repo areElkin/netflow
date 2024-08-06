@@ -318,6 +318,7 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
@@ -435,6 +436,12 @@ the method <code class="xref py py-mod docutils literal notranslate"><span class
 <li><p>Include points not identified with any branch after split in the trunk (nonunique).</p></li>
 </ul>
 </div></blockquote>
+<p>To do:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Set branchable aspect of TreeNode.</p></li>
+</ul>
+</div></blockquote>
 <p class="rubric">Functions</p>
 <table class="longtable table autosummary">
 <colgroup>
@@ -448,6 +455,12 @@ the method <code class="xref py py-mod docutils literal notranslate"><span class
 <tr class="row-even"><td><p><a class="reference internal" href="#netflow.pose.organization.dpt_from_augmented_sym_transitions" title="netflow.pose.organization.dpt_from_augmented_sym_transitions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dpt_from_augmented_sym_transitions</span></code></a>(keeper, key)</p></td>
 <td><p>Compute the diffusion pseudotime metric between observations, computed from the symmetric transitions.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.pose.organization.get_pose" title="netflow.pose.organization.get_pose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_pose</span></code></a>(keeper, key, label, n_branches[, ...])</p></td>
+<td><p>Compute the pose and saved to keeper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.pose.organization.root_max_ratio" title="netflow.pose.organization.root_max_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_max_ratio</span></code></a>(keeper, key)</p></td>
+<td><p>Returns root index of observation that leads to the largest triangle..</p></td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Classes</p>
@@ -457,8 +470,13 @@ the method <code class="xref py py-mod docutils literal notranslate"><span class
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.pose.organization.PseudoOrdering" title="netflow.pose.organization.PseudoOrdering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PseudoOrdering</span></code></a>(keeper, key, label[, root, ...])</p></td>
-<td><p>Compute pseudo-organization transitions and distance from similarity.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.pose.organization.POSER" title="netflow.pose.organization.POSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">POSER</span></code></a>(keeper, key[, root, min_branch_size, ...])</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param keeper</dt>
+<dd class="field-odd"><p>The keeper object that stores the distance matrix of size (n_observations, n_observations).</p>
+</dd>
+</dl>
+</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#netflow.pose.organization.TDA" title="netflow.pose.organization.TDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TDA</span></code></a>(keeper, key[, label, min_branch_size, ...])</p></td>
 <td><p>Class to compute topological branching analysis</p></td>
@@ -472,112 +490,460 @@ the method <code class="xref py py-mod docutils literal notranslate"><span class
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="netflow.pose.organization.PseudoOrdering">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.pose.organization.</span></span><span class="sig-name descname"><span class="pre">PseudoOrdering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#PseudoOrdering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.PseudoOrdering" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute pseudo-organization transitions and distance from similarity.</p>
-<p>Pseudo-ordering of observations (e.g., samples).</p>
-<p>Represent data matrix as a graph of associations (i.e., edges) among data points (i.e., observations or nodes).</p>
-<p>Results are stored to the keeper as a <cite>dict</cite>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Code primarily copied from <cite>scanpy.neighbors</cite>.
-Code makes attributes <code class="docutils literal notranslate"><span class="pre">._transitions_asym</span></code> and <code class="docutils literal notranslate"><span class="pre">._transitions_sym</span></code> available in the object.
-Code makes <code class="docutils literal notranslate"><span class="pre">transitions_asym</span></code> and <code class="docutils literal notranslate"><span class="pre">transitions_sym</span></code> available in similarity keeper.</p>
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.pose.organization.</span></span><span class="sig-name descname"><span class="pre">POSER</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose_largest_segment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flavor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'haghverdi16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_kendall_tau_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keeper</strong> (<cite>netflow.Keeper</cite>) – The keeper object that stores the distance matrix of size (n_observations, n_observations).</p></li>
+<li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the distance matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>,
+of size (n_observations, n_observations).</p></li>
+<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, ‘density’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
+<ul>
+<li><p><cite>int</cite> : index of observation</p></li>
+<li><p>’density’ : select observation with minimal distance-density</p></li>
+<li><p>’ratio’ : select observation which leads to maximal triangular ratio distance</p></li>
+</ul>
+</p></li>
+<li><p><strong>min_branch_size</strong> ({<cite>int</cite>, <cite>float</cite>}) – During recursive splitting of branches, only consider splitting a branch with at least
+<code class="docutils literal notranslate"><span class="pre">min_branch_size</span> <span class="pre">&gt;</span> <span class="pre">2</span></code> data points.
+If a <cite>float</cite>, <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> refers to the fraction of the total number of data points
+(<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">min_branch_size</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>).</p></li>
+<li><p><strong>choose_largest_segment</strong> (<cite>bool</cite>) – If <cite>True</cite>, select largest segment for branching.</p></li>
+<li><p><strong>flavor</strong> (<em>{'haghverdi16'</em><em>, </em><em>'wolf17_tri'</em><em>, </em><em>'wolf17_bi'</em><em>, </em><em>'wolf17_bi_un'}</em>) – Branching algorithm (based on <cite>scanpy</cite> implementation).</p></li>
+<li><p><strong>allow_kendall_tau_shift</strong> (<cite>bool</cite>) – If a very small branch is detected upon splitting, shift away from
+maximum correlation in Kendall tau criterion of <a class="reference internal" href="../../references.html#haghverdi16" id="id2"><span>[Haghverdi16]</span></a> to
+stabilize the splitting.</p></li>
+<li><p><strong>smooth_corr</strong> (<cite>bool</cite>, default = <cite>False</cite>) – If <cite>True</cite>, smooth correlations before identifying cut points for branch splitting.</p></li>
+<li><p><strong>brute</strong> (<cite>bool</cite>) – If <cite>True</cite>, data points not associated with any branch upon split are combined with
+undecided (trunk) points. Otherwise, if <cite>False</cite>, they are treated as individual islands,
+not associated with any branch (and assigned branch index -1).</p></li>
+<li><p><strong>split</strong> (<cite>bool</cite> (default = True)) – if <cite>True</cite>, split segment into multiple branches. Otherwise,
+determine a single branching off of the main segment.
+This is ignored if flavor is not ‘haghverdi16’.
+If <cite>True</cite>, <code class="docutils literal notranslate"><span class="pre">brute</span></code> is ignored.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.__detect_branching_haghverdi16">
+<span class="sig-name descname"><span class="pre">__detect_branching_haghverdi16</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#netflow.pose.organization.POSER.__detect_branching_haghverdi16" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect branching on given segment.</p>
+<p>Compute point that maximizes kendall tau correlation of the sequences of
+distances to the second and the third tip, respectively, when ‘moving
+away’ from the first tip: tips[0]. ‘Moving away’ means moving in the
+direction of increasing distance from the first tip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Dseg</strong> – The distance matrix restricted to segment.</p></li>
+<li><p><strong>tips</strong> – The three tip points in local coordinates to the segment.
+They form a ‘triangle’ that contains the data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>branch</strong> – Segment obtained from “splitting away the first tip data point”,
+where k is the number of data points in the branch.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>numpy.ndarray</cite> (k,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose_largest_segment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flavor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'haghverdi16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_kendall_tau_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.pose.organization'</span></em><a class="headerlink" href="#netflow.pose.organization.POSER.__module__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._construct_topology">
+<span class="sig-name descname"><span class="pre">_construct_topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._construct_topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._construct_topology" title="Permalink to this definition">#</a></dt>
+<dd><p>Construct POSE connections between data points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>segs</strong> (<cite>dict</cite>) – The banched segments indexed by the node’s unique identifier</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>G</strong> – Graph where each node is a data point and edges reflect connections between them.
+Edges have attributes {‘connection’ : (str) ‘intra-branch’ or ‘inter-branch’}
+Nodes have attributes</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span>{&#39;branch&#39; : (`int`) -1, 0, 1, ... where -1 indicates the data point was not identified with a branch,
+                    &#39;undecided&#39; : (bool) True if the data point is part of a trunk and False otherwise,
+                    &#39;name&#39; : (str) Original label if given data was a dataframe, otherwise the same as the node id,
+ &#39;unidentified&#39; : (0 or 1) 1 if data point was ever not associated with any branch upon split,
+                    0 otherwise.,
+}
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>networkx.Graph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._detect_branch">
+<span class="sig-name descname"><span class="pre">_detect_branch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._detect_branch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._detect_branch" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect branching on given segment.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">self.split</span></code>, Call function __detect_branching three times for all three orderings
+of tips. Points that do not belong to the same segment in all three
+orderings are assigned to a fourth segment. The latter is, by Haghverdi
+et al. (2016) referred to as ‘undecided points’ (which make up the so-called ‘trunk’).
+Otherwise, only the branch off the main segment is detected from the third tip.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">split</span></code> and <code class="docutils literal notranslate"><span class="pre">flavor</span> <span class="pre">==</span> <span class="pre">'haghverdi16'</span></code> : If any of the branches from the three
+consist of zero unique observations, resulting in an empty branch, the process is
+terminated and no branching is performed on the current segment.</p>
+<p>..note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="n">practice</span><span class="p">,</span> <span class="n">this</span> <span class="n">has</span> <span class="n">only</span> <span class="n">occurred</span> <span class="ow">in</span> <span class="n">small</span> <span class="n">segments</span><span class="o">.</span> <span class="n">If</span> <span class="n">finer</span> <span class="n">resolution</span> <span class="n">partitioning</span>
+<span class="ow">is</span> <span class="n">desired</span><span class="p">,</span> <span class="n">this</span> <span class="n">may</span> <span class="n">be</span> <span class="n">changed</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">future</span> <span class="n">release</span> <span class="n">to</span> <span class="n">account</span> <span class="k">for</span> <span class="n">an</span> <span class="n">offshoot</span> <span class="n">resulting</span>
+<span class="ow">in</span> <span class="n">two</span> <span class="n">branches</span> <span class="p">(</span><span class="ow">and</span> <span class="n">possibly</span> <span class="n">a</span> <span class="n">trunk</span> <span class="k">with</span> <span class="n">undecided</span> <span class="n">points</span><span class="p">)</span><span class="o">.</span>
+</pre></div>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>keeper</strong> (<cite>netflow.Keeper</cite>) – The keeper object that stores the symmetric similarity matrix of size (n_observations, n_observations).</p></li>
-<li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the similarity matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.similarities</span></code>,
-of size (n_observations, n_observations).</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label used to store resulting organization schema in <code class="docutils literal notranslate"><span class="pre">keeper.misc[label]</span></code>
-and used to store transition matrices in <code class="docutils literal notranslate"><span class="pre">keeper.similarities[&quot;transitions_{label}&quot;]</span></code>
-and <code class="docutils literal notranslate"><span class="pre">keeper.similarities[transitions_Psym_{label}&quot;]</span></code>.</p></li>
-<li><p><strong>root</strong> (<cite>int</cite>) – Index of root obs that pesudo-ordering is computed from (<code class="docutils literal notranslate"><span class="pre">root</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p></li>
-<li><p><strong>density_normalize</strong> (<cite>bool</cite>) – <dl class="simple">
-<dt>The density rescaling of Coifman and Lafon (2006): Then only the</dt><dd><p>geometry of the data matters, not the sampled density.</p>
-</dd>
-</dl>
-</p></li>
+<li><p><strong>Dseg</strong> – The distance matrix restricted to segment.</p></li>
+<li><p><strong>tips</strong> (<cite>numpy.ndarray</cite>) – Tips in local coordinates relative to the segment.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ssegs</strong> (<em>list[list]</em>) – Stores branched segments in local coordinates.</p></li>
+<li><p><strong>ssegs_tips</strong> (<em>list[list]</em>) – Stores all tip points in local coordinates for the segments in <code class="docutils literal notranslate"><span class="pre">ssegs</span></code>.</p></li>
+<li><p><em>ssegs_connects list[list]</em> – A list of k lists, where k is the number of inter-segment connections between
+the segments in <code class="docutils literal notranslate"><span class="pre">ssegs</span></code>. Each entry is a 2-list of the form
+[[index of first seg in <code class="docutils literal notranslate"><span class="pre">ssegs</span></code>, index of second seg in <code class="docutils literal notranslate"><span class="pre">ssegs</span></code>],
+[source observation, target observation]].</p></li>
+<li><p><strong>trunk</strong> (<cite>int</cite>) – Index of segment in <cite>ssegs</cite> that all other segments in <code class="docutils literal notranslate"><span class="pre">ssegs</span></code> stem from.</p></li>
+<li><p><strong>trunk_undecided</strong> (<cite>bool</cite>) – If True, the trunk are made up of undecided points.</p></li>
+<li><p><strong>unidentified_points</strong> (<cite>set</cite>) – Points in local coordinates relative to the segment before branching
+that are not associated with any branch after splitting.</p></li>
+</ul>
+</p>
+</dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="netflow.pose.organization.PseudoOrdering.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#PseudoOrdering.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.PseudoOrdering.__init__" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="netflow.pose.organization.PseudoOrdering.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'netflow.pose.organization'</span></em><a class="headerlink" href="#netflow.pose.organization.PseudoOrdering.__module__" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="netflow.pose.organization.PseudoOrdering._set_pseudotime">
-<span class="sig-name descname"><span class="pre">_set_pseudotime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ordering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#PseudoOrdering._set_pseudotime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.PseudoOrdering._set_pseudotime" title="Permalink to this definition">#</a></dt>
-<dd><p>Return pseudotime with respect to root point.</p>
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._detect_branching_single_haghverdi16">
+<span class="sig-name descname"><span class="pre">_detect_branching_single_haghverdi16</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._detect_branching_single_haghverdi16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._detect_branching_single_haghverdi16" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect branching on given segment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>root</strong> (<cite>int</cite>, 0 &lt;= root &lt; m where m is the number of obs.) – Root obs for computing pseudo-ordering. If <cite>None</cite>, <code class="docutils literal notranslate"><span class="pre">self.root</span></code> is used.
-If provided, <code class="docutils literal notranslate"><span class="pre">self.root</span></code> is updated to <code class="docutils literal notranslate"><span class="pre">root</span></code>.</p></li>
-<li><p><strong>ordering</strong> (<em>{'distance'</em><em>, </em><em>'similarity'</em><em>, </em><em>'transitions_asym'</em><em>, </em><em>'transitions_sym'</em><em>, </em><em>'precomputed'}</em>) – <p>Metric by which pseudo-ordering should be computed.</p>
-<p>Options:</p>
-<ul>
-<li><p>’distance’ : <code class="docutils literal notranslate"><span class="pre">self._distances</span></code></p></li>
-<li><p>’similarity’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._similarities</span></code></p></li>
-<li><p>’transitions_asym’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._transitions_asym</span></code></p></li>
-<li><p>’transitions_sym’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._transitions_sym</span></code></p></li>
-<li><p>’precomputed’ : 1 - precomputed</p></li>
+<li><p><strong>Dseg</strong> – </p></li>
+<li><p><strong>tips</strong> – </p></li>
 </ul>
-</p></li>
-<li><p><strong>data</strong> – Similarity matrix used when <code class="docutils literal notranslate"><span class="pre">ordering</span> <span class="pre">=</span> <span class="pre">'precomputed'</span></code>.
-Note, this is ignored if <code class="docutils literal notranslate"><span class="pre">ordering</span></code> is not “precomputed”.</p></li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ssegs</strong> – The branched segments.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list[numpy.ndarray]</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._detect_branching_single_wolf17_bi">
+<span class="sig-name descname"><span class="pre">_detect_branching_single_wolf17_bi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._detect_branching_single_wolf17_bi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._detect_branching_single_wolf17_bi" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._detect_branching_single_wolf17_tri">
+<span class="sig-name descname"><span class="pre">_detect_branching_single_wolf17_tri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tips</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._detect_branching_single_wolf17_tri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._detect_branching_single_wolf17_tri" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._kendall_tau_add">
+<span class="sig-name descname"><span class="pre">_kendall_tau_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">len_old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">diff_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._kendall_tau_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._kendall_tau_add" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Kendall tau delta.</p>
+<p>The new sequence has length len_old + 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>len_old</strong> – The length of the old sequence, used to compute tau_old.</p></li>
+<li><p><strong>diff_pos</strong> – Difference between concordant and non-concordant pairs.</p></li>
+<li><p><strong>tau_old</strong> – Kendall rank correlation of the old sequence.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="netflow.pose.organization.PseudoOrdering.compute_transitions">
-<span class="sig-name descname"><span class="pre">compute_transitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#PseudoOrdering.compute_transitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.PseudoOrdering.compute_transitions" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute transition matrix.</p>
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._kendall_tau_diff">
+<span class="sig-name descname"><span class="pre">_kendall_tau_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._kendall_tau_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._kendall_tau_diff" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute difference in concordance of pairs in split sequences.</p>
+<p>Consider splitting a and b at index i.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>similarities</strong> (<cite>numpy.ndarray</cite>, (m, m)) – Symmetric similarity measure.</p></li>
-<li><p><strong>density_normalize</strong> (<cite>bool</cite>) – The density rescaling of Coifman and Lafon (2006): Then only the
-geometry of the data matters, not the sampled density.</p></li>
+<li><p><strong>a</strong> (<cite>numpy.ndarray</cite>) – One dimensional sequences.</p></li>
+<li><p><strong>b</strong> (<cite>numpy.ndarray</cite>) – One dimensional sequences.</p></li>
+<li><p><strong>i</strong> (<cite>int</cite>) – Index for splitting <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>diff_pos</em> – Difference between concordant pairs for both subsequences.</p></li>
+<li><p><em>diff_neg</em> – Difference between non-concordant pairs for both subsequences.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._kendall_tau_subtract">
+<span class="sig-name descname"><span class="pre">_kendall_tau_subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">len_old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">diff_neg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._kendall_tau_subtract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._kendall_tau_subtract" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Kendall tau delta.</p>
+<p>The new sequence has length len_old - 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>len_old</strong> – The length of the old sequence, used to compute tau_old.</p></li>
+<li><p><strong>diff_neg</strong> – Difference between concordant and non-concordant pairs.</p></li>
+<li><p><strong>tau_old</strong> – Kendall rank correlation of the old sequence.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER._set_pseudo_dist">
+<span class="sig-name descname"><span class="pre">_set_pseudo_dist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER._set_pseudo_dist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER._set_pseudo_dist" title="Permalink to this definition">#</a></dt>
+<dd><p>Return pseudo-distance with respect to root point.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.branchings_segments">
+<span class="sig-name descname"><span class="pre">branchings_segments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_branches</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">until_branched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.branchings_segments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.branchings_segments" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect up to <cite>n_branches</cite> branches and partition the data into corresponding segments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branches to look for (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p></li>
+<li><p><strong>until_branched</strong> (<cite>bool</cite>) – <p>If <cite>True</cite>, iteratively find segment to branch and perform branching
+until a segement is successfully branched or no branchable segments
+remain. Otherwise, if <cite>False</cite>, attempt to perform branching only once
+on the next potentially branchable segment.</p>
+<p>..note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">only</span> <span class="n">applicable</span> <span class="n">when</span> <span class="n">branching</span> <span class="ow">is</span> <span class="n">being</span> <span class="n">performed</span><span class="o">.</span> <span class="n">If</span> <span class="n">previous</span>
+<span class="n">iterations</span> <span class="n">of</span> <span class="n">branching</span> <span class="n">has</span> <span class="n">already</span> <span class="n">been</span> <span class="n">performed</span><span class="p">,</span> <span class="n">it</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">possible</span> <span class="n">to</span>
+<span class="n">identify</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">iterations</span> <span class="n">where</span> <span class="n">no</span> <span class="n">branching</span> <span class="n">was</span> <span class="n">performed</span><span class="o">.</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>G</strong> – The graph of the resulting POSE.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>nx.Graph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.construct_pose_mst_topology">
+<span class="sig-name descname"><span class="pre">construct_pose_mst_topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.construct_pose_mst_topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.construct_pose_mst_topology" title="Permalink to this definition">#</a></dt>
+<dd><p>Construct pose topology with minimum spanning tree (MST) edges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> (<cite>networkx.Graph</cite>) – The POSE graph. MST edges are added to a copy of the graph.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>Gmst</strong> – The updated graph with MST edges and edge attribute “edge_origin”
+with the possible values :</p>
+<ul class="simple">
+<li><p>”POSE” : for edges in the original graph that are not MST edges</p></li>
+<li><p>”MST” : for MST edges that were not in the original graph</p></li>
+<li><p>”POSE + MST” : for edges in the original graph that are also MST edges</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>networkx.Graph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.construct_pose_nn_topology">
+<span class="sig-name descname"><span class="pre">construct_pose_nn_topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.construct_pose_nn_topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.construct_pose_nn_topology" title="Permalink to this definition">#</a></dt>
+<dd><p>Add nearest neighbor (nn) edges to POSE topology.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> (<cite>networkx.Graph</cite>) – Nearest-neighbor edges are added to a copy of the POSE graph.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>Gnn</strong> – The updated graph with nearest neighbor edges and edge attribute “edge_origin”
+with the possible values :</p>
+<ul class="simple">
+<li><p>”POSE” : for edges in the original graph that are not nearest neighbor edges</p></li>
+<li><p>”NN” : for nearest neighbor edges that were not in the original graph</p></li>
+<li><p>”POSE + NN” : for edges in the original graph that are also nearest neighbor edges</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>networkx.Graph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.detect_branches">
+<span class="sig-name descname"><span class="pre">detect_branches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_branches</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">until_branched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.detect_branches"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.detect_branches" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect up to <code class="docutils literal notranslate"><span class="pre">n_branches</span></code> branchings and update tree in place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branch splits to perform (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p></li>
+<li><p><strong>until_branched</strong> (<cite>bool</cite>) – <p>If <cite>True</cite>, iteratively find segment to branch and perform branching
+until a segement is successfully branched or no branchable segments
+remain. Otherwise, if <cite>False</cite>, attempt to perform branching only once
+on the next potentially branchable segment.</p>
+<p>..note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">only</span> <span class="n">applicable</span> <span class="n">when</span> <span class="n">branching</span> <span class="ow">is</span> <span class="n">being</span> <span class="n">performed</span><span class="o">.</span> <span class="n">If</span> <span class="n">previous</span>
+<span class="n">iterations</span> <span class="n">of</span> <span class="n">branching</span> <span class="n">has</span> <span class="n">already</span> <span class="n">been</span> <span class="n">performed</span><span class="p">,</span> <span class="n">it</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">possible</span> <span class="n">to</span>
+<span class="n">identify</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">iterations</span> <span class="n">where</span> <span class="n">no</span> <span class="n">branching</span> <span class="n">was</span> <span class="n">performed</span><span class="o">.</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.detect_branching">
+<span class="sig-name descname"><span class="pre">detect_branching</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.detect_branching"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.detect_branching" title="Permalink to this definition">#</a></dt>
+<dd><p>Detect branching on a given segment and update TreeNode parameters in place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> (<cite>TreeNode</cite>) – The node of the segment to be branched.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>updated</strong> – <cite>True</cite> if segment is successfully branched, <cite>False</cite> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>bool</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.extract_branchings">
+<span class="sig-name descname"><span class="pre">extract_branchings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_branches</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.extract_branchings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.extract_branchings" title="Permalink to this definition">#</a></dt>
+<dd><p>Extract POSE from up to <cite>n_branches</cite> branchings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branches to look for (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>tree</strong> – The tree with up to <cite>n_branches</cite> branchings.
+If <code class="docutils literal notranslate"><span class="pre">n_branches</span></code> is more than or equal to the number of
+branchings in the tree, the original tree is returned.
+Otherwise, a reduced tree is returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>Tree</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.identify_local_tips">
+<span class="sig-name descname"><span class="pre">identify_local_tips</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Dseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tip</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.identify_local_tips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.identify_local_tips" title="Permalink to this definition">#</a></dt>
+<dd><p>Identify new tips within the new segments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newseg</strong> (<cite>list</cite>) – New segment.</p></li>
+<li><p><strong>tip</strong> (<cite>int</cite>) – Local index of the first tip, with respect to the original segment that determinned
+<code class="docutils literal notranslate"><span class="pre">Dseg</span></code> before the split.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>tips</strong> – First and second tip indices in local coordinates relative to the original segment,
+before it was branched.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>np.ndarray</cite> (2,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.kendall_tau_split">
+<span class="sig-name descname"><span class="pre">kendall_tau_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.kendall_tau_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.kendall_tau_split" title="Permalink to this definition">#</a></dt>
+<dd><p>Return splitting index that maximizes correlation in the sequences.</p>
+<p>Compute difference in Kendall tau for all splitted sequences.</p>
+<p>For each splitting index i, compute the difference of the two
+correlation measures kendalltau(a[:i], b[:i]) and
+kendalltau(a[i:], b[i:]).</p>
+<dl class="simple">
+<dt>Returns the splitting index that maximizes</dt><dd><p>kendalltau(a[:i], b[:i]) - kendalltau(a[i:], b[i:])</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<cite>numpy.ndarray</cite>) – One dimensional sequences.</p></li>
+<li><p><strong>b</strong> (<cite>numpy.ndarray</cite>) – One dimensional sequences.</p></li>
+<li><p><strong>min_length</strong> (<cite>int</cite>, (<code class="docutils literal notranslate"><span class="pre">min_length</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>)) – Minimum number of data points automatically included in branch.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>imax</strong> – Splitting index according to above description.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.select_segment">
+<span class="sig-name descname"><span class="pre">select_segment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.select_segment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.select_segment" title="Permalink to this definition">#</a></dt>
+<dd><p>Select segment with most distant triangulated data point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>node</strong> – The node corresponding to the selected segment.
+If no nodes are branchable, returns None.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Makes attributes <code class="docutils literal notranslate"><span class="pre">.transitions_sym</span></code> and <code class="docutils literal notranslate"><span class="pre">.transitions</span></code> available.</p>
+<dd class="field-even"><p><cite>TreeNode</cite></p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Code copied from <cite>scanpy.neighbors</cite>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="netflow.pose.organization.PseudoOrdering.pseudotime_distances">
-<span class="sig-name descname"><span class="pre">pseudotime_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ordering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#PseudoOrdering.pseudotime_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.PseudoOrdering.pseudotime_distances" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute distance matrix used for pseudotime branching.</p>
+<dt class="sig sig-object py" id="netflow.pose.organization.POSER.single_branch">
+<span class="sig-name descname"><span class="pre">single_branch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">until_branched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#POSER.single_branch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.POSER.single_branch" title="Permalink to this definition">#</a></dt>
+<dd><p>Perform single branching in place.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ordering</strong> (<em>{'distance'</em><em>, </em><em>'similarity'</em><em>, </em><em>'transitions_asym'</em><em>, </em><em>'transitions_sym'</em><em>, </em><em>'precomputed'}</em>) – <p>Metric by which pseudo-ordering should be computed.</p>
-<p>Options:</p>
-<ul>
-<li><p>’distance’ : <code class="docutils literal notranslate"><span class="pre">self._distances</span></code></p></li>
-<li><p>’similarity’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._similarities</span></code></p></li>
-<li><p>’transitions_asym’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._transitions_asym</span></code></p></li>
-<li><p>’transitions_sym’ : 1 - <code class="docutils literal notranslate"><span class="pre">self._transitions_sym</span></code></p></li>
-<li><p>’precomputed’ : 1 - precomputed</p></li>
-</ul>
-</p></li>
-<li><p><strong>data</strong> – Similarity matrix used when <code class="docutils literal notranslate"><span class="pre">ordering</span> <span class="pre">=</span> <span class="pre">'precomputed'</span></code>.
-Note, this is ignored if <code class="docutils literal notranslate"><span class="pre">ordering</span></code> is not “precomputed”.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>until_branched</strong> (<cite>bool</cite>) – If <cite>True</cite>, iteratively find segment to branch and perform branching
+until a segement is successfully branched or no branchable segments
+remain. Otherwise, if <cite>False</cite>, attempt to perform branching only once
+on the next potentially branchable segment.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>branched_flag</strong> – Indicates if branching was successfully completed.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>bool</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -599,14 +965,12 @@ of size (n_observations, n_observations).</p></li>
 <code class="docutils literal notranslate"><span class="pre">min_branch_size</span> <span class="pre">&gt;</span> <span class="pre">2</span></code> data points.
 If a <cite>float</cite>, <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> refers to the fraction of the total number of data points
 (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">min_branch_size</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>).</p></li>
-<li><p><strong>choose_largest_segment</strong> (<cite>bool</cite>) – <p>?</p>
-</p></li>
-<li><p><strong>flavor</strong> (<em>{'haghverdi16'</em><em>, </em><em>'wolf17_tri'</em><em>, </em><em>'wolf17_bi'</em><em>, </em><em>'wolf17_bi_un'}</em>) – <p>?</p>
-</p></li>
+<li><p><strong>choose_largest_segment</strong> (<cite>bool</cite>) – If <cite>True</cite>, select largest segment for branching.</p></li>
+<li><p><strong>flavor</strong> (<em>{'haghverdi16'</em><em>, </em><em>'wolf17_tri'</em><em>, </em><em>'wolf17_bi'</em><em>, </em><em>'wolf17_bi_un'}</em>) – Branching algorithm (based on <cite>scanpy</cite> implementation).</p></li>
 <li><p><strong>allow_kendall_tau_shift</strong> (<cite>bool</cite>) – If a very small branch is detected upon splitting, shift away from
-maximum correlation in Kendall tau criterion of <a class="reference internal" href="../../references.html#haghverdi16" id="id2"><span>[Haghverdi16]</span></a> to
+maximum correlation in Kendall tau criterion of <a class="reference internal" href="../../references.html#haghverdi16" id="id3"><span>[Haghverdi16]</span></a> to
 stabilize the splitting.</p></li>
-<li><p><strong>root</strong> ({<cite>int</cite>, <cite>str</cite>) – <p>Root observation from which pesudo-ordering is computed.</p>
+<li><p><strong>root</strong> ({<cite>int</cite>, <cite>str</cite>, <cite>None</cite>}) – <p>Root observation from which pesudo-ordering is computed.</p>
 <p>Options :</p>
 <ul>
 <li><p><cite>None</cite> : Default row index of smallest distance (off-diagonal) is used as the root.</p></li>
@@ -676,7 +1040,7 @@ via the first two tip cells.</p></li>
 where the i-th entry is a list with the index of the trunk, if the i-th segment is not the trunk.
 Otherwise, the i-th entry is a list with the indices of all other segments beside the trunk.</p></li>
 <li><p><strong>ssegs_connects</strong> (<cite>list</cite>) – List of lists of the same length as ssegs,
-where the i-th entry is a list of the form [index of data point in the trunk closest to the root of the i-th segment],
+where the i-th entry is a list of the form [index relative to the original segment of data point in the trunk closest to the root of the i-th segment],
 if the i-th segment is not the trunk. Otherwise, the i-th entry is a list of indices of the closest cell in each other (non-trunk) segment
 to the trunk root.</p></li>
 <li><p><strong>trunk</strong> (<cite>int</cite>) – Index of segment in ssegs that is the trunk. When there are undecided points, the trunk is the seg of undecided points.
@@ -798,6 +1162,56 @@ for each segment.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.TDA.construct_pose_mst_topology">
+<span class="sig-name descname"><span class="pre">construct_pose_mst_topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TDA.construct_pose_mst_topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TDA.construct_pose_mst_topology" title="Permalink to this definition">#</a></dt>
+<dd><p>Construct pose topology with minimum spanning tree (MST) edges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> (<cite>networkx.Graph</cite>) – (Optional) If provided, MST edges are added to a copy of the graph.
+If not provided, the graph returned from <cite>self.construct_topology()</cite> is used.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>Gmst</strong> – The updated graph with MST edges and edge attribute “edge_origin”
+with the possible values :</p>
+<ul class="simple">
+<li><p>”POSE” : for edges in the original graph that are not MST edges</p></li>
+<li><p>”MST” : for MST edges that were not in the original graph</p></li>
+<li><p>”POSE + MST” : for edges in the original graph that are also MST edges</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>networkx.Graph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.TDA.construct_pose_nn_topology">
+<span class="sig-name descname"><span class="pre">construct_pose_nn_topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TDA.construct_pose_nn_topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TDA.construct_pose_nn_topology" title="Permalink to this definition">#</a></dt>
+<dd><p>Construct pose topology with edges between nearest neighbors (nn).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> (<cite>networkx.Graph</cite>) – (Optional) If provided, nearest-neighbor edges are added to a copy of the graph.
+If not provided, the graph returned from <cite>self.construct_topology()</cite> is used.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>Gnn</strong> – The updated graph with nearest neighbor edges and edge attribute “edge_origin”
+with the possible values :</p>
+<ul class="simple">
+<li><p>”POSE” : for edges in the original graph that are not nearest neighbor edges</p></li>
+<li><p>”NN” : for nearest neighbor edges that were not in the original graph</p></li>
+<li><p>”POSE + NN” : for edges in the original graph that are also nearest neighbor edges</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>networkx.Graph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="netflow.pose.organization.TDA.construct_topology">
 <span class="sig-name descname"><span class="pre">construct_topology</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TDA.construct_topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TDA.construct_topology" title="Permalink to this definition">#</a></dt>
 <dd><p>construct connections between data points.</p>
@@ -828,7 +1242,7 @@ Nodes have attributes</p>
 <dd><p>Detect up to <cite>n_branches</cite> branches.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branches to look for (<cite>n_branches</cite> &gt; 0).</p>
+<dd class="field-odd"><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branch splits to perform (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -876,7 +1290,7 @@ of the closest cell in each other (non-trunk) segment to the trunk root.</p></li
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>segs</strong> – Dchosen distance matrix restricted to segment.</p></li>
+<li><p><strong>segs</strong> – Stores all segments.</p></li>
 <li><p><strong>segs_tips</strong> – Stores all tip points for the segments in segs.</p></li>
 <li><p><strong>iseg</strong> – Position of segment under study in segs.</p></li>
 <li><p><strong>tips3</strong> – The three tip points local index relative to the seg.
@@ -992,6 +1406,46 @@ corresponding to the <code class="docutils literal notranslate"><span class="pre
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.Tree._get_node_from_counter">
+<span class="sig-name descname"><span class="pre">_get_node_from_counter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree._get_node_from_counter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree._get_node_from_counter" title="Permalink to this definition">#</a></dt>
+<dd><p>Search and return node in Tree by its counter ID.</p>
+<p>Assumes no nodes have the same counter ID.</p>
+<p>If no such node is found with the specified counter, <cite>None</cite>
+is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>counter</strong> (<cite>int</cite>) – Counter ID of node to search for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>node</strong> – Node in the tree. If node is not found, returns <cite>None</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>TreeNode</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.Tree._search_counter">
+<span class="sig-name descname"><span class="pre">_search_counter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree._search_counter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree._search_counter" title="Permalink to this definition">#</a></dt>
+<dd><p>Search and return index of node in Tree by its counter ID.</p>
+<p>Assumes no nodes have the same couner.</p>
+<p>If no such node is found with the specified counter, the
+value -1 is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>counter</strong> (<cite>int</cite>) – Counter ID of node to search for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>index</strong> – Index of node in the tree. If node is not found, returns -1.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="netflow.pose.organization.Tree.all_data">
 <span class="sig-name descname"><span class="pre">all_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree.all_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree.all_data" title="Permalink to this definition">#</a></dt>
 <dd><p>Return sorted set of all data points in all nodes in the tree.</p>
@@ -1007,8 +1461,19 @@ and j-th data points are not found in the same node, the (i.j)-th entry is 0.</p
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.Tree.disp">
+<span class="sig-name descname"><span class="pre">disp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree.disp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree.disp" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="netflow.pose.organization.Tree.get_leaves">
 <span class="sig-name descname"><span class="pre">get_leaves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree.get_leaves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree.get_leaves" title="Permalink to this definition">#</a></dt>
+<dd><p>Return leaf nodes in the tree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.Tree.get_leaves_indices">
+<span class="sig-name descname"><span class="pre">get_leaves_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree.get_leaves_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree.get_leaves_indices" title="Permalink to this definition">#</a></dt>
 <dd><p>Return indices of leaf nodes in the tree.</p>
 </dd></dl>
 
@@ -1016,6 +1481,36 @@ and j-th data points are not found in the same node, the (i.j)-th entry is 0.</p
 <dt class="sig sig-object py" id="netflow.pose.organization.Tree.get_node">
 <span class="sig-name descname"><span class="pre">get_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree.get_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree.get_node" title="Permalink to this definition">#</a></dt>
 <dd><p>Return node by its index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.Tree.get_node_from_name">
+<span class="sig-name descname"><span class="pre">get_node_from_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_up</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree.get_node_from_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree.get_node_from_name" title="Permalink to this definition">#</a></dt>
+<dd><p>Search and return node in Tree by its name.</p>
+<p>Assumes no nodes at the same depth have the same name.
+If more than one node has the same name, return the node
+of the deepest node (farthest from root), when
+<code class="docutils literal notranslate"><span class="pre">bottom_up</span> <span class="pre">=</span> <span class="pre">True</span></code>, otherwise, return the index of the
+shallowest (closest to root) node.</p>
+<p>If no such node is found with the specified name, <cite>None</cite>
+is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of node to search for.</p></li>
+<li><p><strong>bottom_up</strong> (<cite>bool</cite>) – Indicate if the index of the shallowest or deepest node
+should be returned when more than one node has the same
+name. It is assumed that no two nodes at the same depth
+have the same name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>node</strong> – Node in the tree. If node is not found, returns <cite>None</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>TreeNode</cite></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1053,7 +1548,7 @@ leaf nodes when searching for which segment to select).</p>
 <dt class="sig sig-object py" id="netflow.pose.organization.Tree.search">
 <span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_up</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#Tree.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.Tree.search" title="Permalink to this definition">#</a></dt>
 <dd><p>Search and return index of node in Tree by its name.</p>
-<p>Assume no nodes at the same depth have the same name.
+<p>Assumes no nodes at the same depth have the same name.
 If more than one node has the same name, return the index
 of the deepest node (farthest from root), when
 <code class="docutils literal notranslate"><span class="pre">bottom_up</span> <span class="pre">=</span> <span class="pre">True</span></code>, otherwise, return the index of the
@@ -1112,7 +1607,7 @@ have the same name.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="netflow.pose.organization.TreeNode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.pose.organization.</span></span><span class="sig-name descname"><span class="pre">TreeNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'root'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonunique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unidentified</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TreeNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TreeNode" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netflow.pose.organization.</span></span><span class="sig-name descname"><span class="pre">TreeNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'root'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonunique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unidentified</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branchable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_trunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TreeNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TreeNode" title="Permalink to this definition">#</a></dt>
 <dd><p>Node of a general tree data structure.</p>
 <p>Each node is intended to refer to a branch.</p>
 <dl class="field-list simple">
@@ -1126,12 +1621,14 @@ Intended to be a <cite>list</cite> of indices corresponding to the branch member
 <li><p><strong>nonunique</strong> (<cite>bool</cite>) – Indicate if node (branch) is the trunk.</p></li>
 <li><p><strong>unidentified</strong> (<cite>bool</cite>) – Indicate if node (branch) is a set of points that were not identified
 with a particular branch after splitting.</p></li>
+<li><p><strong>branchable</strong> (<cite>bool</cite>) – Indicate if node can potentially be further branched.</p></li>
+<li><p><strong>is_trunk</strong> (<cite>bool</cite>) – Indicate if node referes to undecided trunk branch.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="netflow.pose.organization.TreeNode.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'root'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonunique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unidentified</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TreeNode.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TreeNode.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'root'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonunique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unidentified</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branchable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_trunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TreeNode.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TreeNode.__init__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1140,9 +1637,20 @@ with a particular branch after splitting.</p></li>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="netflow.pose.organization.TreeNode.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TreeNode.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TreeNode.__repr__" title="Permalink to this definition">#</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="netflow.pose.organization.TreeNode.add_child">
 <span class="sig-name descname"><span class="pre">add_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#TreeNode.add_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.TreeNode.add_child" title="Permalink to this definition">#</a></dt>
-<dd><p>add child to node.</p>
+<dd><p>Add child to node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> (<cite>TreeNode</cite>) – The child node.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1208,7 +1716,7 @@ computed from the symmetric transitions.</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(T\)</span> is the symmetric transition matrix</p></li>
 <li><p><span class="math notranslate nohighlight">\(M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)\)</span></p></li>
-<li><p>:math:<a href="#id3"><span class="problematic" id="id4">`</span></a>dpt(x,z) = ||M(x, .) - M(y, .)||^2</p></li>
+<li><p>:math:<a href="#id4"><span class="problematic" id="id5">`</span></a>dpt(x,z) = ||M(x, .) - M(y, .)||^2</p></li>
 </ul>
 </div>
 <dl class="field-list simple">
@@ -1266,7 +1774,7 @@ computed from the symmetric transitions.</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(T\)</span> is the symmetric transition matrix</p></li>
 <li><p><span class="math notranslate nohighlight">\(M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)\)</span></p></li>
-<li><p>:math:<a href="#id5"><span class="problematic" id="id6">`</span></a>dpt(x,z) = ||M(x, .) - M(y, .)||^2</p></li>
+<li><p>:math:<a href="#id6"><span class="problematic" id="id7">`</span></a>dpt(x,z) = ||M(x, .) - M(y, .)||^2</p></li>
 </ul>
 </div>
 <dl class="field-list simple">
@@ -1280,6 +1788,97 @@ in keeper.distances[“dpt_from_{key}”].</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>numpy.ndarray</cite>, (n_observations, n_observations)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.pose.organization.get_pose">
+<span class="sig-prename descclassname"><span class="pre">netflow.pose.organization.</span></span><span class="sig-name descname"><span class="pre">get_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_branches</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">until_branched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose_largest_segment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flavor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'haghverdi16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_kendall_tau_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#get_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.get_pose" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the pose and saved to keeper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keeper</strong> (<cite>netflow.Keeper</cite>) – The keeper object that stores the distance matrix of size (n_observations, n_observations).</p></li>
+<li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the distance matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>,
+of size (n_observations, n_observations).</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – Label used to store resulting schema in <code class="docutils literal notranslate"><span class="pre">keeper.misc[label]</span></code> and POSE topology in
+<code class="docutils literal notranslate"><span class="pre">keeper.graphs[label]</span></code>..</p></li>
+<li><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branch splits to perform (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p></li>
+<li><p><strong>until_branched</strong> (<cite>bool</cite>) – If <cite>True</cite>, iteratively find segment to branch and perform branching
+until a segement is successfully branched or no branchable segments
+remain. Otherwise, if <cite>False</cite>, attempt to perform branching only once
+on the next potentially branchable segment.</p></li>
+<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, ‘density’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
+<ul>
+<li><p><cite>int</cite> : index of observation</p></li>
+<li><p>’density’ : select observation with minimal distance-density</p></li>
+<li><p>’ratio’ : select observation which leads to maximal triangular ratio distance</p></li>
+</ul>
+</p></li>
+<li><p><strong>min_branch_size</strong> ({<cite>int</cite>, <cite>float</cite>}) – During recursive splitting of branches, only consider splitting a branch with at least
+<code class="docutils literal notranslate"><span class="pre">min_branch_size</span> <span class="pre">&gt;</span> <span class="pre">2</span></code> data points.
+If a <cite>float</cite>, <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> refers to the fraction of the total number of data points
+(<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">min_branch_size</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>).</p></li>
+<li><p><strong>choose_largest_segment</strong> (<cite>bool</cite>) – If <cite>True</cite>, select largest segment for branching.</p></li>
+<li><p><strong>flavor</strong> (<em>{'haghverdi16'</em><em>, </em><em>'wolf17_tri'</em><em>, </em><em>'wolf17_bi'</em><em>, </em><em>'wolf17_bi_un'}</em>) – Branching algorithm (based on <cite>scanpy</cite> implementation).</p></li>
+<li><p><strong>allow_kendall_tau_shift</strong> (<cite>bool</cite>) – If a very small branch is detected upon splitting, shift away from
+maximum correlation in Kendall tau criterion of <a class="reference internal" href="../../references.html#haghverdi16" id="id8"><span>[Haghverdi16]</span></a> to
+stabilize the splitting.</p></li>
+<li><p><strong>smooth_corr</strong> (<cite>bool</cite>, default = <cite>False</cite>) – If <cite>True</cite>, smooth correlations before identifying cut points for branch splitting.</p></li>
+<li><p><strong>brute</strong> (<cite>bool</cite>) – If <cite>True</cite>, data points not associated with any branch upon split are combined with
+undecided (trunk) points. Otherwise, if <cite>False</cite>, they are treated as individual islands,
+not associated with any branch (and assigned branch index -1).</p></li>
+<li><p><strong>split</strong> (<cite>bool</cite> (default = True)) – if <cite>True</cite>, split segment into multiple branches. Otherwise,
+determine a single branching off of the main segment.
+This is ignored if flavor is not ‘haghverdi16’.
+If <cite>True</cite>, <code class="docutils literal notranslate"><span class="pre">brute</span></code> is ignored.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>poser : <cite>POSER</cite></p>
+<ul>
+<li><p>The poser object with the pseudo-organizational branching structure
+is stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc['poser_{label}']</span></code>.</p></li>
+</ul>
+</li>
+<li><p>G_pose : <cite>networkx.Graph</cite></p>
+<ul>
+<li><p>The resulting pose topology is stored in <code class="docutils literal notranslate"><span class="pre">keeper.graphs['pose_{label}']</span></code>.</p></li>
+</ul>
+</li>
+<li><p>G_pose_nn : <cite>networkx.Graph</cite></p>
+<ul>
+<li><p>The resulting pose + nearest-neighbor (nn) topology is stored in
+<code class="docutils literal notranslate"><span class="pre">keeper.graphs['pose_nn_{label}]</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Writes the following to the keeper</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.pose.organization.root_max_ratio">
+<span class="sig-prename descclassname"><span class="pre">netflow.pose.organization.</span></span><span class="sig-name descname"><span class="pre">root_max_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/pose/organization.html#root_max_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.pose.organization.root_max_ratio" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns root index of observation that leads to the largest triangle..</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keeper</strong> (<cite>netflow.Keeper</cite>) – The keeper object.</p></li>
+<li><p><strong>key</strong> (<cite>str</cite>) – Reference key of distance in keeper used to determine the root.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>root</strong> – The root index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
 </dd>
 </dl>
 </dd></dl>

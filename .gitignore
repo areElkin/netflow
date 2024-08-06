@@ -3,7 +3,7 @@
 data/
 __pycache__/
 .ipynb_checkpoints
-
+docs/source/tutorial/notebooks/example_data/
 
 # macOS Files #
 ###############
