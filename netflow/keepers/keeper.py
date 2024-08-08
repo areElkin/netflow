@@ -7,15 +7,22 @@ Classes used for data storage and manipulation.
 
 from pathlib import Path
 
+import multiprocessing as mp
 import networkx as nx
 import numpy as np
 import pandas as pd
 
 from .. import checks
 from .._utils import _docstring_parameter, _desc_distance, \
-    _desc_data_distance, load_from_file
+    _desc_data_distance, load_from_file, fuse_labels
 from ..utils import unstack_triu_
+from ..methods.classes import InfoNet
+from ..pose import similarity as nfs
+from ..pose.organization import compute_transitions, dpt_from_augmented_sym_transitions, POSER
+# import netflow.InfoNet as InfoNet
 from .._logging import _gen_logger, set_verbose
+
+
 
 logger = _gen_logger(__name__)
 
@@ -230,7 +237,7 @@ class DataKeeper:
         else:  # np.ndarray
             feature_labels = None        
         
-        checks.check_matrix_no_nan(data)
+        # checks.check_matrix_no_nan(data)
         # checks.check_matrix_nonnegative(data)
         self._data[label] = data
         self._features_labels[label] = feature_labels
@@ -651,7 +658,7 @@ class DistanceKeeper:
         """
         distance_subset = DistanceKeeper(data=None, observation_labels=observations)
         for data in self:
-            distance_subset.add_data(data.subset(observations=observations), data.label)
+            distance_subset.add_data(data.subset(observations_a=observations), data.label)
         return distance_subset
 
 
@@ -1224,14 +1231,15 @@ class Keeper:
             Reference label describing the data set.        
         """
         self._data.add_data(data, label)
-        logger.msg(f"Added data input {label} to the keeper.")
+        logger.info(f"Added data input {label} to the keeper.")
 
         # If not yet initialized, update keeper observation_labels and num_observations
         if self._num_observations is None:
             self._num_observations = self._data[label].num_observations
             self._observation_labels = self._data[label].observation_labels            
-            if self._data[label]._observation_labels is None:
-                self._observation_labels = [f"X{i}" for i in range(self._num_observations)]
+            # if self._data[label]._observation_labels is None:
+            if self._data._observation_labels is None:
+                self._observation_labels = self._data._observation_labels = [f"X{i}" for i in range(self._num_observations)]
 
             # initialize distances and similarities:
             self._distances = DistanceKeeper(observation_labels=self._observation_labels)
@@ -1252,7 +1260,7 @@ class Keeper:
             Reference label describing the distance.
         """
         self._distances.add_data(data, label)
-        logger.msg(f"Added distance input {label} to the keeper.")
+        logger.info(f"Added distance input {label} to the keeper.")
 
         # If not yet initialized, update keeper observation_labels and num_observations
         if self._num_observations is None:
@@ -1281,7 +1289,7 @@ class Keeper:
             Reference label describing the distance.
         """
         self._distances.add_stacked_data(data, label)
-        logger.msg(f"Added distance input {label} to the keeper.")
+        logger.info(f"Added distance input {label} to the keeper.")
 
         # If not yet initialized, update keeper observation_labels and num_observations
         if self._num_observations is None:
@@ -1309,7 +1317,7 @@ class Keeper:
             Reference label describing the similarity.
         """
         self._similarities.add_data(data, label)
-        logger.msg(f"Added similarity input {label} to the keeper.")
+        logger.info(f"Added similarity input {label} to the keeper.")
 
         # If not yet initialized, update keeper observation_labels and num_observations
         if self._num_observations is None:
@@ -1340,7 +1348,7 @@ class Keeper:
             Value used on diagonal. 
         """
         self._similarities.add_stacked_data(data, label, diag=diag)
-        logger.msg(f"Added similarity input {label} to the keeper.")
+        logger.info(f"Added similarity input {label} to the keeper.")
 
         # If not yet initialized, update keeper observation_labels and num_observations
         if self._num_observations is None:
@@ -1368,7 +1376,7 @@ class Keeper:
             Reference label describing the network.
         """
         self._graphs.add_graph(graph, label)
-        logger.msg(f"Added graph input {label} to the keeper.")
+        logger.info(f"Added graph input {label} to the keeper.")
 
         
     def add_misc(self, data, label):
@@ -1386,7 +1394,7 @@ class Keeper:
 
         self._misc[label] = data
 
-        logger.msg(f"Added misc input {label} to the keeper.")
+        logger.info(f"Added misc input {label} to the keeper.")
     
 
     def load_data(self, file_name, label='data', file_path=None, file_format=None,                  
@@ -1895,8 +1903,678 @@ class Keeper:
         return obs
 
 
-    
-            
+    def wass_distance_pairwise_observation_profile(self, data_key, graph_key,
+                                                   features=None, label=None,
+                                                   graph_distances=None, edge_weight=None,
+                                                   proc=mp.cpu_count(), chunksize=None,
+                                                   measure_cutoff=1e-6, solvr=None):
+        """ Compute Wasserstein distances between feature profiles of every two observations
 
+        .. note::
+
+          If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.
+          Before starting the computation, check if the file exists. If so, load and remove already computed
+          nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+          the previously computed and saved results before saving and returning the combined results.
+
+          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+          distance and do not provide any further information.
+
+          The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
+          and can be accessed by ``self.distances[f'{data_key}_{label}_wass_dist_observation_pairwise_profiles']``.
+
+        Parameters
+        ----------
+        data_key : `str`
+            The key to the data in the data keeper that should be used.
+        graph_key : 'str'
+            The key to the graph in the graph keeper that should be used.
+            (Does not have to include all features in the data)
+        features : {`None`, `list` [`str`])}
+            List of features to compute profile distances on. If `None`, all features are used.
+        label : str
+            Label that resulting Wasserstein distances are saved in ``keeper.distances`` and
+            name of file to store stacked results.
+        graph_distances : `numpy.ndarray`, (n, n)
+            A matrix of node-pairwise graph distances between the :math:`n` nodes (ordered from :math:`0, 1, ..., n-1`).
+            If `None`, use hop distance.
+        edge_weight : {`None`, `str`}
+            The edge attribute used as the weight for computed the graph distances. This is
+            ignored if ``graph_distances`` is provided, If `None`, no edge weight is used.
+        measure_cutoff : `float`
+            Threshold for treating values in profiles as zero, default = 1e-6.
+        proc : `int`
+            Number of processor used for multiprocessing. (Default value = cpu_count()). 
+        chunksize : `int`
+            Chunksize to allocate for multiprocessing.
+        solvr : `str`
+            Solver to pass to POT library for computing Wasserstein distance.    
+
+        Returns
+        -------
+        wds : `pandas.DataFrame`
+            Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names,
+            saved in ``keeper.distances`` with the key ``f'{data_key}_{label}_wass_dist_observation_pairwise_profiles'``.
+        """
+        inet = InfoNet(self, graph_key, layer=data_key)
+
+        if graph_distances is None:
+            graph_distances = inet.compute_graph_distances(weight=edge_weight)
+
+        if label is None:
+            label = f'{data_key}_wass_dist_observation_pairwise_profiles'
+        else:
+            label = f'{data_key}_{label}_wass_dist_observation_pairwise_profiles'
+            
+        inet.pairwise_observation_profile_wass_distance(features=features, graph_distances=graph_distances, 
+                                                        label=label,
+                                                        desc='Computing pairwise profile Wasserstein distances',
+                                                        proc=proc, chunksize=chunksize,
+                                                        measure_cutoff=measure_cutoff, solvr=solvr)
 
         
+    def euc_distance_pairwise_observation_profile(self, data_key, features=None, label=None,
+                                                  metric='euclidean', normalize=False, **kwargs):
+        """ Compute Euclidean distances between feature profiles of every two observations
+
+        .. note::
+
+          If ``object.outdir`` is not `None`, Euclidean distances are saved to file.
+          Before starting the computation, check if the file exists. If so, load and remove already computed
+          nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
+          the previously computed and saved results before saving and returning the combined results.
+
+          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+          distance and do not provide any further information.
+
+          The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
+          and can be accessed by ``self.distances[f'{data_key}_{label}_euc_dist_observation_pairwise_profiles']``.
+
+        Parameters
+        ----------
+        data_key : `str`
+            The key to the data in the data keeper that should be used.
+        features : {`None`, `list` [`str`])}
+            List of features to compute profile distances on. If `None`, all features are used.
+        label : str
+            Label that resulting Wasserstein distances are saved in ``keeper.distances`` and
+            name of file to store stacked results.
+        metric : `str`
+            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.
+        normalize : `bool`
+            If `True`, normalize neighborhood profiles to sum to 1.
+        **kwargs : `dict`
+            Extra arguments to metric, passed to `scipy.spatial.distance.cdist`.
+
+        Returns
+        -------
+        eds : `pandas.DataFrame`
+            Euclidean distances between pairwise profiles where rows are observation-pairs and columns are node names,
+            saved in ``keeper.distances`` with the key ``f'{data_key}_{label}_euc_dist_observation_pairwise_profiles'``.
+
+        """
+        inet = InfoNet(self, None, layer=data_key)
+
+        if label is None:
+            label = f'{data_key}_euc_dist_observation_pairwise_profiles'
+        else:
+            label = f'{data_key}_{label}_euc_dist_observation_pairwise_profiles'
+
+        inet.pairwise_observation_profile_euc_distance(features=features,
+                                                       label=label, 
+                                                       desc='Computing pairwise profile Euclidean distances',
+                                                       metric=metric, normalize=normalize, **kwargs)
+
+
+    def wass_distance_pairwise_observation_feature_nbhd(self, data_key, graph_key,
+                                                        features=None, include_self=False, label=None,
+                                                        graph_distances=None, edge_weight=None,
+                                                        proc=mp.cpu_count(), chunksize=None,
+                                                        measure_cutoff=1e-6, solvr=None):
+        """ Compute Wasserstein distances between feature neighborhoods of every two observations
+
+        .. note::
+
+          If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.
+          Before starting the computation, check if the file exists. If so, load and remove already computed
+          nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+          the previously computed and saved results before saving and returning the combined results.
+
+          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+          distance and do not provide any further information.
+
+          The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by
+          ``self.misc[f"{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"]``.
+
+        Parameters
+        ----------
+        data_key : `str`
+            The key to the data in the data keeper that should be used.
+        graph_key : 'str'
+            The key to the graph in the graph keeper that should be used.
+            (Does not have to include all features in the data)
+        features : {`None`, `list` [`str`])}
+            List of features (nodes) to compute neighborhood distances on.
+            If `None`, all features are used.
+        include_self : `bool`
+            If `True`, add node in neighborhood which will result in computing normalized profile over the neighborhood.
+            If `False`, node is not included in neighborhood which results in computing the transition distribution
+            over the neighborhood.
+        label : str
+            Label that resulting Wasserstein distances are saved in ``keeper.misc`` 
+            and name of file to store stacked results.
+        graph_distances : `numpy.ndarray`, (n, n)
+            A matrix of node-pairwise graph distances between the
+            :math:`n` nodes (ordered from :math:`0, 1, ..., n-1`).
+            If `None`, use hop distance.
+        edge_weight : {`None`, `str`}
+            The edge attribute used as the weight for computed the graph distances. This is
+            ignored if ``graph_distances`` is provided, If `None`, no edge weight is used.
+        measure_cutoff : `float`
+            Threshold for treating values in profiles as zero, default = 1e-6.
+        proc : `int`
+            Number of processor used for multiprocessing. (Default value = cpu_count()). 
+        chunksize : `int`
+            Chunksize to allocate for multiprocessing.
+        solvr : `str`
+            Solver to pass to POT library for computing Wasserstein distance.    
+
+        Returns
+        -------
+        wds : `pandas.DataFrame`
+            Wasserstein distances between pairwise observations where rows are observation-pairs and columns are
+            feature (node) names.
+            saved in ``keeper.misc`` with the key
+            ``f"{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"``.
+        """
+        inet = InfoNet(self, graph_key, layer=data_key)
+
+        if graph_distances is None:
+            graph_distances = inet.compute_graph_distances(weight=edge_weight)
+
+        if label is None:
+            label = f"{data_key}_wass_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"
+        else:
+            label = f"{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"
+            
+        inet.multiple_pairwise_observation_neighborhood_wass_distance(nodes=features, include_self=include_self,
+                                                                      graph_distances=graph_distances,
+                                                                      label=label,
+                                                                      desc='Computing pairwise 1-hop nbhd Wasserstein distances',
+                                                                      proc=proc, chunksize=chunksize,
+                                                                      measure_cutoff=measure_cutoff, solvr=solvr)
+
+
+    def euc_distance_pairwise_observation_feature_nbhd(self, data_key, graph_key,
+                                                        features=None, include_self=False, label=None,
+                                                        metric='euclidean', normalize=False, **kwargs):
+        """ Compute Euclidean distances between feature neighborhoods of every two observations
+
+        .. note::
+
+          If ``object.outdir`` is not `None`, Euclidean distances are saved to file every 10 iterations.
+          Before starting the computation, check if the file exists. If so, load and remove already computed
+          nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
+          the previously computed and saved results before saving and returning the combined results.
+
+          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Euclidean
+          distance and do not provide any further information.
+
+          The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by
+          ``self.misc[f"{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"]``.
+
+        Parameters
+        ----------
+        data_key : `str`
+            The key to the data in the data keeper that should be used.
+        graph_key : 'str'
+            The key to the graph in the graph keeper that should be used.
+            (Does not have to include all features in the data)
+        features : {`None`, `list` [`str`])}
+            List of features (nodes) to compute neighborhood distances on.
+            If `None`, all features are used.
+        include_self : `bool`
+            If `True`, add node in neighborhood which will result in computing normalized profile over the neighborhood.
+            If `False`, node is not included in neighborhood which results in computing the transition distribution
+            over the neighborhood.
+        label : str
+            Label that resulting Wasserstein distances are saved in ``keeper.misc`` 
+            and name of file to store stacked results.
+        metric : `str`
+            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.
+        normalize : `bool`
+            If `True`, normalize neighborhood profiles to sum to 1.
+        **kwargs : `dict`
+            Extra arguments to metric, passed to `scipy.spatial.distance.cdist`.
+
+        Returns
+        -------
+        eds : `pandas.DataFrame`
+            Euclidean distances between pairwise observations where rows are observation-pairs and columns are
+            feature (node) names.
+            saved in ``keeper.misc`` with the key
+            ``f"{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"``.
+        """
+        inet = InfoNet(self, graph_key, layer=data_key)
+
+        if label is None:
+            label = f"{data_key}_euc_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"
+        else:
+            label = f"{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"
+            
+        if normalize :
+            label = '_'.join([label, 'normalized'])
+            
+        inet.multiple_pairwise_observation_neighborhood_euc_distance(nodes=features, include_self=include_self,
+                                                                     label=label,
+                                                                     desc='Computing pairwise 1-hop nbhd Euclidean distances',
+                                                                     metric=metric, normalize=normalize, **kwargs)
+
+
+    def compute_sigmas(self, distance_key, label=None, n_neighbors=None,
+                       method='max', return_nn=False):
+        """ Set sigma for each obs as the distance to its k-th neighbor from keeper.
+    
+        Parameters
+        ----------
+        distance_key : `str`
+            The label used to reference the distance matrix stored in ``keeper.distances``,
+            of size (n_observations, n_observations).
+        label : {`None`, `str`}
+            If provided, this is appended to the context tag
+            (``tag = f"{method}{n_neighbors}nn_{distance_key}"``). The key used to store the
+            results defaults to the tag when ``label`` is not provided: ``key = tag``. Otherwise,
+            the key is set to: ``key = tag + "-" + label``. The resulting sigmas
+            are stored in ``keeper.misc['sigmas_' + key]``.
+            
+            If ``return_nn`` is `True`,
+            nearest neighbor indices are stored in ``keeper.misc['nn_indices_' + key]`` and nearest
+            neighbor distances are stored in ``keeper.misc['nn_distances_' + key]``.
+        n_neighbors : {`int`, `None`}
+            K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,
+            ``n_neighbors > 0``. (Uses ``n_neighbors + 1``, since each obs is it's closest neighbor).
+            If `None`, all neighbors are used.
+        method : {'mean', 'median', 'max'}
+            Indicate how to compute sigma.
+
+            Options:
+
+            - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors
+            - 'median' : median of distance to ``n_neighbors`` nearest neighbors
+            - 'max' : distance to ``n_neighbors``-nearest neighbor
+        return_nn : `bool`
+            If `True`, also store indices and distances of ``n_neighbors`` nearest neighbors.
+    
+        Returns
+        -------
+        sigmas : `numpy.ndarray`, (n_observations, )
+            The distance to the k-th nearest neighbor for all rows in ``d``.
+            Sigmas represent the kernel width representing each data point's accessible neighbors.
+            Written to ``keeper.misc['sigmas_' + key]``.
+        indices : `numpy.ndarray`, (n_observations, )
+            Indices of nearest neighbors where each row corresponds to an observation.
+            Written, if ``return_nn`` is `True`, to ``keeper.misc['nn_indices_' + key]``.
+        distances : `numpy.ndarray`, (n_observations, ``n_neighbors + 1``)
+            Distances to nearest neighbors where each row corresponds to an obs.
+            Written, if ``return_nn`` is `True`, to ``keeper.misc['nn_distances_' + key]``.
+        """
+        tag = f"{method}{n_neighbors}nn_{distance_key}"
+        if label is not None:
+            tag = "_".join([tag, label])
+        
+        nfs.sigma_knn(self, distance_key, label=tag, n_neighbors=n_neighbors,
+                      method=method, return_nn=return_nn)
+
+
+    def compute_similarity_from_distance(self, distance_key, n_neighbors, method, precomputed_method=None,
+                                         label=None, knn=False):
+        """
+        Convert distance matrix to symmetric similarity measure.
+
+        The resulting similarity is written to the similarity keeper.
+
+        Parameters
+        ----------
+        distance_key : `str`
+            The label used to reference the distance matrix stored in ``keeper.distances``,
+            of size (n_observations, n_observations).    
+        n_neighbors : {`int`, `None`}
+            K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,
+            ``n_neighbors > 0``. (Uses ``n_neighbors + 1``, since each obs is it's closest neighbor).
+            If `None`, all neighbors are used.
+        method : {`float`, 'mean', 'median', 'max', 'precomputed'}
+            Indicate how to compute sigma.
+
+            Options:
+
+            - `float` : constant float to use as sigma
+            - `int` : constant int to use as sigma
+            - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors
+            - 'median' : median of distance to ``n_neighbors`` nearest neighbors
+            - 'max' : distance to ``n_neighbors``-nearest neighbor
+            - 'precomputed' : precomputed values extracted from ``keeper.misc[f"sigmas_{key}"]`` as a `numpy.ndarray` of size (n_observations, ).
+        precomputed_method : {'mean', 'median', 'max'}
+            This is ignored if `method` is not `'precomputed'`. When `method` is `'precomputed'`, specify the method that
+            was previously used for computing sigmas. See `method` for description of options.
+        label : {`None`, `str`}
+            If provided, this is appended to the context tag (``tag = f"{method}{n_neighbors}nn_{distance_key}"``)
+            The key used to store the resulting similarity matrix of size (n_observations, n_observations)
+            in ``keeper.similarities[f"similarity_{key}]`` defaults to the tag when ``label`` is not provided: ``key = tag``. Otherwise,
+            the key is set to: ``key = tag + "-" + label``.        
+        knn : `bool`
+            If `True`, restrict similarity measure to be non-zero only between ``n_neighbors`` nearest neighbors.
+
+        Returns
+        -------
+        K : `numpy.ndarray`, (n_observations, n_observations)
+            Symmetric similarity measure. 
+            Written to ``keeper.similarities[key]``.
+        """
+        if method != 'precomputed':
+            precomputed_method = method
+            
+        tag = f"{str(precomputed_method)}{n_neighbors}nn_{distance_key}"
+        if label is not None:
+            tag = "_".join([tag, label])
+            
+        nfs.distance_to_similarity(self, distance_key, n_neighbors, method,
+                                   label=f"similarity_{tag}", sigmas=f"sigmas_{tag}",
+                                   knn=knn, indices=None)
+
+
+
+    def convert_similarity_to_distance(self, similarity_key):
+        """ Convert a similarity to a distance.
+
+        The distance, computed as 1-similarity, is added to the distance keeper
+        with the key ``"distance_from_" + similarity_key``
+
+        Parameters
+        ----------
+        similarity_key : `str`
+            The similiratiy reference key.
+
+        Returns
+        -------
+        The following are saved to the distance keeper:
+
+            d : The new distance is saved to the keeper in
+               ``keeper.distances[f"distance_from_{similarity_key}"].
+        """
+        sim = self.similarities[similarity_key]
+        self.add_distance(1.-sim.data, f"distance_from_{similarity_key}")
+        
+        
+    def fuse_similarities(self, similarity_keys, weights=None, fused_key=None):
+        """ Fuse similarities in the keeper
+
+        Parameters
+        ----------
+        similarity_keys : `list`
+            Reference keys of similiraties to fuse.
+        weights : `list`
+            (Optional) Weight each similarity contributes to the fused similarity.
+            Should be the same length as ``similarity_keys``.
+            If not provided, default behavior is to apply uniform weights.
+        fused_key : `str`
+            (Optional) Specify key used to store the fused similarity in the keeper.
+            Default behavior is to fuse the keys of the original similarities.
+
+        Returns
+        -------
+        The following is added to the similarity keeper :
+
+          - fused_sim : The fused similarity, where the reference key, if not provided,
+            is fused from the original labels.
+        """
+        if (weights is not None) and (len(similarity_keys) != len(weights)):
+            raise ValueError("``weights`` must have the same number of values as ``similarity_keys``.")
+
+        if fused_key is None:            
+            fused_key = fuse_labels(similarity_keys)
+
+        s = self.similarities[similarity_keys[0]].data
+        if weights is not None:
+            s = weights[0] * s
+
+        fused_sim = s
+        for ix, key in enumerate(similarity_keys[1:], start=1):
+            s = self.similarities[key].data
+            if weights is not None:
+                s = weights[ix] * s
+            fused_sim = fused_sim + s
+
+        if weights is None:
+            n = len(similarity_keys)
+            fused_sim = fused_sim / n
+
+        self.add_similarity(fused_sim, fused_key)
+        
+        
+    def compute_transitions_from_similarity(self, similarity_key, density_normalize: bool = True):
+        """ Compute symmetric and asymmetric transition matrices and store in keeper.
+
+        .. note:: Code primarily copied from `scanpy.neighbors`.
+
+        Parameters
+        ----------
+        similarity_key : `str`
+            Reference key to the `numpy.ndarray`, (n_observations, n_observations)
+            symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+            in the keeper.
+        density_normalize : `bool`
+            The density rescaling of Coifman and Lafon (2006): Then only the
+            geometry of the data matters, not the sampled density.
+
+        Returns
+        -------
+        Adds the following to `keeper.misc` (with 0s on the diagonals):
+            transitions_asym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)
+                Asymmetric Transition matrix.
+            transitions_sym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)
+                Symmetric Transition matrix.
+        
+        """
+        compute_transitions(self, similarity_key, density_normalize=density_normalize)
+
+
+    def compute_dpt_from_augmented_sym_transitions(self, key):
+        """ Compute the diffusion pseudotime metric between observations,
+        computed from the symmetric transitions.
+
+        .. Note::
+
+            - :math:`T` is the symmetric transition matrix
+            - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`
+            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2
+
+        Parameters
+        ----------
+        key : `str`
+            Reference ID for the symmetric transitions `numpy.ndarray`, (n_observations, n_observations)
+            stored in ``keeper.misc``.
+
+        Returns
+        -------
+        dpt : `numpy.ndarray`, (n_observations, n_observations)
+            Pairwise-observation Diffusion pseudotime distances are stored
+            in keeper.distances["dpt_from_{key}"].
+        """
+        dpt_from_augmented_sym_transitions(self, key)
+
+
+    def compute_dpt_from_similarity(self, similarity_key, density_normalize: bool = True):
+        """ Compute the diffusion pseudotime metric between observations,
+        computed from similarity 
+
+        .. note::
+
+            - This entails computing the augmented symmetric transitions.
+            - :math:`T` is the symmetric transition matrix
+            - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`
+            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2
+
+        Parameters
+        ----------
+        similarity_key : `str`
+            Reference key to the `numpy.ndarray`, (n_observations, n_observations)
+            symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+            in the keeper.
+        density_normalize : `bool`
+            The density rescaling of Coifman and Lafon (2006): Then only the
+            geometry of the data matters, not the sampled density.
+
+        
+        Returns
+        -------
+        The following are stored in the keeper :
+           transitions_asym : `numpy.ndarray`, (n_observations, n_observations)
+                Asymmetric Transition matrix (with 0s on the diagonal) added to
+                ``keeper.misc[f"transitions_asym_{similarity_key}"].
+           transitions_sym : `numpy.ndarray`, (n_observations, n_observations)
+                Symmetric Transition matrix (with 0s on the diagonal) added to
+                ``keeper.misc[f"transitions_sym_{similarity_key}"].
+        
+           dpt : `numpy.ndarray`, (n_observations, n_observations)
+               Pairwise-observation Diffusion pseudotime distances are stored
+               in keeper.distances["dpt_from_transitions_asym_{similarity_key}"].
+        """
+        self.compute_transitions_from_similarity(similarity_key, density_normalize)
+        T_sym_key = f"transitions_sym_{similarity_key}"
+        self.compute_dpt_from_augmented_sym_transitions(T_sym_key)
+
+
+    def construct_pose(self, key, root=None,
+                       min_branch_size=5, choose_largest_segment=False,
+                       flavor='haghverdi16', allow_kendall_tau_shift=False,
+                       smooth_corr=True, brute=True, split=True, verbose=None,
+                       n_branches=2, until_branched=False,
+                       ):                
+        """ Construct the POSE from specified distance.
+
+        Parameters
+        ----------
+        key : `str`
+            The label used to reference the distance matrix stored in ``keeper.distances``,
+            of size (n_observations, n_observations).
+        root : {`None`, `int`, 'density', 'ratio'}
+            The root. If `None`, 'density' is used.
+
+            options
+            -------
+            - `int` : index of observation
+            - 'density' : select observation with minimal distance-density
+            - 'ratio' : select observation which leads to maximal triangular ratio distance
+        min_branch_size : {`int`, `float`}
+            During recursive splitting of branches, only consider splitting a branch with at least
+            ``min_branch_size > 2`` data points.
+            If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
+            (``0 < min_branch_size < 1``).
+        choose_largest_segment : `bool`
+            If `True`, select largest segment for branching.
+        flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
+            Branching algorithm (based on `scanpy` implementation).
+        allow_kendall_tau_shift : `bool`
+            If a very small branch is detected upon splitting, shift away from
+            maximum correlation in Kendall tau criterion of [Haghverdi16]_ to
+            stabilize the splitting.
+        smooth_corr : `bool`, default = `False`
+            If `True`, smooth correlations before identifying cut points for branch splitting.
+        brute : `bool`
+            If `True`, data points not associated with any branch upon split are combined with
+            undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,
+            not associated with any branch (and assigned branch index -1).
+        split : `bool` (default = True)
+                if `True`, split segment into multiple branches. Otherwise,
+                determine a single branching off of the main segment.
+                This is ignored if flavor is not 'haghverdi16'.
+                If `True`, ``brute`` is ignored.
+        n_branches : `int`
+            Number of branches to look for (``n_branches > 0``).
+        until_branched : `bool`
+            If `True`, iteratively find segment to branch and perform branching
+            until a segement is successfully branched or no branchable segments
+            remain. Otherwise, if `False`, attempt to perform branching only once 
+            on the next potentially branchable segment.
+
+            ..note::
+
+              This is only applicable when branching is being performed. If previous
+              iterations of branching has already been performed, it is not possible to
+              identify the number of iterations where no branching was performed.
+
+        Returns
+        -------
+        poser : `netflow.pose.POSER`
+            The object used to construct the POSE.
+        G_poser_nn : `networkx.Graph`
+            The updated graph with nearest neighbor edges and edge attribute "edge_origin"
+            with the possible values :
+
+            - "POSE" : for edges in the original graph that are not nearest neighbor edges
+            - "NN" : for nearest neighbor edges that were not in the original graph
+            - "POSE + NN" : for edges in the original graph that are also nearest neighbor edges
+        """                
+        poser = POSER(self, key, root=root, min_branch_size=min_branch_size,
+                      choose_largest_segment=choose_largest_segment,
+                      flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
+                      smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
+
+        G_poser = poser.branchings_segments(n_branches, until_branched=until_branched)
+        G_poser_nn = poser.construct_pose_nn_topology(G_poser)
+
+        # label = [key]
+        # if root is not None:
+        #     label.append(f"root_{root}")
+        # label.append(f"n_branches_{n_branches}")
+        # label.append(f"min_branch_size_{min_branch_size}")
+        # if choose_largest_segment:
+        #     label.append("choose_largest_segment")
+        # label.append(f"flavor_{flavor}")
+        # if allow_kendall_tau_shift:
+        #     label.append("allow_kendall_tau_shift")
+        # if smooth_corr:
+        #     label.append("smooth_corr")
+        # if brute:
+        #     label.append("brute")
+        # if split:
+        #     label.append("split")
+        # if until_branched:
+        #     label.append("until_branched")
+        # label = "_".join(label)
+        # keeper.add_graph(G_poser_nn, "POSE_{label}")
+
+        return poser, G_poser_nn
+
+
+    def log1p(self, key, base=None):
+        """ Logarithmic data transformation.
+
+        Computes :math:`data = \\log(data + 1)` with the natural logarithm as the default base.
+
+        Parameters
+        ----------
+        key : `str`
+            The reference key of the data in the data-keeper that will be
+            logarithmically transformed.
+        base : {`None`, `int`}
+            Base used for the logarithmic transformation.
+
+        Returns
+        -------
+        Logarithmically transformed data with label "{key}_log1p" is added to the data keeper.
+        """
+        data = self.data[key]
+        features = data.feature_labels[:]
+        obs = data.observation_labels[:]
+        data = data.data.copy()
+        if not (np.issubdtype(data.dtype, np.floating) or np.issubdtype(data.dtype, complex)):
+            data = data.astype(float)
+        data = np.log1p(data, out=data)
+        if base is not None:
+            np.divide(data, np.log(base), out=data)
+
+        data = pd.DataFrame(data=data, index=features, columns=obs)
+        self.add_data(data, f"{key}_log1p")
+        
+

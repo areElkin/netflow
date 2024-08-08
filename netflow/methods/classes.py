@@ -61,14 +61,15 @@ class InfoNet:
         if verbose is not None:
             set_verbose(logger, verbose)
 
-        self.data = keeper.data[layer]        
-        logger.msg(f"Loaded data: {self.data.data.shape}")
+        self.data = keeper.data[layer]
+        check_matrix_no_nan(self.data.data)        
+        logger.debug(f"Loaded data: {self.data.data.shape}")
 
         if graph_key is not None:
             G = keeper.graphs[graph_key].copy()  # keeper.misc[graph_key].copy()
             check_connected_graph(G)
             check_graph_no_self_loops(G)
-            logger.msg(f"Loaded graph: {G}")
+            logger.debug(f"Loaded graph: {G}")
 
             if not nx.get_node_attributes(G, name='name'):
                 # G = nx.convert_node_labels_to_integers(G, label_attribute='name')
@@ -121,7 +122,7 @@ class InfoNet:
         Makes the invariant measures attribute of size (n_observations, n_observations)
         in ``keeper.data[label]`` available.
         """
-
+        check_matrix_nonnegative(self.data.data)
         IM = utl.invariant_measure(self.data.data, G=self.G)
         self.keeper.add_data(IM, label)
         
@@ -431,9 +432,10 @@ class InfoNet:
         wd : `pandas.Series`
             Wasserstein distances between pairwise observations
         """
+        # check_matrix_nonnegative(self.data.data)
         nbhd, profiles = self.neighborhood_profiles(node, include_self=include_self)
         if graph_distances is None:
-            logger.msg("Computing graph hop distances.")
+            logger.debug("Computing graph hop distances.")
             graph_distances = self.compute_graph_distances(weight=None)
 
         # graph_distances = graph_distances[np.ix_(profiles.index.tolist(), profiles.index.tolist())]
@@ -459,6 +461,8 @@ class InfoNet:
         include_self : `bool`
             If `True`, include node in neighborhood.
             If `False`, node is not included in neighborhood.
+        metric : `str`
+            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.
         normalize : `bool`
             If `True`, normalize neighborhood profiles to sum to 1.
         **kwargs : `dict`
@@ -793,6 +797,7 @@ class InfoNet:
 
         To do: specify if nodes in input are ids or node names and check that loaded data has correct type int or str for nodes
         """
+        # check_matrix_nonnegative(self.data.data)
         if nodes is None:
             nodes = [k for k in self.G if len(list(self.G.neighbors(k)))>1]
         else:
@@ -803,12 +808,14 @@ class InfoNet:
             wds_prior = None
         else:
             # fname = self.outdir / f"wass_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
-            fname = f"wass_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
+            # fname = f"wass_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
+            fname = f"{label}.csv"
             self.filenames.append(fname)
             if (self.outdir / fname).is_file():
                 
-                wds_prior = pd.read_csv(self.outdir / fname, header=0, index_col=(0, 1))
-                logger.msg(f"Loaded saved observation pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles of size {wds_prior.shape}.")
+                wds_prior = pd.read_csv(self.outdir / fname, header=0, index_col=(0, 1))                
+                # logger.msg(f"Loaded saved observation pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles of size {wds_prior.shape}.")
+                logger.msg(f"Loaded saved observation pairwise 1-hop neighborhood Wasserstein distances from {label} profiles of size {wds_prior.shape}.")
                 n_orig = len(nodes)
                 nodes = [k for k in nodes if self.G.nodes[k]['name'] not in wds_prior.columns]
                 n_update = len(nodes)
@@ -817,9 +824,9 @@ class InfoNet:
                         # logger.msg(f"Loading observation pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles.")
                         # return wds_prior
                         self.keeper.add_misc(wds_prior, label)
-                        return None
-                    
-                    logger.msg(f"Computing observation pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles on {n_update}/{n_orig} nodes.")
+                        return None                    
+                    # logger.msg(f"Computing observation pairwise 1-hop neighborhood Wasserstein distances from {profiles_desc} profiles on {n_update}/{n_orig} nodes.")
+                    logger.msg(f"Computing observation pairwise 1-hop neighborhood Wasserstein distances from {label} profiles on {n_update}/{n_orig} nodes.")
             else:
                 wds_prior = None
 
@@ -853,7 +860,8 @@ class InfoNet:
             wds = pd.concat([wds_prior, wds], axis=1)
         if self.outdir is not None:
             wds.to_csv(str(self.outdir / fname), header=True, index=True)
-            logger.msg(f"Observation pairwise 1-hop neighborhood Wasserstein distances on {profiles_desc} saved to {str(fname)}.")
+            # logger.msg(f"Observation pairwise 1-hop neighborhood Wasserstein distances on {profiles_desc} saved to {str(fname)}.")
+            logger.msg(f"Observation pairwise 1-hop neighborhood Wasserstein distances on {label} saved to {str(fname)}.")            
 
         self.keeper.add_misc(wds, label)
         # return wds
@@ -878,6 +886,8 @@ class InfoNet:
             Description for progress bar.
         profiles_desc : `str`, default = "t0"
             Description of profiles used in name of file to store results.
+        metric : `str`
+            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.
         normalize : `bool`
             If `True`, normalize neighborhood profiles to sum to 1.
         **kwargs : `dict`
@@ -905,14 +915,17 @@ class InfoNet:
             fname = None
             eds_prior = None
         else:
-            if normalize:
-                fname = f"euc_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self_normalized.csv"
-            else:
-                fname = f"euc_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
+            # if normalize:
+            #     fname = f"euc_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self_normalized.csv"
+                
+            # else:
+            #     fname = f"euc_dist_observation_pairwise_1hop_nbhd_profiles_{profiles_desc}_with{'' if include_self else 'out'}_self.csv"
+            fname = f"{label}.csv"
             self.filenames.append(fname)
             if (self.outdir / fname).is_file():                
                 eds_prior = pd.read_csv(self.outdir / fname, header=0, index_col=(0, 1))
-                logger.msg(f"Loaded saved observation pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles of size {eds_prior.shape}.")
+                # logger.msg(f"Loaded saved observation pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles of size {eds_prior.shape}.")
+                logger.msg(f"Loaded saved observation pairwise 1-hop neighborhood Euclidean distances from {label} profiles of size {eds_prior.shape}.")
                 n_orig = len(nodes)
                 nodes = [k for k in nodes if self.G.nodes[k]['name'] not in eds_prior.columns]
                 n_update = len(nodes)
@@ -921,7 +934,8 @@ class InfoNet:
                         # return eds_prior
                         self.keeper.add_misc(eds_prior, label)
                         return None
-                    logger.msg(f"Computing observation pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles on {n_update}/{n_orig} nodes.")
+                    # logger.msg(f"Computing observation pairwise 1-hop neighborhood Euclidean distances from {profiles_desc} profiles on {n_update}/{n_orig} nodes.")
+                    logger.msg(f"Computing observation pairwise 1-hop neighborhood Euclidean distances from {label} profiles on {n_update}/{n_orig} nodes.")
             else:
                 eds_prior = None
 
@@ -943,7 +957,8 @@ class InfoNet:
             eds = pd.concat([eds_prior, eds], axis=1)
         if self.outdir is not None:
             eds.to_csv(self.outdir / fname, header=True, index=True)
-            logger.msg(f"Observation pairwise 1-hop neighborhood Euclidean distances on {profiles_desc} saved to {str(fname)}.")
+            # logger.msg(f"Observation pairwise 1-hop neighborhood Euclidean distances on {profiles_desc} saved to {str(fname)}.")
+            logger.msg(f"Observation pairwise 1-hop neighborhood Euclidean distances on {label} saved to {str(fname)}.")
 
         self.keeper.add_misc(eds, label)
         # return eds
@@ -998,8 +1013,7 @@ class InfoNet:
 
         SAVED TO DISTANCES
         """
-
-        # logger.msg(">>> ENTERED FN")
+        # check_matrix_nonnegative(self.data.data)
         if features is None:
             features = list(self.G)
         else:
@@ -1007,7 +1021,7 @@ class InfoNet:
         
         pw_obs = list(combinations(self.observations, 2))
 
-        logger.msg(f">>> {len(pw_obs)} pw-obs")
+        logger.info(f">>> computing {len(pw_obs)} pw-obs distances")
 
         if self.outdir is None:
             fname = None
@@ -1070,7 +1084,7 @@ class InfoNet:
                 wds.to_csv(str(self.outdir / fname), header=True, index=True)
                 logger.msg(f"Observation pairwise profile Wasserstein distances saved to {str(fname)}.")
 
-        logger.msg(f">>> wds made it to here with shape {wds.shape}.")
+        # logger.msg(f">>> wds made it to here with shape {wds.shape}.")
 
         ## self.keeper.add_misc(wds, label)
 
@@ -1103,6 +1117,8 @@ class InfoNet:
             name of file to store stacked results.
         desc : `str`
             Description for progress bar.
+        metric : `str`
+            The metric used to compute the distance, passed to scipy.spatial.distance.cdist.
         normalize : `bool`
             If `True`, normalize neighborhood profiles to sum to 1.
         **kwargs : `dict`
@@ -1118,7 +1134,7 @@ class InfoNet:
         -----
         If ``object.outdir`` is not `None`, Euclidean distances are saved to file.
         Before starting the computation, check if the file exists. If so, load and remove already computed
-        nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+        nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
         the previously computed and saved results before saving and returning the combined results.
 
         SAVES TO DISTANCES
@@ -1174,9 +1190,9 @@ class InfoNet:
         # line 1025
         eds.name = 'ED'
 
-        if self.outdir is not None:
-            eds.to_csv(self.outdir / fname, header=True, index=True)
-            logger.msg(f"Observation pairwise profile Euclidean distances saved to {str(fname)}.")
+        # if self.outdir is not None:
+        #     eds.to_csv(self.outdir / fname, header=True, index=True)
+        #     logger.msg(f"Observation pairwise profile Euclidean distances saved to {str(fname)}.")
             
         # if eds_prior is not None:
         #     eds = pd.concat([eds_prior, eds], axis=0)
