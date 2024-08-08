@@ -141,7 +141,8 @@ def pairwise_sample_wass_distances(profiles, graph_distances, proc=mp.cpu_count(
     wd : pandas Series
         Wasserstein distances between pairwise samples
     """
-    n = profiles.shape[1]
+    check_matrix_nonnegative(profiles)
+    n = profiles.shape[1]    
     # wds = np.zeros([1, int(0.5 * n * (n-1))])
     # print(f"wds = {wds.shape}.")
     # print(f"wds[0] = {wds[0].shape}.")

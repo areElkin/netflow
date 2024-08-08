@@ -834,7 +834,10 @@ def _branch_member_indices(G_tda, branch):
 
 def _sorted_members(G_tda, d, branch, root=None):
     if root is None:
-        root = [G_tda.nodes[k]['name'] for k in G_tda if G_tda.nodes[k]['root']==1][0]
+        if 'root' in G_tda.nodes[0]:
+            root = [G_tda.nodes[k]['name'] for k in G_tda if G_tda.nodes[k]['root']==1][0]
+        else: # is_root'
+            root = [G_tda.nodes[k]['name'] for k in G_tda if G_tda.nodes[k]['is_root']=='Yes'][0]
     if isinstance(root, int):
         root = G_tda.nodes[root]['name']
     branch_labels = _branch_member_labels(G_tda, branch)

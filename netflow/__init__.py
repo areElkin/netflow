@@ -33,6 +33,7 @@ from ._version import __version__
 from netflow.keepers.keeper import Keeper
 from netflow.methods.classes import InfoNet
 from netflow.pose import organization, similarity
+from netflow.probe.jupyter_app import render_pose
 # from netflow import pose
 
 

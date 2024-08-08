@@ -1133,7 +1133,7 @@ class POSER:
         
         # RE END MODIFIED
         if corr_coeff_max < 0.3:
-            logger.warning('    is root itself, never obtain significant correlation')
+            logger.info('    is root itself, never obtain significant correlation')
         return imax
 
 
@@ -1184,7 +1184,7 @@ class POSER:
         # as the criterion based on normalized distances, which follows below,
         # is less stable
         if imax > 0.95 * len(idcs):
-            logger.warning('segment is more than 95\% correlated.')
+            logger.info('segment is more than 95\% correlated.')
         if imax > 0.95 * len(idcs) and self.allow_kendall_tau_shift:            
             # if "everything" is correlated (very large value of imax), a more
             # conservative choice amounts to reducing this
@@ -1363,8 +1363,9 @@ class POSER:
 
                 newseg = np.arange(Dseg.shape[0], dtype=int)[mask]
                 if newseg.shape[0] == 0:
-                    logger.warning("Unique segment is empty, removing from consideration and no branching performed.")
+                    # logger.debug("Unique segment is empty, continuing branching without it.")
                     # continue # TODO - future release switch return to continue for finer resolution partitioning
+                    logger.debug("Unique segment is empty, removing from consideration and no branching performed.")                    
                     return None
 
                 ssegs.append(newseg)
@@ -1599,10 +1600,10 @@ class POSER:
         firsttip = tip
 
         if len(np.flatnonzero(newseg)) <= 1:
-            logger.warning(f'detected group with only {len(np.flatnonzero(newseg))} data points')
+            logger.info(f'detected group with only {len(np.flatnonzero(newseg))} data points')
         if firsttip not in set(newseg):
             new_firsttip = newseg[np.argmin(Dseg[tip][newseg])]
-            logger.warning(f'tip is no longer in the unique branched sub-segment, update tip to its nearest point in the new segment: {firsttip} -> {new_firsttip}')
+            logger.info(f'tip is no longer in the unique branched sub-segment, update tip to its nearest point in the new segment: {firsttip} -> {new_firsttip}')
             firsttip = new_firsttip
 
         tips = np.array([firsttip, secondtip])
@@ -1635,7 +1636,7 @@ class POSER:
 
         result = self._detect_branch(Dseg, tips3)
         if result is None: # RE ADDED THIS CONDITION
-            logger.warning(f"No unique branch detected - removed from consideration.")
+            logger.info(f"No unique branch detected - removed from consideration.")
             node.branchable = False
             updated = False
         else:
@@ -1645,7 +1646,7 @@ class POSER:
 
             # map back to global indices
             unidentified = node.data[unidentified] # record data points not associated with any branch
-            logger.warning(f"* {len(unidentified)} unclaimed points.")
+            logger.info(f"* {len(unidentified)} unclaimed points.")
 
             for iseg_new, seg_new in enumerate(ssegs):
                 ssegs[iseg_new] = node.data[seg_new]
@@ -1728,7 +1729,7 @@ class POSER:
             
                 
             node = self.select_segment()
-            logger.warning(f"* selected node = {node}")
+            logger.info(f"* selected node = {node}")
 
             if node is None:
                 logger.warning("No branchable segments remain -- partitioning converged.")
@@ -1765,12 +1766,12 @@ class POSER:
         """
         if n_branches > len(self.branched_ordering):
             for ibranch in range(len(self.branched_ordering), n_branches):
-                logger.warning(f"*ibranch = {ibranch}")
+                logger.info(f"*ibranch = {ibranch}")
 
                 branched_flag = self.single_branch(until_branched=until_branched)
                 # logger.warning(f"* was branched = {branched_flag}")
                 if not branched_flag:
-                    logger.warning("No further branching occured at this iteration.")
+                    logger.info("No further branching occured at this iteration.")
         else:
             logger.warning(f"`n_branches` branchings have already occurred. No further branching is performed.")
                 
@@ -1861,6 +1862,10 @@ class POSER:
                                    }
 
         G = self._construct_topology(segs)
+        nx.set_node_attributes(G, {k: 'Yes' if k==self.root else 'No' for k in G},
+                               name='is_root')
+        nx.set_node_attributes(G, {k: vl for k, vl in enumerate(self.pseudo_dist)},
+                       name='pseudo-distance from root')
         
         return G
 
@@ -1972,6 +1977,9 @@ class POSER:
                                      **{ee: "NN" for ee in nn_unique_edges},
                                      **{ee: "POSE" for ee in pose_unique_edges}},
                                name="edge_origin")
+
+        nx.set_edge_attributes(Gnn, {ee: "intra-branch" if Gnn.nodes[ee[0]]['branch'] == Gnn.nodes[ee[1]]['branch'] else "inter-branch" for ee in nn_unique_edges},
+                               name="connection")
 
         nx.set_edge_attributes(Gnn, {ee: self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="distance")
         nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
@@ -2132,7 +2140,7 @@ class TDA:
             d_tmp = self.distances.copy()
             d_tmp[np.eye(*d_tmp.shape).astype(bool)] = d_tmp.max()
             self.root = np.unravel_index(np.argmin(d_tmp, axis=None), d_tmp.shape)[0]
-            logger.msg(f"Suggested root set as index {self.root}")
+            logger.info(f"Suggested root set as index {self.root}")
         elif isinstance(root, str):
             # self.root = self.distances.observation_index(root)
             self.root = self.observation_labels.index(root)
@@ -2232,7 +2240,7 @@ class TDA:
         unidentified_points = set()          
         
         for ibranch in range(n_branches):
-            logger.warning(f"*ibranch = {ibranch}")
+            logger.info(f"*ibranch = {ibranch}")
             # logger.warning(f"*{len(segs)} segs = {segs}")
             iseg, tips3 = self.select_segment(segs, segs_tips, segs_undecided, segs_terminate_branching)
             # logger.warning(f"*iseg = {iseg}, tips3 = {tips3}, selected_seg = {segs[iseg]}")
@@ -2426,14 +2434,14 @@ class TDA:
         # are defined by splitting this segment
         result = self._detect_branch(Dseg, tips3, seg)        
         if result is None: # RE ADDED THIS CONDITION
-            logger.warning(f"No unique branch detected - removed from consideration.")
+            logger.info(f"No unique branch detected - removed from consideration.")
             seg_node.branchable = False
         else:
             ssegs, ssegs_tips, ssegs_adjacency, ssegs_connects, trunk, unidentified = result
 
             # map back to global indices
             unidentified = seg[unidentified] # record data points not associated with any branch
-            logger.warning(f"* {len(unidentified)} unclaimed points.")
+            logger.info(f"* {len(unidentified)} unclaimed points.")
             
             for iseg_new, seg_new in enumerate(ssegs):
                 ssegs[iseg_new] = seg[seg_new]
@@ -2706,11 +2714,11 @@ class TDA:
         for iseg, seg in enumerate(ssegs):
             masks[iseg][seg] = True                
         nonunique = np.sum(masks, axis=0) > 1
-        logger.warning(f"* {nonunique.sum()} nonunique points.")
+        logger.info(f"* {nonunique.sum()} nonunique points.")
 
         # RE START MODIFIED - to account for points not associated with any branch
         unidentified = np.sum(masks, axis=0) == 0
-        logger.warning(f"* {unidentified.sum()} unidentified points.")        
+        logger.info(f"* {unidentified.sum()} unidentified points.")        
         # RE END MODIFIED
         
         # RE START MODIFIED - uncomment to match how original paper defines unique
@@ -2730,7 +2738,7 @@ class TDA:
 
             newseg = np.arange(Dseg.shape[0], dtype=int)[mask]
             if newseg.shape[0] == 0:
-                logger.warning("Unique segment is empty, removing from consideration and no branching performed.")
+                logger.info("Unique segment is empty, removing from consideration and no branching performed.")
                 # continue
                 return None
             
@@ -2752,7 +2760,7 @@ class TDA:
             firsttip = tips[inewseg]
             
             if len(np.flatnonzero(newseg)) <= 1:
-                logger.warning(f'detected group with only {len(np.flatnonzero(newseg))} data points')
+                logger.info(f'detected group with only {len(np.flatnonzero(newseg))} data points')
             if firsttip not in set(newseg):
                 new_firsttip = newseg[np.argmin(Dseg[tips[inewseg]][newseg])]
                 logger.warning(f'tip is no longer in the unique branched sub-segment, update tip to its nearest point in the new segment: {firsttip} -> {new_firsttip}')
