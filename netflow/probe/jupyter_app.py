@@ -1,4 +1,5 @@
 import itertools
+import io
 
 import dash_cytoscape as cyto
 import dash.exceptions as dash_exceptions
@@ -8,6 +9,7 @@ import matplotlib as mpl
 import matplotlib.colors as colors
 import networkx as nx
 import numpy as np
+from openpyxl import Workbook
 import pandas as pd
 import plotly.colors as pc
 import plotly.graph_objects as go
@@ -138,12 +140,13 @@ styles = {
     'label': {
         'display': 'block',
         # 'font-weight': 'bold',
-        'font-size': '12', 
+        'font-size': '12',        
     },
     'label_b': {
         'display': 'block',
         'font-weight': 'bold',
         'font-size': '14',
+        'color': 'gray',
     },
 }
 
@@ -675,6 +678,11 @@ def renderer(keeper, pose_key, distance_key):
                                                           marks={0.01: 'smaller', 12: 'larger'},
                                                           tooltip={"placement": "top", "always_visible": False},
                                                           ),
+                                               html.H4("Node opacity"),
+                                               dcc.Slider(id='node-opacity-slider', min=0.0, max=1.0, step=0.01, value=1.,
+                                                          marks={0: 'transparent', 1: 'opaque'},
+                                                          tooltip={"placement": "top", "always_visible": False},
+                                                          ),
                                                html.H4("Set Node Color"),
                                                # html.Label(html.B("Set Fixed Color")), 
                                                html.Label("Set Fixed Color", style=styles['label_b']),
@@ -721,10 +729,10 @@ def renderer(keeper, pose_key, distance_key):
                                                                  'value': cmap} for cmap in SEQUENTIAL_COLORMAP_OPTIONS], # COLORMAP_OPTIONS], # mpl.colormaps()], # ['YlGnBu', 'viridis', 'cividis', 'jet', 'nipy_spectral', 'gist_ncar']],
                                                        value='Turbo_r', # 'YlGnBu',
                                                    ),
-                                               ]),
+                                               ]),                                               
                                                html.H4("Edge Width"),
-                                               dcc.Slider(id='edge-width-slider', min=0.001, max=14, step=0.001, value=1.,
-                                                          marks={1: 'thinner', 14: 'wider'},
+                                               dcc.Slider(id='edge-width-slider', min=0.001, max=14, step=0.001, value=0.09,
+                                                          marks={0.001: 'thinner', 14: 'wider'},
                                                           tooltip={"placement": "top", "always_visible": False},
                                                           ),
                                                html.H4("Set Edge Color"),
@@ -787,7 +795,8 @@ def renderer(keeper, pose_key, distance_key):
                                                ),
                                   ],
                                            ),
-                                  # dcc.Store(id='selected-node-data'),
+                                  dcc.Store(id='store-selectedNodeData'),
+                                  dcc.Store(id='store-tapNodeData'),
                                   cyto.Cytoscape(
                                       id='network-graph',
                                       elements=nx_to_cytoscape(G),
@@ -824,16 +833,16 @@ def renderer(keeper, pose_key, distance_key):
                                               'selector': '.highlight',
                                               'style': {
                                                   'border-width': '2px', # 20,
-                                                  'border-color': 'black',
+                                                  'border-color': 'red', # 'black',
                                                   # 'outline-width': 20,
                                                   # 'outline-color': 'black',
                                               },
-                                          },
+                                          },                                          
                                           {
                                               'selector': '.highlight_box_select',
                                               'style': {
                                                   'border-width': '2px',
-                                                  'border-color': 'gray',
+                                                  'border-color': 'black',
                                                   # 'z-index': 1999,
                                               },
                                           },
@@ -1028,28 +1037,69 @@ def renderer(keeper, pose_key, distance_key):
     #         return cmap_options[0]['value']
 
 
-    @app.callback(
-        Output('box-output', 'children'),
-        Output('btn-download', 'style'),
-        Output("box-selected-labels", 'children'),
-        # Output('selected-node-data', 'data'),
-        # Input('selected-node-data', 'data'), # Input('network-graph', 'boxSelectedData'), # 'selectedNodeData'),
-        Input('network-graph', 'selectedNodeData'),
-        Input('stat-keeper-data-dropdown', 'value'),
-        Input('stat-test-dropdown', 'value'),
-        Input('alpha-label', 'value'),
-        Input('correction-drop-down', 'value'),
-    )
+    # @app.callback(
+    #     Output('store-tapNodeData', 'data'),
+    #     Output('store-selectedNodeData', 'data'),
+    #     Input('network-graph', 'tapNodeData'),
+    #     Input('network-graph', 'selectedNodeData'),
+    #     State('store-tapNodeData', 'data'),
+    #     State('store-selectedNodeData', 'data')
+    # )
+    # def manage_interactive_node_data(tap_data, selected_data, stored_tap_data, stored_selected_data):
+    #     triggered_input = callback_context.triggered[0]['prop_id'].split('.')[0]
+    #     triggered_attr = callback_context.triggered[0]['prop_id'].split('.')[1]
+
+    #     print(f"manager input 0: \n >>> tap_data = {tap_data} \n >>> selected_data = {selected_data} \n >>> stored_tap_data = {stored_tap_data} \n >>> stored_selected_data = {stored_selected_data}")
+    #     if triggered_input == 'network-graph':
+    #         if triggered_attr == 'tapNodeData':
+    #             # update tapNodeData
+    #             # print('updating tapNodeData')
+    #             stored_tap_data = tap_data
+    #         elif triggered_attr == 'selectedNodeData':
+    #             # update selectedNodeData
+    #             stored_selected_data = selected_data
+
+    #     print(f"manager output 1: \n >>> stored_tap_data = {stored_tap_data} \n >>> stored_selected_data = {stored_selected_data}")
+    #     return stored_tap_data, stored_selected_data
+                
+        
+
+    # ATTEMPTING TO USE dcc.STORE HERE
+    # @app.callback(
+    #     Output('box-output', 'children'),
+    #     Output('btn-download', 'style'),
+    #     Output("box-selected-labels", 'children'),
+    #     # Output('selected-node-data', 'data'),
+    #     # Input('selected-node-data', 'data'), # Input('network-graph', 'boxSelectedData'), # 'selectedNodeData'),
+    #     # Input('network-graph', 'selectedNodeData'),
+    #     Input('store-selectedNodeData', 'data'),
+    #     Input('stat-keeper-data-dropdown', 'value'),
+    #     Input('stat-test-dropdown', 'value'),
+    #     Input('alpha-label', 'value'),
+    #     Input('correction-drop-down', 'value'),
+    # )
+    # ORIGINALLY HERE
+    # @app.callback(
+    #     Output('box-output', 'children'),
+    #     Output('btn-download', 'style'),
+    #     Output("box-selected-labels", 'children'),
+    #     # Output('selected-node-data', 'data'),
+    #     # Input('selected-node-data', 'data'), # Input('network-graph', 'boxSelectedData'), # 'selectedNodeData'),
+    #     Input('network-graph', 'selectedNodeData'),
+    #     Input('stat-keeper-data-dropdown', 'value'),
+    #     Input('stat-test-dropdown', 'value'),
+    #     Input('alpha-label', 'value'),
+    #     Input('correction-drop-down', 'value'),
+    # )    
     def display_selected_nodes(data, keeper_data_label, test, alpha, method):
-        print(f"display_selected_nodes : TRIGGERED INPUT = {callback_context.triggered[0]['prop_id']}")
-        print(f"display selected nodes = is box data none: {data is None} - data = {data}")
+        # print(f"display_selected_nodes : TRIGGERED INPUT = {callback_context.triggered[0]['prop_id']}")
+        # print(f"display selected nodes = is box data none: {data is None} - data = {data}")
         if (not data) or (keeper_data_label == 'None') :
             return "", {'display': 'none'}, 'Selected nodes' # [] # "No nodes selected."
-
-        
                               
-        selected_obs = [node['name'] for node in data]
-        unselected_obs = list(set(keeper.observation_labels) - set(selected_obs))
+        selected_obs = set([node['name'] for node in data])
+        unselected_obs = list(set(keeper.observation_labels) - selected_obs)
+        selected_obs = list(selected_obs)
         df = keeper.data[keeper_data_label].to_frame()
         # select columns that are floats or integers:
         df = df[df.select_dtypes(include=['float', 'int']).columns]
@@ -1123,15 +1173,25 @@ def renderer(keeper, pose_key, distance_key):
         State('stat-keeper-data-dropdown', 'value'),
         State('stat-test-dropdown', 'value'),
         State('correction-drop-down', 'value'),
+        State("box-selected-labels", 'children'),
         prevent_initial_call=True,
     )
-    def download_data(n_clicks, data, data_label, stat_test, correction):
-        df = pd.DataFrame(data)
+    def download_data(n_clicks, data, data_label, stat_test, correction, obs_labels):
+        df = pd.DataFrame(data)        
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         fname = "_".join(["selected_nodes", str(data_label), stat_test.replace('-', ''),
                           correction.replace('-', ''), timestamp])
-        fname = fname + ".csv"
-        return dcc.send_data_frame(df.to_csv, fname)
+        # fname = fname + ".csv"
+        # return dcc.send_data_frame(df.to_csv, fname)
+        with io.BytesIO() as output:
+            with pd.ExcelWriter(output, engine='openpyxl') as writer:
+                df.to_excel(writer, index=False, sheet_name='stats')
+
+                obs_df = pd.DataFrame({'Selected observations': obs_labels.split(', ')})
+                obs_df.to_excel(writer, index=False, sheet_name='observations')
+
+            output.seek(0)
+            return dcc.send_bytes(output.getvalue(), fname+".xlsx")
                                                
 
     @app.callback(
@@ -1153,64 +1213,132 @@ def renderer(keeper, pose_key, distance_key):
                         'value': ft} for ft in sorted(keeper.data[data_label].feature_labels)]
         return options    
 
-    
-    @app.callback(        
-        Output('network-graph', 'elements'),
-        Output('network-graph', 'stylesheet'), # missing
-        # Output('network-graph', 'selectedNodeData'),
-        # Output('selected-node-data', 'data'), ####################
-        # Output('network-graph', 'boxSelectedData'),
-        Output('node-attribute-dropdown', 'value'),
-        Output('keeper-data-dropdown', 'value'),
-        Output('feature-label', 'value'),
-        Output('network-graph', 'zoom'),
-        Output('network-graph', 'pan'),
-        Output('node-colorbars-div', 'children'), # missing
-        Output('edge-colorbars-div', 'children'), # missing
-        Output('network-graph', 'tapNodeData'),
-        Output('node-fixed-color', 'value'),
-        Output('network-graph', 'mouseoverNodeData'),
-        # Output('node-colormap-type', 'value'),  # 
-        # Output('node-colormap-dropdown', 'value'), # add here
-        Input('layout-dropdown', 'value'), 
-        Input('highlight-button', 'n_clicks'), 
-        State('node-label', 'value'), 
+
+    @app.callback(
+        Output('network-graph', 'stylesheet'),
         Input('node-size-slider', 'value'), 
         Input('edge-width-slider', 'value'),
-        Input('node-attribute-dropdown', 'value'),
-        Input('edge-attribute-dropdown', 'value'),
-        Input('node-colormap-dropdown', 'value'),        
-        Input('edge-colormap-dropdown', 'value'),
-        Input('network-graph', 'tapNodeData'),
-        State('network-graph', 'elements'),
-        State('container-dimensions', 'data'),
-        State('network-graph', 'zoom'),
-        State('network-graph', 'pan'),
+        Input('node-opacity-slider', 'value'),
+    )
+    def update_stylesheet(node_size, edge_width, node_opacity):
+        stylesheet=[
+
+            {
+                'selector': 'node',
+                'style': {
+                    # 'label': 'data(name)',
+                    'width': node_size, # 'data(size)',
+                    'height': node_size, # 'data(size)',
+                    'background-color': 'data(color)',
+                    'text-opacity': '0',  # Hide labels by default,   
+                    'font-size': '8px',
+                    # 'border-width': '0.5px',  # Adds a thin border around the nodes
+                    # 'border-color': '#999',  # Sets the border color
+                    'opacity': node_opacity,
+                    # 'z-index': 1001,
+                },
+            },
+            {
+                'selector': 'edge',
+                'style': {
+                    'width': edge_width, # 'data(width)',
+                    'line-color': 'data(color)'
+                },
+            },
+            # Class selectors
+            {
+                'selector': '.highlight',
+                'style': {
+                    'border-width': '1.5px',
+                    'border-color': 'red',
+                    # 'outline-width': 20,
+                    # 'outline-color': 'black',
+                    # 'z-index': 1001,
+                },
+            },
+            {
+                'selector': '.highlight_box_select',
+                'style': {
+                    'border-width': '1.5px',
+                    'border-color': 'black',
+                    # 'z-index': 1999,
+                },
+            },
+        ]
+        return stylesheet
+    
+    
+    @app.callback(        
+        Output('network-graph', 'elements'), # (elements)
+        # Output('network-graph', 'stylesheet'), # moved to its own callback
+        # Output('network-graph', 'selectedNodeData'), # Output('network-graph', 'boxSelectedData'),
+        # Output('selected-node-data', 'data'), ####################        
+        Output('node-attribute-dropdown', 'value'), # (node_attr)
+        Output('keeper-data-dropdown', 'value'), # (data_label)
+        Output('feature-label', 'value'), # (ft_label)
+        Output('network-graph', 'zoom'), # (current_zoom)
+        Output('network-graph', 'pan'), # (current_pan)
+        Output('node-colorbars-div', 'children'), # (node_cbar_vis_in)
+        Output('edge-colorbars-div', 'children'), # edge_cbar_vis_in)
+        # Output('network-graph', 'tapNodeData'), # (tap_node_data)
+        Output('node-fixed-color', 'value'), # (node_fixed_color)
+        Output('network-graph', 'mouseoverNodeData'), # (mouseover_node_data)
+        Output('store-tapNodeData', 'data'), # new (stored_tap_node_data)
+        Output('store-selectedNodeData', 'data'), # new (stored_selected_node_data)
+        Output('box-output', 'children'), # new (box_selected_table)
+        Output('btn-download', 'style'), # new (stat_download_button_style)
+        Output("box-selected-labels", 'children'), # new (box_selected_output)
+        # Output('node-colormap-type', 'value'),  # 
+        # Output('node-colormap-dropdown', 'value'), # add here
+        Input('layout-dropdown', 'value'),                 # (layout) x
+        Input('highlight-button', 'n_clicks'),             # (n_clicks)
+        State('node-label', 'value'),  # (node_label)
+        # Input('node-size-slider', 'value'), # moved to its own callback
+        # Input('edge-width-slider', 'value'), # moved to its own callback
+        Input('node-attribute-dropdown', 'value'),         # (node_attr) xxx
+        Input('edge-attribute-dropdown', 'value'),         # (edge_attr)
+        Input('node-colormap-dropdown', 'value'),          # (node_cmap)
+        Input('edge-colormap-dropdown', 'value'),          # (edge_cmap)
+        Input('network-graph', 'tapNodeData'),             # (tap_node_data) xxx
+        Input('network-graph', 'selectedNodeData'),        # new (selected_node_data) xxx
+        State('store-tapNodeData', 'data'), # new (stored_tap_node_data)
+        State('store-selectedNodeData', 'data'), # new (stored_selected_node_data)
+        Input('stat-keeper-data-dropdown', 'value'),       # new (stat_keeper_data_label) xxx
+        Input('stat-test-dropdown', 'value'),              # new (stat_test) xxx
+        Input('alpha-label', 'value'),                     # new (alpha) xxx
+        Input('correction-drop-down', 'value'),            # new (stat_correction) xxx
+        State('network-graph', 'elements'), # (elements_in)
+        State('container-dimensions', 'data'), # (dimensions)
+        State('network-graph', 'zoom'), # (current_zoom)
+        State('network-graph', 'pan'), # (current_pan)
         # Input('node-color-button', 'n_clicks'),    # here
-        State('keeper-data-dropdown', 'value'),
-        Input('feature-label', 'value'),  # here : State -> Input
-        State('node-fixed-color', 'value'), 
-        Input('fixed-color-button', 'n_clicks'),
-        Input('pose-button', 'n_clicks'),
-        State('g-pose-dropdown', 'value'),
-        State('pose-distance-dropdown', 'value'),
-        # Input('network-graph', 'boxSelectedData'), # 'selectedNodeData'), ################
-        # Input('network-graph', 'selectedNodeData'),
+        State('keeper-data-dropdown', 'value'), # (data_label)
+        Input('feature-label', 'value'),                   # here : State -> Input   (ft_label) xxx
+        State('node-fixed-color', 'value'),  # (node_fixed_color)
+        Input('fixed-color-button', 'n_clicks'),           # (node_fixed_color_n_clicks) xxx
+        Input('pose-button', 'n_clicks'),                  # (pose_n_clicks) xxx
+        State('g-pose-dropdown', 'value'), # (pose_key)
+        State('pose-distance-dropdown', 'value'), # (pose_dist_key)
+        # Input('network-graph', 'selectedNodeData'), # 'boxSelectedData'), 
         # State('network-graph', 'selectedNodeData'), # add select
-        # State('selected-node-data', 'data'), ###################
-        State('network-graph', 'mouseoverNodeData'),
-        State('network-graph', 'stylesheet'), # 2
-        State('node-colorbars-div', 'children'), # 9
-        State('edge-colorbars-div', 'children'), # 10
-        # State('node-colormap-type', 'value'),  # 
+        State('network-graph', 'mouseoverNodeData'), # (mouseover_node_data)
+        # State('network-graph', 'stylesheet'), # 2  # moved to its own callback
+        State('node-colorbars-div', 'children'), # 9 (node_cbar_vis_in)
+        State('edge-colorbars-div', 'children'), # 10 # (edge_cbar_vis_in)
+        # State('node-colormap-type', 'value'),  #
+        State('box-output', 'children'), # new (box_selected_table)
+        State('btn-download', 'style'), # new (stat_download_button_style)
+        State("box-selected-labels", 'children'), # new (box_selected_output)        
         # prevent_initial_call=True,
         # suppress_callback_exceptions=True,        
     )
     def update_graph(layout, n_clicks, node_label, 
-                     node_size, 
-                     edge_width, 
+                     # node_size, edge_width, # moved to its own callback
                      node_attr, edge_attr, node_cmap, edge_cmap, 
                      tap_node_data,
+                     selected_node_data, stored_tap_node_data, # new
+                     stored_selected_node_data, stat_keeper_data_label, # new
+                     stat_test, alpha, stat_correction, # new
                      elements_in, dimensions,
                      current_zoom, current_pan, # feature_n_clicks, # here
                      data_label, ft_label,
@@ -1219,7 +1347,9 @@ def renderer(keeper, pose_key, distance_key):
                      # box_select_node_data,
                      # select_node_data,  # add select
                      mouseover_node_data,
-                     stylesheet_in, node_cbar_vis_in, edge_cbar_vis_in,
+                     # stylesheet_in, # moved to its own callback
+                     node_cbar_vis_in, edge_cbar_vis_in,
+                     box_selected_table, stat_download_button_style, box_selected_output,
                      ): 
         # Determine which input triggered the callback
         triggered_input = callback_context.triggered[0]['prop_id'].split('.')[0]
@@ -1227,67 +1357,137 @@ def renderer(keeper, pose_key, distance_key):
 
         print("-------")
         print(f"TRIGGERED INPUT = {callback_context.triggered[0]['prop_id']}")
-        # print(f"select_node_data = {select_node_data}")
-        print(f"tap_node_data = {tap_node_data}")
+        #  print(f"select_node_data = {select_node_data}")
+        # print(f"tap_node_data = {tap_node_data}")
         print("--------")
 
         # print(f"update graph = select node data in = {select_node_data}")
         
         # only update the highlighting of the box selected nodes
         if (triggered_input == 'network-graph') and (triggered_attr == 'selectedNodeData'):  # 'boxSelectedData'): #
-            print("ENTERED UPDATE HIGHLIGHT NODES")
+            selected_labels = set([node['name'] for node in selected_node_data])
+            if stored_selected_node_data is None:
+                stored_selected_labels = set()
+            else:
+                stored_selected_labels = set([node['name'] for node in stored_selected_node_data])
+
+            tap_label = '' if tap_node_data is None else tap_node_data['name']
+            stored_tap_label = '' if stored_tap_node_data is None else stored_tap_node_data['name']
+
+            if (len(selected_labels - stored_selected_labels) == 1) and not tap_node_data:
+                print("*** Expected tapNodeData....")
             
-            # first remove previously highlighted nodes            
-            elements = elements_in
-            for element in elements['nodes']:
-                if 'classes' in element:
-                    if ' highlight_box_select' in element['classes']:
-                        # print(f"unupdated selected box element : {element['classes']}")
+                
+
+            print("--- ENTERED TRIGGERED BY selectedNodeData ---")
+
+            print(f"--- tapNodeData = {tap_node_data}; \n---stored tapNodeData = {stored_tap_node_data}")
+            print(f"--- selectedNodeData = {selected_node_data}; \n---stored selectedNodeData = {stored_selected_node_data}")
+            
+            if tap_node_data and not stored_tap_node_data:
+                triggered_attr = 'tapNodeData'
+            elif tap_node_data and (len(selected_labels - stored_selected_labels) == 1) and (tap_label == list(selected_labels - stored_selected_labels)[0]):
+                triggered_attr = 'tapNodeData'
+            elif tap_node_data and stored_tap_node_data and (tap_label != stored_tap_label):
+                triggered_attr = 'tapNodeData'
+            else:
+                
+                # a = 0 if stored_selected_node_data is None else len(stored_selected_node_data)
+                # if len(selected_node_data) - a > 1:
+                stored_selected_node_data = selected_node_data
+                box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
+                                                                                                             stat_keeper_data_label,
+                                                                                                             stat_test, alpha,
+                                                                                                             stat_correction)
+
+                # update elements
+                selected_obs = set([node['name'] for node in stored_selected_node_data])
+
+                elements = elements_in
+                for element in elements['nodes']:
+                    if element['data'].get('name') in selected_obs:
+                        if 'classes' in element:
+                            if 'highlight_box_select' in element['classes']:
+                                continue
+                            else:
+                                element['classes'] += ' highlight_box_select'
+                        else:
+                            element['classes'] = 'nodes highlight_box_select'
+                    elif 'classes' in element:
                         # element['classes'] = ''.join(element['classes'].split(' highlight_box_select'))
                         element['classes'] = element['classes'].replace(' highlight_box_select', '').strip()
-                    
-                        # print(f"updated selected box element : {element['classes']}")
-
-            # update new selected nodes
-            # selected_obs = [node['name'] for node in select_node_data]
-            selected_obs = [node['name'] for node in select_node_data]
-                
-            
-            for element in elements['nodes']:
-                if element['data'].get('name') in selected_obs:
-                    if 'classes' in element:
-                        element['classes'] += ' highlight_box_select'
                     else:
-                        element['classes'] = 'nodes highlight_box_select'
-                    selected_obs.remove(element['data'].get('name'))
-                    if len(selected_obs) == 0:
-                        break
-                    
-            stylesheet = stylesheet_in
-            stylesheet.append({
-                'selector': '.highlight_box_select',
-                'style': {
-                    'border-width': '2px',
-                    'border-color': 'gray',
-                    # 'z-index': 1999,
-                },
-            })
+                        continue
 
-            # no_update
-            # return elements, stylesheet, select_node_data, node_attr, data_label, ft_label, \
-            return (elements, stylesheet, # select_node_data,
+
+
+
+                # # first remove previously highlighted nodes            
+                # elements = elements_in
+                # for element in elements['nodes']:
+                #     if 'classes' in element:                    
+                #         if ' highlight_box_select' in element['classes']:
+                #             # print(f"unupdated selected box element : {element['classes']}")
+                #             # element['classes'] = ''.join(element['classes'].split(' highlight_box_select'))
+                #             element['classes'] = element['classes'].replace(' highlight_box_select', '').strip()
+
+                #             # print(f"updated selected box element : {element['classes']}")
+
+                # # update new selected nodes
+                # # selected_obs = [node['name'] for node in select_node_data]
+                # selected_obs = [node['name'] for node in selected_node_data]
+
+
+                # for element in elements['nodes']:
+                #     if element['data'].get('name') in selected_obs:
+                #         if 'classes' in element:
+                #             element['classes'] += ' highlight_box_select'
+                #         else:
+                #             element['classes'] = 'nodes highlight_box_select'
+                #         selected_obs.remove(element['data'].get('name'))
+                #         if len(selected_obs) == 0:
+                #             break
+
+                # stylesheet = stylesheet_in
+                # stylesheet.append({
+                #     'selector': '.highlight_box_select',
+                #     'style': {
+                #         'border-width': '2px',
+                #         'border-color': 'gray',
+                #         # 'z-index': 1999,
+                #     },
+                # })
+
+                # no_update
+                return (elements, # stylesheet, # select_node_data,
+                        node_attr, data_label, ft_label,
+                        current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, # tap_node_data, # NOTE: should this be here?
+                        node_fixed_color, mouseover_node_data,
+                        stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
+                        box_selected_output)
+            
+
+        if triggered_input in ['stat-keeper-data-dropdown', 'stat-test-dropdown', 'alpha-label', 'correction-drop-down']:
+            box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
+                                                                                                         stat_keeper_data_label,
+                                                                                                         stat_test, alpha,
+                                                                                                         stat_correction)
+            return (elements_in, # stylesheet, # select_node_data,
                     node_attr, data_label, ft_label,
-                    current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, tap_node_data,
-                    node_fixed_color, mouseover_node_data)
+                    current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, # tap_node_data, # NOTE: should this be here?
+                    node_fixed_color, mouseover_node_data,
+                    stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
+                    box_selected_output)
+        
             
         D = keeper.distances[pose_dist_key].data
         G = keeper.graphs[pose_key]        
 
-        # if new pose, reset layouts and tapNodeData 
+        # if new pose, reset layouts and tapNodeData and selectedNodeData
         if triggered_input == 'pose-button':            
             positions_records.clear()
-            tap_node_data = None
-            # select_node_data = None # add select
+            stored_tap_node_data = None
+            stored_selected_node_data = None 
             mouseover_node_data = None
 
         if not dimensions:
@@ -1346,8 +1546,9 @@ def renderer(keeper, pose_key, distance_key):
             node_attr_value = 'None'
             data_label = 'None'
             ft_label = ''
-            tap_node_data = None            
+            stored_tap_node_data = None # tap_node_data = None
         elif (triggered_input == 'network-graph') and (triggered_attr == 'tapNodeData'):
+            stored_tap_node_data = tap_node_data
             # print(f"ENTERED TAPNODEDATA \n-- select_node_data = {select_node_data}\n--tap_node_data = {tap_node_data}\n\n")
             node_attr = int(tap_node_data['id'])
             node_attr_value = 'None'
@@ -1358,21 +1559,21 @@ def renderer(keeper, pose_key, distance_key):
             #     node_cmap_type = 'sequential'
             #     node_cmap = SEQUENTIAL_COLORMAP_OPTIONS[0]
         elif triggered_input == 'node-attribute-dropdown':
-            print("ENTERED NODE ATTRIBUTE DROPDOWN")
+            # print("ENTERED NODE ATTRIBUTE DROPDOWN")
             node_attr_value = node_attr
             data_label = 'None'
             ft_label = ''
-            tap_node_data = None
+            stored_tap_node_data = None
             node_fixed_color = '' 
         elif triggered_input == 'feature-label': # 'node-color-button':  # here
             node_attr_value = 'None'
-            tap_node_data = None
+            stored_tap_node_data = None
             node_fixed_color = '' 
         else:
-            if tap_node_data is None: 
+            if stored_tap_node_data is None: 
                 node_attr_value = node_attr 
             else: 
-                node_attr = int(tap_node_data['id'])
+                node_attr = int(stored_tap_node_data['id'])
                 node_attr_value = 'None'
                 data_label = 'None'
                 ft_label = ''
@@ -1419,77 +1620,105 @@ def renderer(keeper, pose_key, distance_key):
         if node_label:
             for element in elements['nodes']:
                 if element['data'].get('name') == node_label:
-                    element['classes'] += ' highlight'
+                    if 'classes' in element:
+                        element['classes'] += ' highlight'
+                    else:
+                        element['classes'] = 'nodes highlight'
                     break
 
         # print(f"BEFORE HIGHLIGHTING \n-- select_node_data = {select_node_data}\n--tap_node_data = {tap_node_data}\n\n")
         # Highlight selected box nodes
         # add select uncomment below:
         # if select_node_data:
-        if False:
-            selected_obs = [node['name'] for node in select_node_data]
-            elements = elements_in
+        if stored_selected_node_data is not None:
+            selected_obs = [node['name'] for node in stored_selected_node_data]
+
             for element in elements['nodes']:
                 if element['data'].get('name') in selected_obs:
-                    element['classes'] += ' highlight_box_select'
-                    selected_obs.remove(element['data'].get('name'))
-                    if len(selected_obs) == 0:
-                        break                                                
+                    if 'classes' in element:
+                        if 'highlight_box_select' in element['classes']:
+                            continue
+                        else:
+                            element['classes'] += ' highlight_box_select'
+                    else:
+                        element['classes'] = 'nodes highlight_box_select'
+                elif 'classes' in element:
+                    # element['classes'] = ''.join(element['classes'].split(' highlight_box_select'))
+                    element['classes'] = element['classes'].replace(' highlight_box_select', '').strip()
+                else:
+                    continue
+            # for element in elements['nodes']:
+            #     if element['data'].get('name') in selected_obs:
+            #         if 'classes' in element:
+            #             element['classes'] += ' highlight_box_select'
+            #         else:
+            #             element['classes'] = 'nodes highlight_box_select'                    
+            #         selected_obs.remove(element['data'].get('name'))
+            #         if len(selected_obs) == 0:
+            #             break                
+                    
                 
 
-        stylesheet=[
+        # MOVED TO ITS OWN CALLBACK
+        # stylesheet=[
 
-            {
-                'selector': 'node',
-                'style': {
-                    # 'label': 'data(name)',
-                    'width': node_size, # 'data(size)',
-                    'height': node_size, # 'data(size)',
-                    'background-color': 'data(color)',
-                    'text-opacity': '0',  # Hide labels by default,   
-                    'font-size': '8px',
-                    'border-width': '0.5px',  # Adds a thin border around the nodes
-                    'border-color': '#999',  # Sets the border color
-                    # 'z-index': 1001,
-                },
-            },
-            {
-                'selector': 'edge',
-                'style': {
-                    'width': edge_width, # 'data(width)',
-                    'line-color': 'data(color)'
-                },
-            },
-            # Class selectors
-            {
-                'selector': '.highlight',
-                'style': {
-                    'border-width': '2px',
-                    'border-color': 'black',
-                    # 'outline-width': 20,
-                    # 'outline-color': 'black',
-                    # 'z-index': 1001,
-                },
-            },
-            {
-                'selector': '.highlight_box_select',
-                'style': {
-                    'border-width': '2px',
-                    'border-color': 'gray',
-                    # 'z-index': 1999,
-                },
-            },
-        ]
+        #     {
+        #         'selector': 'node',
+        #         'style': {
+        #             # 'label': 'data(name)',
+        #             'width': node_size, # 'data(size)',
+        #             'height': node_size, # 'data(size)',
+        #             'background-color': 'data(color)',
+        #             'text-opacity': '0',  # Hide labels by default,   
+        #             'font-size': '8px',
+        #             'border-width': '0.5px',  # Adds a thin border around the nodes
+        #             'border-color': '#999',  # Sets the border color
+        #             # 'z-index': 1001,
+        #         },
+        #     },
+        #     {
+        #         'selector': 'edge',
+        #         'style': {
+        #             'width': edge_width, # 'data(width)',
+        #             'line-color': 'data(color)'
+        #         },
+        #     },
+        #     # Class selectors
+        #     {
+        #         'selector': '.highlight',
+        #         'style': {
+        #             'border-width': '2px',
+        #             'border-color': 'red',
+        #             # 'outline-width': 20,
+        #             # 'outline-color': 'black',
+        #             # 'z-index': 1001,
+        #         },
+        #     },
+        #     {
+        #         'selector': '.highlight_box_select',
+        #         'style': {
+        #             'border-width': '2px',
+        #             'border-color': 'black',
+        #             # 'z-index': 1999,
+        #         },
+        #     },
+        # ]
         
         # print(f"select node data out = {select_node_data}")
         # print(f"BEFORE RETURNING \n-- select_node_data = {select_node_data}\n--tap_node_data = {tap_node_data}\n\n")
         # return elements, stylesheet, select_node_data, 
             
-        return (elements, stylesheet, # select_node_data, 
+        # return (elements, # stylesheet, # select_node_data, 
+        #         node_attr_value, data_label, ft_label,
+        #         current_zoom, current_pan, node_cbar_vis, edge_cbar_vis, tap_node_data,
+        #         node_fixed_color, mouseover_node_data, # , node_cmap_type # , node_cmap
+        #         )
+        return (elements, # stylesheet, # select_node_data,
                 node_attr_value, data_label, ft_label,
-                current_zoom, current_pan, node_cbar_vis, edge_cbar_vis, tap_node_data,
-                node_fixed_color, mouseover_node_data, # , node_cmap_type # , node_cmap
-                )
+                current_zoom, current_pan, node_cbar_vis, edge_cbar_vis, # tap_node_data, # NOTE: should this be here?
+                node_fixed_color, mouseover_node_data,
+                stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
+                box_selected_output)
 
     
     @app.callback(Output('cytoscape-mouseoverNodeData', 'children'),
