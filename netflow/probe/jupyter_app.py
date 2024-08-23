@@ -64,7 +64,7 @@ styles = {
         # 'flex': '1.2 1.1 0', # '0.15',
         # 'flex': '0 1.1 20%',
         # 'flex': '0 0 20%',
-        'display': 'inline-block', # 'inline-block', 
+        'display': 'inline-block',
         'verticalAlign': 'top', 
         'border': '1px solid black', 
         'border-radius': '20px', 
@@ -107,6 +107,7 @@ styles = {
         # 'height': '15%',
         'padding': '10px',
         'margin': '5px',
+        'color': 'gray',
     },
     'pre-container': {
         # 'border': 'thin lightgrey solid',
@@ -120,6 +121,9 @@ styles = {
     },
     'stat-table': {
         'padding': '3px',
+        'height': '20%',
+        # 'dislay': 'inline-block',
+        'overflowY': 'auto',
         # 'border': 'thin lightgrey solid',
     },
     'pre_box_labels': {
@@ -140,14 +144,27 @@ styles = {
     'label': {
         'display': 'block',
         # 'font-weight': 'bold',
-        'font-size': '12',        
+        'font-size': '12',
+        'color': '#696969',
+    },
+    'label_tspace': {
+        'display': 'block',
+        # 'font-weight': 'bold',
+        'font-size': '12',
+        'color': '#696969',
+        'margin-top': '8px',
     },
     'label_b': {
         'display': 'block',
         'font-weight': 'bold',
         'font-size': '14',
-        'color': 'gray',
+        'color': '#787878',
+        'margin-bottom': '3px',
+        'margin-top': '13px',
     },
+    'h4': {
+        'margin-bottom': '3px',
+    },   
 }
 
 # COLORMAP_OPTIONS = ['magma', 'inferno', 'plasma', 'viridis', 'cividis', 'twilight', 'turbo',
@@ -633,12 +650,12 @@ def renderer(keeper, pose_key, distance_key):
                           children=[                              
                               html.Div(className='control-panel-container',                                       
                                        style=styles['control-panel-container'], children=[
-                                           html.H2("NetFlow POSE"),
-                                           html.H3("Settings"),
+                                           html.H2("NetFlow POSE", style=styles['h4']),
+                                           html.H3("Settings", style=styles['h4']),
                                            html.Div([
                                                dcc.Store(id='container-dimensions'),
                                                html.Div(children=[
-                                                   html.H4("POSE"),
+                                                   html.H4("POSE", style=styles['h4']),
                                                    html.Label("POSE:", style=styles['label']),
                                                    dcc.Dropdown(
                                                        className='custom-dropdown',
@@ -657,62 +674,77 @@ def renderer(keeper, pose_key, distance_key):
                                                    ),
                                                    html.Button('Select POSE', id='pose-button', n_clicks=0),
                                                ]),
-                                               html.H4("Graph Layout"),
-                                               html.Label("Layout:", style=styles['label']),
-                                               dcc.Dropdown(
-                                                   id='layout-dropdown',
-                                                   options=[{'label': layout,
-                                                             'value': layout} for layout in ['kamada_kawai', 'spring',
-                                                                                             'circular', # 'cose',
-                                                                                             'shell', 'grid',
-                                                                                             'breadthfirst', 'sin',
-                                                                                             'wavy_spiral']],
-                                                   value='kamada_kawai',
-                                               ),
-                                               html.H4("Highlight Node"),
+                                               html.Div(children=[
+                                                   html.H4("Graph Layout", style=styles['h4']),
+                                                   html.Label("Layout:", style=styles['label']),
+                                                   dcc.Dropdown(
+                                                       id='layout-dropdown',
+                                                       options=[{'label': layout,
+                                                                 'value': layout} for layout in ['kamada_kawai', 'spring',
+                                                                                                 'circular', # 'cose',
+                                                                                                 'shell', 'grid',
+                                                                                                 'breadthfirst', 'sin',
+                                                                                                 'wavy_spiral']],
+                                                       value='kamada_kawai',
+                                                   ),
+                                               ]),
+                                               html.H4("Highlight Node", style=styles['h4']),
                                                html.Label("Node label:", style=styles['label']),
                                                dcc.Input(id='node-label', type='text', value=''),
                                                html.Button('Highlight Node', id='highlight-button', n_clicks=0),
-                                               html.H4("Node Size"),
+                                               html.H4("Node Size", style=styles['h4']),
                                                dcc.Slider(id='node-size-slider', min=0.01, max=12, step=0.01, value=4,
                                                           marks={0.01: 'smaller', 12: 'larger'},
                                                           tooltip={"placement": "top", "always_visible": False},
                                                           ),
-                                               html.H4("Node opacity"),
+                                               html.H4("Node opacity", style=styles['h4']),
                                                dcc.Slider(id='node-opacity-slider', min=0.0, max=1.0, step=0.01, value=1.,
                                                           marks={0: 'transparent', 1: 'opaque'},
                                                           tooltip={"placement": "top", "always_visible": False},
                                                           ),
-                                               html.H4("Set Node Color"),
-                                               # html.Label(html.B("Set Fixed Color")), 
-                                               html.Label("Set Fixed Color", style=styles['label_b']),
-                                               html.Label("Color:", style=styles['label']),
-                                               dcc.Input(id='node-fixed-color', type='text', value=''),
-                                               html.Button('Color nodes', id='fixed-color-button', n_clicks=0),
-                                               # html.Label(html.B("Color By Node Attribute")), 
-                                               html.Label("Color By Node Attribute", style=styles['label_b']),
-                                               html.Label("Node attribute:", style=styles['label']),
-                                               dcc.Dropdown(
-                                                   id='node-attribute-dropdown',
-                                                   options=[{'label': 'None',
-                                                             'value': 'None'}] + [{'label': attr,
-                                                                                   'value': attr} for attr in G.nodes(data=True)[0].keys()],
-                                                   value='None',
-                                               ),
+                                               html.H4("Set Node Color", style=styles['h4']),
+                                               # html.Label(html.B("Set Fixed Color")),
+                                               html.Div(children=[
+                                                   html.Label("Set Fixed Color", style=styles['label_b']),
+                                                   # html.Br(style={'font-size': '2'}),
+                                                   html.Label("Color:", style=styles['label']),
+                                                   dcc.Input(id='node-fixed-color', type='text', value=''),
+                                                   html.Button('Color nodes', id='fixed-color-button', n_clicks=0),
+                                               ]),
+                                               # html.Label(html.B("Color By Node Attribute")),
+                                               # html.Br(),
+                                               html.Div(children=[
+                                                   html.Label("Color By Node Attribute", style=styles['label_b']),
+                                                   # html.Br(),
+                                                   html.Label("Node attribute:", style=styles['label']),
+                                                   dcc.Dropdown(
+                                                       id='node-attribute-dropdown',
+                                                       # BBB options=[{'label': 'None',
+                                                       # BBB          'value': 'None'}] + [{'label': attr,
+                                                       # BBB                             'value': attr} for attr in G.nodes(data=True)[0].keys()],
+                                                       options=[{'label': attr,
+                                                                 'value': attr} for attr in G.nodes(data=True)[0].keys()],
+                                                       value=None, # BBB 'None',
+                                                   ),
+                                               ]),
                                                # html.Label(html.B("Color by Data Feature")),
+                                               # html.Br(),
                                                html.Label("Color by Data Feature", style=styles['label_b']),
-                                               html.Label("Dataset:", style=styles['label']),                                               
+                                               # html.Br(),
+                                               html.Label("Dataset:", style=styles['label']),
                                                dcc.Dropdown(
                                                    id='keeper-data-dropdown',
-                                                   options=[{'label': 'None',
-                                                             'value': 'None'}] + [{'label': dataset.label,
-                                                                                   'value': dataset.label} for dataset in keeper.data],
-                                                   value='None', # 'branch'
+                                                   # BBB options=[{'label': 'None',
+                                                   # BBB          'value': 'None'}] + [{'label': dataset.label,
+                                                   # BBB                                'value': dataset.label} for dataset in keeper.data],
+                                                   options=[{'label': dataset.label,
+                                                             'value': dataset.label} for dataset in keeper.data],
+                                                   value=None, # BBB 'None', # 'branch'
                                                ),
                                                html.Label("Feature:", style=styles['label']),
-                                               dcc.Dropdown(id='feature-label', options=[], value='None'),
+                                               dcc.Dropdown(id='feature-label', options=[], value=None), # 'None'), AAA 
                                                # html.Button('Color nodes', id='node-color-button', n_clicks=0), # here
-                                               html.H4("Colormap for Nodes"),
+                                               html.H4("Colormap for Nodes", style=styles['h4']),
                                                html.Div([
                                                    dcc.RadioItems(id='node-colormap-type',
                                                                   options=[
@@ -730,23 +762,25 @@ def renderer(keeper, pose_key, distance_key):
                                                        value='Turbo_r', # 'YlGnBu',
                                                    ),
                                                ]),                                               
-                                               html.H4("Edge Width"),
-                                               dcc.Slider(id='edge-width-slider', min=0.001, max=14, step=0.001, value=0.09,
+                                               html.H4("Edge Width", style=styles['h4']),
+                                               dcc.Slider(id='edge-width-slider', min=0.001, max=14, step=0.001, value=0.1,
                                                           marks={0.001: 'thinner', 14: 'wider'},
                                                           tooltip={"placement": "top", "always_visible": False},
                                                           ),
-                                               html.H4("Set Edge Color"),
+                                               html.H4("Set Edge Color", style=styles['h4']),
                                                # html.Label(html.B("Color by Edge Attribute")),
-                                               html.Label("Color by Edge Attribute", style=styles['label']),
+                                               html.Label("Color by Edge Attribute", style=styles['label_b']),
                                                html.Label("Edge attribute:", style=styles['label']),
                                                dcc.Dropdown(
                                                    id='edge-attribute-dropdown',
-                                                   options=[{'label': 'None',
-                                                             'value': 'None'}] + [{'label': attr,
-                                                                                   'value': attr} for attr in list(G.edges(data=True))[0][-1].keys()],
-                                                   value='None', 
+                                                   # BBB options=[{'label': 'None',
+                                                   # BBB          'value': 'None'}] + [{'label': attr,
+                                                   # BBB                                'value': attr} for attr in list(G.edges(data=True))[0][-1].keys()],
+                                                   options=[{'label': attr,
+                                                             'value': attr} for attr in list(G.edges(data=True))[0][-1].keys()],
+                                                   value=None, # BBB 'None', 
                                                ),
-                                               html.H4("Colormap for Edges"),
+                                               html.H4("Colormap for Edges", style=styles['h4']),
                                                html.Div([
                                                    dcc.RadioItems(id='edge-colormap-type',
                                                                   options=[
@@ -832,7 +866,7 @@ def renderer(keeper, pose_key, distance_key):
                                           {
                                               'selector': '.highlight',
                                               'style': {
-                                                  'border-width': '2px', # 20,
+                                                  'border-width': '1.5px', # 20,
                                                   'border-color': 'red', # 'black',
                                                   # 'outline-width': 20,
                                                   # 'outline-color': 'black',
@@ -841,8 +875,8 @@ def renderer(keeper, pose_key, distance_key):
                                           {
                                               'selector': '.highlight_box_select',
                                               'style': {
-                                                  'border-width': '2px',
-                                                  'border-color': 'black',
+                                                  'border-width': '1.5px',
+                                                  'border-color': 'gray', # 'black',
                                                   # 'z-index': 1999,
                                               },
                                           },
@@ -853,28 +887,33 @@ def renderer(keeper, pose_key, distance_key):
                               ]),
                               # begin box over
                               html.Div(style=styles['stat-panel-container'], children=[
-                                  html.H3("Statistical Testing"),
+                                  html.H3("Statistical Testing", style=styles['h4']),
+                                  html.H4("Options", style=styles['h4']),
                                   html.Div(style=styles['stat-panel'], # {'display': 'flex', 'flex': 0.3, 'height': '100%'},
                                            children=[
                                                html.Div([
                                                    html.Label("Dataset:", style=styles['label']),
                                                    dcc.Dropdown(
                                                        id='stat-keeper-data-dropdown',
-                                                       options=[{'label': 'None',
-                                                                 'value': 'None'}] + [{'label': dataset.label,
-                                                                                       'value': dataset.label} for dataset in keeper.data],
-                                                       value='None'),
+                                                       # BBB options=[{'label': 'None',
+                                                       # BBB          'value': 'None'}] + [{'label': dataset.label,
+                                                       # BBB                                'value': dataset.label} for dataset in keeper.data],
+                                                       options=[{'label': dataset.label,
+                                                                 'value': dataset.label} for dataset in keeper.data],
+                                                       value=None), # BBB 'None'),
+                                                   # html.Br(style={'font-size': '6'}),
                                                    ]),
                                                html.Div([
-                                                   html.Label("Statistical test:", style=styles['label']),
+                                                   html.Label("Statistical test:", style=styles['label_tspace']),
                                                    dcc.Dropdown(id='stat-test-dropdown',
                                                                 options=[{'label': 'Mann Whitney U Test', 'value': 'MWU'},
                                                                          {'label': 'T-test', 'value': 't-test'}], value='MWU'),
                                                    html.Div(children=["alpha: ",
                                                                       dcc.Input(id='alpha-label', type='number', min=0., max=1., value=0.05, step=0.001)]),
+                                                   # html.Br(style={'font-size': '6'}),
                                                    ]),
                                                html.Div([
-                                                   html.Label("Multiple test correction:", style=styles['label']),
+                                                   html.Label("Multiple test correction:", style=styles['label_tspace']),
                                                    dcc.Dropdown(id='correction-drop-down',
                                                                 options=[{'label': k,
                                                                           'value': kk} for k,kk in zip(['Bonferroni', 'Sidak', 'Holm-Sidak', 'Holm',
@@ -886,13 +925,15 @@ def renderer(keeper, pose_key, distance_key):
                                                                 value='fdr_bh'),
                                                    ]),
                                            ]),
+                                  html.H4("Results", style=styles['h4']),
                                   html.Div(id="box-output", children=[],
                                            # style={'display': 'flex', 'flex': 0.7},
                                            style=styles['stat-table'],
                                            ),
                                   html.Button("Download Data", id="btn-download", n_clicks=0, style={'display': 'none'}),
                                   dcc.Download(id="download-data"),
-                                  html.Pre(id="box-selected-labels", style=styles['pre_box_labels'], # children=[],
+                                  html.Pre(id="box-selected-labels", style=styles['pre_box_labels'], 
+                                           children=['Selected nodes'],
                                            ),
                               ]),
                               # end box here
@@ -1094,7 +1135,7 @@ def renderer(keeper, pose_key, distance_key):
     def display_selected_nodes(data, keeper_data_label, test, alpha, method):
         # print(f"display_selected_nodes : TRIGGERED INPUT = {callback_context.triggered[0]['prop_id']}")
         # print(f"display selected nodes = is box data none: {data is None} - data = {data}")
-        if (not data) or (keeper_data_label == 'None') :
+        if (not data) or (keeper_data_label is None): # BBB == 'None') :
             return "", {'display': 'none'}, 'Selected nodes' # [] # "No nodes selected."
                               
         selected_obs = set([node['name'] for node in data])
@@ -1123,7 +1164,7 @@ def renderer(keeper, pose_key, distance_key):
                      pd.api.types.is_numeric_dtype(record[i]) else \
                      {"name": i, "id": i} for i in record.columns],
             data=record.to_dict('records'),
-            style_table={'height': '200px',
+            style_table={'height': '100%', # '200px',
                          'overflowY': 'scroll', # 'auto',
                          'overflowX': 'scroll'},
             style_cell={'textAlign': 'left',
@@ -1137,7 +1178,7 @@ def renderer(keeper, pose_key, distance_key):
                 'color': 'black',
                 'border': '1px solid black',
             },
-            page_size=20,  # Adjust as needed for your display
+            page_size=10,  # Adjust as needed for your display
             style_data={
                 'color': 'black',
                 'backgroundColor': 'white',
@@ -1162,7 +1203,7 @@ def renderer(keeper, pose_key, distance_key):
         #         dcc.Download(id="download-data")]
         # label_output = [html.Pre(", ".join(selected_obs),
         #                          style=styles['pre_box_labels'])]
-        label_output = ", ".join(selected_obs)
+        label_output = "Selected nodes' labels: " + ", ".join(selected_obs)
         return dash_record, {'display': 'block'}, label_output # mlti
         
 
@@ -1194,10 +1235,10 @@ def renderer(keeper, pose_key, distance_key):
             return dcc.send_bytes(output.getvalue(), fname+".xlsx")
                                                
 
-    @app.callback(
-        Output('feature-label', 'options'),
-        Input('keeper-data-dropdown', 'value'),
-    )
+    # @app.callback(
+    #     Output('feature-label', 'options'),
+    #     Input('keeper-data-dropdown', 'value'),
+    # )
     def set_feature_options(data_label):
         """ return list of feature options for given data in the keeper """
         if (data_label is None) or (data_label == 'None'):
@@ -1276,6 +1317,7 @@ def renderer(keeper, pose_key, distance_key):
         Output('node-attribute-dropdown', 'value'), # (node_attr)
         Output('keeper-data-dropdown', 'value'), # (data_label)
         Output('feature-label', 'value'), # (ft_label)
+        Output('feature-label', 'options'), # (fl_label_opts) 
         Output('network-graph', 'zoom'), # (current_zoom)
         Output('network-graph', 'pan'), # (current_pan)
         Output('node-colorbars-div', 'children'), # (node_cbar_vis_in)
@@ -1312,8 +1354,9 @@ def renderer(keeper, pose_key, distance_key):
         State('network-graph', 'zoom'), # (current_zoom)
         State('network-graph', 'pan'), # (current_pan)
         # Input('node-color-button', 'n_clicks'),    # here
-        State('keeper-data-dropdown', 'value'), # (data_label)
+        Input('keeper-data-dropdown', 'value'), # (data_label)
         Input('feature-label', 'value'),                   # here : State -> Input   (ft_label) xxx
+        State('feature-label', 'options'), # (fl_label_opts) 
         State('node-fixed-color', 'value'),  # (node_fixed_color)
         Input('fixed-color-button', 'n_clicks'),           # (node_fixed_color_n_clicks) xxx
         Input('pose-button', 'n_clicks'),                  # (pose_n_clicks) xxx
@@ -1341,7 +1384,7 @@ def renderer(keeper, pose_key, distance_key):
                      stat_test, alpha, stat_correction, # new
                      elements_in, dimensions,
                      current_zoom, current_pan, # feature_n_clicks, # here
-                     data_label, ft_label,
+                     data_label, ft_label, fl_label_opts,
                      node_fixed_color, node_fixed_color_n_clicks, # node_cmap_type,
                      pose_n_clicks, pose_key, pose_dist_key,
                      # box_select_node_data,
@@ -1353,15 +1396,8 @@ def renderer(keeper, pose_key, distance_key):
                      ): 
         # Determine which input triggered the callback
         triggered_input = callback_context.triggered[0]['prop_id'].split('.')[0]
-        triggered_attr = callback_context.triggered[0]['prop_id'].split('.')[1]
+        triggered_attr = callback_context.triggered[0]['prop_id'].split('.')[1]        
 
-        print("-------")
-        print(f"TRIGGERED INPUT = {callback_context.triggered[0]['prop_id']}")
-        #  print(f"select_node_data = {select_node_data}")
-        # print(f"tap_node_data = {tap_node_data}")
-        print("--------")
-
-        # print(f"update graph = select node data in = {select_node_data}")
         
         # only update the highlighting of the box selected nodes
         if (triggered_input == 'network-graph') and (triggered_attr == 'selectedNodeData'):  # 'boxSelectedData'): #
@@ -1370,19 +1406,13 @@ def renderer(keeper, pose_key, distance_key):
                 stored_selected_labels = set()
             else:
                 stored_selected_labels = set([node['name'] for node in stored_selected_node_data])
+            
 
-            tap_label = '' if tap_node_data is None else tap_node_data['name']
-            stored_tap_label = '' if stored_tap_node_data is None else stored_tap_node_data['name']
+            tap_label = '' if tap_node_data is None else tap_node_data['name']            
+            stored_tap_label = '' if stored_tap_node_data is None else stored_tap_node_data['name']            
 
             if (len(selected_labels - stored_selected_labels) == 1) and not tap_node_data:
                 print("*** Expected tapNodeData....")
-            
-                
-
-            print("--- ENTERED TRIGGERED BY selectedNodeData ---")
-
-            print(f"--- tapNodeData = {tap_node_data}; \n---stored tapNodeData = {stored_tap_node_data}")
-            print(f"--- selectedNodeData = {selected_node_data}; \n---stored selectedNodeData = {stored_selected_node_data}")
             
             if tap_node_data and not stored_tap_node_data:
                 triggered_attr = 'tapNodeData'
@@ -1460,8 +1490,8 @@ def renderer(keeper, pose_key, distance_key):
 
                 # no_update
                 return (elements, # stylesheet, # select_node_data,
-                        node_attr, data_label, ft_label,
-                        current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, # tap_node_data, # NOTE: should this be here?
+                        node_attr, data_label, ft_label, fl_label_opts,
+                        current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
                         node_fixed_color, mouseover_node_data,
                         stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
                         box_selected_output)
@@ -1473,8 +1503,19 @@ def renderer(keeper, pose_key, distance_key):
                                                                                                          stat_test, alpha,
                                                                                                          stat_correction)
             return (elements_in, # stylesheet, # select_node_data,
-                    node_attr, data_label, ft_label,
-                    current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, # tap_node_data, # NOTE: should this be here?
+                    node_attr, data_label, ft_label, fl_label_opts,
+                    current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
+                    node_fixed_color, mouseover_node_data,
+                    stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
+                    box_selected_output)
+        
+
+        if triggered_input == 'keeper-data-dropdown':
+            fl_label_opts = set_feature_options(data_label)
+            ft_label = None
+            return (elements_in, # stylesheet, # select_node_data,
+                    node_attr, data_label, ft_label, fl_label_opts,
+                    current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
                     node_fixed_color, mouseover_node_data,
                     stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
                     box_selected_output)
@@ -1543,17 +1584,17 @@ def renderer(keeper, pose_key, distance_key):
         # node_fixed_color, node_fixed_color_n_clicks
         # 'fixed-color-button'
         if triggered_input == 'fixed-color-button': 
-            node_attr_value = 'None'
-            data_label = 'None'
-            ft_label = ''
+            node_attr_value = None # BBB 'None'
+            data_label = None, # BBB 'None'
+            ft_label = None # '' AAA
             stored_tap_node_data = None # tap_node_data = None
         elif (triggered_input == 'network-graph') and (triggered_attr == 'tapNodeData'):
             stored_tap_node_data = tap_node_data
             # print(f"ENTERED TAPNODEDATA \n-- select_node_data = {select_node_data}\n--tap_node_data = {tap_node_data}\n\n")
             node_attr = int(tap_node_data['id'])
-            node_attr_value = 'None'
-            data_label = 'None'
-            ft_label = ''
+            node_attr_value = None # BBB 'None'
+            data_label = None, # BBB 'None'
+            ft_label = None # '' AAA
             node_fixed_color = ''
             # if node_cmap in DISCRETE_COLORMAP_OPTIONS:
             #     node_cmap_type = 'sequential'
@@ -1561,12 +1602,12 @@ def renderer(keeper, pose_key, distance_key):
         elif triggered_input == 'node-attribute-dropdown':
             # print("ENTERED NODE ATTRIBUTE DROPDOWN")
             node_attr_value = node_attr
-            data_label = 'None'
-            ft_label = ''
+            data_label = None, # BBB 'None'
+            ft_label = None # '' AAA
             stored_tap_node_data = None
             node_fixed_color = '' 
         elif triggered_input == 'feature-label': # 'node-color-button':  # here
-            node_attr_value = 'None'
+            node_attr_value = None # BBB 'None'
             stored_tap_node_data = None
             node_fixed_color = '' 
         else:
@@ -1574,20 +1615,23 @@ def renderer(keeper, pose_key, distance_key):
                 node_attr_value = node_attr 
             else: 
                 node_attr = int(stored_tap_node_data['id'])
-                node_attr_value = 'None'
-                data_label = 'None'
-                ft_label = ''
+                node_attr_value = None # BBB  'None'
+                data_label = None # BBB 'None'
+                ft_label = None # ''  AAA
                 node_fixed_color = ''
 
         # print(f"after - tap_node_data = {tap_node_data}")
 
-        if (data_label != 'None') and (ft_label is not None):
+        # BBB if (data_label != 'None') and (ft_label is not None):
+        if (data_label is not None) and (ft_label is not None):
             nc = keeper.data[data_label].subset(features=[ft_label]).loc[ft_label].values
         else:
             nc = None
 
-        nca = None if (node_attr=='None' and data_label=='None') else node_attr if node_attr!='None' else nc
-        eca = None if edge_attr=='None' else edge_attr
+        # BBB nca = None if (node_attr=='None' and data_label=='None') else node_attr if node_attr!='None' else nc
+        nca = None if (node_attr is None and data_label is not None) else node_attr if (node_attr is not None) else nc
+        # BBB eca = None if edge_attr=='None' else edge_attr
+        eca = None if edge_attr is None else edge_attr
         nfc = node_fixed_color if node_fixed_color != '' else '#888' 
         elements, node_cbar_vis, edge_cbar_vis = nx_to_cytoscape(G, pos=pos, 
                                                                  node_color_attr=nca,
@@ -1714,7 +1758,7 @@ def renderer(keeper, pose_key, distance_key):
         #         node_fixed_color, mouseover_node_data, # , node_cmap_type # , node_cmap
         #         )
         return (elements, # stylesheet, # select_node_data,
-                node_attr_value, data_label, ft_label,
+                node_attr_value, data_label, ft_label, fl_label_opts,
                 current_zoom, current_pan, node_cbar_vis, edge_cbar_vis, # tap_node_data, # NOTE: should this be here?
                 node_fixed_color, mouseover_node_data,
                 stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
@@ -1743,7 +1787,7 @@ def renderer(keeper, pose_key, distance_key):
     return app
 
     
-def render_pose(keeper, G, distance_key):    
+def render_pose(keeper, G, distance_key, port=8090):    
     """ Render the interactive POSE visualization in a JupyterLab notebook
 
     Parameters
@@ -1758,5 +1802,5 @@ def render_pose(keeper, G, distance_key):
         (intended to be the distance used to construct the POSE).
     """
     app = renderer(keeper, G, distance_key)
-    app.run_server(mode='jupyterlab', host="127.0.0.1", port=8090, dev_tools_ui=True, debug=True, # False,
+    app.run_server(mode='jupyterlab', host="127.0.0.1", port=port, dev_tools_ui=True, debug=True, # False,
               dev_tools_hot_reload=True, threaded=True)
