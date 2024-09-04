@@ -1,6 +1,7 @@
 import itertools
 import io
 
+import dash_bootstrap_components as dbc
 import dash_cytoscape as cyto
 import dash.exceptions as dash_exceptions
 import dash_table
@@ -23,6 +24,10 @@ from matplotlib import colormaps as mpl_cm
 from .visualization import sin_layout, wavy_curve_layout
 from ..methods.stats import stat_test
 
+from ..methods import stats as ms
+from importlib import reload
+reload(ms)
+stat_test = ms.stat_test
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 styles = {
@@ -51,20 +56,25 @@ styles = {
         'display': 'block', # 'inline-block',
         'overflow-y': 'scroll', 
         'height': '81%',
-        'paddingRight': '15px',
-        'paddingLeft': '8px',
+        'paddingRight': '13px', # '15px', # changed from '15px' when switched to fieldset
+        # 'paddingLeft': '8px', # commented out when switched to fieldset
         'paddingBottom': '3px',
-        'border': 'thin solid lightgrey',
-        'border-radius': '10px',
+        # 'border': 'thin solid lightgrey',
+        # 'border-radius': '10px',
         'gap': '3px',
         'z-index': 999,
+    },
+    'fieldset-panel': {
+        'border': 'thin solid lightgrey', # #614051',
+        'border-radius': '10px',
+        'margin-bottom': '6px',
     },
     'stat-panel-container': {
         'width': '20%',
         # 'flex': '1.2 1.1 0', # '0.15',
         # 'flex': '0 1.1 20%',
         # 'flex': '0 0 20%',
-        'display': 'inline-block',
+        'display': 'block', # 'inline-block',
         'verticalAlign': 'top', 
         'border': '1px solid black', 
         'border-radius': '20px', 
@@ -74,13 +84,13 @@ styles = {
     'stat-panel' : {        
         'display': 'block', # 'inline-block',
         'overflow-y': 'scroll', 
-        'height': '31%',        
+        'height': '37%', # '34%',
         'paddingRight': '15px',
         'paddingLeft': '8px',
         'paddingBottom': '3px',
         'border': 'thin solid lightgrey',
         'border-radius': '10px',
-        # 'width': '90%', # here
+        'width': '88%', # here
         # 'position': 'relative',
         'z-index': 999,
     },
@@ -121,9 +131,11 @@ styles = {
     },
     'stat-table': {
         'padding': '3px',
-        'height': '20%',
-        # 'dislay': 'inline-block',
+        'height': '29%',
+        # 'width': '100%', # MY NEW
+        # 'dislay': 'block',
         'overflowY': 'auto',
+        'margin-top': '10px',
         # 'border': 'thin lightgrey solid',
     },
     'pre_box_labels': {
@@ -140,6 +152,7 @@ styles = {
         'height': '10%',
         'paddingBottom': '3px',
         'color': 'gray',
+        # 'width': '24%', # MY NEW
     },
     'label': {
         'display': 'block',
@@ -164,7 +177,16 @@ styles = {
     },
     'h4': {
         'margin-bottom': '3px',
-    },   
+    },
+    'h3': {
+        'margin-bottom': '3px',
+        'margin-top': '10px',
+    },
+    'fieldset-legend': {
+        'font-size': '14px',
+        # 'color': '#614051',
+        # 'font-weight': 'bold',
+    },
 }
 
 # COLORMAP_OPTIONS = ['magma', 'inferno', 'plasma', 'viridis', 'cividis', 'twilight', 'turbo',
@@ -631,9 +653,14 @@ def renderer(keeper, pose_key, distance_key):
     G = keeper.graphs[pose_key]
     
 
+    # stylesheet with the .dbc class from dash-bootstrap-templates library                                                                                    
+    # dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
+    
     # Initialize the app
     # app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
-    app = JupyterDash(__name__, suppress_callback_exceptions=True)
+    app = JupyterDash(__name__, suppress_callback_exceptions=True,
+                      # external_stylesheets=[dbc.themes.FLATLY, dbc_css],
+                      )
 
     # Define the layout of the app
 
@@ -654,8 +681,10 @@ def renderer(keeper, pose_key, distance_key):
                                            html.H3("Settings", style=styles['h4']),
                                            html.Div([
                                                dcc.Store(id='container-dimensions'),
-                                               html.Div(children=[
-                                                   html.H4("POSE", style=styles['h4']),
+                                               # html.Div(children=[
+                                               # html.H4("POSE", style=styles['h4']),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('POSE', style=styles['fieldset-legend']),
                                                    html.Label("POSE:", style=styles['label']),
                                                    dcc.Dropdown(
                                                        className='custom-dropdown',
@@ -672,10 +701,12 @@ def renderer(keeper, pose_key, distance_key):
                                                                  'value': ky} for ky in [dd.label for dd in keeper.distances]],
                                                        value=distance_key,
                                                    ),
-                                                   html.Button('Select POSE', id='pose-button', n_clicks=0),
+                                                   html.Button('Select POSE', id='pose-button', n_clicks=0),                   
                                                ]),
-                                               html.Div(children=[
-                                                   html.H4("Graph Layout", style=styles['h4']),
+                                               # html.Div(children=[
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Graph Layout', style=styles['fieldset-legend']),
+                                                   # html.H4("Graph Layout", style=styles['h4']),
                                                    html.Label("Layout:", style=styles['label']),
                                                    dcc.Dropdown(
                                                        id='layout-dropdown',
@@ -688,115 +719,143 @@ def renderer(keeper, pose_key, distance_key):
                                                        value='kamada_kawai',
                                                    ),
                                                ]),
-                                               html.H4("Highlight Node", style=styles['h4']),
-                                               html.Label("Node label:", style=styles['label']),
-                                               dcc.Input(id='node-label', type='text', value=''),
-                                               html.Button('Highlight Node', id='highlight-button', n_clicks=0),
-                                               html.H4("Node Size", style=styles['h4']),
-                                               dcc.Slider(id='node-size-slider', min=0.01, max=12, step=0.01, value=4,
-                                                          marks={0.01: 'smaller', 12: 'larger'},
-                                                          tooltip={"placement": "top", "always_visible": False},
-                                                          ),
-                                               html.H4("Node opacity", style=styles['h4']),
-                                               dcc.Slider(id='node-opacity-slider', min=0.0, max=1.0, step=0.01, value=1.,
-                                                          marks={0: 'transparent', 1: 'opaque'},
-                                                          tooltip={"placement": "top", "always_visible": False},
-                                                          ),
-                                               html.H4("Set Node Color", style=styles['h4']),
-                                               # html.Label(html.B("Set Fixed Color")),
-                                               html.Div(children=[
-                                                   html.Label("Set Fixed Color", style=styles['label_b']),
-                                                   # html.Br(style={'font-size': '2'}),
-                                                   html.Label("Color:", style=styles['label']),
-                                                   dcc.Input(id='node-fixed-color', type='text', value=''),
-                                                   html.Button('Color nodes', id='fixed-color-button', n_clicks=0),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Highlight Node', style=styles['fieldset-legend']),
+                                                   # html.H4("Highlight Node", style=styles['h4']),
+                                                   html.Label("Node label:", style=styles['label']),
+                                                   dcc.Input(id='node-label', type='text', value=''),
+                                                   html.Button('Highlight Node', id='highlight-button', n_clicks=0),
                                                ]),
-                                               # html.Label(html.B("Color By Node Attribute")),
-                                               # html.Br(),
-                                               html.Div(children=[
-                                                   html.Label("Color By Node Attribute", style=styles['label_b']),
-                                                   # html.Br(),
-                                                   html.Label("Node attribute:", style=styles['label']),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Node Size', style=styles['fieldset-legend']),
+                                                   # html.H4("Node Size", style=styles['h4']),
+                                                   dcc.Slider(id='node-size-slider', min=0.01, max=12, step=0.01, value=4,
+                                                              marks={0.01: 'smaller', 12: 'larger'},
+                                                              tooltip={"placement": "top", "always_visible": False},
+                                                              className='my-slider',
+                                                              ),
+                                               ]),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Node Opacity', style=styles['fieldset-legend']),
+                                                   # html.H4("Node Opacity", style=styles['h4']),
+                                                   dcc.Slider(id='node-opacity-slider', min=0.0, max=1.0, step=0.01, value=1.,
+                                                              marks={0: 'transparent', 1: 'opaque'},
+                                                              tooltip={"placement": "top", "always_visible": False},
+                                                              className='my-slider',
+                                                              ),
+                                               ]),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Set Node Color', style=styles['fieldset-legend']),
+                                                   # html.H4("Set Node Color", style=styles['h4']),
+                                                   # # html.Label(html.B("Set Fixed Color")),
+                                                   html.Div(children=[
+                                                       html.Label("Set Fixed Color", style=styles['label_b']),
+                                                       html.Label("Color:", style=styles['label']),
+                                                       dcc.Input(id='node-fixed-color', type='text', value=''),
+                                                       html.Button('Color nodes', id='fixed-color-button', n_clicks=0),
+                                                   ]),
+                                                   # html.Label(html.B("Color By Node Attribute")),
+                                                   html.Div(children=[
+                                                       html.Label("Color By Node Attribute", style=styles['label_b']),
+                                                       html.Label("Node attribute:", style=styles['label']),
+                                                       dcc.Dropdown(
+                                                           id='node-attribute-dropdown',
+                                                           # BBB options=[{'label': 'None',
+                                                           # BBB          'value': 'None'}] + [{'label': attr,
+                                                           # BBB                             'value': attr} for attr in G.nodes(data=True)[0].keys()],
+                                                           options=[{'label': attr,
+                                                                     'value': attr} for attr in G.nodes(data=True)[0].keys()],
+                                                           value=None, # BBB 'None',
+                                                       ),
+                                                   ]),
+                                                   # html.Label(html.B("Color by Data Feature")),
+                                                   html.Label("Color by Data Feature", style=styles['label_b']),
+                                                   html.Label("Dataset:", style=styles['label']),
                                                    dcc.Dropdown(
-                                                       id='node-attribute-dropdown',
+                                                       id='keeper-data-dropdown',
+                                                       # BBB options=[{'label': 'None',
+                                                       # BBB          'value': 'None'}] + [{'label': dataset.label,
+                                                       # BBB                                'value': dataset.label} for dataset in keeper.data],
+                                                       options=[{'label': dataset.label,
+                                                                 'value': dataset.label} for dataset in keeper.data],
+                                                       value=None, # BBB 'None', # 'branch'
+                                                   ),
+                                                   html.Label("Feature:", style=styles['label']),
+                                                   dcc.Dropdown(id='feature-label', options=[], value=None), # 'None'), AAA 
+                                                   # html.Button('Color nodes', id='node-color-button', n_clicks=0), # here
+                                               ]),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Colormap for Nodes', style=styles['fieldset-legend']),
+                                                   # html.H4("Colormap for Nodes", style=styles['h4']),
+                                                   html.Div([
+                                                       dcc.RadioItems(id='node-colormap-type',
+                                                                      options=[
+                                                                          {'label': 'Sequential', 'value': 'sequential'},
+                                                                          {'label': 'Diverging', 'value': 'diverging'},
+                                                                          {'label': 'Discrete', 'value': 'discrete'},
+                                                                      ],
+                                                                      value='sequential',
+                                                                      labelStyle={'display': 'block', 'margin-right': '10px'}, # 'display': 'indline-block'
+                                                                      inputClassName='custom-radioinput',
+                                                                      className='custom-radioitems',
+                                                                      labelClassName='custom-radiolabel',
+                                                                      ),
+                                                       dcc.Dropdown(
+                                                           id='node-colormap-dropdown',
+                                                           options=[{'label': cmap,
+                                                                     'value': cmap} for cmap in SEQUENTIAL_COLORMAP_OPTIONS], # COLORMAP_OPTIONS], # mpl.colormaps()], # ['YlGnBu', 'viridis', 'cividis', 'jet', 'nipy_spectral', 'gist_ncar']],
+                                                           value='Turbo_r', # 'YlGnBu',
+                                                       ),
+                                                   ]),
+                                               ]),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Edge Width', style=styles['fieldset-legend']),
+                                                   # html.H4("Edge Width", style=styles['h4']),
+                                                   dcc.Slider(id='edge-width-slider', min=0.001, max=14, step=0.001, value=0.1,
+                                                              marks={0.001: 'thinner', 14: 'wider'},
+                                                              tooltip={"placement": "top", "always_visible": False},
+                                                              className='my-slider',
+                                                              ),
+                                               ]),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Set Edge Color', style=styles['fieldset-legend']),
+                                                   # html.H4("Set Edge Color", style=styles['h4']),
+                                                   # # html.Label(html.B("Color by Edge Attribute")),
+                                                   html.Label("Color by Edge Attribute", style=styles['label_b']),
+                                                   html.Label("Edge attribute:", style=styles['label']),
+                                                   dcc.Dropdown(
+                                                       id='edge-attribute-dropdown',
                                                        # BBB options=[{'label': 'None',
                                                        # BBB          'value': 'None'}] + [{'label': attr,
-                                                       # BBB                             'value': attr} for attr in G.nodes(data=True)[0].keys()],
+                                                       # BBB                                'value': attr} for attr in list(G.edges(data=True))[0][-1].keys()],
                                                        options=[{'label': attr,
-                                                                 'value': attr} for attr in G.nodes(data=True)[0].keys()],
-                                                       value=None, # BBB 'None',
+                                                                 'value': attr} for attr in list(G.edges(data=True))[0][-1].keys()],
+                                                       value=None, # BBB 'None', 
                                                    ),
                                                ]),
-                                               # html.Label(html.B("Color by Data Feature")),
-                                               # html.Br(),
-                                               html.Label("Color by Data Feature", style=styles['label_b']),
-                                               # html.Br(),
-                                               html.Label("Dataset:", style=styles['label']),
-                                               dcc.Dropdown(
-                                                   id='keeper-data-dropdown',
-                                                   # BBB options=[{'label': 'None',
-                                                   # BBB          'value': 'None'}] + [{'label': dataset.label,
-                                                   # BBB                                'value': dataset.label} for dataset in keeper.data],
-                                                   options=[{'label': dataset.label,
-                                                             'value': dataset.label} for dataset in keeper.data],
-                                                   value=None, # BBB 'None', # 'branch'
-                                               ),
-                                               html.Label("Feature:", style=styles['label']),
-                                               dcc.Dropdown(id='feature-label', options=[], value=None), # 'None'), AAA 
-                                               # html.Button('Color nodes', id='node-color-button', n_clicks=0), # here
-                                               html.H4("Colormap for Nodes", style=styles['h4']),
-                                               html.Div([
-                                                   dcc.RadioItems(id='node-colormap-type',
-                                                                  options=[
-                                                                      {'label': 'Sequential', 'value': 'sequential'},
-                                                                      {'label': 'Diverging', 'value': 'diverging'},
-                                                                      {'label': 'Discrete', 'value': 'discrete'},
-                                                                  ],
-                                                                  value='sequential',
-                                                                  labelStyle={'display': 'block', 'margin-right': '10px'}, # 'display': 'indline-block'
-                                                                  ),
-                                                   dcc.Dropdown(
-                                                       id='node-colormap-dropdown',
-                                                       options=[{'label': cmap,
-                                                                 'value': cmap} for cmap in SEQUENTIAL_COLORMAP_OPTIONS], # COLORMAP_OPTIONS], # mpl.colormaps()], # ['YlGnBu', 'viridis', 'cividis', 'jet', 'nipy_spectral', 'gist_ncar']],
-                                                       value='Turbo_r', # 'YlGnBu',
-                                                   ),
-                                               ]),                                               
-                                               html.H4("Edge Width", style=styles['h4']),
-                                               dcc.Slider(id='edge-width-slider', min=0.001, max=14, step=0.001, value=0.1,
-                                                          marks={0.001: 'thinner', 14: 'wider'},
-                                                          tooltip={"placement": "top", "always_visible": False},
-                                                          ),
-                                               html.H4("Set Edge Color", style=styles['h4']),
-                                               # html.Label(html.B("Color by Edge Attribute")),
-                                               html.Label("Color by Edge Attribute", style=styles['label_b']),
-                                               html.Label("Edge attribute:", style=styles['label']),
-                                               dcc.Dropdown(
-                                                   id='edge-attribute-dropdown',
-                                                   # BBB options=[{'label': 'None',
-                                                   # BBB          'value': 'None'}] + [{'label': attr,
-                                                   # BBB                                'value': attr} for attr in list(G.edges(data=True))[0][-1].keys()],
-                                                   options=[{'label': attr,
-                                                             'value': attr} for attr in list(G.edges(data=True))[0][-1].keys()],
-                                                   value=None, # BBB 'None', 
-                                               ),
-                                               html.H4("Colormap for Edges", style=styles['h4']),
-                                               html.Div([
-                                                   dcc.RadioItems(id='edge-colormap-type',
-                                                                  options=[
-                                                                      {'label': 'Sequential', 'value': 'sequential'},
-                                                                      {'label': 'Diverging', 'value': 'diverging'},
-                                                                      {'label': 'Discrete', 'value': 'discrete'},
-                                                                  ],
-                                                                  value='sequential',
-                                                                  labelStyle={'display': 'block', 'margin-right': '10px'},
-                                                                  ),
-                                                   dcc.Dropdown(
-                                                       id='edge-colormap-dropdown',
-                                                       options=[{'label': cmap,
-                                                                 'value': cmap} for cmap in SEQUENTIAL_COLORMAP_OPTIONS], 
-                                                       value='hot_r',
-                                                   ),
+                                               html.Fieldset(style=styles['fieldset-panel'], children=[
+                                                   html.Legend('Colormap for Edges', style=styles['fieldset-legend']),
+                                                   # html.H4("Colormap for Edges", style=styles['h4']),
+                                                   html.Div([
+                                                       dcc.RadioItems(id='edge-colormap-type',
+                                                                      options=[
+                                                                          {'label': 'Sequential', 'value': 'sequential'},
+                                                                          {'label': 'Diverging', 'value': 'diverging'},
+                                                                          {'label': 'Discrete', 'value': 'discrete'},
+                                                                      ],
+                                                                      value='sequential',
+                                                                      labelStyle={'display': 'block', 'margin-right': '10px'},
+                                                                      inputClassName='custom-radioinput',
+                                                                      className='custom-radioitems',
+                                                                      labelClassName='custom-radiolabel',
+                                                                      ),
+                                                       dcc.Dropdown(
+                                                           id='edge-colormap-dropdown',
+                                                           options=[{'label': cmap,
+                                                                     'value': cmap} for cmap in SEQUENTIAL_COLORMAP_OPTIONS], 
+                                                           value='hot_r',
+                                                       ),
+                                                   ]),
                                                ]),
                                                dcc.Interval(id='interval', interval=1000, n_intervals=0),  # Interval to capture dimensions periodically
                                                
@@ -888,9 +947,11 @@ def renderer(keeper, pose_key, distance_key):
                               # begin box over
                               html.Div(style=styles['stat-panel-container'], children=[
                                   html.H3("Statistical Testing", style=styles['h4']),
-                                  html.H4("Options", style=styles['h4']),
-                                  html.Div(style=styles['stat-panel'], # {'display': 'flex', 'flex': 0.3, 'height': '100%'},
+                                  # html.H4("Options", style=styles['h3']),
+                                  # html.Div(style=styles['stat-panel'], # {'display': 'flex', 'flex': 0.3, 'height': '100%'},
+                                  html.Fieldset(style=styles['fieldset-panel'], # styles['stat-panel'], 
                                            children=[
+                                               html.Legend('Options', style=styles['fieldset-legend']),
                                                html.Div([
                                                    html.Label("Dataset:", style=styles['label']),
                                                    dcc.Dropdown(
@@ -901,7 +962,6 @@ def renderer(keeper, pose_key, distance_key):
                                                        options=[{'label': dataset.label,
                                                                  'value': dataset.label} for dataset in keeper.data],
                                                        value=None), # BBB 'None'),
-                                                   # html.Br(style={'font-size': '6'}),
                                                    ]),
                                                html.Div([
                                                    html.Label("Statistical test:", style=styles['label_tspace']),
@@ -910,7 +970,6 @@ def renderer(keeper, pose_key, distance_key):
                                                                          {'label': 'T-test', 'value': 't-test'}], value='MWU'),
                                                    html.Div(children=["alpha: ",
                                                                       dcc.Input(id='alpha-label', type='number', min=0., max=1., value=0.05, step=0.001)]),
-                                                   # html.Br(style={'font-size': '6'}),
                                                    ]),
                                                html.Div([
                                                    html.Label("Multiple test correction:", style=styles['label_tspace']),
@@ -925,7 +984,10 @@ def renderer(keeper, pose_key, distance_key):
                                                                 value='fdr_bh'),
                                                    ]),
                                            ]),
-                                  html.H4("Results", style=styles['h4']),
+                                  # html.H4("Results", style=styles['h3']),
+                                  # html.Fieldset(style={'width': '100%'}, # styles['stat-panel'],
+                                  #          children=[
+                                  #              html.Legend('Results', style=styles['h3']),
                                   html.Div(id="box-output", children=[],
                                            # style={'display': 'flex', 'flex': 0.7},
                                            style=styles['stat-table'],
@@ -935,6 +997,17 @@ def renderer(keeper, pose_key, distance_key):
                                   html.Pre(id="box-selected-labels", style=styles['pre_box_labels'], 
                                            children=['Selected nodes'],
                                            ),
+                                  html.Div(children=[
+                                      dbc.Switch(id='box-selected-switch', label='Highlight selected nodes',
+                                                 value=True,
+                                                 class_name='custom-switch-container', # # The class of the container (div) 
+                                                 input_class_name='custom-control-input', # The class of the <input> checkbox element.
+                                                 input_style={}, #  The style of the <input> checkbox element.
+                                                 label_class_name='custom-control-label', # CSS classes to apply to the <label> element for each item.
+                                                 label_style={}, # Inline style arguments to apply to the <label> element for each item
+                                                 ),
+                                  ]),
+                                  # ]),
                               ]),
                               # end box here
                           ])
@@ -1141,9 +1214,17 @@ def renderer(keeper, pose_key, distance_key):
         selected_obs = set([node['name'] for node in data])
         unselected_obs = list(set(keeper.observation_labels) - selected_obs)
         selected_obs = list(selected_obs)
+        label_output = "Selected nodes' labels: " + ", ".join(selected_obs)
+        
         df = keeper.data[keeper_data_label].to_frame()
         # select columns that are floats or integers:
-        df = df[df.select_dtypes(include=['float', 'int']).columns]
+        # df = df[df.select_dtypes(include=['float', 'int']).columns]
+        # df = df.loc[df.T.select_dtypes(include=['float', 'int']).columns]
+        rows = [rw for rw, vv in df.iterrows() if all([isinstance(k, (float, int)) for k in vv])]
+        if len(rows) == 0:
+            return "", {'display': 'none'}, label_output 
+        
+        df = df.loc[rows]
         df1 = df[selected_obs]
         df2 = df[unselected_obs]
         df1_mean = df1.mean(axis=1)
@@ -1154,6 +1235,9 @@ def renderer(keeper, pose_key, distance_key):
         record = stat_test(df1, df2, test=test, alpha=alpha, method=method)
         record.insert(0, HL.name, HL)
         record = record.loc[record['p-value'] <= alpha]
+        if record.shape[0] == 0:
+            return "", {'display': 'none'}, label_output
+        
         record = record.sort_values(by='p-value')
         record.index.name = 'feature'
         record = record.reset_index()
@@ -1165,6 +1249,7 @@ def renderer(keeper, pose_key, distance_key):
                      {"name": i, "id": i} for i in record.columns],
             data=record.to_dict('records'),
             style_table={'height': '100%', # '200px',
+                         # 'width': '100%', # '24%', # MY NEW
                          'overflowY': 'scroll', # 'auto',
                          'overflowX': 'scroll'},
             style_cell={'textAlign': 'left',
@@ -1178,7 +1263,7 @@ def renderer(keeper, pose_key, distance_key):
                 'color': 'black',
                 'border': '1px solid black',
             },
-            page_size=10,  # Adjust as needed for your display
+            page_size=5,  # Adjust as needed for your display
             style_data={
                 'color': 'black',
                 'backgroundColor': 'white',
@@ -1203,7 +1288,7 @@ def renderer(keeper, pose_key, distance_key):
         #         dcc.Download(id="download-data")]
         # label_output = [html.Pre(", ".join(selected_obs),
         #                          style=styles['pre_box_labels'])]
-        label_output = "Selected nodes' labels: " + ", ".join(selected_obs)
+        
         return dash_record, {'display': 'block'}, label_output # mlti
         
 
@@ -1260,8 +1345,9 @@ def renderer(keeper, pose_key, distance_key):
         Input('node-size-slider', 'value'), 
         Input('edge-width-slider', 'value'),
         Input('node-opacity-slider', 'value'),
+        Input('box-selected-switch', 'value'),
     )
-    def update_stylesheet(node_size, edge_width, node_opacity):
+    def update_stylesheet(node_size, edge_width, node_opacity, box_switch):
         stylesheet=[
 
             {
@@ -1297,15 +1383,18 @@ def renderer(keeper, pose_key, distance_key):
                     # 'z-index': 1001,
                 },
             },
-            {
-                'selector': '.highlight_box_select',
-                'style': {
-                    'border-width': '1.5px',
-                    'border-color': 'black',
-                    # 'z-index': 1999,
-                },
-            },
         ]
+        if box_switch:
+            stylesheet.append(
+                {
+                    'selector': '.highlight_box_select',
+                    'style': {
+                        'border-width': '1.5px',
+                        'border-color': 'black',
+                        # 'z-index': 1999,
+                    },
+                })
+
         return stylesheet
     
     
@@ -1400,6 +1489,13 @@ def renderer(keeper, pose_key, distance_key):
 
         
         # only update the highlighting of the box selected nodes
+        if (triggered_input == 'network-graph'):
+            # aa = "\n".join([f"\n****\nTriggered_input = {triggered_input}; triggered_attr = {triggered_attr}",
+            #                 f" > selected_labels = {set([node['name'] for node in selected_node_data])}",
+            #                 f" > stored_selected_labels = {'None' if stored_selected_node_data is None else set([node['name'] for node in stored_selected_node_data])}",
+            #                 f" > tap_node_data = {'None' if tap_node_data is None else tap_node_data['name']}",
+            #                 f" > stored_tap_node_data = {'None' if stored_tap_node_data is None else stored_tap_node_data['name']}"])
+            # print(aa)
         if (triggered_input == 'network-graph') and (triggered_attr == 'selectedNodeData'):  # 'boxSelectedData'): #
             selected_labels = set([node['name'] for node in selected_node_data])
             if stored_selected_node_data is None:
@@ -1411,8 +1507,8 @@ def renderer(keeper, pose_key, distance_key):
             tap_label = '' if tap_node_data is None else tap_node_data['name']            
             stored_tap_label = '' if stored_tap_node_data is None else stored_tap_node_data['name']            
 
-            if (len(selected_labels - stored_selected_labels) == 1) and not tap_node_data:
-                print("*** Expected tapNodeData....")
+            # if (len(selected_labels - stored_selected_labels) == 1) and not tap_node_data:
+            #     print("*** Expected tapNodeData....")
             
             if tap_node_data and not stored_tap_node_data:
                 triggered_attr = 'tapNodeData'
@@ -1526,10 +1622,14 @@ def renderer(keeper, pose_key, distance_key):
 
         # if new pose, reset layouts and tapNodeData and selectedNodeData
         if triggered_input == 'pose-button':            
-            positions_records.clear()
-            stored_tap_node_data = None
-            stored_selected_node_data = None 
+            positions_records.clear()            
             mouseover_node_data = None
+            # stored_tap_node_data = None
+            # stored_selected_node_data = None 
+            # box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
+            #                                                                                              stat_keeper_data_label,
+            #                                                                                              stat_test, alpha,
+            #                                                                                              stat_correction)
 
         if not dimensions:
             raise dash_exceptions.PreventUpdate
@@ -1629,7 +1729,7 @@ def renderer(keeper, pose_key, distance_key):
             nc = None
 
         # BBB nca = None if (node_attr=='None' and data_label=='None') else node_attr if node_attr!='None' else nc
-        nca = None if (node_attr is None and data_label is not None) else node_attr if (node_attr is not None) else nc
+        nca = None if (node_attr is None and data_label is None) else node_attr if (node_attr is not None) else nc
         # BBB eca = None if edge_attr=='None' else edge_attr
         eca = None if edge_attr is None else edge_attr
         nfc = node_fixed_color if node_fixed_color != '' else '#888' 

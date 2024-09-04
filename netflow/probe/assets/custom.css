@@ -1,5 +1,11 @@
 /* assets/custom.css */
+
+/* Make sure the dropdown menu extends beyond the container */
+.custom-dropdown .dropdown {
+    width: 200px;
+}
+
 .custom-dropdown .Select-menu-outer {
-    width: 1056px; 
+    width: 1066px; 
 }
 

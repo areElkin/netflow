@@ -632,7 +632,7 @@ def gauss_conv(array, window_size=5, smoothness=2.5):
     return smoothed_array
 
 
-def invariant_measure(profile, G=None, adj=None):
+def invariant_measure(profiles, G=None, adj=None):
     """ Compute the invariant measure of the profile (node weights) on the network.
 
     ..Note:: Either the graph ``G`` or the adjacency matrix ``adj`` must be provided.
@@ -670,14 +670,10 @@ def invariant_measure(profile, G=None, adj=None):
     W = np.multiply(W, profiles) 
     Z = W.sum(axis=0)
     IM = W / Z
+    return IM
     
 
     
 
     
-        
-        
-    
-    
-    
-    
+      

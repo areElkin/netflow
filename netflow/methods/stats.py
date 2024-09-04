@@ -187,7 +187,7 @@ def stat_test(df1, df2, test='MWU', alpha=0.05, method='fdr_bh', **kwargs):
     if test == 'wilcoxon':
         assert (df1.columns == df2.columns).all(), "DataFrames must have the same observations for performing the Wilcoxon Signed Rank Test."
     
-    p_values = [perform_stat_test(df1.loc[k].values, df2.loc[k].values, test, **kwargs) for k in df1.index]
+    p_values = [perform_stat_test(df1.loc[k].values.astype(float), df2.loc[k].values.astype(float), test, **kwargs) for k in df1.index]
 
     corrected_p_values = multipletests(p_values, alpha=alpha, method=method)[1]
 
