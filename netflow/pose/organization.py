@@ -1821,7 +1821,7 @@ class POSER:
             
             
             
-    def branchings_segments(self, n_branches, until_branched=False):
+    def branchings_segments(self, n_branches, until_branched=False, annotate=True):
         """ Detect up to `n_branches` branches and partition the data into corresponding segments.
         
         Parameters
@@ -1839,6 +1839,8 @@ class POSER:
               This is only applicable when branching is being performed. If previous
               iterations of branching has already been performed, it is not possible to
               identify the number of iterations where no branching was performed.
+        annotate : `bool`
+            If `True`, annotate nodes with root and tips.
 
         Returns
         -------
@@ -1861,27 +1863,32 @@ class POSER:
                                    'undecided' : node.is_trunk,
                                    }
 
-        G = self._construct_topology(segs)
-        nx.set_node_attributes(G, {k: 'Yes' if k==self.root else 'No' for k in G},
-                               name='is_root')
-        nx.set_node_attributes(G, {k: vl for k, vl in enumerate(self.pseudo_dist)},
-                       name='pseudo-distance from root')
+        G = self._construct_topology(segs, annotate=annotate)
+        if annotate:
+            nx.set_node_attributes(G, {k: 'Yes' if k==self.root else 'No' for k in G},
+                                   name='is_root')
+            nx.set_node_attributes(G, {k: vl for k, vl in enumerate(self.pseudo_dist)},
+                           name='pseudo-distance from root')
         
         return G
 
 
-    def _construct_topology(self, segs):
+    def _construct_topology(self, segs, annotate=True):
         """ Construct POSE connections between data points.
 
         Parameters
         ----------
         segs : `dict`
             The banched segments indexed by the node's unique identifier
+        annotate : `bool`
+            If `True`, annotate edges with edge origin and distance.
 
         Returns
         -------
         G : `networkx.Graph`
             Graph where each node is a data point and edges reflect connections between them.
+            If ``annotate`` is `True`, the following annotations are added:
+        
             Edges have attributes {'connection' : (str) 'intra-branch' or 'inter-branch'}
             Nodes have attributes
 
@@ -1900,7 +1907,8 @@ class POSER:
         seg_nodes = set(itertools.chain(*[n['seg'] for n in segs.values()]))
         missing_nodes = set(range(self.distances.shape[0])) - seg_nodes
         G.add_nodes_from(list(missing_nodes), branch=-1)
-        nx.set_node_attributes(G, {k: False for k in missing_nodes}, name='undecided')
+        if annotate:
+            nx.set_node_attributes(G, {k: False for k in missing_nodes}, name='undecided')
 
         # add segments and intra-segemnt edges
         for ix, seg in segs.items():
@@ -1908,9 +1916,10 @@ class POSER:
                 G.add_node(seg['seg'][0])
             else:
                 G.add_edges_from(zip(seg['seg'], seg['seg'][1:]), connection='intra-branch')
-            nx.set_node_attributes(G, {v: {'branch': seg['name'],
-                                           'undecided': seg['undecided'],
-                                           } for v in seg['seg']})
+            if annotate:
+                nx.set_node_attributes(G, {v: {'branch': seg['name'],
+                                               'undecided': seg['undecided'],
+                                               } for v in seg['seg']})
 
         # add inter-segment edges
         mx = max(segs.keys())
@@ -1925,31 +1934,35 @@ class POSER:
 
 
         # add if node was ever an unidentified point:
-        nx.set_node_attributes(G, {v: 1 if v in self.unidentified_points else 0 for v in G},
-                               name='unidentified')
+        if annotate:
+            nx.set_node_attributes(G, {v: 1 if v in self.unidentified_points else 0 for v in G},
+                                   name='unidentified')
 
-        nx.set_edge_attributes(G, {ee: self.distances[ee[0], ee[1]] for ee in G.edges()},
-                               name="distance")
-        nx.set_edge_attributes(G, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0],
-                                                                                      ee[1]] for ee in G.edges()},
-                               name="inverted_distance")
+            nx.set_edge_attributes(G, {ee: self.distances[ee[0], ee[1]] for ee in G.edges()},
+                                   name="distance")
+            nx.set_edge_attributes(G, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0],
+                                                                                          ee[1]] for ee in G.edges()},
+                                   name="inverted_distance")
 
         return G
 
 
-    def construct_pose_nn_topology(self, G):
+    def construct_pose_nn_topology(self, G, annotate=True):
         """ Add nearest neighbor (nn) edges to POSE topology.
 
         Parameters
         ----------
         G : `networkx.Graph`
             Nearest-neighbor edges are added to a copy of the POSE graph.
+        annotate : `bool`
+            If `True`, annotate edges.
 
         Returns
         -------
         Gnn : `networkx.Graph`
-            The updated graph with nearest neighbor edges and edge attribute "edge_origin"
-            with the possible values :
+            The updated graph with nearest neighbor edges.
+            If ``annotate`` is `True`, edge attribute "edge_origin"
+            is added with the possible values :
 
             - "POSE" : for edges in the original graph that are not nearest neighbor edges
             - "NN" : for nearest neighbor edges that were not in the original graph
@@ -1957,32 +1970,38 @@ class POSER:
         """
         Gnn = G.copy()
         d = self.distances
-        d = d + (np.max(d)+1e-3)*np.eye(*d.shape)
-        nn = np.argmin(d, axis=0)
-        nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
-        nn_edges = list(set(nn_edges))
+        # d = d + (np.max(d)+1e-3)*np.eye(*d.shape)
+        # nn = np.argmin(d, axis=0)
+        nn = np.argpartition(d, 1, axis=1)[:, 1]
+        if annotate:
+            nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
+            nn_edges = list(set(nn_edges))
 
-        pose_edges = list(set([tuple(sorted(ee)) for ee in Gnn.edges()]))
+            pose_edges = list(set([tuple(sorted(ee)) for ee in Gnn.edges()]))
 
-        nn_unique_edges = list(set(nn_edges) - set(pose_edges))
-        pose_unique_edges = list(set(pose_edges) - set(nn_edges))
-        nn_pose_edges = list(set(nn_edges) & set(pose_edges))
+            nn_unique_edges = list(set(nn_edges) - set(pose_edges))
+            pose_unique_edges = list(set(pose_edges) - set(nn_edges))
+            nn_pose_edges = list(set(nn_edges) & set(pose_edges))
 
-        if len(nn_unique_edges) + len(nn_pose_edges) != len(nn_edges):
-            raise AssertionError("Unexpected number of nearest-neighbor edges.")
+            if len(nn_unique_edges) + len(nn_pose_edges) != len(nn_edges):
+                raise AssertionError("Unexpected number of nearest-neighbor edges.")
 
-        Gnn.add_edges_from(nn_unique_edges)
+            Gnn.add_edges_from(nn_unique_edges)
 
-        nx.set_edge_attributes(Gnn, {**{ee: "POSE + NN" for ee in nn_pose_edges},
-                                     **{ee: "NN" for ee in nn_unique_edges},
-                                     **{ee: "POSE" for ee in pose_unique_edges}},
-                               name="edge_origin")
+            nx.set_edge_attributes(Gnn, {**{ee: "POSE + NN" for ee in nn_pose_edges},
+                                         **{ee: "NN" for ee in nn_unique_edges},
+                                         **{ee: "POSE" for ee in pose_unique_edges}},
+                                   name="edge_origin")
 
-        nx.set_edge_attributes(Gnn, {ee: "intra-branch" if Gnn.nodes[ee[0]]['branch'] == Gnn.nodes[ee[1]]['branch'] else "inter-branch" for ee in nn_unique_edges},
-                               name="connection")
+            nx.set_edge_attributes(Gnn, {ee: "intra-branch" if Gnn.nodes[ee[0]]['branch'] == Gnn.nodes[ee[1]]['branch'] else "inter-branch" for ee in nn_unique_edges},
+                                   name="connection")
 
-        nx.set_edge_attributes(Gnn, {ee: self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="distance")
-        nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
+            nx.set_edge_attributes(Gnn, {ee: self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="distance")
+            nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
+
+        else:
+            nn_edges = [tuple([i,j]) for i, j in zip(range(d.shape[0]), nn)]
+            Gnn.add_edges_from(nn_edges)
 
         return Gnn
 
@@ -3369,7 +3388,7 @@ class TDA:
 
 
     
-    def construct_pose_nn_topology(self, G=None):
+    def construct_pose_nn_topology(self, G=None, annotate=True):
         """ Construct pose topology with edges between nearest neighbors (nn).
 
         Parameters
@@ -3377,12 +3396,15 @@ class TDA:
         G : `networkx.Graph`
             (Optional) If provided, nearest-neighbor edges are added to a copy of the graph.
             If not provided, the graph returned from `self.construct_topology()` is used.
+        annotate : `bool`
+            If `True`, annotate edges with edge origin and distance.
 
         Returns
         -------
         Gnn : `networkx.Graph`
-            The updated graph with nearest neighbor edges and edge attribute "edge_origin"
-            with the possible values :
+            The updated graph with nearest neighbor edges.
+            If ``annotate`` is `True`, edge attribute "edge_origin"
+            is added with the possible values :
 
             - "POSE" : for edges in the original graph that are not nearest neighbor edges
             - "NN" : for nearest neighbor edges that were not in the original graph
@@ -3393,29 +3415,34 @@ class TDA:
         else:
             Gnn = G.copy()
         d = self.distances
-        d = d + (np.max(d)+1e-3)*np.eye(*d.shape)
-        nn = np.argmin(d, axis=0)
-        nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
-        nn_edges = list(set(nn_edges))
+        # d = d + (np.max(d)+1e-3)*np.eye(*d.shape)
+        # nn = np.argmin(d, axis=0)
+        nn = np.argpartition(d, 1, axis=1)[:, 1]
+        if annotate:
+            nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
+            nn_edges = list(set(nn_edges))
 
-        pose_edges = list(set([tuple(sorted(ee)) for ee in Gnn.edges()]))
+            pose_edges = list(set([tuple(sorted(ee)) for ee in Gnn.edges()]))
 
-        nn_unique_edges = list(set(nn_edges) - set(pose_edges))
-        pose_unique_edges = list(set(pose_edges) - set(nn_edges))
-        nn_pose_edges = list(set(nn_edges) & set(pose_edges))
+            nn_unique_edges = list(set(nn_edges) - set(pose_edges))
+            pose_unique_edges = list(set(pose_edges) - set(nn_edges))
+            nn_pose_edges = list(set(nn_edges) & set(pose_edges))
 
-        if len(nn_unique_edges) + len(nn_pose_edges) != len(nn_edges):
-            raise AssertionError("Unexpected number of nearest-neighbor edges.")
+            if len(nn_unique_edges) + len(nn_pose_edges) != len(nn_edges):
+                raise AssertionError("Unexpected number of nearest-neighbor edges.")
 
-        Gnn.add_edges_from(nn_unique_edges)
+            Gnn.add_edges_from(nn_unique_edges)
 
-        nx.set_edge_attributes(Gnn, {**{ee: "POSE + NN" for ee in nn_pose_edges},
-                                     **{ee: "NN" for ee in nn_unique_edges},
-                                     **{ee: "POSE" for ee in pose_unique_edges}},
-                               name="edge_origin")
+            nx.set_edge_attributes(Gnn, {**{ee: "POSE + NN" for ee in nn_pose_edges},
+                                         **{ee: "NN" for ee in nn_unique_edges},
+                                         **{ee: "POSE" for ee in pose_unique_edges}},
+                                   name="edge_origin")
 
-        nx.set_edge_attributes(Gnn, {ee: self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="distance")
-        nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
+            nx.set_edge_attributes(Gnn, {ee: self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="distance")
+            nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
+        else:
+            nn_edges = [tuple([i,j]) for i, j in zip(range(d.shape[0]), nn)]
+            Gnn.add_edges_from(nn_edges)
 
         return Gnn
 
