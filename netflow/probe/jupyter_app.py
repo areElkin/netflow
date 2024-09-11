@@ -923,7 +923,7 @@ def renderer(keeper, pose_key, distance_key):
                                           },
                                           # Class selectors
                                           {
-                                              'selector': '.highlight',
+                                              'selector': '.highlight_by_label',
                                               'style': {
                                                   'border-width': '1.5px', # 20,
                                                   'border-color': 'red', # 'black',
@@ -1374,7 +1374,7 @@ def renderer(keeper, pose_key, distance_key):
             },
             # Class selectors
             {
-                'selector': '.highlight',
+                'selector': '.highlight_by_label',
                 'style': {
                     'border-width': '1.5px',
                     'border-color': 'red',
@@ -1414,11 +1414,13 @@ def renderer(keeper, pose_key, distance_key):
         # Output('network-graph', 'tapNodeData'), # (tap_node_data)
         Output('node-fixed-color', 'value'), # (node_fixed_color)
         Output('network-graph', 'mouseoverNodeData'), # (mouseover_node_data)
-        Output('store-tapNodeData', 'data'), # new (stored_tap_node_data)
+        # Output('store-tapNodeData', 'data'), # new (stored_tap_node_data)
         Output('store-selectedNodeData', 'data'), # new (stored_selected_node_data)
         Output('box-output', 'children'), # new (box_selected_table)
         Output('btn-download', 'style'), # new (stat_download_button_style)
         Output("box-selected-labels", 'children'), # new (box_selected_output)
+        Output('network-graph', 'tapNodeData'),             # (tap_node_data) # ABC added
+        Output('network-graph', 'selectedNodeData'),        # new (selected_node_data) xxx
         # Output('node-colormap-type', 'value'),  # 
         # Output('node-colormap-dropdown', 'value'), # add here
         Input('layout-dropdown', 'value'),                 # (layout) x
@@ -1432,7 +1434,7 @@ def renderer(keeper, pose_key, distance_key):
         Input('edge-colormap-dropdown', 'value'),          # (edge_cmap)
         Input('network-graph', 'tapNodeData'),             # (tap_node_data) xxx
         Input('network-graph', 'selectedNodeData'),        # new (selected_node_data) xxx
-        State('store-tapNodeData', 'data'), # new (stored_tap_node_data)
+        # State('store-tapNodeData', 'data'), # new (stored_tap_node_data)
         State('store-selectedNodeData', 'data'), # new (stored_selected_node_data)
         Input('stat-keeper-data-dropdown', 'value'),       # new (stat_keeper_data_label) xxx
         Input('stat-test-dropdown', 'value'),              # new (stat_test) xxx
@@ -1468,7 +1470,7 @@ def renderer(keeper, pose_key, distance_key):
                      # node_size, edge_width, # moved to its own callback
                      node_attr, edge_attr, node_cmap, edge_cmap, 
                      tap_node_data,
-                     selected_node_data, stored_tap_node_data, # new
+                     selected_node_data, # stored_tap_node_data, # new
                      stored_selected_node_data, stat_keeper_data_label, # new
                      stat_test, alpha, stat_correction, # new
                      elements_in, dimensions,
@@ -1489,45 +1491,116 @@ def renderer(keeper, pose_key, distance_key):
 
         
         # only update the highlighting of the box selected nodes
-        if (triggered_input == 'network-graph'):
-            # aa = "\n".join([f"\n****\nTriggered_input = {triggered_input}; triggered_attr = {triggered_attr}",
-            #                 f" > selected_labels = {set([node['name'] for node in selected_node_data])}",
-            #                 f" > stored_selected_labels = {'None' if stored_selected_node_data is None else set([node['name'] for node in stored_selected_node_data])}",
-            #                 f" > tap_node_data = {'None' if tap_node_data is None else tap_node_data['name']}",
-            #                 f" > stored_tap_node_data = {'None' if stored_tap_node_data is None else stored_tap_node_data['name']}"])
-            # print(aa)
-        if (triggered_input == 'network-graph') and (triggered_attr == 'selectedNodeData'):  # 'boxSelectedData'): #
-            selected_labels = set([node['name'] for node in selected_node_data])
-            if stored_selected_node_data is None:
-                stored_selected_labels = set()
-            else:
-                stored_selected_labels = set([node['name'] for node in stored_selected_node_data])
-            
+        # if (triggered_input == 'network-graph'):
+        #     print(f"selected node data = {selected_node_data}")
+        #     aa = "\n".join([f"\n****\nTriggered_input = {triggered_input}; triggered_attr = {triggered_attr}",
+        #                     f" > selected_node_data type = {type(selected_node_data)}",
+        #                     f" > selected_node_data len if not None = {'None' if selected_node_data is None else len(selected_node_data)}",
+        #                     f" > selected_labels = {'None' if selected_node_data is None else set([node['name'] for node in selected_node_data])}",
+        #                     f" > stored_selected_labels = {'None' if stored_selected_node_data is None else set([node['name'] for node in stored_selected_node_data])}",
+        #                     f" > tap_node_data = {'None' if tap_node_data is None else tap_node_data['name']}",
+        #                     # f" > stored_tap_node_data = {'None' if stored_tap_node_data is None else stored_tap_node_data['name']}"])
+        #                     # f" > stored_tap_node_data = {'None' if stored_tap_node_data is None else stored_tap_node_data}",
+        #                     ])
+        #     print(aa)
+        #     bb = "\n".join([f"\n input selected node data: {selected_node_data}",
+        #                     f" input tap node data: {tap_node_data}",
+        #                     f" input stored selected node data: {stored_selected_node_data}"])
+        #     print(bb)
 
-            tap_label = '' if tap_node_data is None else tap_node_data['name']            
-            stored_tap_label = '' if stored_tap_node_data is None else stored_tap_node_data['name']            
+        if triggered_input == 'highlight-button':
+            elements = elements_in
+            if node_label:
+                labels = set(node_label.split(', '))
+            
+                for element in elements['nodes']:
+                    if element['data'].get('name') in labels:
+                        if 'classes' in element:
+                            if 'highlight_by_label' in element['classes']:
+                                continue
+                            else:
+                                element['classes'] += ' highlight_by_label'
+                        else:
+                            element['classes'] = 'nodes highlight_by_label'
+                    elif 'classes' in element:
+                        element['classes'] = element['classes'].replace(' highlight_by_label', '').strip()
+                    else:
+                        continue
+                    
+            return (elements,
+                    node_attr, data_label, ft_label, fl_label_opts,
+                    current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
+                    node_fixed_color, mouseover_node_data,
+                    stored_selected_node_data, box_selected_table, stat_download_button_style,
+                    box_selected_output, tap_node_data, None) # selected_node_data)
+            
+        if (triggered_input == 'network-graph') and (triggered_attr == 'selectedNodeData'):  # 'boxSelectedData'): #
+            tap_label = '' if tap_node_data is None else tap_node_data['name']            # ABC commented line
+            # stored_tap_label = '' if stored_tap_node_data is None else stored_tap_node_data['name']            # ABC commented line
 
             # if (len(selected_labels - stored_selected_labels) == 1) and not tap_node_data:
             #     print("*** Expected tapNodeData....")
             
-            if tap_node_data and not stored_tap_node_data:
+            # selected_labels = set() if selected_node_data is None else set([node['name'] for node in selected_node_data])
+            selected_labels = [] if selected_node_data is None else list(set([node['name'] for node in selected_node_data]))
+            
+            # if len(selected_labels) == 0: # ABC added line
+            #     stored_selected_node_data = None # ABC added line
+            #     return (elements_in, # ABC added line
+            #             node_attr, data_label, ft_label, fl_label_opts, # ABC added line
+            #             current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, # ABC added line
+            #             node_fixed_color, mouseover_node_data, # ABC added line
+            #             stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style, # ABC added line
+            #             box_selected_output, tap_node_data) # ABC added line            
+                        
+            # ABC begin commenting
+            # if tap_node_data and not stored_tap_node_data:
+            #     triggered_attr = 'tapNodeData'
+            # elif tap_node_data and (len(selected_labels - stored_selected_labels) == 1) and (tap_label == list(selected_labels - stored_selected_labels)[0]):
+            #     triggered_attr = 'tapNodeData'
+            # elif tap_node_data and stored_tap_node_data and (tap_label != stored_tap_label):
+            #     triggered_attr = 'tapNodeData'
+            # else:
+            # ABC end commenting
+
+            if (len(selected_labels) == 1) and (tap_label == selected_labels[0]):
                 triggered_attr = 'tapNodeData'
-            elif tap_node_data and (len(selected_labels - stored_selected_labels) == 1) and (tap_label == list(selected_labels - stored_selected_labels)[0]):
-                triggered_attr = 'tapNodeData'
-            elif tap_node_data and stored_tap_node_data and (tap_label != stored_tap_label):
-                triggered_attr = 'tapNodeData'
+                selected_node_data = None
+                # print(f">>> {selected_node_data} and \n\n {stored_selected_node_data}")
+                # HERE elif (len(selected_labels) == 1) and (tap_label == selected_labels[0]):
             else:
-                
+                if (selected_node_data is not None) and (len(selected_node_data) == 0):
+                    selected_node_data = None
+                    
+                if (stored_selected_node_data is None) and (selected_node_data is None):
+                    stored_selected_node_data = None # if selected_node_data is None else selected_node_data[:] # ABC added line
+                elif (selected_node_data is None): #  or (len(selected_node_data == 0)):
+                    stored_selected_node_data = None
+                elif stored_selected_node_data is None:
+                    stored_selected_node_data = selected_node_data[:] 
+                else: # (stored_selected_node_data is not None) and (selected_node_data is not None)
+                    stored_selected_labels = set([node['name'] for node in stored_selected_node_data])
+                    for node in selected_node_data: # ABC added line
+                        if (node['name'] not in stored_selected_labels) and (node['name'] != tap_label): # ABC added line
+                            stored_selected_node_data.append(node) # ABC added line
+                            stored_selected_labels.add(node['name']) # ABC added line
+                    selected_node_data = None
+
+                # ABC begin indented to the left
                 # a = 0 if stored_selected_node_data is None else len(stored_selected_node_data)
                 # if len(selected_node_data) - a > 1:
-                stored_selected_node_data = selected_node_data
+                # stored_selected_node_data = selected_node_data # ABC commented out
+
                 box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
                                                                                                              stat_keeper_data_label,
                                                                                                              stat_test, alpha,
                                                                                                              stat_correction)
 
                 # update elements
-                selected_obs = set([node['name'] for node in stored_selected_node_data])
+                if stored_selected_node_data is None:
+                    selected_obs = set()
+                else:
+                    selected_obs = set([node['name'] for node in stored_selected_node_data])
 
                 elements = elements_in
                 for element in elements['nodes']:
@@ -1544,9 +1617,6 @@ def renderer(keeper, pose_key, distance_key):
                         element['classes'] = element['classes'].replace(' highlight_box_select', '').strip()
                     else:
                         continue
-
-
-
 
                 # # first remove previously highlighted nodes            
                 # elements = elements_in
@@ -1585,36 +1655,52 @@ def renderer(keeper, pose_key, distance_key):
                 # })
 
                 # no_update
+                # bb = "\n".join([f"\n\n output selected node data: {selected_node_data}",
+                #             f" output tap node data: {tap_node_data}",
+                #             f" output stored selected node data: {stored_selected_node_data}"])
+                # print(bb)
                 return (elements, # stylesheet, # select_node_data,
                         node_attr, data_label, ft_label, fl_label_opts,
                         current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
                         node_fixed_color, mouseover_node_data,
-                        stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
-                        box_selected_output)
-            
+                        # stored_tap_node_data,
+                        stored_selected_node_data, box_selected_table, stat_download_button_style,
+                        box_selected_output, tap_node_data, None) # selected_node_data)
+            # ABC END INDENTATION
+
 
         if triggered_input in ['stat-keeper-data-dropdown', 'stat-test-dropdown', 'alpha-label', 'correction-drop-down']:
             box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
                                                                                                          stat_keeper_data_label,
                                                                                                          stat_test, alpha,
                                                                                                          stat_correction)
+            # bb = "\n".join([f"\n\n output selected node data: {selected_node_data}",
+            #                 f" output tap node data: {tap_node_data}",
+            #                 f" output stored selected node data: {stored_selected_node_data}"])
+            # print(bb)
             return (elements_in, # stylesheet, # select_node_data,
                     node_attr, data_label, ft_label, fl_label_opts,
                     current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
                     node_fixed_color, mouseover_node_data,
-                    stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
-                    box_selected_output)
+                    # stored_tap_node_data,
+                    stored_selected_node_data, box_selected_table, stat_download_button_style,
+                    box_selected_output, tap_node_data, None) # selected_node_data)
         
 
         if triggered_input == 'keeper-data-dropdown':
             fl_label_opts = set_feature_options(data_label)
             ft_label = None
+            # bb = "\n".join([f"\n\n output selected node data: {selected_node_data}",
+            #                 f" output tap node data: {tap_node_data}",
+            #                 f" output stored selected node data: {stored_selected_node_data}"])
+            # print(bb)
             return (elements_in, # stylesheet, # select_node_data,
                     node_attr, data_label, ft_label, fl_label_opts,
                     current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
                     node_fixed_color, mouseover_node_data,
-                    stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
-                    box_selected_output)
+                    # stored_tap_node_data,
+                    stored_selected_node_data, box_selected_table, stat_download_button_style,
+                    box_selected_output, tap_node_data, None) # selected_node_data)
         
             
         D = keeper.distances[pose_dist_key].data
@@ -1624,6 +1710,7 @@ def renderer(keeper, pose_key, distance_key):
         if triggered_input == 'pose-button':            
             positions_records.clear()            
             mouseover_node_data = None
+            # tap_node_data = None # ABC added
             # stored_tap_node_data = None
             # stored_selected_node_data = None 
             # box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
@@ -1687,9 +1774,10 @@ def renderer(keeper, pose_key, distance_key):
             node_attr_value = None # BBB 'None'
             data_label = None, # BBB 'None'
             ft_label = None # '' AAA
-            stored_tap_node_data = None # tap_node_data = None
+            tap_node_data = None # stored_tap_node_data = None # ABC updated commented line
+            # stored_tap_node_data = False # ABC added line
         elif (triggered_input == 'network-graph') and (triggered_attr == 'tapNodeData'):
-            stored_tap_node_data = tap_node_data
+            # stored_tap_node_data = tap_node_data # ABC commented out
             # print(f"ENTERED TAPNODEDATA \n-- select_node_data = {select_node_data}\n--tap_node_data = {tap_node_data}\n\n")
             node_attr = int(tap_node_data['id'])
             node_attr_value = None # BBB 'None'
@@ -1699,22 +1787,26 @@ def renderer(keeper, pose_key, distance_key):
             # if node_cmap in DISCRETE_COLORMAP_OPTIONS:
             #     node_cmap_type = 'sequential'
             #     node_cmap = SEQUENTIAL_COLORMAP_OPTIONS[0]
+            # stored_tap_node_data = True # ABC added line
+            # print(f" > stored_tap_node_data from tapNodeData trigger: = {'None' if stored_tap_node_data is None else stored_tap_node_data}") # ABC added line
         elif triggered_input == 'node-attribute-dropdown':
             # print("ENTERED NODE ATTRIBUTE DROPDOWN")
             node_attr_value = node_attr
             data_label = None, # BBB 'None'
             ft_label = None # '' AAA
-            stored_tap_node_data = None
+            tap_node_data = None # stored_tap_node_data = None # ABC updated comented line
+            # stored_tap_node_data = False # ABC added line
             node_fixed_color = '' 
         elif triggered_input == 'feature-label': # 'node-color-button':  # here
             node_attr_value = None # BBB 'None'
-            stored_tap_node_data = None
-            node_fixed_color = '' 
+            tap_node_data = None # stored_tap_node_data = None # ABC updated comented line
+            node_fixed_color = ''
+            # stored_tap_node_data = False # ABC added line
         else:
-            if stored_tap_node_data is None: 
+            if tap_node_data is None: # stored_tap_node_data is None: # ABC updated commented line
                 node_attr_value = node_attr 
             else: 
-                node_attr = int(stored_tap_node_data['id'])
+                node_attr = int(tap_node_data['id']) # int(stored_tap_node_data['id']) # ABC updated commented line
                 node_attr_value = None # BBB  'None'
                 data_label = None # BBB 'None'
                 ft_label = None # ''  AAA
@@ -1762,23 +1854,27 @@ def renderer(keeper, pose_key, distance_key):
 
         # Highlight specified node by label
         if node_label:
+            labels = set(node_label.split(', '))
             for element in elements['nodes']:
-                if element['data'].get('name') == node_label:
+                if element['data'].get('name') in labels: # == node_label:
                     if 'classes' in element:
-                        element['classes'] += ' highlight'
+                        element['classes'] += ' highlight_by_label'
                     else:
-                        element['classes'] = 'nodes highlight'
-                    break
+                        element['classes'] = 'nodes highlight_by_label'
+                    labels.remove(element['data'].get('name'))
+                    if len(labels) == 0:
+                        break
 
         # print(f"BEFORE HIGHLIGHTING \n-- select_node_data = {select_node_data}\n--tap_node_data = {tap_node_data}\n\n")
         # Highlight selected box nodes
         # add select uncomment below:
         # if select_node_data:
+        tap_label = '' if tap_node_data is None else tap_node_data['name']            # ABC commented line
         if stored_selected_node_data is not None:
             selected_obs = [node['name'] for node in stored_selected_node_data]
 
             for element in elements['nodes']:
-                if element['data'].get('name') in selected_obs:
+                if (element['data'].get('name') in selected_obs) and (element['data'].get('name') != tap_label):
                     if 'classes' in element:
                         if 'highlight_box_select' in element['classes']:
                             continue
@@ -1857,12 +1953,17 @@ def renderer(keeper, pose_key, distance_key):
         #         current_zoom, current_pan, node_cbar_vis, edge_cbar_vis, tap_node_data,
         #         node_fixed_color, mouseover_node_data, # , node_cmap_type # , node_cmap
         #         )
+        # bb = "\n".join([f"\n\n output selected node data: {selected_node_data}",
+        #                     f" output tap node data: {tap_node_data}",
+        #                     f" output stored selected node data: {stored_selected_node_data}"])
+        # print(bb)
         return (elements, # stylesheet, # select_node_data,
                 node_attr_value, data_label, ft_label, fl_label_opts,
                 current_zoom, current_pan, node_cbar_vis, edge_cbar_vis, # tap_node_data, # NOTE: should this be here?
                 node_fixed_color, mouseover_node_data,
-                stored_tap_node_data, stored_selected_node_data, box_selected_table, stat_download_button_style,
-                box_selected_output)
+                # stored_tap_node_data,
+                stored_selected_node_data, box_selected_table, stat_download_button_style,
+                box_selected_output, tap_node_data, None) # selected_node_data)
 
     
     @app.callback(Output('cytoscape-mouseoverNodeData', 'children'),
