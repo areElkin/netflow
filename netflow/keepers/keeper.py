@@ -2448,7 +2448,7 @@ class Keeper:
                        min_branch_size=5, choose_largest_segment=False,
                        flavor='haghverdi16', allow_kendall_tau_shift=False,
                        smooth_corr=True, brute=True, split=True, verbose=None,
-                       n_branches=2, until_branched=False,
+                       n_branches=2, until_branched=False, annotate=True,
                        ):                
         """ Construct the POSE from specified distance.
 
@@ -2502,14 +2502,17 @@ class Keeper:
               This is only applicable when branching is being performed. If previous
               iterations of branching has already been performed, it is not possible to
               identify the number of iterations where no branching was performed.
+        annotate : `bool`
+            If `True`, annotate edges and nodes with POSE features.
 
         Returns
         -------
         poser : `netflow.pose.POSER`
             The object used to construct the POSE.
         G_poser_nn : `networkx.Graph`
-            The updated graph with nearest neighbor edges and edge attribute "edge_origin"
-            with the possible values :
+            The updated graph with nearest neighbor edges.
+            If ``annotate`` is `True`, edge attribute "edge_origin"
+            is added with the possible values :
 
             - "POSE" : for edges in the original graph that are not nearest neighbor edges
             - "NN" : for nearest neighbor edges that were not in the original graph
@@ -2520,8 +2523,8 @@ class Keeper:
                       flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
                       smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
 
-        G_poser = poser.branchings_segments(n_branches, until_branched=until_branched)
-        G_poser_nn = poser.construct_pose_nn_topology(G_poser)
+        G_poser = poser.branchings_segments(n_branches, until_branched=until_branched, annotate=annotate)
+        G_poser_nn = poser.construct_pose_nn_topology(G_poser, annotate=annotate)
 
         # label = [key]
         # if root is not None:
