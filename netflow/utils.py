@@ -5,7 +5,11 @@ from functools import lru_cache
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-import Orange.clustering.hierarchical as orange_hier
+try: 
+    import Orange.clustering.hierarchical as orange_hier
+    orange_installed = True
+except ModuleNotFoundError:
+    orange_installed = False
 import pandas as pd
 import scipy as sc
 import scipy.cluster.hierarchy as sch
@@ -331,18 +335,24 @@ def clustermap(data, observations=None, features=None, transform=True, is_symmet
 
     obs_linkage = fc.linkage(data, **linkage_kwargs)
     if optimal_nodes_ordering:
-        tree = orange_hier.tree_from_linkage(obs_linkage)
-        tree = orange_hier.optimal_leaf_ordering(tree, ssd.squareform(ssd.pdist(data)))
-        obs_linkage = orange_hier.linkage_from_tree(tree)
+        if orange_installed:
+            tree = orange_hier.tree_from_linkage(obs_linkage)
+            tree = orange_hier.optimal_leaf_ordering(tree, ssd.squareform(ssd.pdist(data)))
+            obs_linkage = orange_hier.linkage_from_tree(tree)
+        else:
+            logger.warning("No module named Orange, optimal node ordering not performed")
 
     if is_symmetric:
         feat_linkage=obs_linkage
     else:
         feat_linkage = fc.linkage(data.transpose(), **linkage_kwargs)
         if optimal_nodes_ordering:
-            tree = orange_hier.tree_from_linkage(feat_linkage)
-            tree = orange_hier.optimal_leaf_ordering(tree, ssd.squareform(ssd.pdist(data.transpose())))
-            feat_linkage = orange_hier.linkage_from_tree(tree)
+            if orange_installed:
+                tree = orange_hier.tree_from_linkage(feat_linkage)
+                tree = orange_hier.optimal_leaf_ordering(tree, ssd.squareform(ssd.pdist(data.transpose())))
+                feat_linkage = orange_hier.linkage_from_tree(tree)
+            else:
+                logger.warning("No module named Orange, optimal node ordering not performed")
 
     cm = sns.clustermap(data.transpose(), row_linkage=feat_linkage, col_linkage=obs_linkage, **vis_kwargs)
     plt.gcf().suptitle(title, y=1.05)

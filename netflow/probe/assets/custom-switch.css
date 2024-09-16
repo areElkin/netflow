@@ -1,0 +1,75 @@
+/* custom-switch.css */
+
+/* Styles the outer container of the switch */
+.custom-switch-container {
+    margin: 5px 0 0 45px;
+}
+
+/* Base styles for the switch */
+.custom-control-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0; 
+    pointer-events: none; 
+    background-color: #e5e5e5 !important; /* Light gray background when off */
+    border-color: #ccc !important; /* Light border */
+    border-radius: 50% !important; /* Circular shape */
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out !important;
+}
+
+/* Styles the label element */
+.custom-control-label {
+    position: relative;
+    margin-bottom: 0; 
+    vertical-align: top;
+    color: #333333; /* Dark gray text */
+    font-weight: 400; /* Regular font weight */
+}
+
+.custom-control-label::before {
+    position: absolute;
+    top: 0.25rem;
+    left: -2.25rem;
+    display: block;
+    width: 2rem;
+    height: 1rem;
+    content: "";
+    background-color: #e5e5e5; /* Light gray background when off */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 1rem;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.custom-control-label::after {
+    position: absolute;
+    top: 0.25rem;
+    left: -2.25rem;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    content: "";
+    background-color: #ffffff; /* White knob */
+    border-radius: 50%;
+    transition: transform 0.15s ease-in-out;
+}
+
+/* When the switch is checked (on state) */
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #614051; /* Aubergine color when toggled on */
+    border-color: #614051; /* Matching border */
+}
+
+.custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(1rem); /* Move the knob to the right */
+}
+
+/* Focus state for accessibility */
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(24, 188, 156, 0.25);
+}
+
+
+/* Optional: adjust label text style */
+.custom-control-input::before {
+    background-color: #ffffff !important; /* White knob */
+}

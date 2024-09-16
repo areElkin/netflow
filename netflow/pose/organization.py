@@ -759,14 +759,18 @@ class POSER:
     key : `str`
         The label used to reference the distance matrix stored in ``keeper.distances``,
         of size (n_observations, n_observations).
-    root : {`None`, `int`, 'density', 'ratio'}
+    root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
         The root. If `None`, 'density' is used.
 
         options
         -------
         - `int` : index of observation
         - 'density' : select observation with minimal distance-density
+        - 'density_inv' : select observation with maximal distance-density
         - 'ratio' : select observation which leads to maximal triangular ratio distance
+    root_as_tip : `bool`
+        If `True`, force first tip as the root.
+        Defaults to `False` following scanpy implementation.
     min_branch_size : {`int`, `float`}
         During recursive splitting of branches, only consider splitting a branch with at least
         ``min_branch_size > 2`` data points.
@@ -792,7 +796,7 @@ class POSER:
             This is ignored if flavor is not 'haghverdi16'.
             If `True`, ``brute`` is ignored.
     """
-    def __init__(self, keeper, key, root=None,
+    def __init__(self, keeper, key, root=None, root_as_tip=False,
                  min_branch_size=5, choose_largest_segment=False,
                  flavor='haghverdi16', allow_kendall_tau_shift=False,
                  smooth_corr=True, brute=True, split=True, verbose=None):
@@ -825,6 +829,8 @@ class POSER:
         if isinstance(root, str):
             if root == 'density':
                 root = keeper.distance_density_argmin(key)
+            elif root == 'density_inv':
+                root = keeper.distance_density_argmax(key)
             elif root == 'ratio':
                 root = root_max_ratio(keeper, key)
             else:
@@ -849,7 +855,10 @@ class POSER:
         # get tips:
         # tip_0 = root
         # get first tip (farthest from root)
-        tip_0 = np.argmax(self.distances[self.root])
+        if root_as_tip:
+            tip_0 = self.root
+        else:
+            tip_0 = np.argmax(self.distances[self.root])
         tip_1 = np.argmax(self.distances[tip_0])
         node.tips = np.array([tip_0, tip_1])
         self.tree.insert(node)

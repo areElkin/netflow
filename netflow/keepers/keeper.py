@@ -1843,7 +1843,7 @@ class Keeper:
 
 
     def distance_density_argmin(self, label):
-        """ Find the observation with the largest density from a distnace.
+        """ Find the observation with the smallest density from a distance.
 
         The density of an observation is its net distance to all other observations.
 
@@ -1859,6 +1859,27 @@ class Keeper:
         """
         density = self.distances[label].density()
         obs = density.idxmin(axis=0)
+        obs = self.observation_labels.index(obs)
+        return obs
+
+
+    def distance_density_argmax(self, label):
+        """ Find the observation with the largest density from a distance.
+
+        The density of an observation is its net distance to all other observations.
+
+        Parameters
+        ----------
+        label : `str`
+            The reference label for the distance.
+
+        Returns
+        -------
+        obs : `int`
+            The index of the observation with the largest density.
+        """
+        density = self.distances[label].density()
+        obs = density.idxmax(axis=0)
         obs = self.observation_labels.index(obs)
         return obs
 
@@ -2444,7 +2465,7 @@ class Keeper:
         self.compute_dpt_from_augmented_sym_transitions(T_sym_key)
 
 
-    def construct_pose(self, key, root=None,
+    def construct_pose(self, key, root=None, root_as_tip=False,
                        min_branch_size=5, choose_largest_segment=False,
                        flavor='haghverdi16', allow_kendall_tau_shift=False,
                        smooth_corr=True, brute=True, split=True, verbose=None,
@@ -2465,6 +2486,9 @@ class Keeper:
             - `int` : index of observation
             - 'density' : select observation with minimal distance-density
             - 'ratio' : select observation which leads to maximal triangular ratio distance
+        root_as_tip : `bool`
+            If `True`, force first tip as the root.
+            Defaults to `False` following scanpy implementation.
         min_branch_size : {`int`, `float`}
             During recursive splitting of branches, only consider splitting a branch with at least
             ``min_branch_size > 2`` data points.
@@ -2496,7 +2520,7 @@ class Keeper:
             until a segement is successfully branched or no branchable segments
             remain. Otherwise, if `False`, attempt to perform branching only once 
             on the next potentially branchable segment.
-
+UBE
             ..note::
 
               This is only applicable when branching is being performed. If previous
@@ -2518,7 +2542,7 @@ class Keeper:
             - "NN" : for nearest neighbor edges that were not in the original graph
             - "POSE + NN" : for edges in the original graph that are also nearest neighbor edges
         """                
-        poser = POSER(self, key, root=root, min_branch_size=min_branch_size,
+        poser = POSER(self, key, root=root, root_as_tip=root_as_tip, min_branch_size=min_branch_size,
                       choose_largest_segment=choose_largest_segment,
                       flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
                       smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
