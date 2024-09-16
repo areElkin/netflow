@@ -382,6 +382,10 @@ def plot_topology(G,
             # node_ticklabels = [str(np.round(nc_set[0], 2)), str(np.round(nc_set[-1], 2))]
             # node_norm = plt.Normalize(vmin=cur_vmin, vmax=cur_vmax)
 
+    elif (not isinstance(node_color, str)) and (node_cmap is not None):
+        if node_cmap in qualitative_cmaps.keys():
+            node_vmax = max(node_vmax, qualitative_cmaps[node_cmap])
+
     # for edge colorbar:
     if (isinstance(edge_color, Iterable)) and (not isinstance(edge_color, str)):
         if edge_vmin is None:
@@ -446,7 +450,7 @@ def plot_topology(G,
             bordercolors_tmp = [bordercolors[i] for i in indices]
         else:
             bordercolors_tmp = bordercolors
-
+            
         nx.draw_networkx_nodes(G, pos, ax=ax, nodelist=nodelist_tmp, node_size=node_size_tmp,                    
                                node_color=node_color_tmp, node_shape=shape_class,
                                alpha=node_alpha, # MAYBE CHANGE TO ALPHA BY NODE?

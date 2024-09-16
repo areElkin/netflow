@@ -1,0 +1,79 @@
+/* assets/style.css */
+
+/* Set the color of the slider track */
+.my-slider .rc-slider-track {
+    background-color: #614051; /* Active part of the slider */
+}
+
+/* Set the color of the slider handle */
+.my-slider .rc-slider-handle {
+    border: 2px solid #614051; /* Slider handle color */
+}
+
+/* Set the color of the slider track before the handle */
+.my-slider .rc-slider-rail {
+    background-color: #eeeeee; /* Inactive part of the slider */
+}
+
+/* Set the color when the handle is focused or hovered */
+.my-slider .rc-slider-handle:focus, 
+.my-slider .rc-slider-handle:hover,
+.my-slider .rc-slider-handle:active {
+    border-color: #894585; /* Darker shade when focused or hovered */
+}
+
+/* Set the color of the slider endpoints (the ticks) */
+.my-slider .rc-slider-dot {
+    border: 2px solid #eeeeee; /* Color of the ticks/endpoints */
+    background-color: white; /* Background color of the ticks */
+}
+
+/* Optional: Set the color of the active endpoint when the handle passes over it */
+.my-slider .rc-slider-dot-active {
+    border-color: #614051; /* Darker color for active ticks */
+}
+
+
+
+/* Style the radio items container */
+/* .custom-radioitems .dash-radioitem { */
+.custom-radioitems {
+    /* display: flex; */
+    /* align-items: center; */
+    /* margin-bottom: 10px; */
+    /* margin: 5px 0 0 45px; */
+    
+}
+
+/* Adjusting for the Fieldset context */
+.custom-radioitems label {
+    font-weight: normal; /* Reset font weight for all labels */
+}
+
+/* Style the radio input elements */
+.custom-radioinput {
+    /* margin-right: 10px; */ /* Space between radio input and label */
+    /* cursor: pointer; */    
+}
+
+/* Default style for the radio labels */
+.custom-radiolabel {
+    /* display: inline-block; /* Ensure labels are inline */
+    /* margin: 5px 0; */ /* Space between labels */
+    /* color: #333333; */  /* Default label color */
+     font-weight: normal;  /* Default font weight for labels */
+    /* cursor: pointer; */
+}
+
+/* Style for the radio input when checked */
+.custom-radioinput:checked { 
+    /* color: #614051; */ /* Change color when selected */    
+    /* background-color: #614051; */
+    accent-color: #614051; /* Change the color of the selected radio button to aubergine */
+}
+
+
+/* Optional: Style for hovered labels */
+.custom-radiolabel:hover {
+    color: #614051;  /* Change color on hover */
+}
