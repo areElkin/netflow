@@ -811,7 +811,7 @@ def renderer(keeper, pose_key, distance_key):
                                                html.Fieldset(style=styles['fieldset-panel'], children=[
                                                    html.Legend('Edge Width', style=styles['fieldset-legend']),
                                                    # html.H4("Edge Width", style=styles['h4']),
-                                                   dcc.Slider(id='edge-width-slider', min=0.001, max=14, step=0.001, value=0.1,
+                                                   dcc.Slider(id='edge-width-slider', min=0.001, max=14, step=0.001, value=0.406, # 0.1,
                                                               marks={0.001: 'thinner', 14: 'wider'},
                                                               tooltip={"placement": "top", "always_visible": False},
                                                               className='my-slider',
@@ -1074,7 +1074,7 @@ def renderer(keeper, pose_key, distance_key):
             cmap_value = 'balance_r'
         else:  # discrete
             colormap_options = [{'label': name, 'value': name} for name in DISCRETE_COLORMAP_OPTIONS]
-            cmap_value = DISCRETE_COLORMAP_OPTIONS[0]
+            cmap_value = 'Bold' # DISCRETE_COLORMAP_OPTIONS[0]
 
         return colormap_options, cmap_value
     # Define the callback to update the dropdown node colormap options based on the selected radio item
@@ -1123,7 +1123,7 @@ def renderer(keeper, pose_key, distance_key):
             cmap_value = 'balance_r'
         else:  # discrete
             colormap_options = [{'label': name, 'value': name} for name in DISCRETE_COLORMAP_OPTIONS]
-            cmap_value = DISCRETE_COLORMAP_OPTIONS[0]
+            cmap_value = 'Bold' # DISCRETE_COLORMAP_OPTIONS[0]
 
         return colormap_options, cmap_value
     # # Define the callback to update the dropdown edge colormap options based on the selected radio item
