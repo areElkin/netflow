@@ -651,6 +651,11 @@ def compute_transitions(keeper, similarity_key, density_normalize: bool = True):
 
     asym_label = f"transitions_asym_{similarity_key}"
     sym_label = f"transitions_sym_{similarity_key}"
+
+    if density_normalize:
+        asym_label = "_".join([asym_label, "density_normalized"])
+        sym_label = "_".join([sym_label, "density_normalized"])
+        
     # if label is not None:
     #     asym_label = "_".join([asym_label, label])
     #     sym_label = "_".join([sym_label, label])

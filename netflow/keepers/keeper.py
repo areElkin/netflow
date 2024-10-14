@@ -122,6 +122,15 @@ class DataKeeper:
             yield DataView(dkeeper=self, label=key)
 
 
+    def keys(self):
+        return self.data.keys()
+
+
+    def items(self):
+        return self.data.items()
+        
+
+
     @property
     def data(self):
         """ A dictionary of all data sets. """
@@ -531,6 +540,14 @@ class DistanceKeeper:
         for key in self._data.keys():
             yield DistanceView(dkeeper=self, label=key)
 
+
+    def keys(self):
+        return self.data.keys()
+
+
+    def items(self):
+        return self.data.items()
+
     
     @property
     def data(self):
@@ -859,6 +876,14 @@ class GraphKeeper:
     def __iter__(self):
         for key, graph in self._graphs.items():
             yield graph
+
+            
+    def keys(self):
+        return self.graphs.keys()
+
+
+    def items(self):
+        return self.graphs.items()
 
 
     @property
@@ -2462,6 +2487,9 @@ class Keeper:
         """
         self.compute_transitions_from_similarity(similarity_key, density_normalize)
         T_sym_key = f"transitions_sym_{similarity_key}"
+        if density_normalize:
+            T_sym_key = "_".join([T_sym_key, "density_normalized"])
+            
         self.compute_dpt_from_augmented_sym_transitions(T_sym_key)
 
 
