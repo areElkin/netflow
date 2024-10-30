@@ -2424,7 +2424,7 @@ class Keeper:
         compute_transitions(self, similarity_key, density_normalize=density_normalize)
 
 
-    def compute_dpt_from_augmented_sym_transitions(self, key):
+    def compute_dpt_from_augmented_sym_transitions(self, key, n_comps: int = 0):
         """ Compute the diffusion pseudotime metric between observations,
         computed from the symmetric transitions.
 
@@ -2445,11 +2445,15 @@ class Keeper:
         dpt : `numpy.ndarray`, (n_observations, n_observations)
             Pairwise-observation Diffusion pseudotime distances are stored
             in keeper.distances["dpt_from_{key}"].
+        n_comps : `int`
+            Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.
+            Alternatively, if set ``n_comps >= n_observations``, the whole spectrum will be computed.
         """
-        dpt_from_augmented_sym_transitions(self, key)
+        dpt_from_augmented_sym_transitions(self, key, n_comps=n_comps)
 
 
-    def compute_dpt_from_similarity(self, similarity_key, density_normalize: bool = True):
+    def compute_dpt_from_similarity(self, similarity_key, density_normalize: bool = True,
+                                    n_comps: int = 0):
         """ Compute the diffusion pseudotime metric between observations,
         computed from similarity 
 
@@ -2469,7 +2473,9 @@ class Keeper:
         density_normalize : `bool`
             The density rescaling of Coifman and Lafon (2006): Then only the
             geometry of the data matters, not the sampled density.
-
+        n_comps : `int`
+            Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.
+            Alternatively, if set ``n_comps >= n_observations``, the whole spectrum will be computed.
         
         Returns
         -------
@@ -2490,7 +2496,7 @@ class Keeper:
         if density_normalize:
             T_sym_key = "_".join([T_sym_key, "density_normalized"])
             
-        self.compute_dpt_from_augmented_sym_transitions(T_sym_key)
+        self.compute_dpt_from_augmented_sym_transitions(T_sym_key, n_comps=n_comps)
 
 
     def construct_pose(self, key, root=None, root_as_tip=False,

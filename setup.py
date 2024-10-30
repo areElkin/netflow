@@ -10,4 +10,5 @@ setuptools.setup(name="netflow",
                  description="Toolbox to compute information flow on a network and correlations between network modules",
                  install_requires=install_requires,
                  packages=setuptools.find_packages(),
+                 license_files=('LICENSE', 'NF_LICENSE.txt'), 
 )    

@@ -1,4 +1,11 @@
-
+# Copyright 2017 F. Alexander Wolf, P. Angerer, Theis Lab
+# Revisions copyright 2024 R. Elkin
+# All rights reserved.
+# This file contains code derived, either in part or in whole,
+# from the Scanpy library, which is governed by the original
+# "BSD 3-Clause License".
+# Please see the LICENSE file included as part of this package for
+# more details.
 import itertools
 import fastcluster as fc
 from functools import lru_cache
