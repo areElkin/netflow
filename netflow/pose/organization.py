@@ -1,3 +1,11 @@
+# Copyright 2017 F. Alexander Wolf, P. Angerer, Theis Lab
+# Revisions copyright 2024 R. Elkin
+# All rights reserved.
+# This file contains code derived, either in part or in whole,
+# from the Scanpy library, which is governed by the original
+# "BSD 3-Clause License".
+# Please see the LICENSE file included as part of this package for
+# more details.
 """
 organization
 ============
@@ -85,13 +93,14 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
             until a segement is successfully branched or no branchable segments
             remain. Otherwise, if `False`, attempt to perform branching only once 
             on the next potentially branchable segment.
-    root : {`None`, `int`, 'density', 'ratio'}
+    root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
         The root. If `None`, 'density' is used.
 
         options
         -------
         - `int` : index of observation
         - 'density' : select observation with minimal distance-density
+        - 'density_inv' : select observation with maximal distance-density
         - 'ratio' : select observation which leads to maximal triangular ratio distance
     min_branch_size : {`int`, `float`}
         During recursive splitting of branches, only consider splitting a branch with at least
@@ -664,7 +673,7 @@ def compute_transitions(keeper, similarity_key, density_normalize: bool = True):
     keeper.add_misc(transitions_sym, sym_label)
 
 
-def _dpt_from_augmented_sym_transitions(T):
+def _dpt_from_augmented_sym_transitions(T, n_comps: int = 0):
     """ Return the diffusion pseudotime metric between observations,
     computed from the symmetric transitions.
 
@@ -678,13 +687,18 @@ def _dpt_from_augmented_sym_transitions(T):
     ----------
     T : `numpy.ndarray`, (n_observations, n_observations)
         Symmetric transitions.
+    n_comps
+        Number of eigenvalues/vectors to be computed,
+        set ``n_comps = 0`` to compute the whole spectrum.
+        Alternatively, if set ``n_comps >= n_observations``,
+        the whole spectrum will be computed.
 
     Returns
     -------
     dpt : `numpy.ndarray`, (n_observations, n_observations)
         Pairwise-observation Diffusion pseudotime distances.
     """
-    evals, evecs = utl.compute_eigen(T, n_comps=0, sort="decrease")
+    evals, evecs = utl.compute_eigen(T, n_comps=n_comps, sort="decrease")
     if np.abs(evals[0] - 1.) > 1e-3:
         raise ValueError(f"Largest eigenvalue is expected to be close to 1, found to be {np.round(evals[0], 4)}")
     if evals[1] > 1.0:
@@ -695,7 +709,7 @@ def _dpt_from_augmented_sym_transitions(T):
     return dpt
 
 
-def dpt_from_augmented_sym_transitions(keeper, key):
+def dpt_from_augmented_sym_transitions(keeper, key, n_comps: int = 0):
     """ Compute the diffusion pseudotime metric between observations,
     computed from the symmetric transitions.
 
@@ -708,18 +722,30 @@ def dpt_from_augmented_sym_transitions(keeper, key):
     Parameters
     ----------
     key : `str`
-        Reference ID for the symmetric transitions `numpy.ndarray`, (n_observations, n_observations)
+        Reference ID for the symmetric transitions
+        `numpy.ndarray`, (n_observations, n_observations)
         stored in ``keeper.misc``.
+    n_comps
+        Number of eigenvalues/vectors to be computed,
+        set ``n_comps = 0`` to compute the whole spectrum.
+        Alternatively, if set ``n_comps >= n_observations``,
+        the whole spectrum will be computed.
 
     Returns
     -------
     dpt : `numpy.ndarray`, (n_observations, n_observations)
         Pairwise-observation Diffusion pseudotime distances are stored
-        in keeper.distances["dpt_from_{key}"].
+        in keeper.distances[dpt_key] where ``dpt_key="dpt_from_{key}"``.
+        If the full spectrum is not used (i.e., ``0 < n_comps < n_observations"``),
+        then ``dpt_key="dpt_from_{key}_{n_comps}comps"``.
     """
     T = keeper.misc[key]
-    dpt = _dpt_from_augmented_sym_transitions(T)
-    keeper.add_distance(dpt, f"dpt_from_{key}")
+    dpt = _dpt_from_augmented_sym_transitions(T, n_comps=n_comps)
+
+    dpt_key = f"dpt_from_{key}"
+    if 0 < n_comps < keeper.num_observations:
+        dpt_key = "_".join([dpt_key, f"{n_comps}comps"])
+    keeper.add_distance(dpt, dpt_key)
     
 
 def root_max_ratio(keeper, key):
@@ -839,7 +865,7 @@ class POSER:
             elif root == 'ratio':
                 root = root_max_ratio(keeper, key)
             else:
-                raise ValueError("Unrecognized method for determining root, expected to be one of ['density', 'ratio'].")
+                raise ValueError("Unrecognized method for determining root, expected to be one of ['density', 'density_inv', 'ratio'].")
         elif isinstance(root, int):
             if (root < 0) or (keeper.num_observations - 1 < root):
                 raise ValueError("Unrecognized value for root, expected to be the index of an observation in the keeper.")

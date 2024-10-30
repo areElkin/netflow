@@ -729,8 +729,8 @@ def renderer(keeper, pose_key, distance_key):
                                                html.Fieldset(style=styles['fieldset-panel'], children=[
                                                    html.Legend('Node Size', style=styles['fieldset-legend']),
                                                    # html.H4("Node Size", style=styles['h4']),
-                                                   dcc.Slider(id='node-size-slider', min=0.01, max=12, step=0.01, value=4,
-                                                              marks={0.01: 'smaller', 12: 'larger'},
+                                                   dcc.Slider(id='node-size-slider', min=0.01, max=16, step=0.01, value=4,
+                                                              marks={0.01: 'smaller', 16: 'larger'},
                                                               tooltip={"placement": "top", "always_visible": False},
                                                               className='my-slider',
                                                               ),
