@@ -701,7 +701,15 @@ def renderer(keeper, pose_key, distance_key):
                                                                  'value': ky} for ky in [dd.label for dd in keeper.distances]],
                                                        value=distance_key,
                                                    ),
-                                                   html.Button('Select POSE', id='pose-button', n_clicks=0),                   
+                                                   html.Button('Select POSE', id='pose-button', n_clicks=0),
+                                                   dbc.Switch(id='pose-switch', label=' restrict to ordering',
+                                                              value=False,
+                                                              class_name='custom-switch-container', # # The class of the container (div)
+                                                              input_class_name='custom-control-input', # The class of the <input> checkbox element.
+                                                              input_style={}, #  The style of the <input> checkbox element.
+                                                              label_class_name='custom-control-label', # CSS classes to apply to the <label> element for each item.
+                                                              label_style={}, # Inline style arguments to apply to the <label> element for each item
+                                                              ),
                                                ]),
                                                # html.Div(children=[
                                                html.Fieldset(style=styles['fieldset-panel'], children=[
@@ -1450,9 +1458,10 @@ def renderer(keeper, pose_key, distance_key):
         State('feature-label', 'options'), # (fl_label_opts) 
         State('node-fixed-color', 'value'),  # (node_fixed_color)
         Input('fixed-color-button', 'n_clicks'),           # (node_fixed_color_n_clicks) xxx
-        Input('pose-button', 'n_clicks'),                  # (pose_n_clicks) xxx
+        Input('pose-button', 'n_clicks'),                  # (pose_n_clicks) xxx        
         State('g-pose-dropdown', 'value'), # (pose_key)
         State('pose-distance-dropdown', 'value'), # (pose_dist_key)
+        Input('pose-switch', 'value'), # (pose_ordering)
         # Input('network-graph', 'selectedNodeData'), # 'boxSelectedData'), 
         # State('network-graph', 'selectedNodeData'), # add select
         State('network-graph', 'mouseoverNodeData'), # (mouseover_node_data)
@@ -1477,7 +1486,7 @@ def renderer(keeper, pose_key, distance_key):
                      current_zoom, current_pan, # feature_n_clicks, # here
                      data_label, ft_label, fl_label_opts,
                      node_fixed_color, node_fixed_color_n_clicks, # node_cmap_type,
-                     pose_n_clicks, pose_key, pose_dist_key,
+                     pose_n_clicks, pose_key, pose_dist_key, pose_ordering,
                      # box_select_node_data,
                      # select_node_data,  # add select
                      mouseover_node_data,
@@ -1704,7 +1713,14 @@ def renderer(keeper, pose_key, distance_key):
         
             
         D = keeper.distances[pose_dist_key].data
-        G = keeper.graphs[pose_key]        
+        G = keeper.graphs[pose_key]
+
+        if pose_ordering:
+            G = G.edge_subgraph([ee for ee in G.edges() if G.edges[ee]['edge_origin'].startswith('POSE')]) #  in ['POSE', 'POSE + NN']]
+
+        # if change between POSE or ordering, reset positions_records
+        if triggered_input == 'pose-switch':
+            positions_records.clear()
 
         # if new pose, reset layouts and tapNodeData and selectedNodeData
         if triggered_input == 'pose-button':            
