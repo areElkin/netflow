@@ -25,9 +25,7 @@ from .visualization import sin_layout, wavy_curve_layout
 from ..methods.stats import stat_test
 
 from ..methods import stats as ms
-from importlib import reload
-reload(ms)
-stat_test = ms.stat_test
+
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 styles = {
@@ -202,8 +200,10 @@ COLORMAP_OPTIONS = list(itertools.chain(*[[k, k+'_r'] for k in pc.named_colorsca
 # DISCRETE_COLORMAP_OPTIONS = list(itertools.chain(*[[k, k+'_r'] for k in DISCRETE_COLORMAP_OPTIONS]))
 
 SEQUENTIAL_COLORMAP_OPTIONS = [cs for cs in pc.sequential.__dict__.keys() if not (cs.startswith('_') or cs.startswith('swatch'))]
+SEQUENTIAL_COLORMAP_OPTIONS.append('nipy_spectral') #  += ['nipy_spectral', 'nipy_spectral_r']
 SEQUENTIAL_COLORMAP_OPTIONS = sorted(set([k.split('_r')[0] for k in SEQUENTIAL_COLORMAP_OPTIONS]), key=lambda x: x.lower())
 SEQUENTIAL_COLORMAP_OPTIONS = list(itertools.chain(*[[k, k+'_r'] for k in SEQUENTIAL_COLORMAP_OPTIONS]))
+
 
 DIVERGING_COLORMAP_OPTIONS = [cs for cs in pc.diverging.__dict__.keys() if not (cs.startswith('_') or cs.startswith('swatch'))]
 DIVERGING_COLORMAP_OPTIONS = sorted(set([k.split('_r')[0] for k in DIVERGING_COLORMAP_OPTIONS]))
@@ -213,6 +213,31 @@ DISCRETE_COLORMAP_OPTIONS = [cs for cs in pc.qualitative.__dict__.keys() if not 
 DISCRETE_COLORMAP_OPTIONS = sorted(set([k.split('_r')[0] for k in DISCRETE_COLORMAP_OPTIONS]))
 DISCRETE_COLORMAP_OPTIONS = list(itertools.chain(*[[k, k+'_r'] for k in DISCRETE_COLORMAP_OPTIONS]))
 
+
+def matplotlib_to_plotly_cmap(cmap, n=11, precision=2):
+    """ Convert matplotlib colormap to a plotly colorscale
+
+    Parameters
+    ----------
+    cmap :
+        The matplotlib colormap.
+    n : `int`
+        The number of entries considered for the Plotly colorscale.
+    precision : `int`
+        The number of digits considered for rounding the scale values.
+
+    Returns
+    -------
+    plotly_colorscale :
+        The plotly colorscale.
+    """
+    scale = np.linspace(0, 1, n)
+    colors = (cmap(scale)[:, :3]*255).astype(np.uint8)
+    plotly_colorscale = [[round(s, precision), f'rgb{tuple(color)}'] for s, color in zip(scale, colors)]
+    return plotly_colorscale
+nipy_spectral_cmap = mpl_cm.get_cmap('nipy_spectral')
+nipy_spectral_pl = matplotlib_to_plotly_cmap(nipy_spectral_cmap, n=255, precision=4)
+nipy_spectral_r_pl = [[a,b] for a,b in zip([k[0] for k in nipy_spectral_pl], [k[1] for k in nipy_spectral_pl][::-1])]
 
 # add new for exit button
 # import time
@@ -256,7 +281,15 @@ def create_colorbar(values, title, color_scale='viridis'):
     """
     # if color_scale in COLORMAP_OPTIONS:
     values = np.array([[min(values), max(values)]])
-    trace = [go.Heatmap(z=values, colorscale=color_scale, showscale=True,
+    
+    if color_scale == 'nipy_spectral':
+        cs = nipy_spectral_pl
+    elif color_scale == 'nipy_spectral_r':
+        cs = nipy_spectral_r_pl
+    else:
+        cs = color_scale
+    trace = [go.Heatmap(z=values,
+                        colorscale=cs, showscale=True,
                         zmin=values.min(), zmax=values.max(),
                         colorbar=dict(title=dict(text=title, font=dict(size=12, family='Arial')), # title,
                                       titleside='right', ticks='outside',
@@ -426,8 +459,13 @@ def get_node_colors(G, node_color_attr, D=None, node_cmap='jet'):
         norm = colors.Normalize(vmin=vmin, vmax=vmax)    
         # cmap = mpl_cm.get_cmap(node_cmap)
 
-        # node_color_map = {node: colors.rgb2hex(cmap(norm(val))) for node, val in zip(G.nodes(), node_colors)}
-        node_color_map = {node: pc.sample_colorscale(node_cmap, norm(val))[0] for node, val in zip(G.nodes(), node_colors)}
+        if node_cmap == 'nipy_spectral':
+            node_color_map = {node: pc.sample_colorscale(nipy_spectral_pl, norm(val))[0] for node, val in zip(G.nodes(), node_colors)}
+        elif node_cmap == 'nipy_spectral_r':
+            node_color_map = {node: pc.sample_colorscale(nipy_spectral_r_pl, norm(val))[0] for node, val in zip(G.nodes(), node_colors)}
+        else:
+            # node_color_map = {node: colors.rgb2hex(cmap(norm(val))) for node, val in zip(G.nodes(), node_colors)}
+            node_color_map = {node: pc.sample_colorscale(node_cmap, norm(val))[0] for node, val in zip(G.nodes(), node_colors)}
         # cbar = create_colorbar(node_colors, 'nodes', color_scale=node_cmap)
         cbar = create_colorbar([vmin, vmax], 'Nodes', color_scale=node_cmap)
 
@@ -478,10 +516,15 @@ def get_edge_colors(G, edge_color_attr, edge_cmap='jet'):
         # norm = colors.Normalize(vmin=min(edge_colors), vmax=max(edge_colors))
         norm = colors.Normalize(vmin=vmin, vmax=vmax)    
         # cmap = mpl_cm.get_cmap(edge_cmap)
-        
-        # edge_color_map = {edge: colors.rgb2hex(cmap(norm(val))) for edge, val in zip(G.edges(), edge_colors)}
-        edge_color_map = {edge: pc.sample_colorscale(edge_cmap, norm(val))[0] for edge, val in zip(G.edges(), edge_colors)}
-        # edge_color_map = {edge: colors.rgb2hex(cmap(norm(G.edges[edge][edge_color_attr]))) for edge in G.edges()}
+
+        if edge_cmap == 'nipy_spectral':
+            edge_color_map = {edge: pc.sample_colorscale(nipy_spectral_pl, norm(val))[0] for edge, val in zip(G.edges(), edge_colors)}
+        elif edge_cmap == 'nipy_spectral_r':
+            edge_color_map = {edge: pc.sample_colorscale(nipy_spectral_r_pl, norm(val))[0] for edge, val in zip(G.edges(), edge_colors)}
+        else:
+            # edge_color_map = {edge: colors.rgb2hex(cmap(norm(val))) for edge, val in zip(G.edges(), edge_colors)}
+            edge_color_map = {edge: pc.sample_colorscale(edge_cmap, norm(val))[0] for edge, val in zip(G.edges(), edge_colors)}
+            # edge_color_map = {edge: colors.rgb2hex(cmap(norm(G.edges[edge][edge_color_attr]))) for edge in G.edges()}
         # cbar = create_colorbar(edge_colors, 'edges', color_scale=edge_cmap)
         cbar = create_colorbar([vmin, vmax], 'Edges', color_scale=edge_cmap)
     else:  # edge_cmap in DISCRETE_COLORMAP_OPTIONS
@@ -812,7 +855,7 @@ def renderer(keeper, pose_key, distance_key):
                                                            id='node-colormap-dropdown',
                                                            options=[{'label': cmap,
                                                                      'value': cmap} for cmap in SEQUENTIAL_COLORMAP_OPTIONS], # COLORMAP_OPTIONS], # mpl.colormaps()], # ['YlGnBu', 'viridis', 'cividis', 'jet', 'nipy_spectral', 'gist_ncar']],
-                                                           value='Turbo_r', # 'YlGnBu',
+                                                           value='nipy_spectral', # 'Turbo_r', # 'YlGnBu',
                                                        ),
                                                    ]),
                                                ]),
@@ -1075,7 +1118,7 @@ def renderer(keeper, pose_key, distance_key):
         if cmap_type == 'sequential':
             colormap_options = [{'label': name, 'value': name} for name in SEQUENTIAL_COLORMAP_OPTIONS]
             # cmap_value = SEQUENTIAL_COLORMAP_OPTIONS[0]
-            cmap_value = 'Turbo_r' # 'Blackbody'
+            cmap_value = 'nipy_spectral' # 'Turbo_r' # 'Blackbody'
         elif cmap_type == 'diverging':
             colormap_options = [{'label': name, 'value': name} for name in DIVERGING_COLORMAP_OPTIONS]
             # cmap_value = DIVERGING_COLORMAP_OPTIONS[0]
@@ -1124,7 +1167,7 @@ def renderer(keeper, pose_key, distance_key):
         if cmap_type == 'sequential':
             colormap_options = [{'label': name, 'value': name} for name in SEQUENTIAL_COLORMAP_OPTIONS]
             # cmap_value = SEQUENTIAL_COLORMAP_OPTIONS[0]
-            cmap_value = 'Turbo_r'
+            cmap_value = 'nipy_spectral' # 'Turbo_r'
         elif cmap_type == 'diverging':
             colormap_options = [{'label': name, 'value': name} for name in DIVERGING_COLORMAP_OPTIONS]
             # cmap_value = DIVERGING_COLORMAP_OPTIONS[0]
