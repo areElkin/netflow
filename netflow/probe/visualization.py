@@ -571,7 +571,7 @@ def plot_topology(G,
 
 def KM_between_groups(T, E, groups, min_group_size=10,
                       figsize=(9,6), show_censors=False, ci_show=False,
-                      show_at_risk_counts=True, 
+                      show_at_risk_counts=True, precision=4,
                       ttl='', xlabel=None, colors=None, ax=None, **kwargs):
     """ KM analysis for each group, with log-rank p-values.
 
@@ -593,7 +593,9 @@ def KM_between_groups(T, E, groups, min_group_size=10,
     min_group_size : `int`
         Minimum group size to be included in analysis.
     figsize 
-        Figure size.  
+        Figure size.
+    precision : `int`
+        Precision shown for log-rank p-value.
     ttl : `str`, optional
         Figure title.
     colors : `dict`
@@ -639,6 +641,7 @@ def KM_between_groups(T, E, groups, min_group_size=10,
             kmfs.append(kmf)
     
     ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    ttl2 = ''
 
     for clus_a, clus_b in itertools.combinations(groups.unique(), 2):
         group_a = groups.index[groups==clus_a].tolist()
@@ -654,7 +657,7 @@ def KM_between_groups(T, E, groups, min_group_size=10,
                                event_observed_B=E.loc[group_b])            
             lrp = lrp.p_value
             if lrp <=0.05:
-                ttl += f"\n{clus_a} vs {clus_b} :  p = {np.round(lrp, 4)}"
+                ttl2 += f"\n{clus_a} vs {clus_b} :  p = {np.round(lrp, precision)}"
 
     if show_at_risk_counts:
         add_at_risk_counts(*kmfs, ax=ax)
@@ -662,7 +665,14 @@ def KM_between_groups(T, E, groups, min_group_size=10,
 
     if xlabel is not None:
         ax.set_xlabel(xlabel)
-    ax.set_title(f"logrank {ttl}");
+
+    ax.set_ylabel('survival')
+
+    total_ttl = ttl
+    if ttl2:
+        if ttl:
+            total_ttl = ttl + '\n' + 'logrank ' + ttl2
+    ax.set_title(total_ttl);
 
 
 def alpha_numeric_sorted(a): 
