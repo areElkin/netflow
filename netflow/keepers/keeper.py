@@ -1423,7 +1423,7 @@ class Keeper:
     
 
     def load_data(self, file_name, label='data', file_path=None, file_format=None,                  
-                  delimiter=',', dtype=None, **kwargs):
+                  delimiter=',', dtype=None, cols_as_obs=True, **kwargs):
         """ Load data from file into the keeper.
 
         .. Note::
@@ -1447,13 +1447,19 @@ class Keeper:
         delimiter: `str`, optional (default: ',')
             Delimiter to use.
         dtype
-            If provided, ensure to convert data type after loaded. 
+            If provided, ensure to convert data type after loaded.
+        cols_as_obs : `bool` (default = `True`)
+            If `True`, columns in the loaded data are observations, otherwise,
+            the rows are observations.
         **kwargs
             Additional key-word arguments passed to ``pandas.read_csv``.
         
         """
         data = load_from_file(file_name, file_path=file_path, file_format=file_format,
                               delimiter=delimiter, **kwargs)
+
+        if not cols_as_obs:
+            data = data.T
         if dtype is not None:
             data = data.astype(dtype)
         self.add_data(data, label)
@@ -2444,7 +2450,9 @@ class Keeper:
         -------
         dpt : `numpy.ndarray`, (n_observations, n_observations)
             Pairwise-observation Diffusion pseudotime distances are stored
-            in keeper.distances["dpt_from_{key}"].
+            in keeper.distances[dpt_key] where ``dpt_key="dpt_from_{key}"``.
+            If the full spectrum is not used (i.e., ``0 < n_comps < n_observations"``),
+            then ``dpt_key="dpt_from_{key}_{n_comps}comps"``.
         n_comps : `int`
             Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.
             Alternatively, if set ``n_comps >= n_observations``, the whole spectrum will be computed.
@@ -2489,12 +2497,15 @@ class Keeper:
         
            dpt : `numpy.ndarray`, (n_observations, n_observations)
                Pairwise-observation Diffusion pseudotime distances are stored
-               in keeper.distances["dpt_from_transitions_asym_{similarity_key}"].
+               in keeper.distances[dpt_key] where
+               ``dpt_key="dpt_from_transitions_asym_{similarity_key}"``.
+               If the full spectrum is not used (i.e., ``0 < n_comps < n_observations"``),
+               then ``dpt_key="dpt_from_transitions_asym_{similarity_key}_{n_comps}comps"``.
         """
         self.compute_transitions_from_similarity(similarity_key, density_normalize)
         T_sym_key = f"transitions_sym_{similarity_key}"
         if density_normalize:
-            T_sym_key = "_".join([T_sym_key, "density_normalized"])
+            T_sym_key = "_".join([T_sym_key, "density_normalized"])            
             
         self.compute_dpt_from_augmented_sym_transitions(T_sym_key, n_comps=n_comps)
 
@@ -2512,13 +2523,14 @@ class Keeper:
         key : `str`
             The label used to reference the distance matrix stored in ``keeper.distances``,
             of size (n_observations, n_observations).
-        root : {`None`, `int`, 'density', 'ratio'}
+        root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
             The root. If `None`, 'density' is used.
 
             options
             -------
             - `int` : index of observation
             - 'density' : select observation with minimal distance-density
+            - 'density_inv' : select observation with maximal distance-density
             - 'ratio' : select observation which leads to maximal triangular ratio distance
         root_as_tip : `bool`
             If `True`, force first tip as the root.
