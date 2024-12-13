@@ -70,6 +70,8 @@ def load_from_file(file_name, file_path=None, file_format=None,
 
     if file_format in ['txt', 'csv', 'tsv']:
         f = pd.read_csv(_fp, sep=delimiter, **kwargs)
+    elif file_format in ['xlsx']:
+        f = pd.read_excel(_fp, **kwargs)
     else:
         raise ValueError("Unrecognized file_format.")
 
