@@ -1,7 +1,10 @@
+import itertools
 import numpy as np
 import pandas as pd
-from scipy.stats import ttest_ind, mannwhitneyu, wilcoxon
+from scipy.stats import ttest_ind, mannwhitneyu, wilcoxon, spearmanr, pearsonr
 from statsmodels.stats.multitest import multipletests
+
+from multiprocessing import Pool, cpu_count
 
 def t_test(values1, values2, alternative='two-sided', **kwargs):
     """ Calculate the T-test for the means of *two independent* samples of scores.
@@ -193,13 +196,131 @@ def stat_test(df1, df2, test='MWU', alpha=0.05, method='fdr_bh', **kwargs):
 
     record = pd.DataFrame(data=[p_values, corrected_p_values], columns=df1.index.copy(), index=['p-value', 'corrected p-value']).T
     return record
-    
 
-        
-    
-    
-    
-        
 
+def compute_spearman(row_x, row_y):
+    """Compute Spearman correlation with each row in Y for a given row in X.
     
-              
+    Parameters
+    ----------
+    row_x, row_y : array_like
+        1-D arrays representing multiple observations of a single variable. 
+        The correlation is computed between ``row_x`` and ``row_y``.
+        
+    Returns
+    -------
+    correlation : `float`
+        The correlation.
+    p_value : `float`
+        The p-value.
+    """    
+    correlation, pvalue = spearmanr(row_x, row_y)
+    return correlation, pvalue
+
+
+def compute_spearman_parallel(X, Y, num_processors=None, chunksize=None):
+    """Compute Spearman correlation between each row of X and all rows of Y in parallel.
+    
+    Parameters
+    ----------
+    X, Y : `pandas.DataFrame` 
+        Dataframes containing multiple variables and observations. 
+        Each row represents a variable and each column is an observation of each variable.
+        `X` and `Y` must have the same number of columns (i.e., the same observations) 
+        but they need not have the same number of variables. 
+    num_processors : `int`
+        Number of processors to use. Defaults to None (uses all available).
+        
+    Returns
+    -------
+    correlations : `dict`
+        The resulting correlations in the form ``{index_row_X: {index_row_Y: corr}}``
+    p_values : `dict`
+        The resulting p_values in the form ``{index_row_X: {index_row_Y: p_value}}``
+    """
+    if X.shape[1] != Y.shape[1]:
+        raise ValueError("Dimension miss-match, expected X and Y to have the same number of columns")
+    
+    # ensure the columns of X and Y are ordered the same
+    Y = Y[X.columns]
+    
+    if num_processors is None:
+        num_processors = cpu_count()  # Use all available processors
+
+    with Pool(processes=num_processors) as pool:                    
+        result = pool.starmap(compute_spearman, itertools.product(X.values, Y.values), chunksize=chunksize)
+
+    # correlations = {k: v[0] for k, v in zip(itertools.product(X.index, Y.index), result)}
+    # p_values = {k: v[1] for k, v in zip(itertools.product(X.index, Y.index), result)}
+
+    correlations = {k: {} for k in X.index}
+    p_values = {k: {} for k in X.index}
+    for (x_idx, y_idx), (rho, p_val) in zip(itertools.product(X.index, Y.index), result):
+        correlations[x_idx][y_idx] = rho
+        p_values[x_idx][y_idx] = p_val
+
+    return correlations, p_values
+
+
+def compute_pearson(row_x, row_y):
+    """Compute Pearson correlation with each row in Y for a given row in X.
+    
+    Parameters
+    ----------
+    row_x, row_y : array_like
+        1-D arrays representing multiple observations of a single variable. 
+        The correlation is computed between ``row_x`` and ``row_y``.
+        
+    Returns
+    -------
+    correlation : `float`
+        The correlation.
+    p_value : `float`
+        The p-value.
+    """    
+    correlation, pvalue = pearsonr(row_x, row_y)
+    return correlation, pvalue
+
+
+def compute_pearson_parallel(X, Y, num_processors=None, chunksize=None):
+    """Compute Pearson correlation between each row of X and all rows of Y in parallel.
+    
+    Parameters
+    ----------
+    X, Y : `pandas.DataFrame` 
+        Dataframes containing multiple variables and observations. 
+        Each row represents a variable and each column is an observation of each variable.
+        `X` and `Y` must have the same number of columns (i.e., the same observations) 
+        but they need not have the same number of variables. 
+    num_processors : `int`
+        Number of processors to use. Defaults to None (uses all available).
+        
+    Returns
+    -------
+    correlations : `dict`
+        The resulting correlations in the form ``{index_row_X: {index_row_Y: corr}}``
+    p_values : `dict`
+        The resulting p_values in the form ``{index_row_X: {index_row_Y: p_value}}``
+    """
+    if X.shape[1] != Y.shape[1]:
+        raise ValueError("Dimension miss-match, expected X and Y to have the same number of columns")
+    
+    # ensure the columns of X and Y are ordered the same
+    Y = Y[X.columns]
+    
+    if num_processors is None:
+        num_processors = cpu_count()  # Use all available processors
+    
+    with Pool(processes=num_processors) as pool:                    
+        result = pool.starmap(compute_pearson, itertools.product(X.values, Y.values), chunksize=chunksize)
+
+    # correlations = {k: v[0] for k, v in zip(itertools.product(X.index, Y.index), result)}
+    # p_values = {k: v[1] for k, v in zip(itertools.product(X.index, Y.index), result)}
+
+    correlations = {k: {} for k in X.index}
+    p_values = {k: {} for k in X.index}
+    for (x_idx, y_idx), (rho, p_val) in zip(itertools.product(X.index, Y.index), result):
+        correlations[x_idx][y_idx] = rho
+        p_values[x_idx][y_idx] = p_val
+
+    return correlations, p_values
