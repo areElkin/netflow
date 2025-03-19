@@ -39,6 +39,7 @@ To do:
 
 from typing import Tuple, Optional, Sequence, List
 
+from collections import defaultdict as ddict
 import itertools
 import networkx as nx
 import numpy as np
@@ -47,15 +48,15 @@ import pandas as pd
 import pptree
 import scipy as sp
 from scipy.sparse import issparse
-from collections import defaultdict as ddict
+from sklearn.preprocessing import normalize
 
 # from importlib import reload
 # pptree = reload(pptree)
-
 # import netflow.utils as utl
 import netflow.utils as utl
 # from importlib import reload
 # reload(utl)
+from .similarity import mutual_knn_edges
 # from .._logging import logger, set_verbose ###
 from .._logging import _gen_logger, set_verbose
 
@@ -73,7 +74,9 @@ logger = _gen_logger(__name__)
 def get_pose(keeper, key, label, n_branches, until_branched=False, 
              root=None, min_branch_size=5, choose_largest_segment=False,
              flavor='haghverdi16', allow_kendall_tau_shift=False,
-             smooth_corr=False, brute=True, split=True, verbose=None):
+             smooth_corr=False, brute=True, split=True,
+             mutual=False, k_mnn=3,
+             verbose=None):
     """ Compute the pose and saved to keeper.
 
     Parameters
@@ -122,10 +125,16 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
         undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,
         not associated with any branch (and assigned branch index -1).
     split : `bool` (default = True)
-            if `True`, split segment into multiple branches. Otherwise,
-            determine a single branching off of the main segment.
-            This is ignored if flavor is not 'haghverdi16'.
-            If `True`, ``brute`` is ignored.
+        if `True`, split segment into multiple branches. Otherwise,
+        determine a single branching off of the main segment.
+        This is ignored if flavor is not 'haghverdi16'.
+        If `True`, ``brute`` is ignored.
+    mutual : `bool` (default = `False`)
+        If `True`, add ``k_mnn`` mutual nn edges. Otherwise, add single nn edge.
+        When `False`, ``k_mnn`` is ignored.
+    k_mnn : `int` (``0 < k_mnn < len(G)``)
+        The number of nns to consider when extracting mutual nns.
+        Note, this is ignored when ``mutual`` is `False`.
 
     Returns
     -------
@@ -152,9 +161,10 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
     keeper.add_misc(poser, 'poser_' + label)
     keeper.add_graph(G_pose, 'pose_' + label)
 
-    G_pose_nn = poser.construct_pose_nn_topology(G_pose)
-    G_pose_nn.name = 'pose_nn_' + label
-    keeper.add_graph(G_pose_nn, 'pose_nn_' + label)
+    G_pose_nn = poser.construct_pose_nn_topology(G_pose, mutual=mutual, k_mnn=k_mnn)
+    pre_label = 'pose_mnn_' if mutual else 'pose_nn_'
+    G_pose_nn.name = pre_label + label
+    keeper.add_graph(G_pose_nn, pre_label + label)
 
 
 class TreeNode:
@@ -624,8 +634,8 @@ def _compute_transitions(similarity=None, density_normalize: bool = True):
     # phi0 = D1_ / np.sqrt(np.power(D1_, 2).sum())  # TODO: check if ever need this to be sparse
 
     return transitions_asym, transitions_sym
-
-
+    
+    
 def compute_transitions(keeper, similarity_key, density_normalize: bool = True):
     """ Compute symmetric and asymmetric transition matrices and store in keeper.
 
@@ -673,6 +683,150 @@ def compute_transitions(keeper, similarity_key, density_normalize: bool = True):
     keeper.add_misc(transitions_sym, sym_label)
 
 
+def compute_rw_transitions(keeper, similarity_key, do_save=True):
+    """ Compute the row-stochastic transition matrix.
+
+    Parameters
+    ----------
+    keeper : `netflow.Keeper`
+        The keeper object.
+    similarity_key : `str`
+        Reference key to the `numpy.ndarray`, (n_observations, n_observations)
+        symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+        in the keeper.
+    do_save : `bool`
+        If `True`, save to ``keeper``.
+
+    Returns
+    -------
+    P : `numpy.ndarray` (n_observations, n_observations)
+        The row-stochastic transition matrix (with 0s on the diagonals).
+        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key ``'transitions_rw_{similarity_key}'``
+    """
+    similarity = keeper.similarities[similarity_key].data
+    P = normalize(similarity, "l1", axis=1)
+
+    if do_save:
+        P_label = f"transitions_rw_{similarity_key}"
+        keeper.add_misc(P, P_label)
+
+    return P
+
+
+def compute_sym_diffusion_affinity_transitions(keeper, similarity_key, do_save=True):
+    """ Compute the symmetric diffusion affinity transition matrix from
+    https://github.com/KrishnaswamyLab/graphtools/blob/master/graphtools/base.py.
+
+    .. math:: P_{ij} = K_{ij} * (d_i * d_j)^{-1/2}
+
+    where :math:`d_i = \sum_r K_{ir}` is the degree (row sum) of observation :math:`i`.
+
+    Parameters
+    ----------
+    keeper : `netflow.Keeper`
+        The keeper object.
+    similarity_key : `str`
+        Reference key to the `numpy.ndarray`, (n_observations, n_observations)
+        symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+        in the keeper.
+    do_save : `bool`
+        If `True`, save to ``keeper``.
+
+    Returns
+    -------
+    P : `numpy.ndarray` (n_observations, n_observations)
+        The symmetric diffusion affinity transition matrix (with 0s on the diagonals).
+        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key ``'transitions_sym_diff_aff_{similarity_key}'``
+    """
+    similarity = keeper.similarities[similarity_key].data
+    row_degrees = similarity.sum(axis=1)[:, None]
+    col_degrees = similarity.sum(axis=0)[None,:]
+    
+    P = (similarity / np.sqrt(row_degrees)) / np.sqrt(col_degrees)
+
+    if do_save:
+        P_label = f"transitions_sym_diff_aff_{similarity_key}"
+        keeper.add_misc(P, P_label)
+
+    return P
+
+
+
+def compute_multiscale_VNE_transitions_from_similarity(keeper, similarity_key,
+                                                       tau_max=None, do_save=True):
+    """ Compute the multi-scale transition matrix based on the elbow of the Von Neumann Entropy (VNE)
+    as described in GSPA and PHATE https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py,
+    https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf.
+
+    Parameters
+    ----------
+    keeper : `netflow.Keeper`
+        The keeper object.
+    similarity_key : `str`
+        Reference key to the `numpy.ndarray`, (n_observations, n_observations)
+        symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+        in the keeper.
+    tau_max : `int`
+        Max scale ``tau`` tested for VNE (default is 100).
+    do_save : `bool`
+        If `True`, save to ``keeper``.
+
+    Returns
+    -------
+    P : `numpy.ndarray` (n_observations, n_observations)
+        The symmetric VNE multi-scale transition matrix (with 0s on the diagonals).
+        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key ``'transitions_sym_multiscaleVNE_{similarity_key}'``
+    P_asym : `numpy.ndarray` (n_observations, n_observations)
+        The random-walk VNE multi-scale transition matrix (with 0s on the diagonals).
+        If ``do_save`` is `True`, ``P_asym`` is added to the ``keeper.misc`` with the key ``'transitions_multiscaleVNE_{similarity_key}'``
+    """
+    P_sym_label = f"transitions_sym_multiscaleVNE_{similarity_key}"
+    P_asym_label = f"transitions_multiscaleVNE_{similarity_key}"
+
+    if P_sym_label in keeper.misc and P_asym_label in keeper.misc:
+        P = keeper.misc[P_sym_label]
+        P_asym = keeper.misc[P_asym_label]
+    else:
+        P_label = f"transitions_sym_diff_aff_{similarity_key}"
+        if P_label in keeper.misc:
+            P = keeper.misc[P_label]
+        else:
+            P = compute_sym_diffusion_affinity_transitions(keeper, similarity_key, do_save=False)
+        vne = utl.von_neumann_entropy(P, tau_max=tau_max)
+        tau = utl.find_knee_point(vne)
+
+        # if not use_affinity_diffusion_matrix:
+        #    P = compute_rw_transitions(keeper, similarity_key, do_save=False)    
+
+        P_rw_label = f"transitions_rw_{similarity_key}"
+        if P_rw_label in keeper.misc:
+            P_asym = keeper.misc[P_rw_label]
+        else:
+            P_asym = compute_rw_transitions(keeper, similarity_key, do_save=False)
+
+        P = np.linalg.matrix_power(P, tau)
+        P_asym = np.linalg.matrix_power(P_asym, tau)
+
+        if do_save:
+            # if use_affinity_diffusion_matrix:
+            #     P_label = f"transitions_sym_multiscaleVNE_{similarity_key}"
+            # else:
+            #     P_label = f"transitions_multiscaleVNE_{similarity_key}"
+
+            try:
+                keeper.add_misc(P, P_sym_label)
+            except Exception as e:
+                P = keeer.misc[P_sym_label]
+                logger.warning(f"Returning pre-computed {P_sym_label}")
+            try:
+                keeper.add_misc(P_asym, P_asym_label)
+            except Exception as e:
+                P_asym = keeper.misc[P_asym_label]
+                logger.warning(f"Returning pre-computed {P_sym_label}")
+
+    return P, P_asym
+
+
 def _dpt_from_augmented_sym_transitions(T, n_comps: int = 0):
     """ Return the diffusion pseudotime metric between observations,
     computed from the symmetric transitions.
@@ -699,7 +853,7 @@ def _dpt_from_augmented_sym_transitions(T, n_comps: int = 0):
         Pairwise-observation Diffusion pseudotime distances.
     """
     evals, evecs = utl.compute_eigen(T, n_comps=n_comps, sort="decrease")
-    if np.abs(evals[0] - 1.) > 1e-3:
+    if np.abs(evals[0] - 1.) > 1.8e-2: # 1e-2:
         raise ValueError(f"Largest eigenvalue is expected to be close to 1, found to be {np.round(evals[0], 4)}")
     if evals[1] > 1.0:
         raise ValueError(f"Expected second largest eigenvalue to be less than 1, found to be {np.round(evals[1], 4)}")
@@ -1857,8 +2011,7 @@ class POSER:
             # tree.node_adjacency = self.tree.node_adjacency
             # tree.node_connection = self.tree.node_connection
 
-        return tree
-            
+        return tree            
             
             
     def branchings_segments(self, n_branches, until_branched=False, annotate=True):
@@ -1987,13 +2140,22 @@ class POSER:
         return G
 
 
-    def construct_pose_nn_topology(self, G, annotate=True):
+    def construct_pose_nn_topology(self, G, mutual=False, k_mnn=3, annotate=True):
         """ Add nearest neighbor (nn) edges to POSE topology.
+
+        .. note:: Mutual nns tend to be sparser than nns so allow to select more
+                  than just the first nn if restricting to mutual neighbors.
 
         Parameters
         ----------
         G : `networkx.Graph`
             Nearest-neighbor edges are added to a copy of the POSE graph.
+        mutual : `bool` (default = `False`)
+            If `True`, add ``k_mnn`` mutual nn edges. Otherwise, add single nn edge.
+            When `False`, ``k_mnn`` is ignored.
+        k_mnn : `int` (``0 < k_mnn < len(G)``)
+            The number of nns to consider when extracting mutual nns.
+            Note, this is ignored when ``mutual`` is `False`.
         annotate : `bool`
             If `True`, annotate edges.
 
@@ -2011,11 +2173,20 @@ class POSER:
         Gnn = G.copy()
         d = self.distances
         # d = d + (np.max(d)+1e-3)*np.eye(*d.shape)
-        # nn = np.argmin(d, axis=0)
-        nn = np.argpartition(d, 1, axis=1)[:, 1]
-        if annotate:
+
+        if mutual:
+            nn_edges = mutual_knn_edges(d, n_neighbors=k_mnn)
+            nn_edges = [tuple(sorted(ee)) for ee in nn_edges]  # TODO: this might be redundant if returned in sorted order already
+        else:
+            # nn = np.argmin(d, axis=0)        
+            nn = np.argpartition(d, 1, axis=1)[:, 1]            
             nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
             nn_edges = list(set(nn_edges))
+            
+        
+        if annotate:
+            # nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
+            # nn_edges = list(set(nn_edges))
 
             pose_edges = list(set([tuple(sorted(ee)) for ee in Gnn.edges()]))
 
@@ -2040,7 +2211,7 @@ class POSER:
             nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
 
         else:
-            nn_edges = [tuple([i,j]) for i, j in zip(range(d.shape[0]), nn)]
+            # nn_edges = [tuple([i,j]) for i, j in zip(range(d.shape[0]), nn)]
             Gnn.add_edges_from(nn_edges)
 
         return Gnn

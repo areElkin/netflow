@@ -690,7 +690,127 @@ def invariant_measure(profiles, G=None, adj=None):
     return IM
     
 
-    
+def von_neumann_entropy(X, tau_max=None):
+    """ Compute Von Neumann Entropy (VNE) of the data at increasing scales.
+
+    As described in GSPA and PHATE https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py, https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf.
+
+    Taken from https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py.
+
+    Parameters
+    ----------
+    X : array-like
+        Matrix to compute VNE on. Expected to be ``n x n`` transition matrix.
+    tau_max : `int`
+        Max scale ``tau`` (default is 100).
+
+    Returns
+    -------
+    vne : `np.array`[``tau_max``]
+        The VNE at each scale up to ``tau_max``.
+    """
+    if tau_max is None:
+        tau_max = 100
+        
+    _, evals, _ = sc.linalg.svd(X)
+    evals_tau = evals.copy()
+
+    vne = []
+    for _ in itertools.repeat(None, tau_max):
+        p = evals_tau / np.sum(evals_tau)
+        p = p + np.finfo(float).eps # following SPARC implementation
+        vne.append(-np.sum(p * np.log(p)))
+        evals_tau = evals_tau * evals
+    vne = np.array(vne)
+
+    return vne
+
+
+def find_knee_point(y, x=None):
+    """
+    Returns the x-location of a (single) knee of curve y=f(x).
+
+    Taken from https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py.
 
     
-      
+    Parameters
+    ----------
+    y : array, shape=[n]
+        data for which to find the knee point
+    x : array, optional, shape=[n], default=np.arange(len(y))
+        indices of the data points of y,
+        if these are not in order and evenly spaced
+    
+    Returns
+    -------
+    knee_point : `int`
+        The index (or x value) of the knee point on y
+    
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import phate
+    >>> x = np.arange(20)
+    >>> y = np.exp(-x/10)
+    >>> phate.vne.find_knee_point(y,x)
+    8
+    """
+    try:
+        y.shape
+    except AttributeError:
+        y = np.array(y)
+
+    if len(y) < 3:
+        raise ValueError("Cannot find knee point on vector of length 3")
+    elif len(y.shape) > 1:
+        raise ValueError("y must be 1-dimensional")
+
+    if x is None:
+        x = np.arange(len(y))
+    else:
+        try:
+            x.shape
+        except AttributeError:
+            x = np.array(x)
+        if not x.shape == y.shape:
+            raise ValueError("x and y must be the same shape")
+        else:
+            # ensure x is sorted float
+            idx = np.argsort(x)
+            x = x[idx]
+            y = y[idx]
+
+    n = np.arange(2, len(y) + 1).astype(np.float32)
+    # figure out the m and b (in the y=mx+b sense) for the "left-of-knee"
+    sigma_xy = np.cumsum(x * y)[1:]
+    sigma_x = np.cumsum(x)[1:]
+    sigma_y = np.cumsum(y)[1:]
+    sigma_xx = np.cumsum(x * x)[1:]
+    det = n * sigma_xx - sigma_x * sigma_x
+    mfwd = (n * sigma_xy - sigma_x * sigma_y) / det
+    bfwd = -(sigma_x * sigma_xy - sigma_xx * sigma_y) / det
+
+    # figure out the m and b (in the y=mx+b sense) for the "right-of-knee"
+    sigma_xy = np.cumsum(x[::-1] * y[::-1])[1:]
+    sigma_x = np.cumsum(x[::-1])[1:]
+    sigma_y = np.cumsum(y[::-1])[1:]
+    sigma_xx = np.cumsum(x[::-1] * x[::-1])[1:]
+    det = n * sigma_xx - sigma_x * sigma_x
+    mbck = ((n * sigma_xy - sigma_x * sigma_y) / det)[::-1]
+    bbck = (-(sigma_x * sigma_xy - sigma_xx * sigma_y) / det)[::-1]
+
+    # figure out the sum of per-point errors for left- and right- of-knee fits
+    error_curve = np.full_like(y, np.float("nan"))
+    for breakpt in np.arange(1, len(y) - 1):
+        delsfwd = (mfwd[breakpt - 1] * x[: breakpt + 1] + bfwd[breakpt - 1]) - y[
+            : breakpt + 1
+        ]
+        delsbck = (mbck[breakpt - 1] * x[breakpt:] + bbck[breakpt - 1]) - y[breakpt:]
+
+        error_curve[breakpt] = np.sum(np.abs(delsfwd)) + np.sum(np.abs(delsbck))
+
+    # find location of the min of the error curve
+    loc = np.argmin(error_curve[1:-1]) + 1
+    knee_point = x[loc]
+    return knee_point
+    
