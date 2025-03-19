@@ -223,3 +223,109 @@ def avg_cluster_edges(X, clustering, G=None):
     R = R.loc[sorted(R.columns), sorted(R.columns)]
     return R
              
+
+def louvain(G, weight='inverted-distance', resolution=1., seed=0, **kwargs):
+    """ Compute Louvain communities on graph, intended for POSE
+
+    Louvain communities are computed via ``networkx.community.louvain_communities``
+
+    Parameters
+    ----------
+    G : `networkx.Graph`
+        The graph.
+    weight : {`None`, `str`}
+        The edge attribute of the value used as the weight. If None, set to 1
+        for all edges (default value = 'inverted_distance').
+    resolution : `float`
+        Influences algorithm preference for larger (resolution value greater than 1)
+        or smaller (resolution value smaller than 1) communities.
+    seed : `int`
+        Random generator state.
+    kwargs : `dict`
+        Keyword arguments passed to ``networkx.community.louvain_communities``.
+
+    Returns
+    -------
+    lvp : `dict`
+       Index of community each node is partitioned into, keyed by the nodes.
+    """
+    louvain_partition = nx.community.louvain_communities(G,
+                                                         weight=weight,
+                                                         resolution=resolution,
+                                                         seed=seed,
+                                                         **kwargs)
+    lvp = {node: i for i, partition in enumerate(louvain_partition) for node in partition}
+
+
+def louvain_paritioned(G, class_attr, louvain_attr=None,
+                       weight='inverted-distance', resolution=1., seed=0,
+                       **kwargs):
+    """ Compute Louvain communities on graph and further partition restricted to existing classifier (e.g., branches intended for POSE)
+
+    Louvain communities are computed via ``networkx.community.louvain_communities``
+
+    Parameters
+    ----------
+    G : `networkx.Graph`
+        The graph.
+    class_attr : `str`
+        The node attribute of the value of the pre-assigned class attribute against
+        which the Louvain communities should be partitioned.
+    louvain_attr : {`None`, `str`}
+        (Optional) Node attribute where Louvain community indices are stored.
+        If provided, first check if the attribute already exists in ``G`` to use
+        pre-compouted Louvain community idices (if it exists, remaining argument
+        values are ignored). Otherwise, the computed Louvain community indices are
+        stored in this node attribute. If not provided, Louvain communities are
+        computed and not stored.
+    weight : {`None`, `str`}
+        The edge attribute of the value used as the weight. If None, set to 1
+        for all edges (default value = 'inverted_distance').
+        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)
+    resolution : `float`
+        Influences algorithm preference for larger (resolution value greater than 1)
+        or smaller (resolution value smaller than 1) communities.
+        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)
+    seed : `int`
+        Random generator state.
+        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)
+    kwargs : `dict`
+        Keyword arguments passed to ``networkx.community.louvain_communities``.
+        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)
+
+    Returns
+    -------
+    The following node attributes are added to the graph ``G`` :
+
+        - f"{class_attr}_{louvain_attr}" : The class partitioned and Louvain community
+          reference index in the form "{class-index}-{Louvain-index}"
+          (``louvain_attr`` defaults to "lvp" if not provided).
+        - louvain_attr - The Louvain community reference index, if provided.
+    """
+    ca = dict(nx.get_node_attributes(G, class_attr))
+
+
+    if louvain_attr is not None:
+        lvp = dict(nx.get_node_attributes(G, louvain_attr))
+    else:
+        lvp = {}
+        
+    if len(lvp) != len(G):
+        louvain_partition = nx.community.louvain_communities(G,
+                                                             weight=weight,
+                                                             resolution=resolution,
+                                                             seed=seed,
+                                                             **kwargs)
+        lvp = {node: i for i, partition in enumerate(louvain_partition) for node in partition}
+        if louvain_attr is not None:
+            nx.set_node_attributes(G, lvp, name=louvain_attr)
+
+    louvain_str = louvain_attr if louvain_attr is not None else 'lvp'
+
+    nx.set_node_attributes(G, {k: f"{ca[k]}-{lvp[k]}" for k in G},
+                           name=f"{class_attr}-{louvain_str}")
+
+    
+            
+    
+    

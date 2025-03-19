@@ -11,6 +11,7 @@ import multiprocessing as mp
 import networkx as nx
 import numpy as np
 import pandas as pd
+import sklearn.decomposition
 
 from .. import checks
 from .._utils import _docstring_parameter, _desc_distance, \
@@ -18,12 +19,15 @@ from .._utils import _docstring_parameter, _desc_distance, \
 from ..utils import unstack_triu_
 from ..methods.classes import InfoNet
 from ..pose import similarity as nfs
-from ..pose.organization import compute_transitions, dpt_from_augmented_sym_transitions, POSER
+from ..pose import organization as nfo
+# from ..pose.organization import compute_transitions, dpt_from_augmented_sym_transitions, POSER, compute_rw_transitions, 
 # import netflow.InfoNet as InfoNet
 from .._logging import _gen_logger, set_verbose
 
+from importlib import reload
+reload(nfo)
 
-
+nfo = reload(nfo)
 logger = _gen_logger(__name__)
 
 
@@ -2006,7 +2010,7 @@ class Keeper:
         -------
         wds : `pandas.DataFrame`
             Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names,
-            saved in ``keeper.distances`` with the key ``f'{data_key}_{label}_wass_dist_observation_pairwise_profiles'``.
+            saved in ``keeper.distances`` with the key ``f'{data_key}_{label}_profile_wass'``,
         """
         inet = InfoNet(self, graph_key, layer=data_key)
 
@@ -2014,9 +2018,9 @@ class Keeper:
             graph_distances = inet.compute_graph_distances(weight=edge_weight)
 
         if label is None:
-            label = f'{data_key}_wass_dist_observation_pairwise_profiles'
+            label = f'{data_key}_profile_wass'
         else:
-            label = f'{data_key}_{label}_wass_dist_observation_pairwise_profiles'
+            label = f'{data_key}_{label}_profile_wass'
             
         inet.pairwise_observation_profile_wass_distance(features=features, graph_distances=graph_distances, 
                                                         label=label,
@@ -2040,7 +2044,7 @@ class Keeper:
           distance and do not provide any further information.
 
           The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
-          and can be accessed by ``self.distances[f'{data_key}_{label}_euc_dist_observation_pairwise_profiles']``.
+          and can be accessed by ``self.distances[f'{data_key}_{label}_profile_euc']``.
 
         Parameters
         ----------
@@ -2062,15 +2066,15 @@ class Keeper:
         -------
         eds : `pandas.DataFrame`
             Euclidean distances between pairwise profiles where rows are observation-pairs and columns are node names,
-            saved in ``keeper.distances`` with the key ``f'{data_key}_{label}_euc_dist_observation_pairwise_profiles'``.
+            saved in ``keeper.distances`` with the key ``f'{data_key}_{label}_profile_euc'``.
 
         """
         inet = InfoNet(self, None, layer=data_key)
 
         if label is None:
-            label = f'{data_key}_euc_dist_observation_pairwise_profiles'
+            label = f'{data_key}_profile_euc'
         else:
-            label = f'{data_key}_{label}_euc_dist_observation_pairwise_profiles'
+            label = f'{data_key}_{label}_profile_euc'
 
         inet.pairwise_observation_profile_euc_distance(features=features,
                                                        label=label, 
@@ -2096,7 +2100,7 @@ class Keeper:
           distance and do not provide any further information.
 
           The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by
-          ``self.misc[f"{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"]``.
+          ``self.misc[f"{data_key}_{label}_nbhd_wass_with{'' if include_self else 'out'}_self"]``.
 
         Parameters
         ----------
@@ -2137,7 +2141,7 @@ class Keeper:
             Wasserstein distances between pairwise observations where rows are observation-pairs and columns are
             feature (node) names.
             saved in ``keeper.misc`` with the key
-            ``f"{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"``.
+            ``f"{data_key}_{label}_nbhd_wass_with{'' if include_self else 'out'}_self"``.
         """
         inet = InfoNet(self, graph_key, layer=data_key)
 
@@ -2145,9 +2149,9 @@ class Keeper:
             graph_distances = inet.compute_graph_distances(weight=edge_weight)
 
         if label is None:
-            label = f"{data_key}_wass_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"
+            label = f"{data_key}_nbhd_wass_with{'' if include_self else 'out'}_self"
         else:
-            label = f"{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"
+            label = f"{data_key}_{label}_nbhd_wass_with{'' if include_self else 'out'}_self"
             
         inet.multiple_pairwise_observation_neighborhood_wass_distance(nodes=features, include_self=include_self,
                                                                       graph_distances=graph_distances,
@@ -2173,7 +2177,7 @@ class Keeper:
           distance and do not provide any further information.
 
           The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by
-          ``self.misc[f"{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"]``.
+          ``self.misc[f"{data_key}_{label}_nbhd_euc_with{'' if include_self else 'out'}_self"]``.
 
         Parameters
         ----------
@@ -2205,14 +2209,14 @@ class Keeper:
             Euclidean distances between pairwise observations where rows are observation-pairs and columns are
             feature (node) names.
             saved in ``keeper.misc`` with the key
-            ``f"{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"``.
+            ``f"{data_key}_{label}_nbhd_euc_with{'' if include_self else 'out'}_self"``.
         """
         inet = InfoNet(self, graph_key, layer=data_key)
 
         if label is None:
-            label = f"{data_key}_euc_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"
+            label = f"{data_key}_nbhd_euc_with{'' if include_self else 'out'}_self"
         else:
-            label = f"{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{'' if include_self else 'out'}_self"
+            label = f"{data_key}_{label}_nbhd_euc_with{'' if include_self else 'out'}_self"
             
         if normalize :
             label = '_'.join([label, 'normalized'])
@@ -2423,11 +2427,11 @@ class Keeper:
         Adds the following to `keeper.misc` (with 0s on the diagonals):
             transitions_asym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)
                 Asymmetric Transition matrix.
-            transitions_sym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)
+            Transitions_sym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)
                 Symmetric Transition matrix.
         
         """
-        compute_transitions(self, similarity_key, density_normalize=density_normalize)
+        nfo.compute_transitions(self, similarity_key, density_normalize=density_normalize)
 
 
     def compute_dpt_from_augmented_sym_transitions(self, key, n_comps: int = 0):
@@ -2457,7 +2461,26 @@ class Keeper:
             Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.
             Alternatively, if set ``n_comps >= n_observations``, the whole spectrum will be computed.
         """
-        dpt_from_augmented_sym_transitions(self, key, n_comps=n_comps)
+        nfo.dpt_from_augmented_sym_transitions(self, key, n_comps=n_comps)
+
+    def compute_rw_transitions_from_similarity(self, similarity_key):
+        """ Compute the row-stochastic transition matrix and store in keeper.
+
+        Parameters
+        ----------
+        similarity_key : `str`
+            Reference key to the `numpy.ndarray`, (n_observations, n_observations)
+            symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+            in the keeper.
+
+        Returns
+        -------
+        Adds the following to `keeper.misc` (with 0s on the diagonals):
+            transitions_rw_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)
+                Asymmetric random walk transition matrix.
+        """
+        _ = nfo.compute_rw_transitions(self, similarity_key)
+
 
 
     def compute_dpt_from_similarity(self, similarity_key, density_normalize: bool = True,
@@ -2502,19 +2525,214 @@ class Keeper:
                If the full spectrum is not used (i.e., ``0 < n_comps < n_observations"``),
                then ``dpt_key="dpt_from_transitions_asym_{similarity_key}_{n_comps}comps"``.
         """
-        self.compute_transitions_from_similarity(similarity_key, density_normalize)
         T_sym_key = f"transitions_sym_{similarity_key}"
         if density_normalize:
-            T_sym_key = "_".join([T_sym_key, "density_normalized"])            
-            
+            T_sym_key = "_".join([T_sym_key, "density_normalized"])
+        if T_sym_key not in self.misc:
+            self.compute_transitions_from_similarity(similarity_key, density_normalize)        
+
         self.compute_dpt_from_augmented_sym_transitions(T_sym_key, n_comps=n_comps)
 
+
+    def integrate_transitions(self, transition_keys, integrated_key=None):
+        """ Integrate transitions
+
+        Parameters
+        -----------
+        transition_keys : `list`
+            Reference keys of transitions to integrate.
+        integrated_key : `str`
+            (Optional) Specify key used to store the integrated transitions into the keeper.
+            Default behavior is to integrate the keys of the original transitions.
+
+        Returns
+        -------
+        The following is added to the similarity keeper :
+
+          - integrated transition : The integrated transition, where the reference key, if not provided, is fused from the original labels.
+        """
+
+        if integrated_key is None:            
+            integrated_key = fuse_labels(transition_keys).replace('fused', 'integrated')
+
+        p = self.misc[transition_keys[0]] # .data
+        for key in transition_keys[1:]:
+            p_cur = self.misc[key] # .data
+            p = p @ p_cur
+
+        # ensure symmetric
+        p = (p + p.T) / 2
+        self.add_misc(p, integrated_key)
+
+    
+    def integrate_transitions_from_similarity(self,
+                                              similarity_keys, integrated_key=None,
+                                              density_normalize: bool = True,
+                                              n_comps: int = 0):
+        """ Compute the integrated transition from similarities,
+
+        .. note::
+
+            - This entails computing the augmented symmetric transitions.
+            - :math:`T` is the symmetric transition matrix
+
+        Parameters
+        ----------
+        similarity_keys : `list`
+            Reference keys of similarities to compute transitions and integrate.
+        integrated_key : `str`
+            (Otional) Specify key used to store the integrated transitions into the keeper.
+            Default behavior is to integrate the keys of the original transitions.
+        density_normalize : `bool`
+            The density rescaling of Coifman and Lafon (2006): Then only the
+            geometry of the data matters, not the sampled density.
+        n_comps : `int`
+            Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.
+            Alternatively, if set ``n_comps >= n_observations``, the whole spectrum will be computed.
+
+        Returns
+        -------
+        The following are stored in the keeper :
+           transitions_asym : `numpy.ndarray`, (n_observations, n_observations)
+                Asymmetric Transition matrix (with 0s on the diagonal) added to
+                ``keeper.misc[f"transitions_asym_{similarity_key}"].
+           transitions_sym : `numpy.ndarray`, (n_observations, n_observations)
+                Symmetric Transition matrix (with 0s on the diagonal) added to
+                ``keeper.misc[f"transitions_sym_{similarity_key}"].
+           transitions_i : The integrated transition, where the reference key, if not provided, is fused from the original labels.
+        """
+
+        transition_keys = []
+        
+        for similarity_key in similarity_keys:
+            T_sym_key = f"transitions_sym_{similarity_key}"
+            if density_normalize:
+                T_sym_key = "_".join([T_sym_key, "density_normalized"])
+            if T_sym_key not in self.misc:
+                self.compute_transitions_from_similarity(similarity_key,
+                                                         density_normalize)
+            transition_keys.append(T_sym_key)
+
+
+        self.integrate_transitions(transition_keys, integrated_key=integrated_key)
+        
+
+    def compute_multiscale_VNE_transition_from_similarity(self, similarity_key,
+                                                          tau_max=None,
+                                                          do_save=True):
+        """ Compute the multi-scale transition matrix based on the elbow of the Von Neumann Entropy (VNE)
+
+        as described in GSPA and PHATE https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py,
+        https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf.
+
+        Parameters
+        ----------
+        similarity_key : `str`
+            Reference key to the `numpy.ndarray`, (n_observations, n_observations)
+            symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+            in the keeper.
+        tau_max : `int`
+            Max scale ``tau`` tested for VNE (default is 100).
+        do_save : `bool`
+            If `True`, save to ``keeper``.
+
+        Returns
+        -------
+        P : `numpy.ndarray` (n_observations, n_observations)
+            The symmetric VNE multi-scale transition matrix (with 0s on the diagonals).
+            If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key ``'transitions_sym_multiscaleVNE_{similarity_key}'``
+        P_asym : `numpy.ndarray` (n_observations, n_observations)
+            The random-walk VNE multi-scale transition matrix (with 0s on the diagonals).
+            If ``do_save`` is `True`, ``P_asym`` is added to the ``keeper.misc`` with the key ``'transitions_multiscaleVNE_{similarity_key}'``
+        """
+        P_sym_label = f"transitions_sym_multiscaleVNE_{similarity_key}"
+        P_asym_label = f"transitions_multiscaleVNE_{similarity_key}"
+        
+        if P_sym_label in self.misc and P_asym_label in self.misc:
+            P = self.misc[P_sym_label]
+            P_asym = self.misc[P_asym_label]
+        else:
+            P, P_asym = nfo.compute_multiscale_VNE_transitions_from_similarity(self,
+                                                                               similarity_key,
+                                                                               tau_max=tau_max,
+                                                                               do_save=do_save)
+        return P, P_asym
+    
+    
+    def integrate_multiscale_VNE_transitions_from_similarities(self, similarity_keys,
+                                                               tau_max=None,
+                                                               integrated_key=None):
+        """ Integrate multi-scale transitions where scale is determined by elbow
+        of Von Neumann Entropy (VNE)
+
+        As described in https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf.
+
+        Parameters
+        -----------
+        similarity_keys : `list`
+            Reference keys of similarities to compute transitions and integrate.
+        tau_max : `int`
+            Max scale ``tau`` to test Von Neumann Entropy on (default is 100).
+        integrated_key : `str`
+            (Optional) Specify key used to store the integrated transitions into the keeper.
+            Default behavior is to integrate the keys of the original transitions.
+
+        Returns
+        -------
+        The following is added to the similarity keeper :
+
+          - integrated transition : The (symmetric) integrated multi-scale transition, where the reference key, if not provided, is fused from the original labels.
+          - integrated asymmetric transition : The (asymmetric random-walk) integrated multi-scale transition, where the reference key, if not provided, is fused from the original labels.
+        """
+        if integrated_key is None:
+            # flabel = 'integrated_sym_VNE' if use_affinity_diffusion_matrix else 'integrated_VNE'
+            # integrated_key = fuse_labels(similarity_keys).replace('fused', flabel)
+            integrated_key = fuse_labels(similarity_keys).replace('fused', 'integrated_VNE')
+
+        P_sym_integrated_label = f"sym_{integrated_key}"
+        P_asym_integrated_label = f"asym_{integrated_key}"
+
+        if P_sym_integrated_label in self.misc and P_asym_integrated_label in self.misc:
+            logger.warning(f"Already computed {P_sym_integrated_label} and {P_asym_integrated_label}")
+
+        else:
+        
+
+            p, p_asym = self.compute_multiscale_VNE_transition_from_similarity(similarity_keys[0],
+                                                                               tau_max=tau_max,
+                                                                               # use_affinity_diffusion_matrix=use_affinity_diffusion_matrix,
+                                                                               do_save=True)
+
+            for key in similarity_keys[1:]:
+                p_cur, p_asym_cur = self.compute_multiscale_VNE_transition_from_similarity(key,
+                                                                                           tau_max=tau_max,
+
+                                                                                           # use_affinity_diffusion_matrix=use_affinity_diffusion_matrix,
+                                                                                           do_save=True)
+                p = p @ p_cur
+                p_asym = p_asym @ p_asym_cur
+
+            # ensure symmetric
+            p = (p + p.T) / 2
+            p_asym = (p_asym + p_asym.T) / 2
+
+            try:
+                self.add_misc(p,P_sym_integrated_label)
+            except Exception as e:
+                logger.warning(f"Encountered error when adding {P_sym_integrated_label}: \n .. {e}")
+            try:
+                self.add_misc(p_asym, P_asym_integrated_label)
+            except Exception as e:
+                logger.warning(f"Encountered error when adding {P_asym_integrated_label}: \n .. {e}")
+
+        
 
     def construct_pose(self, key, root=None, root_as_tip=False,
                        min_branch_size=5, choose_largest_segment=False,
                        flavor='haghverdi16', allow_kendall_tau_shift=False,
                        smooth_corr=True, brute=True, split=True, verbose=None,
-                       n_branches=2, until_branched=False, annotate=True,
+                       n_branches=2, until_branched=False, mutual=False, k_mnn=3,
+                       annotate=True,
                        ):                
         """ Construct the POSE from specified distance.
 
@@ -2572,6 +2790,12 @@ UBE
               This is only applicable when branching is being performed. If previous
               iterations of branching has already been performed, it is not possible to
               identify the number of iterations where no branching was performed.
+        mutual : `bool` (default = `False`)
+            If `True`, add ``k_mnn`` mutual nn edges. Otherwise, add single nn edge.
+            When `False`, ``k_mnn`` is ignored.
+        k_mnn : `int` (``0 < k_mnn < len(G)``)
+            The number of nns to consider when extracting mutual nns.
+            Note, this is ignored when ``mutual`` is `False`.
         annotate : `bool`
             If `True`, annotate edges and nodes with POSE features.
 
@@ -2588,13 +2812,13 @@ UBE
             - "NN" : for nearest neighbor edges that were not in the original graph
             - "POSE + NN" : for edges in the original graph that are also nearest neighbor edges
         """                
-        poser = POSER(self, key, root=root, root_as_tip=root_as_tip, min_branch_size=min_branch_size,
-                      choose_largest_segment=choose_largest_segment,
-                      flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
-                      smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
+        poser = nfo.POSER(self, key, root=root, root_as_tip=root_as_tip, min_branch_size=min_branch_size,
+                          choose_largest_segment=choose_largest_segment,
+                          flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
+                          smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
 
         G_poser = poser.branchings_segments(n_branches, until_branched=until_branched, annotate=annotate)
-        G_poser_nn = poser.construct_pose_nn_topology(G_poser, annotate=annotate)
+        G_poser_nn = poser.construct_pose_nn_topology(G_poser, mutual=mutual, k_mnn=k_mnn, annotate=annotate)
 
         # label = [key]
         # if root is not None:
@@ -2619,6 +2843,32 @@ UBE
 
         return poser, G_poser_nn
 
+    def PCA(self, key, n_components=None, random_state=None):
+        """ Principle component analysis (PCA) decomposition.
+
+        Parameters
+        ----------
+        key : `str`
+            The reference key of the data in the data-keeper that PCA decomposition
+            will be performed on.
+        n_components : {`None`, `int`}
+            The number of principle components to keep.
+            If `None`, all principle components are kept.
+        random_state : {`None`, `int`}
+            Random state used for certain solvers. Pass an `int` for reproducible results across runs.
+
+        Returns
+        -------
+        PCA data with label "{key}_PCA" is added to the data keeper.
+        """
+        pca_obj = sklearn.decomposition.PCA(n_components=n_components, random_state=random_state)
+        data_pca = pca_obj.fit_transform(self.data[key].data.T)
+
+        data_pca = pd.DataFrame(data=data_pca.T,
+                                index=[f"PC{k}" for k in range(data_pca.shape[1])],
+                                columns=self.observation_labels)
+        self.add_data(data_pca, f"{key}_PCA")
+        
 
     def log1p(self, key, base=None):
         """ Logarithmic data transformation.

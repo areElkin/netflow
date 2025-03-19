@@ -21,10 +21,15 @@ from datetime import datetime
 from jupyter_dash import JupyterDash
 from matplotlib import colormaps as mpl_cm
 
-from .visualization import sin_layout, wavy_curve_layout
+from .visualization import sin_layout, wavy_curve_layout # , forceatlas2_layout
 from ..methods.stats import stat_test
 
 from ..methods import stats as ms
+
+from importlib import reload
+from . import visualization as nfv
+reload(nfv)
+forceatlas2_layout = nfv.forceatlas2_layout
 
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -762,7 +767,7 @@ def renderer(keeper, pose_key, distance_key):
                                                    dcc.Dropdown(
                                                        id='layout-dropdown',
                                                        options=[{'label': layout,
-                                                                 'value': layout} for layout in ['kamada_kawai', 'spring',
+                                                                 'value': layout} for layout in ['kamada_kawai', 'forceatlas2', 'spring',
                                                                                                  'circular', # 'cose',
                                                                                                  'shell', 'grid',
                                                                                                  'breadthfirst', 'sin',
@@ -908,6 +913,28 @@ def renderer(keeper, pose_key, distance_key):
                                                        ),
                                                    ]),
                                                ]),
+                                               # html.Fieldset(style=styles['fieldset-panel'], children=[
+                                               #     html.Legend('Filter edges', style=styles['fieldset-legend']),
+                                               #     html.Label("Filter by Edge Attribute", style=styles['label_b']),
+                                               #     html.Label("Edge attribute:", style=styles['label']),
+                                               #     dcc.Dropdown(
+                                               #         id='edge-filter-attribute-dropdown',
+                                               #         # BBB options=[{'label': 'None',
+                                               #         # BBB          'value': 'None'}] + [{'label': attr,
+                                               #         # BBB                                'value': attr} for attr in list(G.edges(data=True))[0][-1].keys()],
+                                               #         options=[{'label': attr,
+                                               #                   'value': attr} for attr in list(G.edges(data=True))[0][-1].keys() if \
+                                               #                  all(isinstance(k, (int, float)) for k in nx.get_edge_attributes(G, attr).values())],
+                                               #         value=None, # BBB 'None', 
+                                               #     ),
+                                               #     html.Label("Range:", style=styles['label']),
+                                               #     dcc.RangeSlider(id='edge-filter-slider',
+                                               #                     min=0, max=1, step=1e-4, value=0,
+                                               #                     allowCross=False,
+                                               #                     tooltip={"placement": "top", "always_visible": False},
+                                               #                     className='my-slider',
+                                               #                     ),
+                                               # ]),
                                                dcc.Interval(id='interval', interval=1000, n_intervals=0),  # Interval to capture dimensions periodically
                                                
                                            ],
@@ -1798,6 +1825,9 @@ def renderer(keeper, pose_key, distance_key):
                 positions_records[layout] = pos
             elif layout == 'grid':
                 pos = nx.planar_layout(G)
+                positions_records[layout] = pos
+            elif layout == 'forceatlas2':
+                pos = forceatlas2_layout(G)
                 positions_records[layout] = pos
             elif layout == 'sin':
                 pos = sin_layout(G, keeper.distances[distance_key].to_frame())
