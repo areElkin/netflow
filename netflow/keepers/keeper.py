@@ -2732,6 +2732,7 @@ class Keeper:
                        flavor='haghverdi16', allow_kendall_tau_shift=False,
                        smooth_corr=True, brute=True, split=True, verbose=None,
                        n_branches=2, until_branched=False, mutual=False, k_mnn=3,
+                       connect_closest=False,
                        annotate=True,
                        ):                
         """ Construct the POSE from specified distance.
@@ -2796,6 +2797,9 @@ UBE
         k_mnn : `int` (``0 < k_mnn < len(G)``)
             The number of nns to consider when extracting mutual nns.
             Note, this is ignored when ``mutual`` is `False`.
+        connect_closest : `bool` (default = False)
+            If `True`, connect branches by points with smallest distance between the branches.
+            Otherwise, connect by continuum of ordering. 
         annotate : `bool`
             If `True`, annotate edges and nodes with POSE features.
 
@@ -2814,6 +2818,7 @@ UBE
         """                
         poser = nfo.POSER(self, key, root=root, root_as_tip=root_as_tip, min_branch_size=min_branch_size,
                           choose_largest_segment=choose_largest_segment,
+                          connect_closest=connect_closest,
                           flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
                           smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
 

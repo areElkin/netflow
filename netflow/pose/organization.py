@@ -40,6 +40,7 @@ To do:
 from typing import Tuple, Optional, Sequence, List
 
 from collections import defaultdict as ddict
+from itertools import combinations
 import itertools
 import networkx as nx
 import numpy as np
@@ -74,7 +75,7 @@ logger = _gen_logger(__name__)
 def get_pose(keeper, key, label, n_branches, until_branched=False, 
              root=None, min_branch_size=5, choose_largest_segment=False,
              flavor='haghverdi16', allow_kendall_tau_shift=False,
-             smooth_corr=False, brute=True, split=True,
+             smooth_corr=False, brute=True, split=True, connect_closest=False,
              mutual=False, k_mnn=3,
              verbose=None):
     """ Compute the pose and saved to keeper.
@@ -135,6 +136,9 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
     k_mnn : `int` (``0 < k_mnn < len(G)``)
         The number of nns to consider when extracting mutual nns.
         Note, this is ignored when ``mutual`` is `False`.
+    connect_closest : `bool` (default = False)
+            If `True`, connect branches by points with smallest distance between the branches.
+            Otherwise, connect by continuum of ordering. 
 
     Returns
     -------
@@ -154,6 +158,7 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
     """
     poser = POSER(keeper, key, root=root,
                   min_branch_size=min_branch_size, choose_largest_segment=choose_largest_segment,
+                  connect_closest=connect_closest,
                   flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
                   smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
     G_pose = poser.branchings_segments(n_branches, until_branched=until_branched)
@@ -980,11 +985,15 @@ class POSER:
             determine a single branching off of the main segment.
             This is ignored if flavor is not 'haghverdi16'.
             If `True`, ``brute`` is ignored.
+    connect_closest : `bool` (default = False)
+            If `True`, connect branches by points with smallest distance between the branches.
+            Otherwise, connect by continuum of ordering. 
     """
     def __init__(self, keeper, key, root=None, root_as_tip=False,
                  min_branch_size=5, choose_largest_segment=False,
                  flavor='haghverdi16', allow_kendall_tau_shift=False,
-                 smooth_corr=True, brute=True, split=True, verbose=None):
+                 smooth_corr=True, brute=True, split=True, connect_closest=False,
+                 verbose=None):
 
         if verbose is not None:
             set_verbose(logger, verbose)
@@ -1008,6 +1017,7 @@ class POSER:
         self.smooth_corr = smooth_corr
         self.brute = brute
         self.split = split
+        self.connect_closest = connect_closest
 
         if root is None:
             root = "density"
@@ -1468,7 +1478,7 @@ class POSER:
         return ssegs
     
 
-    def _detect_branch(self, Dseg: np.ndarray, tips: np.ndarray):
+    def _detect_branch(self, Dseg: np.ndarray, tips: np.ndarray): # , connect_closest=False):
         """ Detect branching on given segment.
 
         If ``self.split``, Call function __detect_branching three times for all three orderings 
@@ -1593,26 +1603,34 @@ class POSER:
                 trunk_undecided = True
                 # establish the connecting points with the other segments
                 ssegs_connects = [] # [[]]*len(ssegs) # [[], [], [], []]
-                for inewseg, newseg_tips in enumerate(ssegs_tips):
-                    reference_point = newseg_tips[0]
-                    # closest (undecided) cell to the new segment tip within undecided cells
-                    closest_cell_a = undecided_cells[
-                        np.argmin(Dseg[reference_point][undecided_cells])
-                    ]
-                    # RE START MODIFIED
-                    # # ssegs_connects[inewseg].append(closest_cell)
-                    # ssegs_connects[-1].append(closest_cell_a)
-                    # RE END MODIFIED
-                    # closest cell to the undecided cells within new segment
-                    closest_cell_b = ssegs[inewseg][
-                        np.argmin(Dseg[closest_cell_a][ssegs[inewseg]])
-                    ]
-                    # RE START MODIFIED
-                    # # ssegs_connects[-1].append(closest_cell)
-                    # ssegs_connects[inewseg].append(closest_cell)
-                    # RE END MODIFIED
 
-                    ssegs_connects.append([[trunk, inewseg], [closest_cell_a, closest_cell_b]])
+                if self.connect_closest:
+                    for i_cur_seg, cur_seg in enumerate(ssegs[:-1]):
+                         dseg_cur = Dseg[np.ix_(cur_seg, ssegs[-1])]
+                         point_in_seg, point_in_trunk = np.unravel_index(np.argmin(dseg_cur), dseg_cur.shape)
+                         ssegs_connects.append([[trunk, i_cur_seg], [undecided_cells[point_in_trunk],
+                                                                     cur_seg[point_in_seg]]])
+                else:
+                    for inewseg, newseg_tips in enumerate(ssegs_tips):
+                        reference_point = newseg_tips[0]
+                        # closest (undecided) cell to the new segment tip within undecided cells
+                        closest_cell_a = undecided_cells[
+                            np.argmin(Dseg[reference_point][undecided_cells])
+                        ]
+                        # RE START MODIFIED
+                        # # ssegs_connects[inewseg].append(closest_cell)
+                        # ssegs_connects[-1].append(closest_cell_a)
+                        # RE END MODIFIED
+                        # closest cell to the undecided cells within new segment
+                        closest_cell_b = ssegs[inewseg][
+                            np.argmin(Dseg[closest_cell_a][ssegs[inewseg]])
+                        ]
+                        # RE START MODIFIED
+                        # # ssegs_connects[-1].append(closest_cell)
+                        # ssegs_connects[inewseg].append(closest_cell)
+                        # RE END MODIFIED
+
+                        ssegs_connects.append([[trunk, inewseg], [closest_cell_a, closest_cell_b]])
 
                 # also compute tips for the undecided cells
                 tip_0 = undecided_cells[
@@ -1635,27 +1653,35 @@ class POSER:
                 reference_point[2] = ssegs_tips[2][0]
                 closest_points = np.zeros((3, 3), dtype=int)
 
-                # this is another strategy than for the undecided_cells
-                # here it's possible to use the more symmetric procedure
-                # shouldn't make much of a difference
-                closest_points[0, 1] = ssegs[1][
-                    np.argmin(Dseg[reference_point[0]][ssegs[1]])
-                ]
-                closest_points[1, 0] = ssegs[0][
-                    np.argmin(Dseg[reference_point[1]][ssegs[0]])
-                ]
-                closest_points[0, 2] = ssegs[2][
-                    np.argmin(Dseg[reference_point[0]][ssegs[2]])
-                ]
-                closest_points[2, 0] = ssegs[0][
-                    np.argmin(Dseg[reference_point[2]][ssegs[0]])
-                ]
-                closest_points[1, 2] = ssegs[2][
-                    np.argmin(Dseg[reference_point[1]][ssegs[2]])
-                ]
-                closest_points[2, 1] = ssegs[1][
-                    np.argmin(Dseg[reference_point[2]][ssegs[1]])
-                ]
+                if self.connect_closest:
+                    for seg_a, seg_b in combinations(range(3), 2):                        
+                        # i_cur_seg, cur_seg in enumerate(ssegs[:-1]):
+                         dseg_cur = Dseg[np.ix_(ssegs[seg_a], ssegs[seg_b])]
+                         point_in_seg_a, point_in_seg_b = np.unravel_index(np.argmin(dseg_cur), dseg_cur.shape)
+                         closest_points[seg_a, seg_b] = ssegs[seg_b][point_in_seg_b]
+                         closest_points[seg_b, seg_a] = ssegs[seg_a][point_in_seg_a]
+                else:
+                    # this is another strategy than for the undecided_cells
+                    # here it's possible to use the more symmetric procedure
+                    # shouldn't make much of a difference
+                    closest_points[0, 1] = ssegs[1][
+                        np.argmin(Dseg[reference_point[0]][ssegs[1]])
+                    ]
+                    closest_points[1, 0] = ssegs[0][
+                        np.argmin(Dseg[reference_point[1]][ssegs[0]])
+                    ]
+                    closest_points[0, 2] = ssegs[2][
+                        np.argmin(Dseg[reference_point[0]][ssegs[2]])
+                    ]
+                    closest_points[2, 0] = ssegs[0][
+                        np.argmin(Dseg[reference_point[2]][ssegs[0]])
+                    ]
+                    closest_points[1, 2] = ssegs[2][
+                        np.argmin(Dseg[reference_point[1]][ssegs[2]])
+                    ]
+                    closest_points[2, 1] = ssegs[1][
+                        np.argmin(Dseg[reference_point[2]][ssegs[1]])
+                    ]
 
                 added_dist = np.zeros(3)
                 added_dist[0] = (
@@ -1700,19 +1726,27 @@ class POSER:
             else:
                 trunk = 0
                 # ssegs_adjacency = [[1], [0]]
-                reference_point_in_0 = ssegs_tips[0][0]
-                closest_point_in_1 = ssegs[1][
-                    np.argmin(Dseg[reference_point_in_0][ssegs[1]])
-                ]
-                reference_point_in_1 = closest_point_in_1  # ssegs_tips[1][0]
-                closest_point_in_0 = ssegs[0][
-                    np.argmin(Dseg[reference_point_in_1][ssegs[0]])
-                ]
-                # RE START MODIFIED
-                # # ssegs_connects = [[closest_point_in_1], [closest_point_in_0]]
-                # ssegs_connects = [[closest_point_in_0], [closest_point_in_1]]
-                ssegs_connects = [[[1, 0], [closest_point_in_0, closest_point_in_1]]]
-                # RE END MODIFIED
+
+                if self.connect_closest:
+                    dseg_cur = Dseg[np.ix_(ssegs[0], ssegs[1])]
+                    point_in_seg_0, point_in_seg_1 = np.unravel_index(np.argmin(dseg_cur), dseg_cur.shape)
+                    ssegs_connects = [[[1, 0], [ssegs[1][point_in_seg_1],
+                                                ssegs[0][point_in_seg_0]]]]
+                else:
+                    reference_point_in_0 = ssegs_tips[0][0]
+                    closest_point_in_1 = ssegs[1][
+                        np.argmin(Dseg[reference_point_in_0][ssegs[1]])
+                    ]
+                    reference_point_in_1 = closest_point_in_1  # ssegs_tips[1][0]
+                    closest_point_in_0 = ssegs[0][
+                        np.argmin(Dseg[reference_point_in_1][ssegs[0]])
+                    ]
+                    # RE START MODIFIED
+                    # # ssegs_connects = [[closest_point_in_1], [closest_point_in_0]]
+                    # ssegs_connects = [[closest_point_in_0], [closest_point_in_1]]
+                    ssegs_connects = [[[1, 0], [closest_point_in_0, closest_point_in_1]]]
+                    # RE END MODIFIED
+                                      
 
         else:
             if len(ssegs) < 1:
@@ -1735,30 +1769,40 @@ class POSER:
                                                                          [tips[0],
                                                                           tips[1], # tips[2],
                                                                           ])]
-            
 
-            # ssegs_connects = [[]]*len(ssegs) # [[], []]
-            # point in branch closest to the main segment
-            reference_point = tips[0]
-            closest_cell_a = branch_seg[
-                np.argmin(Dseg[reference_point][branch_seg])
-            ]
-            # RE START MODIFIED
-            # # ssegs_connects[0].append(closest_cell)
-            # ssegs_connects[-1].append(closest_cell_a)
-            # RE END MODIFIED
-            # point in main segment closest to the identified branch point
-            closest_cell_b = main_seg[
-                np.argmin(Dseg[closest_cell_a][main_seg])
-            ]
-            # RE START MODIFIED
-            # # ssegs_connects[-1].append(closest_cell)
-            # ssegs_connects[0].append(closest_cell_b)
-            # RE END MODIFIED
+            if self.connect_closest:
+                dseg_cur = Dseg[np.ix_(branch_seg, main_seg)]
+                point_in_branch_seg, point_in_main_seg = np.unravel_index(np.argmin(dseg_cur), dseg_cur.shape)
+                closest_cell_a = branch_seg[point_in_branch_seg]
+                closest_cell_b = main_seg[point_in_main_seg]
 
-            trunk = 0
-            # ssegs_adjacency = [[1], [0]]
-            ssegs_connects = [[[0, 1], [closest_cell_a, closest_cell_b]]]
+                trunk=0
+                ssegs_connects = [[[0, 1], [closest_cell_a,
+                                            closest_cell_b]]]
+
+            else:
+                # ssegs_connects = [[]]*len(ssegs) # [[], []]
+                # point in branch closest to the main segment
+                reference_point = tips[0]
+                closest_cell_a = branch_seg[
+                    np.argmin(Dseg[reference_point][branch_seg])
+                ]
+                # RE START MODIFIED
+                # # ssegs_connects[0].append(closest_cell)
+                # ssegs_connects[-1].append(closest_cell_a)
+                # RE END MODIFIED
+                # point in main segment closest to the identified branch point
+                closest_cell_b = main_seg[
+                    np.argmin(Dseg[closest_cell_a][main_seg])
+                ]
+                # RE START MODIFIED
+                # # ssegs_connects[-1].append(closest_cell)
+                # ssegs_connects[0].append(closest_cell_b)
+                # RE END MODIFIED
+
+                trunk = 0
+                # ssegs_adjacency = [[1], [0]]
+                ssegs_connects = [[[0, 1], [closest_cell_a, closest_cell_b]]]
 
             unidentified_points = []
         
@@ -1805,7 +1849,7 @@ class POSER:
         return tips
 
     
-    def detect_branching(self, node):
+    def detect_branching(self, node): # , connect_closest=False):
         """ Detect branching on a given segment and update TreeNode parameters in place.
 
         Parameters
@@ -1828,7 +1872,7 @@ class POSER:
         # branching on the segment, return the list ssegs of segments that
         # are defined by splitting this segment
 
-        result = self._detect_branch(Dseg, tips3)
+        result = self._detect_branch(Dseg, tips3) # , connect_closest=connect_closest)
         if result is None: # RE ADDED THIS CONDITION
             logger.info(f"No unique branch detected - removed from consideration.")
             node.branchable = False
@@ -1901,7 +1945,7 @@ class POSER:
         return updated
 
 
-    def single_branch(self, until_branched=False):
+    def single_branch(self, until_branched=False): # , connect_closest=False):
         """ Perform single branching in place.
 
         Parameters
@@ -1930,7 +1974,7 @@ class POSER:
                 # branched_flag = True
                 break                
             else:
-                branched_flag = self.detect_branching(node)
+                branched_flag = self.detect_branching(node) # , connect_closest=connect_closest)
 
             if not until_branched:
                 # branched_flag = True
@@ -1939,7 +1983,7 @@ class POSER:
         return branched_flag
                 
 
-    def detect_branches(self, n_branches, until_branched=False):
+    def detect_branches(self, n_branches, until_branched=False): # , connect_closest=False):
         """ Detect up to ``n_branches`` branchings and update tree in place.
 
         Parameters
@@ -1962,7 +2006,7 @@ class POSER:
             for ibranch in range(len(self.branched_ordering), n_branches):
                 logger.info(f"*ibranch = {ibranch}")
 
-                branched_flag = self.single_branch(until_branched=until_branched)
+                branched_flag = self.single_branch(until_branched=until_branched) # , connect_closest=connect_closest)
                 # logger.warning(f"* was branched = {branched_flag}")
                 if not branched_flag:
                     logger.info("No further branching occured at this iteration.")
@@ -2014,7 +2058,7 @@ class POSER:
         return tree            
             
             
-    def branchings_segments(self, n_branches, until_branched=False, annotate=True):
+    def branchings_segments(self, n_branches, until_branched=False, annotate=True): # , connect_closest=False):
         """ Detect up to `n_branches` branches and partition the data into corresponding segments.
         
         Parameters
@@ -2040,7 +2084,7 @@ class POSER:
         G : `nx.Graph`
             The graph of the resulting POSE.
         """
-        self.detect_branches(n_branches, until_branched=until_branched)
+        self.detect_branches(n_branches, until_branched=until_branched) # , connect_closest=connect_closest)
 
         tree = self.extract_branchings(n_branches)
 
