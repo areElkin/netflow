@@ -224,7 +224,7 @@ def avg_cluster_edges(X, clustering, G=None):
     return R
              
 
-def louvain(G, weight='inverted-distance', resolution=1., seed=0, **kwargs):
+def louvain(G, weight='inverted_distance', resolution=1., seed=0, **kwargs):
     """ Compute Louvain communities on graph, intended for POSE
 
     Louvain communities are computed via ``networkx.community.louvain_communities``
@@ -255,10 +255,16 @@ def louvain(G, weight='inverted-distance', resolution=1., seed=0, **kwargs):
                                                          seed=seed,
                                                          **kwargs)
     lvp = {node: i for i, partition in enumerate(louvain_partition) for node in partition}
+    # lvp = np.zeros(len(G))
+    # for ix, cc in enumerate(louvain_partition):
+    #     lvp[list(cc)] = ix
+        
+    # lvp = dict(zip(range(len(G)), lvp))
+    return lvp
 
 
 def louvain_paritioned(G, class_attr, louvain_attr=None,
-                       weight='inverted-distance', resolution=1., seed=0,
+                       weight='inverted_distance', resolution=1., seed=0,
                        **kwargs):
     """ Compute Louvain communities on graph and further partition restricted to existing classifier (e.g., branches intended for POSE)
 
@@ -311,12 +317,13 @@ def louvain_paritioned(G, class_attr, louvain_attr=None,
         lvp = {}
         
     if len(lvp) != len(G):
-        louvain_partition = nx.community.louvain_communities(G,
-                                                             weight=weight,
-                                                             resolution=resolution,
-                                                             seed=seed,
-                                                             **kwargs)
-        lvp = {node: i for i, partition in enumerate(louvain_partition) for node in partition}
+        lvp = louvain(G, weight=weight, resolution=resolution, seed=seed, **kwargs)
+        # louvain_partition = nx.community.louvain_communities(G,
+        #                                                      weight=weight,
+        #                                                      resolution=resolution,
+        #                                                      seed=seed,
+        #                                                      **kwargs)
+        # lvp = {node: i for i, partition in enumerate(louvain_partition) for node in partition}
         if louvain_attr is not None:
             nx.set_node_attributes(G, lvp, name=louvain_attr)
 
@@ -324,6 +331,7 @@ def louvain_paritioned(G, class_attr, louvain_attr=None,
 
     nx.set_node_attributes(G, {k: f"{ca[k]}-{lvp[k]}" for k in G},
                            name=f"{class_attr}-{louvain_str}")
+
 
     
             
