@@ -100,8 +100,8 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
     root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
         The root. If `None`, 'density' is used.
 
-        options
-        -------
+        Options:
+
         - `int` : index of observation
         - 'density' : select observation with minimal distance-density
         - 'density_inv' : select observation with maximal distance-density
@@ -832,7 +832,7 @@ def compute_multiscale_VNE_transitions_from_similarity(keeper, similarity_key,
     return P, P_asym
 
 
-def _dpt_from_augmented_sym_transitions(T, n_comps: int = 0):
+def _dpt_from_augmented_sym_transitions(T, n_comps: int = 0, return_eigs=False):
     """ Return the diffusion pseudotime metric between observations,
     computed from the symmetric transitions.
 
@@ -840,7 +840,7 @@ def _dpt_from_augmented_sym_transitions(T, n_comps: int = 0):
 
         - :math:`T` is the symmetric transition matrix
         - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`
-        - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2
+        - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2`
     
     Parameters
     ----------
@@ -865,10 +865,14 @@ def _dpt_from_augmented_sym_transitions(T, n_comps: int = 0):
     EVALS = np.diag(evals[1:] / (1. - evals[1:]))
     M = evecs[:, 1:] @ EVALS @ evecs[:, 1:].T
     dpt = sp.spatial.distance.cdist(M, M)
+
+    if return_eigs:
+        return dpt, evals, evecs
+    
     return dpt
 
 
-def dpt_from_augmented_sym_transitions(keeper, key, n_comps: int = 0):
+def dpt_from_augmented_sym_transitions(keeper, key, n_comps: int = 0, save_eig=False):
     """ Compute the diffusion pseudotime metric between observations,
     computed from the symmetric transitions.
 
@@ -876,7 +880,7 @@ def dpt_from_augmented_sym_transitions(keeper, key, n_comps: int = 0):
 
         - :math:`T` is the symmetric transition matrix
         - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`
-        - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2
+        - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2`
     
     Parameters
     ----------
@@ -899,12 +903,17 @@ def dpt_from_augmented_sym_transitions(keeper, key, n_comps: int = 0):
         then ``dpt_key="dpt_from_{key}_{n_comps}comps"``.
     """
     T = keeper.misc[key]
-    dpt = _dpt_from_augmented_sym_transitions(T, n_comps=n_comps)
+    
+    dpt, evals, evecs = _dpt_from_augmented_sym_transitions(T, n_comps=n_comps, return_eigs=True)
 
     dpt_key = f"dpt_from_{key}"
     if 0 < n_comps < keeper.num_observations:
         dpt_key = "_".join([dpt_key, f"{n_comps}comps"])
     keeper.add_distance(dpt, dpt_key)
+
+    if save_eig:
+        keeper.add_misc(evals, dpt_key.replace('dpt_from', 'evals'))
+        keeper.add_misc(evecs, dpt_key.replace('dpt_from', 'evecs'))
     
 
 def root_max_ratio(keeper, key):
@@ -952,8 +961,8 @@ class POSER:
     root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
         The root. If `None`, 'density' is used.
 
-        options
-        -------
+        Options:
+
         - `int` : index of observation
         - 'density' : select observation with minimal distance-density
         - 'density_inv' : select observation with maximal distance-density
@@ -1569,7 +1578,7 @@ class POSER:
                 if newseg.shape[0] == 0:
                     # logger.debug("Unique segment is empty, continuing branching without it.")
                     # continue # TODO - future release switch return to continue for finer resolution partitioning
-                    logger.debug("Unique segment is empty, removing from consideration and no branching performed.")                    
+                    logger.debug("Unique segment is empty, removing from consideration and no branching performed.")
                     return None
 
                 ssegs.append(newseg)
@@ -1817,7 +1826,7 @@ class POSER:
         Parameters
         ----------
         newseg : `list`
-            New segment.
+            New segment (local with respect to original segment).
         tip : `int`
             Local index of the first tip, with respect to the original segment that determinned
             ``Dseg`` before the split.
@@ -2116,7 +2125,7 @@ class POSER:
         Parameters
         ----------
         segs : `dict`
-            The banched segments indexed by the node's unique identifier
+            The banched segments indexed by the node's unique identifier.
         annotate : `bool`
             If `True`, annotate edges with edge origin and distance.
 
@@ -2126,17 +2135,15 @@ class POSER:
             Graph where each node is a data point and edges reflect connections between them.
             If ``annotate`` is `True`, the following annotations are added:
         
-            Edges have attributes {'connection' : (str) 'intra-branch' or 'inter-branch'}
-            Nodes have attributes
+            - Edges have attributes:
 
-            .. code-block:: py
+                - 'connection' : (str) 'intra-branch' or 'inter-branch'}
+            - Nodes have attributes:
 
-               {'branch' : (`int`) -1, 0, 1, ... where -1 indicates the data point was not identified with a branch,
-                                   'undecided' : (bool) True if the data point is part of a trunk and False otherwise,
-                                   'name' : (str) Original label if given data was a dataframe, otherwise the same as the node id,
-                'unidentified' : (0 or 1) 1 if data point was ever not associated with any branch upon split,
-                                   0 otherwise.,
-               }        
+                - 'branch' : (`int`) -1, 0, 1, ... where -1 indicates the data point was not identified with a branch
+                - 'undecided' : (bool) True if the data point is part of a trunk and False otherwise
+                - 'name' : (str) Original label if given data was a dataframe, otherwise the same as the node id
+                - 'unidentified' : (0 or 1) 1 if data point was ever not associated with any branch upon split, 0 otherwise.
         """
         G = nx.Graph()
 

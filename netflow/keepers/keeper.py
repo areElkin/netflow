@@ -12,6 +12,7 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import sklearn.decomposition
+from sklearn.preprocessing import StandardScaler
 
 from .. import checks
 from .._utils import _docstring_parameter, _desc_distance, \
@@ -284,7 +285,27 @@ class DataKeeper:
         data_subset = DataKeeper(data=None, observation_labels=observations)
         for data in self:
             data_subset.add_data(data.subset(observations=observations), data.label)
-        return data_subset    
+        return data_subset
+
+
+    def standardize(self, key, **kwargs):
+        """ Standardize features by removing the mean and scaling to unit variance
+
+        Parameters
+        ----------
+        key : `str`
+            The reference key of the data in the data-keeper that will be
+            standardized.
+        kwargs 
+          Keyword arguments passed to `sklearn.preprocessing.StandardScalar`.
+
+        Returns
+        -------
+        data_z : `pandas.DataFrame`
+            The standardized data.
+        """
+        data_z = self.data[key].standardize(**kwargs)
+        return data_z
             
 
 class DataView:
@@ -448,6 +469,26 @@ class DataView:
                           columns=self.observation_labels,
                           index=self.feature_labels)
         return df
+
+
+    def standardize(self, **kwargs):
+        """ Standardize features by removing the mean and scaling to unit variance
+        Parameters
+        ----------
+        kwargs 
+          Keyword arguments passed to `sklearn.preprocessing.StandardScalar`.
+
+        Returns
+        -------
+        data_z : `pandas.DataFrame`
+            The standardized data.
+        """        
+        data = self.to_frame()
+        # data_z = (data - data.mean(axis=1)[:, np.newaxis]) / data.std(axis=1)[:, np.newaxis]
+        data_z = StandardScaler(**kwargs).fit_transform(data.T).T
+        data_z = pd.DataFrame(data=data_z, columns=data.columns, index=data.index)
+        return data_z
+        
     
 
         
@@ -1432,8 +1473,8 @@ class Keeper:
 
         .. Note::
 
-        Currently loads data using ``pandas.read_csv``.
-        Additional formats will be added in the future.
+           Currently loads data using ``pandas.read_csv``.
+           Additional formats will be added in the future.
                   
         Parameters
         ----------
@@ -1475,11 +1516,11 @@ class Keeper:
 
         .. Note::
 
-        Assumed that the distance array is stored with the first row and first column as
-        the index and header, respectively.
+           Assumed that the distance array is stored with the first row and first column as
+           the index and header, respectively.
         
-        Currently loads data using ``pandas.read_csv``.
-        Additional formats will be added in the future.
+           Currently loads data using ``pandas.read_csv``.
+           Additional formats will be added in the future.
                   
         Parameters
         ----------
@@ -1510,11 +1551,11 @@ class Keeper:
 
         .. Note::
 
-        Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion
-        (excluding self-pairs) and a single column with the pairwise distances.
+           Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion
+           (excluding self-pairs) and a single column with the pairwise distances.
         
-        Currently loads data using ``pandas.read_csv``.
-        Additional formats will be added in the future.
+           Currently loads data using ``pandas.read_csv``.
+           Additional formats will be added in the future.
                   
         Parameters
         ----------
@@ -1545,11 +1586,11 @@ class Keeper:
 
         .. Note::
 
-        Assumed that the distance array is stored with the first row and first column as
-        the index and header, respectively.
+           Assumed that the distance array is stored with the first row and first column as
+           the index and header, respectively.
         
-        Currently loads data using ``pandas.read_csv``.
-        Additional formats will be added in the future.
+           Currently loads data using ``pandas.read_csv``.
+           Additional formats will be added in the future.
                   
         Parameters
         ----------
@@ -1581,11 +1622,11 @@ class Keeper:
 
         .. Note::
 
-        Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion
-        (excluding self-pairs) and a single column with the pairwise distances.
-        
-        Currently loads data using ``pandas.read_csv``.
-        Additional formats will be added in the future.
+           Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion
+           (excluding self-pairs) and a single column with the pairwise distances.
+
+           Currently loads data using ``pandas.read_csv``.
+           Additional formats will be added in the future.
                   
         Parameters
         ----------
@@ -1619,14 +1660,14 @@ class Keeper:
 
         .. Note::
 
-        Currently loads graph from edgelist. Future release will allow different
-        graph types (e.g., adjacency, graphml).
-        
-        Assumed that the edge-list is stored as two columns, where the first row
-        is labeled as source and target.
-        
-        Currently loads data using ``pandas.read_csv``.
-        Additional formats will be added in the future.
+           Currently loads graph from edgelist. Future release will allow different
+           graph types (e.g., adjacency, graphml).
+
+           Assumed that the edge-list is stored as two columns, where the first row
+           is labeled as source and target.
+
+           Currently loads data using ``pandas.read_csv``.
+           Additional formats will be added in the future.
                   
         Parameters
         ----------
@@ -1663,8 +1704,8 @@ class Keeper:
 
         .. Note::
 
-        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
-        Future releases will allow for other formats.
+           This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
+           Future releases will allow for other formats.
 
         Data set is saved to the file named '{self.outdir}/data_{label}.{file_format}'.
 
@@ -1696,8 +1737,8 @@ class Keeper:
 
         .. Note::
 
-        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
-        Future releases will allow for other formats.
+           This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
+           Future releases will allow for other formats.
 
         Distance is saved to the file named '{self.outdir}/distance_{label}.{file_format}'.
 
@@ -1729,8 +1770,8 @@ class Keeper:
 
         .. Note::
 
-        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
-        Future releases will allow for other formats.
+           This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
+           Future releases will allow for other formats.
 
         Similarity is saved to the file named '{self.outdir}/similarity_{label}.{file_format}'.
 
@@ -1762,8 +1803,8 @@ class Keeper:
 
         .. Note::
 
-        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
-        Future releases will allow for other formats.
+           This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
+           Future releases will allow for other formats.
 
         Misc data is saved to the file named '{self.outdir}/misc_{label}.{file_format}'.
 
@@ -1966,18 +2007,18 @@ class Keeper:
                                                    measure_cutoff=1e-6, solvr=None):
         """ Compute Wasserstein distances between feature profiles of every two observations
 
-        .. note::
+        .. Note::
 
-          If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.
-          Before starting the computation, check if the file exists. If so, load and remove already computed
-          nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
-          the previously computed and saved results before saving and returning the combined results.
+           If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.
+           Before starting the computation, check if the file exists. If so, load and remove already computed
+           nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+           the previously computed and saved results before saving and returning the combined results.
 
-          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
-          distance and do not provide any further information.
+           Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+           distance and do not provide any further information.
 
-          The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
-          and can be accessed by ``self.distances[f'{data_key}_{label}_wass_dist_observation_pairwise_profiles']``.
+        The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
+        and can be accessed by ``self.distances[f'{data_key}_{label}_wass_dist_observation_pairwise_profiles']``.
 
         Parameters
         ----------
@@ -2033,18 +2074,18 @@ class Keeper:
                                                   metric='euclidean', normalize=False, **kwargs):
         """ Compute Euclidean distances between feature profiles of every two observations
 
-        .. note::
+        .. Note::
 
-          If ``object.outdir`` is not `None`, Euclidean distances are saved to file.
-          Before starting the computation, check if the file exists. If so, load and remove already computed
-          nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
-          the previously computed and saved results before saving and returning the combined results.
+           If ``object.outdir`` is not `None`, Euclidean distances are saved to file.
+           Before starting the computation, check if the file exists. If so, load and remove already computed
+           nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
+           the previously computed and saved results before saving and returning the combined results.
 
-          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
-          distance and do not provide any further information.
+           Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+           distance and do not provide any further information.
 
-          The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
-          and can be accessed by ``self.distances[f'{data_key}_{label}_profile_euc']``.
+        The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
+        and can be accessed by ``self.distances[f'{data_key}_{label}_profile_euc']``.
 
         Parameters
         ----------
@@ -2089,18 +2130,18 @@ class Keeper:
                                                         measure_cutoff=1e-6, solvr=None):
         """ Compute Wasserstein distances between feature neighborhoods of every two observations
 
-        .. note::
+        .. Note::
 
-          If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.
-          Before starting the computation, check if the file exists. If so, load and remove already computed
-          nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
-          the previously computed and saved results before saving and returning the combined results.
+           If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.
+           Before starting the computation, check if the file exists. If so, load and remove already computed
+           nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with
+           the previously computed and saved results before saving and returning the combined results.
 
-          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
-          distance and do not provide any further information.
+           Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
+           distance and do not provide any further information.
 
-          The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by
-          ``self.misc[f"{data_key}_{label}_nbhd_wass_with{'' if include_self else 'out'}_self"]``.
+        The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by
+        ``self.misc[f"{data_key}_{label}_nbhd_wass_with{'' if include_self else 'out'}_self"]``.
 
         Parameters
         ----------
@@ -2166,18 +2207,18 @@ class Keeper:
                                                         metric='euclidean', normalize=False, **kwargs):
         """ Compute Euclidean distances between feature neighborhoods of every two observations
 
-        .. note::
+        .. Note::
 
-          If ``object.outdir`` is not `None`, Euclidean distances are saved to file every 10 iterations.
-          Before starting the computation, check if the file exists. If so, load and remove already computed
-          nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
-          the previously computed and saved results before saving and returning the combined results.
+           If ``object.outdir`` is not `None`, Euclidean distances are saved to file every 10 iterations.
+           Before starting the computation, check if the file exists. If so, load and remove already computed
+           nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with
+           the previously computed and saved results before saving and returning the combined results.
 
-          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Euclidean
-          distance and do not provide any further information.
+           Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Euclidean
+           distance and do not provide any further information.
 
-          The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by
-          ``self.misc[f"{data_key}_{label}_nbhd_euc_with{'' if include_self else 'out'}_self"]``.
+        The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by
+        ``self.misc[f"{data_key}_{label}_nbhd_euc_with{'' if include_self else 'out'}_self"]``.
 
         Parameters
         ----------
@@ -2355,7 +2396,7 @@ class Keeper:
         The following are saved to the distance keeper:
 
             d : The new distance is saved to the keeper in
-               ``keeper.distances[f"distance_from_{similarity_key}"].
+               ``keeper.distances[f"distance_from_{similarity_key}"]``.
         """
         sim = self.similarities[similarity_key]
         self.add_distance(1.-sim.data, f"distance_from_{similarity_key}")
@@ -2410,7 +2451,7 @@ class Keeper:
     def compute_transitions_from_similarity(self, similarity_key, density_normalize: bool = True):
         """ Compute symmetric and asymmetric transition matrices and store in keeper.
 
-        .. note:: Code primarily copied from `scanpy.neighbors`.
+        .. Note:: Code primarily copied from `scanpy.neighbors`.
 
         Parameters
         ----------
@@ -2434,7 +2475,7 @@ class Keeper:
         nfo.compute_transitions(self, similarity_key, density_normalize=density_normalize)
 
 
-    def compute_dpt_from_augmented_sym_transitions(self, key, n_comps: int = 0):
+    def compute_dpt_from_augmented_sym_transitions(self, key, n_comps: int = 0, save_eig=False):
         """ Compute the diffusion pseudotime metric between observations,
         computed from the symmetric transitions.
 
@@ -2442,7 +2483,7 @@ class Keeper:
 
             - :math:`T` is the symmetric transition matrix
             - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`
-            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2
+            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2`
 
         Parameters
         ----------
@@ -2461,7 +2502,7 @@ class Keeper:
             Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.
             Alternatively, if set ``n_comps >= n_observations``, the whole spectrum will be computed.
         """
-        nfo.dpt_from_augmented_sym_transitions(self, key, n_comps=n_comps)
+        nfo.dpt_from_augmented_sym_transitions(self, key, n_comps=n_comps, save_eig=save_eig)
 
     def compute_rw_transitions_from_similarity(self, similarity_key):
         """ Compute the row-stochastic transition matrix and store in keeper.
@@ -2484,16 +2525,16 @@ class Keeper:
 
 
     def compute_dpt_from_similarity(self, similarity_key, density_normalize: bool = True,
-                                    n_comps: int = 0):
+                                    n_comps: int = 0, save_eig=False):
         """ Compute the diffusion pseudotime metric between observations,
         computed from similarity 
 
-        .. note::
+        .. Note::
 
             - This entails computing the augmented symmetric transitions.
             - :math:`T` is the symmetric transition matrix
             - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`
-            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2
+            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2`
 
         Parameters
         ----------
@@ -2513,10 +2554,10 @@ class Keeper:
         The following are stored in the keeper :
            transitions_asym : `numpy.ndarray`, (n_observations, n_observations)
                 Asymmetric Transition matrix (with 0s on the diagonal) added to
-                ``keeper.misc[f"transitions_asym_{similarity_key}"].
+                ``keeper.misc[f"transitions_asym_{similarity_key}"]``.
            transitions_sym : `numpy.ndarray`, (n_observations, n_observations)
                 Symmetric Transition matrix (with 0s on the diagonal) added to
-                ``keeper.misc[f"transitions_sym_{similarity_key}"].
+                ``keeper.misc[f"transitions_sym_{similarity_key}"]``.
         
            dpt : `numpy.ndarray`, (n_observations, n_observations)
                Pairwise-observation Diffusion pseudotime distances are stored
@@ -2531,7 +2572,7 @@ class Keeper:
         if T_sym_key not in self.misc:
             self.compute_transitions_from_similarity(similarity_key, density_normalize)        
 
-        self.compute_dpt_from_augmented_sym_transitions(T_sym_key, n_comps=n_comps)
+        self.compute_dpt_from_augmented_sym_transitions(T_sym_key, n_comps=n_comps, save_eig=save_eig)
 
 
     def integrate_transitions(self, transition_keys, integrated_key=None):
@@ -2571,7 +2612,7 @@ class Keeper:
                                               n_comps: int = 0):
         """ Compute the integrated transition from similarities,
 
-        .. note::
+        .. Note::
 
             - This entails computing the augmented symmetric transitions.
             - :math:`T` is the symmetric transition matrix
@@ -2593,13 +2634,14 @@ class Keeper:
         Returns
         -------
         The following are stored in the keeper :
-           transitions_asym : `numpy.ndarray`, (n_observations, n_observations)
+        
+           - transitions_asym : `numpy.ndarray`, (n_observations, n_observations)
                 Asymmetric Transition matrix (with 0s on the diagonal) added to
-                ``keeper.misc[f"transitions_asym_{similarity_key}"].
-           transitions_sym : `numpy.ndarray`, (n_observations, n_observations)
+                ``keeper.misc[f"transitions_asym_{similarity_key}"]``.
+           - transitions_sym : `numpy.ndarray`, (n_observations, n_observations)
                 Symmetric Transition matrix (with 0s on the diagonal) added to
-                ``keeper.misc[f"transitions_sym_{similarity_key}"].
-           transitions_i : The integrated transition, where the reference key, if not provided, is fused from the original labels.
+                ``keeper.misc[f"transitions_sym_{similarity_key}"]``.
+           - transitions_i : The integrated transition, where the reference key, if not provided, is fused from the original labels.
         """
 
         transition_keys = []
@@ -2745,8 +2787,8 @@ class Keeper:
         root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
             The root. If `None`, 'density' is used.
 
-            options
-            -------
+            Options:
+
             - `int` : index of observation
             - 'density' : select observation with minimal distance-density
             - 'density_inv' : select observation with maximal distance-density
@@ -2785,12 +2827,9 @@ class Keeper:
             until a segement is successfully branched or no branchable segments
             remain. Otherwise, if `False`, attempt to perform branching only once 
             on the next potentially branchable segment.
-UBE
-            ..note::
-
-              This is only applicable when branching is being performed. If previous
-              iterations of branching has already been performed, it is not possible to
-              identify the number of iterations where no branching was performed.
+            Note: This is only applicable when branching is being performed. If previous
+            iterations of branching has already been performed, it is not possible to
+            identify the number of iterations where no branching was performed.
         mutual : `bool` (default = `False`)
             If `True`, add ``k_mnn`` mutual nn edges. Otherwise, add single nn edge.
             When `False`, ``k_mnn`` is ignored.
@@ -2904,5 +2943,31 @@ UBE
 
         data = pd.DataFrame(data=data, index=features, columns=obs)
         self.add_data(data, f"{key}_log1p")
+
+
+    def standardize(self, key, label=None, **kwargs):
+        """ Standardize features in DataKeeper by removing the mean and scaling to unit variance
+
+        Parameters
+        ----------
+        key : `str`
+            The reference key of the data in the data-keeper that will be
+            standardized.
+        label : {`str`, `None`}
+            The label used to store the standardized data. If `None`, default
+            label ``f'{key}_z'`` is used.
+        kwargs 
+          Keyword arguments passed to `sklearn.preprocessing.StandardScalar`.
+
+        Returns
+        -------
+        data_z : `pandas.DataFrame`
+            The standardized data.
+        """
+        if label is None:
+            label = f"{key}_z"
+
+        data_z = self.data[key].standardize(**kwargs)
+        self.add_data(data_z, label)
         
 
