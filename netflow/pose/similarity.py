@@ -42,7 +42,7 @@ def edges_from_mutual_knn_indices(kmnn):
 
     Parameters
     ----------
-    kmnn : ``defaultdict`
+    kmnn : `defaultdict`
         The mutual k-nn indices as returned from ``mutual_knn_indices``.
 
     Returns
