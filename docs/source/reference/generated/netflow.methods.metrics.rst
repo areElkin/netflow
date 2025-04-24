@@ -1,4 +1,4 @@
-﻿netflow.methods.metrics
+netflow.methods.metrics
 =======================
 
 .. automodule:: netflow.methods.metrics

@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -545,7 +546,7 @@ document.write(`
 <span class="sd">     ed : pandas Series</span>
 <span class="sd">         Euclidean distances between pairwise observations</span>
 <span class="sd">     &quot;&quot;&quot;</span>
-     <span class="n">n</span> <span class="o">=</span> <span class="n">profiles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>     
+     <span class="n">N</span> <span class="o">=</span> <span class="n">profiles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>     
      <span class="n">eds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">profiles</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">profiles</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
                         <span class="n">index</span><span class="o">=</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
      <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">eds</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">eds</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
@@ -813,8 +814,7 @@ document.write(`
 <span class="sd">        - &#39;median&#39; : Median of :math:`x`</span>
 <span class="sd">    is_distance : `bool`</span>
 <span class="sd">        Indicate if the multi-feature pairwise-observations are distances or similarities.</span>
-<span class="sd">        If `True`, they are treated as distances. If `False, they are treated as similarities.</span>
-
+<span class="sd">        If `True`, they are treated as distances. If `False`, they are treated as similarities.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Xnorm</span> <span class="o">=</span> <span class="n">norm_features</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -860,6 +860,7 @@ document.write(`
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
@@ -890,7 +891,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

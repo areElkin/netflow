@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -49,8 +50,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'overview/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Tutorials" href="../tutorial/index.html" />
-    <link rel="prev" title="1. Usage" href="../building/usage.html" />
+    <link rel="next" title="netflow.keepers" href="../reference/generated/netflow.keepers.html" />
+    <link rel="prev" title="1. Installation via pip" href="../building/usage.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -225,7 +226,7 @@ document.write(`
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -301,6 +302,38 @@ document.write(`
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/generated/netflow.keepers.html">netflow.keepers</a><input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.keepers.keeper.html">netflow.keepers.keeper</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/generated/netflow.pose.html">netflow.pose</a><input checked class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.pose.organization.html">netflow.pose.organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.pose.similarity.html">netflow.pose.similarity</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/generated/netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.probe.visualization.html">netflow.probe.visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/generated/netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.methods.stats.html">netflow.methods.stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/generated/netflow.methods.tools.html">netflow.methods.tools</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
       <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
@@ -371,11 +404,9 @@ document.write(`
 <li><p><a class="reference internal" href="../reference/generated/netflow.pose.html#module-netflow.pose" title="netflow.pose"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.pose</span></code></a> - This library provides tools for computing the POSE.</p></li>
 <li><p><a class="reference internal" href="../reference/generated/netflow.probe.html#module-netflow.probe" title="netflow.probe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.probe</span></code></a> - This library provides tools for downstream visualization and analysis of the POSE.</p></li>
 </ol>
-<p>And a few helper components:</p>
+<p>And a few helper components can be found in:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../reference/generated/netflow.methods.html#module-netflow.methods" title="netflow.methods"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.methods</span></code></a></p></li>
-<li><p><a class="reference internal" href="../reference/generated/netflow.metrics.html#module-netflow.metrics" title="netflow.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.metrics</span></code></a></p></li>
-<li><p><a class="reference internal" href="../reference/generated/netflow.classes.html#module-netflow.classes" title="netflow.classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.classes</span></code></a></p></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
@@ -398,15 +429,15 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Usage</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Installation via pip</p>
       </div>
     </a>
     <a class="right-next"
-       href="../tutorial/index.html"
+       href="../reference/generated/netflow.keepers.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Tutorials</p>
+        <p class="prev-next-title">netflow.keepers</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -429,10 +460,15 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="current visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../building/index.html">Installation</a></li>
-<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="current reference internal nav-link" href="#">User guide</a><ul class="simple visible nav section-nav flex-column">
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="current reference internal nav-link" href="#">User guide</a><ul class="visible nav section-nav flex-column">
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../reference/generated/netflow.keepers.html">netflow.keepers</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../reference/generated/netflow.pose.html">netflow.pose</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../reference/generated/netflow.probe.html">netflow.probe</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../reference/generated/netflow.methods.html">netflow.methods</a></li>
 </ul>
 </li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../references.html">References</a></li>
 </ul>
@@ -471,7 +507,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

@@ -28,5 +28,6 @@
    :recursive:
 
    netflow.probe.clustering
+   netflow.probe.jupyter_app
    netflow.probe.visualization
 

@@ -29,4 +29,6 @@
 
    netflow.methods.classes
    netflow.methods.metrics
+   netflow.methods.stats
+   netflow.methods.tools
 

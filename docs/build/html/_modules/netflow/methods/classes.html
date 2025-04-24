@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -427,7 +428,8 @@ document.write(`
         <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">set_verbose</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span>
+        <span class="n">check_matrix_no_nan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>        
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded data: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">graph_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -487,7 +489,7 @@ document.write(`
 <span class="sd">        Makes the invariant measures attribute of size (n_observations, n_observations)</span>
 <span class="sd">        in ``keeper.data[label]`` available.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
+        <span class="n">check_matrix_nonnegative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="n">IM</span> <span class="o">=</span> <span class="n">utl</span><span class="o">.</span><span class="n">invariant_measure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">IM</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
         
@@ -797,6 +799,7 @@ document.write(`
 <span class="sd">        wd : `pandas.Series`</span>
 <span class="sd">            Wasserstein distances between pairwise observations</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check_matrix_nonnegative(self.data.data)</span>
         <span class="n">nbhd</span><span class="p">,</span> <span class="n">profiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighborhood_profiles</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="n">include_self</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">graph_distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Computing graph hop distances.&quot;</span><span class="p">)</span>
@@ -1161,6 +1164,7 @@ document.write(`
 
 <span class="sd">        To do: specify if nodes in input are ids or node names and check that loaded data has correct type int or str for nodes</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check_matrix_nonnegative(self.data.data)</span>
         <span class="k">if</span> <span class="n">nodes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">k</span><span class="p">)))</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1376,8 +1380,7 @@ document.write(`
 
 <span class="sd">        SAVED TO DISTANCES</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># logger.msg(&quot;&gt;&gt;&gt; ENTERED FN&quot;)</span>
+        <span class="c1"># check_matrix_nonnegative(self.data.data)</span>
         <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1706,6 +1709,7 @@ document.write(`
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
@@ -1736,7 +1740,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

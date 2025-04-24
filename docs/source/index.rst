@@ -13,11 +13,21 @@ netflow documentation
 
 **Date**: |today| **Version**: |version|
 
-**netflow** is an open-source software for analyzing
-and visualizing relationships among observations leveraging
-multi-modal and multi-scale features.
-
 .. grid:: 2
+
+    .. grid-item-card::
+
+        **netflow** is an open-source software for analyzing
+        and visualizing relationships among observations leveraging
+        multi-modal and multi-scale features.
+
+    .. grid-item-card::
+
+        .. image:: _static/netflow_ecosystem.png
+		   
+
+
+.. grid:: 2    
 
     .. grid-item-card::
 
@@ -86,7 +96,6 @@ multi-modal and multi-scale features.
 
             To the reference guide
 
-	
    
 .. toctree::
    :maxdepth: 2
@@ -97,7 +106,6 @@ multi-modal and multi-scale features.
    Tutorials <tutorial/index>
    API reference <reference/index>
    References <references>
-
 
 
 Indices and tables

@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -318,19 +319,18 @@ document.write(`
 </li>
 <li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.stats.html">netflow.methods.stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.tools.html">netflow.methods.tools</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -385,10 +385,7 @@ document.write(`
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">netflow API</a></li>
-    
-    
-    <li class="breadcrumb-item"><a href="../main_namespace.html" class="nav-link">The main netflow namespace</a></li>
+    <li class="breadcrumb-item"><a href="../../overview/index.html" class="nav-link">netflow User Guide</a></li>
     
     <li class="breadcrumb-item active" aria-current="page">netflow.probe</li>
   </ul>
@@ -427,7 +424,10 @@ the POSE.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="netflow.probe.clustering.html#module-netflow.probe.clustering" title="netflow.probe.clustering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">netflow.probe.clustering</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="netflow.probe.visualization.html#module-netflow.probe.visualization" title="netflow.probe.visualization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">netflow.probe.visualization</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="netflow.probe.jupyter_app.html#module-netflow.probe.jupyter_app" title="netflow.probe.jupyter_app"><code class="xref py py-obj docutils literal notranslate"><span class="pre">netflow.probe.jupyter_app</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="netflow.probe.visualization.html#module-netflow.probe.visualization" title="netflow.probe.visualization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">netflow.probe.visualization</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -484,6 +484,7 @@ the POSE.</p>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
 <li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
@@ -492,15 +493,12 @@ the POSE.</p>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
 <li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.probe</a><ul class="nav section-nav flex-column">
 <li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
 <li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -548,7 +546,7 @@ the POSE.</p>
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

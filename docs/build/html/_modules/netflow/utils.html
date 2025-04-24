@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -364,14 +365,25 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for netflow.utils</h1><div class="highlight"><pre>
-<span></span>
+<span></span><span class="c1"># Copyright 2017 F. Alexander Wolf, P. Angerer, Theis Lab</span>
+<span class="c1"># Revisions copyright 2024 R. Elkin</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1"># This file contains code derived, either in part or in whole,</span>
+<span class="c1"># from the Scanpy library, which is governed by the original</span>
+<span class="c1"># &quot;BSD 3-Clause License&quot;.</span>
+<span class="c1"># Please see the LICENSE file included as part of this package for</span>
+<span class="c1"># more details.</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">fastcluster</span> <span class="k">as</span> <span class="nn">fc</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">Orange.clustering.hierarchical</span> <span class="k">as</span> <span class="nn">orange_hier</span>
+<span class="k">try</span><span class="p">:</span> 
+    <span class="kn">import</span> <span class="nn">Orange.clustering.hierarchical</span> <span class="k">as</span> <span class="nn">orange_hier</span>
+    <span class="n">orange_installed</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="n">orange_installed</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sc</span>
 <span class="kn">import</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="k">as</span> <span class="nn">sch</span>
@@ -697,18 +709,24 @@ document.write(`
 
     <span class="n">obs_linkage</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">linkage</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">linkage_kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">optimal_nodes_ordering</span><span class="p">:</span>
-        <span class="n">tree</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">tree_from_linkage</span><span class="p">(</span><span class="n">obs_linkage</span><span class="p">)</span>
-        <span class="n">tree</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">optimal_leaf_ordering</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ssd</span><span class="o">.</span><span class="n">squareform</span><span class="p">(</span><span class="n">ssd</span><span class="o">.</span><span class="n">pdist</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
-        <span class="n">obs_linkage</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">linkage_from_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">orange_installed</span><span class="p">:</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">tree_from_linkage</span><span class="p">(</span><span class="n">obs_linkage</span><span class="p">)</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">optimal_leaf_ordering</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ssd</span><span class="o">.</span><span class="n">squareform</span><span class="p">(</span><span class="n">ssd</span><span class="o">.</span><span class="n">pdist</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+            <span class="n">obs_linkage</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">linkage_from_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No module named Orange, optimal node ordering not performed&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">is_symmetric</span><span class="p">:</span>
         <span class="n">feat_linkage</span><span class="o">=</span><span class="n">obs_linkage</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">feat_linkage</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">linkage</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="o">**</span><span class="n">linkage_kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">optimal_nodes_ordering</span><span class="p">:</span>
-            <span class="n">tree</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">tree_from_linkage</span><span class="p">(</span><span class="n">feat_linkage</span><span class="p">)</span>
-            <span class="n">tree</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">optimal_leaf_ordering</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ssd</span><span class="o">.</span><span class="n">squareform</span><span class="p">(</span><span class="n">ssd</span><span class="o">.</span><span class="n">pdist</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">())))</span>
-            <span class="n">feat_linkage</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">linkage_from_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">orange_installed</span><span class="p">:</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">tree_from_linkage</span><span class="p">(</span><span class="n">feat_linkage</span><span class="p">)</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">optimal_leaf_ordering</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ssd</span><span class="o">.</span><span class="n">squareform</span><span class="p">(</span><span class="n">ssd</span><span class="o">.</span><span class="n">pdist</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">())))</span>
+                <span class="n">feat_linkage</span> <span class="o">=</span> <span class="n">orange_hier</span><span class="o">.</span><span class="n">linkage_from_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No module named Orange, optimal node ordering not performed&quot;</span><span class="p">)</span>
 
     <span class="n">cm</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">clustermap</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">row_linkage</span><span class="o">=</span><span class="n">feat_linkage</span><span class="p">,</span> <span class="n">col_linkage</span><span class="o">=</span><span class="n">obs_linkage</span><span class="p">,</span> <span class="o">**</span><span class="n">vis_kwargs</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.05</span><span class="p">)</span>
@@ -998,7 +1016,7 @@ document.write(`
     <span class="k">return</span> <span class="n">smoothed_array</span></div>
 
 
-<div class="viewcode-block" id="invariant_measure"><a class="viewcode-back" href="../../reference/generated/netflow.utils.html#netflow.utils.invariant_measure">[docs]</a><span class="k">def</span> <span class="nf">invariant_measure</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="invariant_measure"><a class="viewcode-back" href="../../reference/generated/netflow.utils.html#netflow.utils.invariant_measure">[docs]</a><span class="k">def</span> <span class="nf">invariant_measure</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the invariant measure of the profile (node weights) on the network.</span>
 
 <span class="sd">    ..Note:: Either the graph ``G`` or the adjacency matrix ``adj`` must be provided.</span>
@@ -1035,17 +1053,133 @@ document.write(`
     <span class="n">W</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span> 
     <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">profiles</span><span class="p">)</span> 
     <span class="n">Z</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">IM</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="n">Z</span></div>
+    <span class="n">IM</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="n">Z</span>
+    <span class="k">return</span> <span class="n">IM</span></div>
     
 
-    
+<div class="viewcode-block" id="von_neumann_entropy"><a class="viewcode-back" href="../../reference/generated/netflow.utils.html#netflow.utils.von_neumann_entropy">[docs]</a><span class="k">def</span> <span class="nf">von_neumann_entropy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">tau_max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute Von Neumann Entropy (VNE) of the data at increasing scales.</span>
 
-    
+<span class="sd">    As described in GSPA and PHATE https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py, https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf.</span>
+
+<span class="sd">    Taken from https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : array-like</span>
+<span class="sd">        Matrix to compute VNE on. Expected to be ``n x n`` transition matrix.</span>
+<span class="sd">    tau_max : `int`</span>
+<span class="sd">        Max scale ``tau`` (default is 100).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    vne : `np.array`[``tau_max``]</span>
+<span class="sd">        The VNE at each scale up to ``tau_max``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tau_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tau_max</span> <span class="o">=</span> <span class="mi">100</span>
         
-        
-    
-    
-    
+    <span class="n">_</span><span class="p">,</span> <span class="n">evals</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">evals_tau</span> <span class="o">=</span> <span class="n">evals</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">vne</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">tau_max</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">evals_tau</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">evals_tau</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span> <span class="c1"># following SPARC implementation</span>
+        <span class="n">vne</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)))</span>
+        <span class="n">evals_tau</span> <span class="o">=</span> <span class="n">evals_tau</span> <span class="o">*</span> <span class="n">evals</span>
+    <span class="n">vne</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vne</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vne</span></div>
+
+
+<div class="viewcode-block" id="find_knee_point"><a class="viewcode-back" href="../../reference/generated/netflow.utils.html#netflow.utils.find_knee_point">[docs]</a><span class="k">def</span> <span class="nf">find_knee_point</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the x-location of a (single) knee of curve y=f(x).</span>
+
+<span class="sd">    Taken from https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : array, shape=[n]</span>
+<span class="sd">        data for which to find the knee point</span>
+<span class="sd">    x : array, optional, shape=[n], default=np.arange(len(y))</span>
+<span class="sd">        indices of the data points of y,</span>
+<span class="sd">        if these are not in order and evenly spaced</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    knee_point : `int`</span>
+<span class="sd">        The index (or x value) of the knee point on y</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import phate</span>
+<span class="sd">    &gt;&gt;&gt; x = np.arange(20)</span>
+<span class="sd">    &gt;&gt;&gt; y = np.exp(-x/10)</span>
+<span class="sd">    &gt;&gt;&gt; phate.vne.find_knee_point(y,x)</span>
+<span class="sd">    8</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot find knee point on vector of length 3&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;y must be 1-dimensional&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;x and y must be the same shape&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># ensure x is sorted float</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="c1"># figure out the m and b (in the y=mx+b sense) for the &quot;left-of-knee&quot;</span>
+    <span class="n">sigma_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">sigma_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">sigma_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">y</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">sigma_xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">det</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">sigma_xx</span> <span class="o">-</span> <span class="n">sigma_x</span> <span class="o">*</span> <span class="n">sigma_x</span>
+    <span class="n">mfwd</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">sigma_xy</span> <span class="o">-</span> <span class="n">sigma_x</span> <span class="o">*</span> <span class="n">sigma_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">det</span>
+    <span class="n">bfwd</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">sigma_x</span> <span class="o">*</span> <span class="n">sigma_xy</span> <span class="o">-</span> <span class="n">sigma_xx</span> <span class="o">*</span> <span class="n">sigma_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">det</span>
+
+    <span class="c1"># figure out the m and b (in the y=mx+b sense) for the &quot;right-of-knee&quot;</span>
+    <span class="n">sigma_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">sigma_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">sigma_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">y</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">sigma_xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">det</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">sigma_xx</span> <span class="o">-</span> <span class="n">sigma_x</span> <span class="o">*</span> <span class="n">sigma_x</span>
+    <span class="n">mbck</span> <span class="o">=</span> <span class="p">((</span><span class="n">n</span> <span class="o">*</span> <span class="n">sigma_xy</span> <span class="o">-</span> <span class="n">sigma_x</span> <span class="o">*</span> <span class="n">sigma_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">det</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">bbck</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">sigma_x</span> <span class="o">*</span> <span class="n">sigma_xy</span> <span class="o">-</span> <span class="n">sigma_xx</span> <span class="o">*</span> <span class="n">sigma_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">det</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># figure out the sum of per-point errors for left- and right- of-knee fits</span>
+    <span class="n">error_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">breakpt</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">delsfwd</span> <span class="o">=</span> <span class="p">(</span><span class="n">mfwd</span><span class="p">[</span><span class="n">breakpt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[:</span> <span class="n">breakpt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">bfwd</span><span class="p">[</span><span class="n">breakpt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span>
+            <span class="p">:</span> <span class="n">breakpt</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="p">]</span>
+        <span class="n">delsbck</span> <span class="o">=</span> <span class="p">(</span><span class="n">mbck</span><span class="p">[</span><span class="n">breakpt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">breakpt</span><span class="p">:]</span> <span class="o">+</span> <span class="n">bbck</span><span class="p">[</span><span class="n">breakpt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">breakpt</span><span class="p">:]</span>
+
+        <span class="n">error_curve</span><span class="p">[</span><span class="n">breakpt</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">delsfwd</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">delsbck</span><span class="p">))</span>
+
+    <span class="c1"># find location of the min of the error curve</span>
+    <span class="n">loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">error_curve</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">knee_point</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">knee_point</span></div>
     
 </pre></div>
 
@@ -1080,6 +1214,7 @@ document.write(`
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
 </ul>
@@ -1110,7 +1245,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

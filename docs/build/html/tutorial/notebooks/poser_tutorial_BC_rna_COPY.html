@@ -1,0 +1,1936 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Pose pipeline tutorial &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorial/notebooks/poser_tutorial_BC_rna_COPY';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">netflow v0.0.dev Manual</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
+  <p class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Pose pipeline tutorial</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="pose-pipeline-tutorial">
+<h1>Pose pipeline tutorial<a class="headerlink" href="#pose-pipeline-tutorial" title="Permalink to this headline">#</a></h1>
+<p>(Single-modal) In this tutorial, we demonstrate how to perform the POSE pipeline on Breast Cancer (BC) RNA data from TCGA. This analysis entails the following:</p>
+<ol class="arabic simple">
+<li><p>Upload data</p></li>
+<li><p>Compute pairwise sample (WE) distances with respect to gene neigborhoods</p></li>
+<li><p>Compute global pairwise sample (WE) distance matrices</p></li>
+<li><p>Convert global distances to a single sample pairwise similarity matrix</p></li>
+<li><p>(Future work - dpt distance and/or multi-scale diffusion based distances)</p></li>
+<li><p>Extract pseudo-organization (i.e., ordering) of samples.</p></li>
+<li><p>Determine schema (i.e., branching).</p></li>
+<li><p>Visualize schema</p></li>
+<li><p>(Future work - further investigation into samples within different branches and differential analysis between branches)</p></li>
+</ol>
+<ul class="simple">
+<li><p>$d_W(i,j,v)$ - The Wasserstein distance of the 1-hop neighborhood around gene $v$ between sample $i$ and sample $j$</p></li>
+<li><p>$d_E(i,j,v)$ - The Euclidean distance of the 1-hop neighborhood around gene $v$ between sample $i$ and sample $j$</p></li>
+<li><p>$D_W(i,j) = |d_W(i,j,v)|$ - Net Wasserstein distance between sample $i$ and sample $j$ wrt all genes $v$</p></li>
+<li><p>$D_E(i,j) = |d_E(i,j,v)|$ - Net Euclidean distance between sample $i$ and sample $j$ wrt all genes $v$</p></li>
+<li><p>$K_W = e^{-\frac{|D_W|^2}{\sigma^2}}$ - Pairwise sample Wasserstein similarity matrix</p></li>
+<li><p>$K_E = e^{-\frac{|D_E|^2}{\sigma^2}}$ - Pairwise sample Euclidean similarity matrix</p></li>
+<li><p>(Multi-feature, multi-modal) $K = \frac{K_W + K_E}{2}$ - Fused pairwise sample similarity matrix</p></li>
+<li><p>$D = 1 - K$ - Fused pairwise sample distance matrix</p></li>
+<li><p>(Clustering) Determine branching according to lineage tracing algorithm using $D$</p></li>
+<li><p>(Visualizing) Pseudo-ordering of samples in branches according to distance from root node $r$, i.e., $D(r,:)$</p></li>
+</ul>
+<p><strong>Aknowledgement</strong></p>
+<ul class="simple">
+<li><p>The diffusion distance and pseudo-ordering is performed according to the lineage tracing algorithm presented in Haghverdi, et al. (2019).</p></li>
+<li><p>The code for computing the ordering is largely adopted from the scanpy implementation in Python.</p></li>
+</ul>
+<p><strong>Input</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code> : RNA-Seq data matrix</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">genelist</span></code> : list of genes of interest in <code class="docutils literal notranslate"><span class="pre">X</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">G</span></code> : gene-gene (or protein-protein) interaction network</p></li>
+</ul>
+<p><strong>Algorithm</strong></p>
+<ol class="arabic simple">
+<li><p>Compute sample-pairwise gene-1-hop-neighborhood distances:</p>
+<ul class="simple">
+<li><p>Wasserstein distances (shape): For each gene <code class="docutils literal notranslate"><span class="pre">g</span></code> in the <code class="docutils literal notranslate"><span class="pre">genelist</span></code>, compute $$d_W^{(g)}(sample_i, sample_j)$$ which is the Wasserstein distance of gene <code class="docutils literal notranslate"><span class="pre">g</span></code>’s 1-hop neighborhood between every two samples <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code>.</p></li>
+<li><p>Euclidean distances (scale): For each gene <code class="docutils literal notranslate"><span class="pre">g</span></code> in the <code class="docutils literal notranslate"><span class="pre">genelist</span></code>, compute $$d_E^{(g)}(sample_i, sample_j)$$ which is the Euclidean distance of gene <code class="docutils literal notranslate"><span class="pre">g</span></code>’s 1-hop neighborhood (including self) between every two samples <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Compute net sample-pairwise distances:</p>
+<ul class="simple">
+<li><p>Wasserstein distance (shape): $$d_W(sample_i, sample_j) = |d_W^{(g)}(sample_i, sample_j)|$$ as the $L_1$ or $L_2$ norm of the vector of gene-1-hop-neighborhood Wasserstein distances for all genes <code class="docutils literal notranslate"><span class="pre">g</span></code> in the <code class="docutils literal notranslate"><span class="pre">genelist</span></code>.</p></li>
+<li><p>Euclidean distance (scale): $$d_E(sample_i, sample_j) = |d_E^{(g)}(sample_i, sample_j)|$$ as the $L_1$ or $L_2$ norm of the vector of gene-1-hop-neighborhood Euclidean distances for all genes <code class="docutils literal notranslate"><span class="pre">g</span></code> in the <code class="docutils literal notranslate"><span class="pre">genelist</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Convert net sample-pairwise distances to standardized similarities:</p>
+<ul class="simple">
+<li><p>$\sigma$ : Kernel width representing each data point’s accessible neighbors.</p></li>
+<li><p>Set $\sigma$ normalization for each obs as the distance to its k-th neighbor : $$K_{ij}(d) = \sqrt{\frac{2\sigma_i\sigma_j}{\sigma_i^2 + \sigma_j^2}}e^{-\frac{|d_{ij}^2|}{2(\sigma_i^2 + \sigma_j^2)}}$$
+where for each observation $i$, $\sigma_i$ is the distance to its $k$-th nearest neighbor.</p>
+<ul>
+<li><p>Standardized sample-pairwise Wasserstein similarity: $$K_W = K(d_W)$$</p></li>
+<li><p>Standardized sample-pairwise Euclidean similarity: $$K_E = K(d_E)$$</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Compute fused sample-pairwise distance $d_F$:</p>
+<ul class="simple">
+<li><p>$d_F = 1 - \frac{K_W + K_E}{2}$ (Note : could choose other weights to fuse with an unbalanced combination)</p></li>
+</ul>
+</li>
+</ol>
+<!-- 5. Compute sample-pairwise co-branch frequency from pseudo-organization:
+    - Compute pseudo-organization branching using each sample as the root.
+    - Count the number (or percentage) of times every two samples are found in the same branch - `tracker(sample_i, sample_j)`
+6. Cluster samples and generate organization schema:
+    - user specified parameters:
+        - `percentage (0 < percentage <= 100)` : Percentage of pseudo-organizations that samples must be found in the same branch to be considered part of the same cluster.
+        - `min_clus_component_size (1 <= min_clus_component_size <= largest number of samples within a single connected component)` : Remove each cluster where the connected component it belongs to has less than `min_island_clus_size` samples collectively.
+    - approach for constructing the schema:
+        - For each sample `i`, identify cluster `c_i` where $$c_i = \{ i \} \cup \{ j : tracker(i, j) >= percentage \}, $$ which is represented as a node in the schema.
+        - Draw an edge between every two clusters/nodes (e.g., `c_i` and `c_j`) where there is an overlap in the samples associated with each clusters/nodes.
+        - Remove connected components in the schema associated with less than `min_clus_component_size` samples, collectively.
+        - (To do:) Draw fictitious edges to connect the connected-components based on inter-pseudo-organization distance
+
+ --><p>First, import the necessary packages:</p>
+</section>
+<section id="load-libraries">
+<h1>Load libraries<a class="headerlink" href="#load-libraries" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span> <span class="k">as</span> <span class="n">ddict</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">cm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sc_sparse</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">netflow</span></code> has not been installed, add the path to the library:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+<span class="c1"># sys.path.insert(0, pathlib.Path(pathlib.Path(&#39;.&#39;).absolute()).parents[0].resolve().as_posix())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">netflow</span> <span class="k">as</span> <span class="nn">nf</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="set-up-directories">
+<h1>Set up directories<a class="headerlink" href="#set-up-directories" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MAIN_DIR</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Paths to where data is stored:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">MAIN_DIR</span> <span class="o">/</span> <span class="s1">&#39;example_data&#39;</span> <span class="o">/</span> <span class="s1">&#39;breast_tcga&#39;</span>
+
+<span class="n">RNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;rna_606.txt&#39;</span>
+<span class="n">E_RNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_rna_606.txt&#39;</span>
+
+<span class="n">CNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;cna_606.txt&#39;</span>
+<span class="n">E_CNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_cna_606.txt&#39;</span>
+
+<span class="n">METH_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;methylation_606.txt&#39;</span>
+<span class="n">E_METH_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_methylation_606.txt&#39;</span>
+
+<span class="n">CLIN_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;clin_606.txt&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Directory where output should be saved:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">OUT_DIR</span> <span class="o">=</span> <span class="n">MAIN_DIR</span> <span class="o">/</span> <span class="s1">&#39;example_data&#39;</span> <span class="o">/</span> <span class="s1">&#39;results_netflow_breast_tcga&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-clinical-data">
+<h1>Load clinical data<a class="headerlink" href="#load-clinical-data" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clin</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">CLIN_FNAME</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clin</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(606, 34)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clin</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PATIENT_ID</th>
+      <th>SAMPLE_TYPE</th>
+      <th>CANCER_TYPE</th>
+      <th>CANCER_TYPE_DETAILED</th>
+      <th>ONCOTREE_CODE</th>
+      <th>TMB_NONSYNONYMOUS</th>
+      <th>OS_STATUS</th>
+      <th>OS_MONTHS</th>
+      <th>DFS_STATUS</th>
+      <th>DFS_MONTHS</th>
+      <th>...</th>
+      <th>PATH_MARGIN</th>
+      <th>AJCC_TUMOR_PATHOLOGIC_PT</th>
+      <th>AJCC_NODES_PATHOLOGIC_PN</th>
+      <th>AJCC_METASTASIS_PATHOLOGIC_PM</th>
+      <th>AJCC_PATHOLOGIC_TUMOR_STAGE</th>
+      <th>AJCC_STAGING_EDITION</th>
+      <th>Buffa Hypoxia Score</th>
+      <th>Ragnum Hypoxia Score</th>
+      <th>Winter Hypoxia Score</th>
+      <th>PAM50</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>TCGA-E9-A295-01</th>
+      <td>TCGA-E9-A295</td>
+      <td>Primary</td>
+      <td>Breast Cancer</td>
+      <td>Breast Invasive Lobular Carcinoma</td>
+      <td>ILC</td>
+      <td>1.866667</td>
+      <td>0:LIVING</td>
+      <td>12.32</td>
+      <td>0:DiseaseFree</td>
+      <td>12.32</td>
+      <td>...</td>
+      <td>Negative</td>
+      <td>T2</td>
+      <td>N0 (i-)</td>
+      <td>M0</td>
+      <td>Stage IIA</td>
+      <td>7th</td>
+      <td>-19.0</td>
+      <td>-4.0</td>
+      <td>0.0</td>
+      <td>LumA</td>
+    </tr>
+    <tr>
+      <th>TCGA-AR-A1AS-01</th>
+      <td>TCGA-AR-A1AS</td>
+      <td>Primary</td>
+      <td>Breast Cancer</td>
+      <td>Breast Invasive Ductal Carcinoma</td>
+      <td>IDC</td>
+      <td>0.933333</td>
+      <td>0:LIVING</td>
+      <td>37.78</td>
+      <td>0:DiseaseFree</td>
+      <td>37.78</td>
+      <td>...</td>
+      <td>Negative</td>
+      <td>T2</td>
+      <td>N1</td>
+      <td>M0</td>
+      <td>Stage IIB</td>
+      <td>6th</td>
+      <td>11.0</td>
+      <td>10.0</td>
+      <td>14.0</td>
+      <td>LumA</td>
+    </tr>
+  </tbody>
+</table>
+<p>2 rows × 34 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="initialize-the-keeper">
+<h1>Initialize the Keeper<a class="headerlink" href="#initialize-the-keeper" title="Permalink to this headline">#</a></h1>
+<p>We use the same bulk-RNA TCGA breast cancer data (specifically, the RNA and methylation) as previously described in the Keeper tutorial.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># uncomment to initialize Keeper with no output directory:</span>
+<span class="c1"># keeper = nf.Keeper() </span>
+
+<span class="c1"># initializing Keeper with output directory:</span>
+<span class="n">keeper</span> <span class="o">=</span> <span class="n">nf</span><span class="o">.</span><span class="n">Keeper</span><span class="p">(</span><span class="n">outdir</span><span class="o">=</span><span class="n">OUT_DIR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Load the feature data (RNA and methylation) from file:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">RNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rna&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+<span class="n">keeper</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">METH_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;meth&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Load the associated graphs from their edgelist files:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">load_graph</span><span class="p">(</span><span class="n">E_RNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rna&#39;</span><span class="p">)</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">load_graph</span><span class="p">(</span><span class="n">E_METH_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;meth&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compute-observation-pairwise-distances">
+<h1>Compute observation-pairwise distances<a class="headerlink" href="#compute-observation-pairwise-distances" title="Permalink to this headline">#</a></h1>
+<p>We can compute observation-pairwise distances with respect to the feature data. This can be performed on all features, but here we select a specific set of immune related features for demonstration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># gene_sig = [&#39;HLA-DRB1&#39;, &#39;CD80&#39;, &#39;IL11&#39;, &#39;TGFB2&#39;, &#39;KLRG1&#39;, &#39;HLA-DPB1&#39;, &#39;IL6&#39;, &#39;ITGB7&#39;, </span>
+<span class="c1">#             &#39;SNAI1&#39;, &#39;CD3D&#39;, &#39;CCL5&#39;, &#39;ZAP70&#39;, &#39;GZMB&#39;, &#39;ARG1&#39;, &#39;CD247&#39;, &#39;TGFBR2&#39;, &#39;ICOS&#39;, </span>
+<span class="c1">#             &#39;CD86&#39;, &#39;LAT&#39;, &#39;CD3G&#39;, &#39;VAV1&#39;, &#39;CD163&#39;, &#39;PTPN6&#39;, &#39;HLA-DQA2&#39;, &#39;IFNG&#39;, &#39;CD3E&#39;, </span>
+<span class="c1">#             &#39;CTLA4&#39;, &#39;TUBA1A&#39;, &#39;ITK&#39;, &#39;ANGPTL4&#39;, &#39;CD8B&#39;, &#39;CD4&#39;, &#39;IL10&#39;, &#39;GZMA&#39;, &#39;ZEB1&#39;, </span>
+<span class="c1">#             &#39;KLF10&#39;, &#39;CD40LG&#39;, &#39;HLA-DPA1&#39;, &#39;CD28&#39;, &#39;LCK&#39;, &#39;CCR5&#39;, &#39;IL17A&#39;, &#39;PDCD1&#39;, </span>
+<span class="c1">#             &#39;HLA-DRB5&#39;, &#39;FOXP3&#39;, &#39;TGFBR1&#39;, &#39;IL4&#39;, &#39;VEGFA&#39;, &#39;CXCR3&#39;, &#39;LCP2&#39;, &#39;CSF3&#39;, </span>
+<span class="c1">#             &#39;HLA-DQB1&#39;, &#39;ACTB&#39;, &#39;IL2&#39;, &#39;IL1B&#39;, &#39;TNF&#39;, &#39;TGFB1&#39;, &#39;IL1A&#39;, &#39;IL13&#39;, &#39;CD8A&#39;]</span>
+
+<span class="n">gene_sig_label</span> <span class="o">=</span> <span class="s1">&#39;immune_signature&#39;</span>
+<span class="n">gene_sig</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ACTB&#39;</span><span class="p">,</span> <span class="s1">&#39;CCR5&#39;</span><span class="p">,</span> <span class="s1">&#39;CD163&#39;</span><span class="p">,</span> <span class="s1">&#39;CD247&#39;</span><span class="p">,</span> <span class="s1">&#39;CD28&#39;</span><span class="p">,</span> <span class="s1">&#39;CD3D&#39;</span><span class="p">,</span> <span class="s1">&#39;CD3E&#39;</span><span class="p">,</span> <span class="s1">&#39;CD3G&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;CD4&#39;</span><span class="p">,</span> <span class="s1">&#39;CD80&#39;</span><span class="p">,</span> <span class="s1">&#39;CD86&#39;</span><span class="p">,</span> <span class="s1">&#39;CD8A&#39;</span><span class="p">,</span> <span class="s1">&#39;CD8B&#39;</span><span class="p">,</span> <span class="s1">&#39;GZMA&#39;</span><span class="p">,</span> <span class="s1">&#39;GZMB&#39;</span><span class="p">,</span> <span class="s1">&#39;IFNG&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;IL10&#39;</span><span class="p">,</span> <span class="s1">&#39;IL1A&#39;</span><span class="p">,</span> <span class="s1">&#39;IL1B&#39;</span><span class="p">,</span> <span class="s1">&#39;IL6&#39;</span><span class="p">,</span> <span class="s1">&#39;ITGB7&#39;</span><span class="p">,</span> <span class="s1">&#39;ITK&#39;</span><span class="p">,</span> <span class="s1">&#39;KLF10&#39;</span><span class="p">,</span> <span class="s1">&#39;LAT&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;LCK&#39;</span><span class="p">,</span> <span class="s1">&#39;LCP2&#39;</span><span class="p">,</span> <span class="s1">&#39;PTPN6&#39;</span><span class="p">,</span> <span class="s1">&#39;SNAI1&#39;</span><span class="p">,</span> <span class="s1">&#39;TGFB2&#39;</span><span class="p">,</span> <span class="s1">&#39;TGFBR1&#39;</span><span class="p">,</span> <span class="s1">&#39;TGFBR2&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;TNF&#39;</span><span class="p">,</span> <span class="s1">&#39;TUBA1A&#39;</span><span class="p">,</span> <span class="s1">&#39;VAV1&#39;</span><span class="p">,</span> <span class="s1">&#39;VEGFA&#39;</span><span class="p">,</span> <span class="s1">&#39;ZAP70&#39;</span><span class="p">,</span> <span class="s1">&#39;ZEB1&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gene_sig</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>37
+</pre></div>
+</div>
+</div>
+</div>
+<p>We check that all features in <code class="docutils literal notranslate"><span class="pre">gene_sig</span></code> are also in the graphs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">gene_sig</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">g</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>37
+37
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Note:</strong> In general, the same features do not have to be used for each data set. In fact, the data sets may not even have any features in common. Here, we use the same selected set of features for simplicity of the demonstration.</p>
+<section id="feature-neighborhood-distances">
+<h2>Feature neighborhood distances<a class="headerlink" href="#feature-neighborhood-distances" title="Permalink to this headline">#</a></h2>
+<p>For each feature, we can compute distances, such as Wasserstein and Euclidean, between feature neighborhood profiles of every two observations.</p>
+<p>Next we compute the observation-pairwise Wasserstein distances between the 1-hop transition distribution from each feature in the selected gene signature <code class="docutils literal notranslate"><span class="pre">gene_sig</span></code>.</p>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">include_self</span></code> determines if the feature itself should be included in its neighborhood. When computing transition probabilities, the weight of the feature itself ends up being excluded via the mass-action principle. When interested in the transition probabilities, set <code class="docutils literal notranslate"><span class="pre">include_self</span> <span class="pre">=</span> <span class="pre">False</span></code>. Otherwise, if interested in the distance between normalized profiles over the neighborhood, set <code class="docutils literal notranslate"><span class="pre">include_self</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
+<p>Here, we are demonstrate the transition probability context and set <code class="docutils literal notranslate"><span class="pre">include_self</span> <span class="pre">=</span> <span class="pre">False</span></code>.</p>
+<p>See the documentation for a description of all arguments.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">wass_distance_pairwise_observation_feature_nbhd</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">gene_sig</span><span class="p">,</span>
+                                                           <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">gene_sig_label</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.methods.classes: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">21</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:51:11</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> |                                                           
+classes:multiple_pairwise_observation_neighborhood_wass_distan<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">ce:815</span> | &gt;&gt;&gt; Loaded saved observation pairwise <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>-hop 
+neighborhood Wasserstein distances from rna_immune_signature_wass_dist_observation_pairwise_nbhds_without_self     
+profiles of size <span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">183315</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">36</span><span style="font-weight: bold">)</span>.                                                                                     
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.methods.classes: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">21</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:51:33</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> |                                                           
+classes:multiple_pairwise_observation_neighborhood_wass_distan<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">ce:815</span> | &gt;&gt;&gt; Loaded saved observation pairwise <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>-hop 
+neighborhood Wasserstein distances from meth_immune_signature_wass_dist_observation_pairwise_nbhds_without_self    
+profiles of size <span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">183315</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">36</span><span style="font-weight: bold">)</span>.                                                                                     
+</pre>
+</div></div>
+</div>
+<p>As a result, for each feature data (RNA, CNA and methylation), the Wasserstein distances between pairwise observations,
+where rows are observation-pairs and columns are feature (node) names is saved to <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code> keyed by
+<code class="docutils literal notranslate"><span class="pre">f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;</span></code>.</p>
+<p>For example, we can see the RNA results as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;rna_</span><span class="si">{</span><span class="n">gene_sig_label</span><span class="si">}</span><span class="s2">_wass_dist_observation_pairwise_nbhds_without_self&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>ACTB</th>
+      <th>CCR5</th>
+      <th>CD163</th>
+      <th>CD247</th>
+      <th>CD28</th>
+      <th>CD3D</th>
+      <th>CD3E</th>
+      <th>CD3G</th>
+      <th>CD4</th>
+      <th>CD80</th>
+      <th>...</th>
+      <th>SNAI1</th>
+      <th>TGFB2</th>
+      <th>TGFBR1</th>
+      <th>TGFBR2</th>
+      <th>TNF</th>
+      <th>TUBA1A</th>
+      <th>VAV1</th>
+      <th>VEGFA</th>
+      <th>ZAP70</th>
+      <th>ZEB1</th>
+    </tr>
+    <tr>
+      <th>observation_a</th>
+      <th>observation_b</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">TCGA-E9-A295-01</th>
+      <th>TCGA-AR-A1AS-01</th>
+      <td>0.375430</td>
+      <td>0.482697</td>
+      <td>0.025785</td>
+      <td>0.423335</td>
+      <td>0.226186</td>
+      <td>0.623157</td>
+      <td>0.489348</td>
+      <td>0.161659</td>
+      <td>0.930970</td>
+      <td>0.061216</td>
+      <td>...</td>
+      <td>0.319277</td>
+      <td>0.760959</td>
+      <td>0.56571</td>
+      <td>0.955370</td>
+      <td>0.177350</td>
+      <td>0.167693</td>
+      <td>0.304148</td>
+      <td>0.199462</td>
+      <td>0.638770</td>
+      <td>0.645654</td>
+    </tr>
+    <tr>
+      <th>TCGA-AQ-A1H2-01</th>
+      <td>0.467019</td>
+      <td>0.447891</td>
+      <td>0.050915</td>
+      <td>0.221294</td>
+      <td>0.223247</td>
+      <td>0.167546</td>
+      <td>0.245124</td>
+      <td>0.014759</td>
+      <td>0.153712</td>
+      <td>0.205665</td>
+      <td>...</td>
+      <td>0.178091</td>
+      <td>0.559237</td>
+      <td>0.62304</td>
+      <td>0.764808</td>
+      <td>0.481764</td>
+      <td>0.582859</td>
+      <td>0.383708</td>
+      <td>0.218584</td>
+      <td>0.474194</td>
+      <td>0.261223</td>
+    </tr>
+  </tbody>
+</table>
+<p>2 rows × 36 columns</p>
+</div></div></div>
+</div>
+<p>Similarly, we can compute the Euclidean distance on feature neighborhoods. As demonstrated next, the Euclidean metric is specified by the attribute <code class="docutils literal notranslate"><span class="pre">metric</span></code>. Any metric that can be passed to scipy.spatial.distance.cdist is acceptable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">euc_distance_pairwise_observation_feature_nbhd</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">gene_sig</span><span class="p">,</span>
+                                                           <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">gene_sig_label</span><span class="p">,</span>
+                                                           <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.methods.classes: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">21</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:51:34</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> |                                                           
+classes:multiple_pairwise_observation_neighborhood_euc_distan<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">ce:925</span> | &gt;&gt;&gt; Loaded saved observation pairwise <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>-hop  
+neighborhood Euclidean distances from rna_immune_signature_euc_dist_observation_pairwise_nbhds_without_self        
+profiles of size <span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">183315</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">36</span><span style="font-weight: bold">)</span>.                                                                                     
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.methods.classes: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">21</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:51:35</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> |                                                           
+classes:multiple_pairwise_observation_neighborhood_euc_distan<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">ce:925</span> | &gt;&gt;&gt; Loaded saved observation pairwise <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>-hop  
+neighborhood Euclidean distances from meth_immune_signature_euc_dist_observation_pairwise_nbhds_without_self       
+profiles of size <span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">183315</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">36</span><span style="font-weight: bold">)</span>.                                                                                     
+</pre>
+</div></div>
+</div>
+<section id="distance-from-a-single-feature-neighborhood">
+<h3>Distance from a single feature neighborhood<a class="headerlink" href="#distance-from-a-single-feature-neighborhood" title="Permalink to this headline">#</a></h3>
+<p>If we are interested in the distances with respect to a single feature neighborhood, for example CD28, we can extract the stacked-distance format from <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code> and add it to the distances in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>:</p>
+<p>First we extract the stacked RNA CD28 neighborhood Wasserstein distances:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rna_CD28_nbhd_wass_dist</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;rna_</span><span class="si">{</span><span class="n">gene_sig_label</span><span class="si">}</span><span class="s2">_wass_dist_observation_pairwise_nbhds_without_self&quot;</span><span class="p">][</span><span class="s1">&#39;CD28&#39;</span><span class="p">]</span>
+<span class="n">rna_CD28_nbhd_wass_dist</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>observation_a    observation_b  
+TCGA-E9-A295-01  TCGA-AR-A1AS-01    0.226186
+                 TCGA-AQ-A1H2-01    0.223247
+                 TCGA-A8-A08O-01    0.246211
+                 TCGA-BH-A1FJ-01    0.322797
+                 TCGA-JL-A3YX-01    0.382493
+Name: CD28, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then we add the stacked distances to <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>, keyed by <code class="docutils literal notranslate"><span class="pre">'wass_dist_rna_CD28_nbhd'</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_stacked_distance</span><span class="p">(</span><span class="n">rna_CD28_nbhd_wass_dist</span><span class="p">,</span> <span class="s1">&#39;wass_dist_rna_CD28_nbhd&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="distance-from-norm-of-feature-neighborhood-distances">
+<h3>Distance from norm of feature neighborhood distances<a class="headerlink" href="#distance-from-norm-of-feature-neighborhood-distances" title="Permalink to this headline">#</a></h3>
+<p>Alternatively, we can use the norm of the vector of neighborhood distances over all features as the final distance. First, we extract the norm of feature neighborhood distances, again demonstrated on the RNA-Wasserstein distances.</p>
+<p>Summary of the arguments passed to compute the norm and save it as a distance:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">misc_key</span></code> : Specify the key of the stacked RNA feature neighborhood Wasserstein distnaces stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">distance_label</span></code> : Specify the key that the resulting distance is stored as in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">features</span></code> : Option to select subset of features to include. If provided, restrict to norm over columns corresponding to features in the specified list. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, use all columns. (In this demonstration, we use the default behavior and include all features that neighborhood distances were computed on.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">method</span></code> : Indicate which norm to compute, can be one of [‘L1’, ‘L2’, ‘inf’, ‘mean’, ‘median’]</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">misc_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;rna_</span><span class="si">{</span><span class="n">gene_sig_label</span><span class="si">}</span><span class="s2">_wass_dist_observation_pairwise_nbhds_without_self&quot;</span>
+<span class="n">distance_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;norm_</span><span class="si">{</span><span class="n">misc_key</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">nf</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">norm_features_as_sym_dist</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">misc_key</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">distance_label</span><span class="p">,</span>
+                                             <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;L1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now see this distance has been added to <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">distance_label</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TCGA-E9-A295-01</th>
+      <th>TCGA-AR-A1AS-01</th>
+      <th>TCGA-AQ-A1H2-01</th>
+      <th>TCGA-A8-A08O-01</th>
+      <th>TCGA-BH-A1FJ-01</th>
+      <th>TCGA-JL-A3YX-01</th>
+      <th>TCGA-A7-A425-01</th>
+      <th>TCGA-AC-A2BM-01</th>
+      <th>TCGA-LL-A6FP-01</th>
+      <th>TCGA-A7-A26E-01</th>
+      <th>...</th>
+      <th>TCGA-A2-A1G0-01</th>
+      <th>TCGA-WT-AB41-01</th>
+      <th>TCGA-EW-A1P6-01</th>
+      <th>TCGA-XX-A89A-01</th>
+      <th>TCGA-A7-A4SD-01</th>
+      <th>TCGA-AC-A6IX-01</th>
+      <th>TCGA-AR-A24L-01</th>
+      <th>TCGA-BH-A42U-01</th>
+      <th>TCGA-AR-A24S-01</th>
+      <th>TCGA-BH-A0BC-01</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>TCGA-E9-A295-01</th>
+      <td>0.000000</td>
+      <td>13.415799</td>
+      <td>11.976610</td>
+      <td>10.434216</td>
+      <td>11.961795</td>
+      <td>9.241838</td>
+      <td>9.865547</td>
+      <td>12.639423</td>
+      <td>17.064882</td>
+      <td>13.054158</td>
+      <td>...</td>
+      <td>11.651279</td>
+      <td>16.169011</td>
+      <td>10.006264</td>
+      <td>11.019874</td>
+      <td>13.043276</td>
+      <td>9.243581</td>
+      <td>12.245928</td>
+      <td>13.691054</td>
+      <td>11.829914</td>
+      <td>10.739983</td>
+    </tr>
+    <tr>
+      <th>TCGA-AR-A1AS-01</th>
+      <td>13.415799</td>
+      <td>0.000000</td>
+      <td>13.968681</td>
+      <td>9.741795</td>
+      <td>9.344761</td>
+      <td>9.340045</td>
+      <td>12.072010</td>
+      <td>12.957682</td>
+      <td>16.617421</td>
+      <td>10.944821</td>
+      <td>...</td>
+      <td>13.210496</td>
+      <td>19.160851</td>
+      <td>9.812397</td>
+      <td>13.671998</td>
+      <td>15.426071</td>
+      <td>11.771620</td>
+      <td>11.390057</td>
+      <td>17.613263</td>
+      <td>13.028777</td>
+      <td>11.599280</td>
+    </tr>
+  </tbody>
+</table>
+<p>2 rows × 606 columns</p>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="feature-profile-distances">
+<h2>Feature profile distances<a class="headerlink" href="#feature-profile-distances" title="Permalink to this headline">#</a></h2>
+<p>We can also compute distances between feature profiles of every two observations.</p>
+<p>The Wasserstein and Euclidean distances between the selected gene signature feature profiles is computed for each feature data set (RNA and methylation) as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>    
+    <span class="c1"># Wasserstein distances:</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">wass_distance_pairwise_observation_profile</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> 
+                                                      <span class="n">features</span><span class="o">=</span><span class="n">gene_sig</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">gene_sig_label</span><span class="p">,</span>                                                      
+                                                      <span class="n">graph_distances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Euclidean distances:</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">euc_distance_pairwise_observation_profile</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">gene_sig</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">gene_sig_label</span><span class="p">)</span>                                                                  
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.methods.classes: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">21</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:51:58</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | classes:pairwise_observation_profile_euc_distan<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">ce:1158</span> |  
+&gt;&gt;&gt; Loaded saved observation pairwise profile Euclidean distances from                                             
+rna_immune_signature_euc_dist_observation_pairwise_profiles profiles of size <span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">183315</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span><span style="font-weight: bold">)</span>.                          
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.methods.classes: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">21</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:52:26</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | classes:pairwise_observation_profile_euc_distan<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">ce:1158</span> |  
+&gt;&gt;&gt; Loaded saved observation pairwise profile Euclidean distances from                                             
+meth_immune_signature_euc_dist_observation_pairwise_profiles profiles of size <span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">183315</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span><span style="font-weight: bold">)</span>.                         
+</pre>
+</div></div>
+</div>
+</section>
+</section>
+<section id="compute-similarities-from-distances">
+<h1>Compute similarities from distances<a class="headerlink" href="#compute-similarities-from-distances" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">:</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">compute_similarity_from_distance</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span>                                                    
+                                            <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see the labels of all the similarities that have been added to the keeper (one for each distance that was in the keeper):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span><span class="p">],</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="fused-similarities">
+<h1>Fused similarities<a class="headerlink" href="#fused-similarities" title="Permalink to this headline">#</a></h1>
+<p>We can take any combination of similarities and add them as a fused similarity to the keeper.</p>
+<p>For example, we can fuse the Wasserstein and Euclidean RNA profile distances.</p>
+<p>This can be done in two ways :</p>
+<ol class="arabic simple">
+<li><p>Explicitly, by computing the fused distance and then adding it to the keeper or,</p></li>
+<li><p>implicitly, using the keeper’s method <code class="docutils literal notranslate"><span class="pre">fuse_similarities</span></code>. In this approach, you provide:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">similarity_keys</span></code> : the list of keys referencing the similarities that should be fused</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weights</span></code> (optional) : weights for how much each similarity should contribute to the fusion. The default behavior is to assign uniform weights and compute the average.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fused_key</span></code> (optional) : the key used to store the fused similarity in the keeper. The default behavior is to fuse the keys of the original similarities.</p></li>
+</ul>
+</li>
+</ol>
+<p>We demonstrate both options, uncomment one to perform.</p>
+<ul class="simple">
+<li><p>Uncomment below for explicitly computing the fused similarity.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># fused_similarity = 0.5*(keeper.similarities[&#39;similarity_max5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles&#39;].data + \</span>
+<span class="c1">#                         keeper.similarities[&#39;similarity_max5nn_rna_immune_signature_euc_dist_observation_pairwise_profiles&#39;].data)</span>
+
+<span class="c1"># fused_key = &#39;fused_similarity_max5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles&#39;</span>
+<span class="c1"># keeper.add_similarity(fused_similarity, fused_key)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">05</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">08:54:40</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_similarity:<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1320</span> | &gt;&gt;&gt; Added similarity input    
+fused_similarity_None5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles to the keeper.           
+</pre>
+</div></div>
+</div>
+<ul class="simple">
+<li><p>Uncomment below to implicitly compute the fused similarity.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">fuse_similarities</span><span class="p">([</span><span class="s1">&#39;similarity_max5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;similarity_max5nn_rna_immune_signature_euc_dist_observation_pairwise_profiles&#39;</span><span class="p">],</span>
+                         <span class="c1"># weights=None,  # uncomment to add fused weighting</span>
+                        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that the fused similarity has been added to the Keeper with the key
+<code class="docutils literal notranslate"><span class="pre">'fused_similarity_max5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles'</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span><span class="p">],</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>similarity_max5nn_wass_dist_rna_CD28_nbhd
+similarity_max5nn_norm_rna_immune_signature_wass_dist_observation_pairwise_nbhds_without_self
+similarity_max5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles
+similarity_max5nn_rna_immune_signature_euc_dist_observation_pairwise_profiles
+similarity_max5nn_meth_immune_signature_wass_dist_observation_pairwise_profiles
+similarity_max5nn_meth_immune_signature_euc_dist_observation_pairwise_profiles
+fused_similarity_max5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles
+</pre></div>
+</div>
+</div>
+</div>
+<p>Or, we can fuse the RNA and methylation Wasserstein profile distances:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">fuse_similarities</span><span class="p">([</span><span class="s1">&#39;similarity_max5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;similarity_max5nn_meth_immune_signature_wass_dist_observation_pairwise_profiles&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can check that it has been added to the similarities:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;fused_similarity_max5nn_rna_meth_immune_signature_wass_dist_observation_pairwise_profiles&#39;</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Since the similarities range from 0 to 1 (0 being the least similar and 1 being the most similar), we can transform them into distances by taking 1-similarity.</p></li>
+</ul>
+<p>Next, we add the distances from each similarity to <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>, so they can be used in later analysis:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span><span class="p">:</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">convert_similarity_to_distance</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compute-diffusion-distances">
+<h1>Compute diffusion distances<a class="headerlink" href="#compute-diffusion-distances" title="Permalink to this headline">#</a></h1>
+<p>Next we show how to compute the multi-scale diffusion distance from a similarity. This entails computing the transition matrix associated with the similarity which is stored in the misc keeper.</p>
+<p>To compute the diffusion distance for each similarity, we simply loop through the similarities stored in the keeper. See the documentation for a description of additional options.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">sim</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span><span class="p">:</span>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">compute_dpt_from_similarity</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">density_normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for sim in keeper.similarities:</span>
+<span class="c1">#     keeper.compute_transitions_from_similarity(sim.label, density_normalize=True)</span>
+<span class="c1">#     T_sym_label = f&quot;transitions_sym_{sim.label}&quot;</span>
+<span class="c1">#     keeper.compute_dpt_from_augmented_sym_transitions(T_sym_label)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:38</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_asym_similarity_None5nn_wass_dist_rna_CD28_nbhd to the keeper.                                         
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:38</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_sym_similarity_None5nn_wass_dist_rna_CD28_nbhd to the keeper.                                          
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:38</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_asym_similarity_None5nn_norm_rna_immune_signature_wass_dist_observation_pairwise_nbhds_without_self to 
+the keeper.                                                                                                        
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:38</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_sym_similarity_None5nn_norm_rna_immune_signature_wass_dist_observation_pairwise_nbhds_without_self to  
+the keeper.                                                                                                        
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:38</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_asym_similarity_None5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles to the keeper.    
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:38</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_sym_similarity_None5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles to the keeper.     
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:38</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_asym_similarity_None5nn_rna_immune_signature_euc_dist_observation_pairwise_profiles to the keeper.     
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:38</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_sym_similarity_None5nn_rna_immune_signature_euc_dist_observation_pairwise_profiles to the keeper.      
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:39</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_asym_similarity_None5nn_meth_immune_signature_wass_dist_observation_pairwise_profiles to the keeper.   
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:39</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_sym_similarity_None5nn_meth_immune_signature_wass_dist_observation_pairwise_profiles to the keeper.    
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:39</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_asym_similarity_None5nn_meth_immune_signature_euc_dist_observation_pairwise_profiles to the keeper.    
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:39</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_sym_similarity_None5nn_meth_immune_signature_euc_dist_observation_pairwise_profiles to the keeper.     
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:39</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_asym_fused_similarity_None5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles to the  
+keeper.                                                                                                            
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:39</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_sym_fused_similarity_None5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles to the   
+keeper.                                                                                                            
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:39</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_asym_fused_similarity_None5nn_rna_meth_immune_signature_wass_dist_observation_pairwise_profiles to the 
+keeper.                                                                                                            
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">09:26:39</span>  AM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1397</span> | &gt;&gt;&gt; Added misc input                
+transitions_sym_fused_similarity_None5nn_rna_meth_immune_signature_wass_dist_observation_pairwise_profiles to the  
+keeper.                                                                                                            
+</pre>
+</div></div>
+</div>
+</section>
+<section id="compute-the-pose">
+<h1>Compute the POSE<a class="headerlink" href="#compute-the-pose" title="Permalink to this headline">#</a></h1>
+<p>The POSE can be computed from any distance in the keeper. We demonstrate this next using the multi-scale Wasserstein distance between RNA immune signature profiles, with the reference key <code class="docutils literal notranslate"><span class="pre">'dpt_from_transitions_sym_similarity_max5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles'</span></code> in the keeper.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">POSER</span></code> class is used to perform the iterative branching and keep track the branches and their splits.
+The final <strong>POSE</strong>, i.e., the <strong>P</strong>seudo-<strong>O</strong>rganizational <strong>S</strong>tructur<strong>E</strong> of the observations is returned as a graph where each observation is represented as a node. The edges show the organizational relationship determined from the ordering (lineage tracing algorithm) and nearest neighbors (alleviates strict assumptions of lineage tracing that do not apply).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">dd</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">],</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wass_dist_rna_CD28_nbhd
+norm_rna_immune_signature_wass_dist_observation_pairwise_nbhds_without_self
+rna_immune_signature_wass_dist_observation_pairwise_profiles
+rna_immune_signature_euc_dist_observation_pairwise_profiles
+meth_immune_signature_wass_dist_observation_pairwise_profiles
+meth_immune_signature_euc_dist_observation_pairwise_profiles
+distance_from_similarity_max5nn_wass_dist_rna_CD28_nbhd
+distance_from_similarity_max5nn_norm_rna_immune_signature_wass_dist_observation_pairwise_nbhds_without_self
+distance_from_similarity_max5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles
+distance_from_similarity_max5nn_rna_immune_signature_euc_dist_observation_pairwise_profiles
+distance_from_similarity_max5nn_meth_immune_signature_wass_dist_observation_pairwise_profiles
+distance_from_similarity_max5nn_meth_immune_signature_euc_dist_observation_pairwise_profiles
+distance_from_fused_similarity_max5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles
+distance_from_fused_similarity_max5nn_rna_meth_immune_signature_wass_dist_observation_pairwise_profiles
+dpt_from_transitions_sym_similarity_max5nn_wass_dist_rna_CD28_nbhd
+dpt_from_transitions_sym_similarity_max5nn_norm_rna_immune_signature_wass_dist_observation_pairwise_nbhds_without_self
+dpt_from_transitions_sym_similarity_max5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles
+dpt_from_transitions_sym_similarity_max5nn_rna_immune_signature_euc_dist_observation_pairwise_profiles
+dpt_from_transitions_sym_similarity_max5nn_meth_immune_signature_wass_dist_observation_pairwise_profiles
+dpt_from_transitions_sym_similarity_max5nn_meth_immune_signature_euc_dist_observation_pairwise_profiles
+dpt_from_transitions_sym_fused_similarity_max5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles
+dpt_from_transitions_sym_fused_similarity_max5nn_rna_meth_immune_signature_wass_dist_observation_pairwise_profiles
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># key = &#39;distance_from_fused_similarity_max5nn_rna_meth_immune_signature_wass_dist_observation_pairwise_profiles&#39;</span>
+<span class="c1"># key = &#39;dpt_from_transitions_sym_similarity_max5nn_norm_rna_immune_signature_wass_dist_observation_pairwise_nbhds_without_self&#39;</span>
+<span class="c1"># key = &#39;dpt_from_transitions_sym_similarity_max5nn_meth_immune_signature_wass_dist_observation_pairwise_profiles&#39;</span>
+<span class="c1"># key = &#39;dpt_from_transitions_sym_similarity_max5nn_rna_immune_signature_euc_dist_observation_pairwise_profiles&#39;</span>
+<span class="c1"># key = &#39;dpt_from_transitions_sym_similarity_max5nn_meth_immune_signature_euc_dist_observation_pairwise_profiles&#39;</span>
+<span class="c1"># key = &#39;dpt_from_transitions_sym_similarity_max5nn_rna_immune_signature_wass_dist_observation_pairwise_profiles&#39;</span>
+<span class="c1"># key = &#39;dpt_from_transitions_sym_fused_similarity_max5nn_rna_immune_signature_wass_euc_dist_observation_pairwise_profiles&#39;</span>
+<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;dpt_from_transitions_sym_similarity_max5nn_wass_dist_rna_CD28_nbhd&#39;</span>
+
+<span class="n">poser</span><span class="p">,</span> <span class="n">G_poser_nn</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">construct_pose</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">n_branches</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                          <span class="n">until_branched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We briefly go over some of the main arguments for consideration when computing the pose:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">root</span></code> : You can specify which observation should be used as the root or the method to select the root.
+The default is to set the root as the central observation, determined as the observation with the smallest
+average distance to all other observations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> : The minimum number of observations a branch must have to be considered for branching
+during the recursive branching procedure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">split</span></code> : If <code class="docutils literal notranslate"><span class="pre">True</span></code>, a branch is split according to its three tips. Otherwise, split the branch by determining
+a single branching off the main segment with respect to the tip farthest from the root.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_branches</span></code> : The number of times to iteratively perform the branching, unless the process terminates earlier.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">until_branched</span></code> : This is intended for compatibility with the <code class="docutils literal notranslate"><span class="pre">scanpy</span></code> implementation, where branching is
+iteratively attempted <code class="docutils literal notranslate"><span class="pre">n_branches</span></code> times. However, some iterations may not result in any further branching
+(e.g., if no split is found). We add the option (by setting <code class="docutils literal notranslate"><span class="pre">until_branched</span> <span class="pre">=</span> <span class="pre">True</span></code>) so that such iterations
+that do not result in further branching do not count toward the number of iterations performed. Thus, when <code class="docutils literal notranslate"><span class="pre">until_branched</span> <span class="pre">=</span> <span class="pre">True</span></code>,
+the iteration does not terminate until either a branch has been split or the process terminates.</p></li>
+</ul>
+<p>See the documentation for a description of all possible arguments.</p>
+<section id="a-closer-look-at-the-poser">
+<h2>A closer look at the POSER<a class="headerlink" href="#a-closer-look-at-the-poser" title="Permalink to this headline">#</a></h2>
+<p>First, we can get the index of the observation that was used as the root:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">poser</span><span class="o">.</span><span class="n">root</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>433
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also get the label of the root observation:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">[</span><span class="n">poser</span><span class="o">.</span><span class="n">root</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;TCGA-OL-A5RW-01&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can get an overview of the branching:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">poser</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">disp</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            ┌1 (n = 58)
+            ├2 (n = 60)
+            │                   ┌0 - trunk (n = 13)
+            │                   ├4 (n = 2)
+            ├0 - trunk (n = 113)┤
+            │                   ├6 (n = 97)
+            │                   └5 (n = 1)
+ 0 (n = 606)┤
+            │           ┌3 - trunk (n = 20)
+            │           ├7 (n = 17)
+            │           ├9 (n = 4)
+            └3 (n = 375)┤
+                        │           ┌8 - trunk (n = 53)
+                        │           ├10 (n = 14)
+                        │           ├11 (n = 248)
+                        └8 (n = 334)┤
+                                    │           ┌12 - trunk (n = 11)
+                                    │           ├13 (n = 1)
+                                    └12 (n = 19)┤
+                                                ├15 (n = 2)
+                                                └14 (n = 5)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can get a list of the branches that were split in the order in which they were split:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">poser</span><span class="o">.</span><span class="n">branched_ordering</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0 (n = 606), 0 - trunk (n = 113), 3 (n = 375), 8 (n = 334), 12 (n = 19)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizing-the-pose">
+<h2>Visualizing the POSE<a class="headerlink" href="#visualizing-the-pose" title="Permalink to this headline">#</a></h2>
+<p>The topology of the POSE is return as <code class="docutils literal notranslate"><span class="pre">G_poser_nn</span></code>.</p>
+<p>We highlight some of the node and edge attributes</p>
+<p><strong>Node attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'branch'</span></code> : Reference ID of the branch the observation belongs to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'name'</span></code> : Label of the observation the node corresponds to.</p></li>
+</ul>
+<p><strong>Edge attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'connection</span></code>’ : Takes one of the following values:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'intra-branch'</span></code> if the edge connects two observations in the same branch and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'inter-branch'</span></code> if the edge connects two observations in different branches.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'distance'</span></code> :</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'edge_origin'</span></code> : Takes one of the following values:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'POSE</span> <span class="pre">+</span> <span class="pre">NN'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'POSE'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'NN'</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>We can get a record of the branch that each observation is assigned to:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">branch_record</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;branch&#39;</span><span class="p">,</span> 
+                                                     <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)))</span>
+<span class="n">branch_record</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">key</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And then we can see the number of observations in each branch:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">branch_record</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>11    248
+6      97
+2      60
+1      58
+8      53
+3      20
+7      17
+10     14
+0      13
+12     11
+14      5
+9       4
+4       2
+15      2
+5       1
+13      1
+Name: dpt_from_transitions_sym_similarity_max5nn_wass_dist_rna_CD28_nbhd, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<section id="kaplan-meier-survival-analysis">
+<h3>Kaplan-Meier survival analysis<a class="headerlink" href="#kaplan-meier-survival-analysis" title="Permalink to this headline">#</a></h3>
+<p>Next, we perform Kaplan-Meier survival analysis grouping the observations by their branch.</p>
+<p><strong>Note:</strong> We point out that the branches provide an ordering (and not a partition). While branching captures breaks in relational structure of the observations, it does not necessarily partition the observations into hetergeneous clusters where the clusters are made up of homogeneous observations. Further clustering is recommended</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">netflow.probe</span> <span class="kn">import</span> <span class="n">visualization</span> <span class="k">as</span> <span class="n">nfv</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="n">clin</span><span class="p">[</span><span class="s1">&#39;OS_MONTHS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+<span class="n">E</span> <span class="o">=</span> <span class="n">clin</span><span class="p">[</span><span class="s1">&#39;OS_STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s1">&#39;0:LIVING&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;1:DECEASED&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="n">display</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="n">TE</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>282.69
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0    530
+1     76
+Name: OS_STATUS, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cut</span> <span class="o">=</span> <span class="mf">12.</span><span class="o">*</span><span class="mf">10.</span>
+<span class="n">Tcut</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">Tcut</span><span class="p">[</span><span class="n">Tcut</span> <span class="o">&gt;</span> <span class="n">cut</span><span class="p">]</span> <span class="o">=</span> <span class="n">cut</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Tcut</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+<span class="n">Ecut</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">Ecut</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">T</span> <span class="o">&gt;</span> <span class="n">cut</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">E</span><span class="o">==</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Ecut</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="n">TEcut</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">Tcut</span><span class="p">,</span> <span class="n">Ecut</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>120.0
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0    534
+1     72
+Name: OS_STATUS, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cm</span><span class="o">.</span><span class="n">to_hex</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">tab10</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span><span class="mi">10</span> <span class="k">else</span> <span class="p">[</span><span class="n">cm</span><span class="o">.</span><span class="n">to_hex</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">tab20</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)]</span>
+
+<span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">:</span>
+    <span class="n">color_cycler</span> <span class="o">=</span> <span class="n">colors</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">branch_record</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span> 
+                                       <span class="n">vmax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">branch_record</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gist_rainbow</span><span class="p">)</span>
+    <span class="n">color_cycler</span> <span class="o">=</span> <span class="p">[</span><span class="n">mapper</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">branch_record</span><span class="o">.</span><span class="n">unique</span><span class="p">())]</span>
+
+<span class="n">nfv</span><span class="o">.</span><span class="n">KM_between_groups</span><span class="p">(</span><span class="n">TEcut</span><span class="p">[</span><span class="s1">&#39;OS_MONTHS&#39;</span><span class="p">],</span> <span class="n">TEcut</span><span class="p">[</span><span class="s1">&#39;OS_STATUS&#39;</span><span class="p">],</span> 
+                      <span class="n">branch_record</span><span class="p">,</span> <span class="n">min_group_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                      <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">show_censors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ci_show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                      <span class="n">show_at_risk_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                      <span class="n">ttl</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;POSE branching</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>                      
+                      <span class="n">colors</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">branch_record</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">color_cycler</span><span class="p">))),</span> 
+                      <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;time (months)&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                      <span class="n">censor_styles</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ms&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;marker&#39;</span><span class="p">:</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="c1"># &#39;markeredgecolor&#39;: &#39;#ff0000&#39;,</span>
+                                    <span class="p">},</span>
+                      <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/f267f5c85b988e4cd56aa5a86cef0b74d063f044c8e0230d95152ff71594662d.png" src="../../_images/f267f5c85b988e4cd56aa5a86cef0b74d063f044c8e0230d95152ff71594662d.png" />
+</div>
+</div>
+</section>
+<section id="visualize-pose">
+<h3>Visualize POSE<a class="headerlink" href="#visualize-pose" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">kamada_kawai_layout</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>First determine features to color nodes by:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_obs</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">root</span>
+<span class="n">nodelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="p">)</span>
+<span class="n">edgelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+<span class="n">node_labels</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">G_poser_nn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">}</span>
+<span class="n">edge_style</span> <span class="o">=</span> <span class="p">[</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">ee</span><span class="p">][</span><span class="s1">&#39;edge_origin&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">edgelist</span><span class="p">]</span>
+<span class="n">node_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span> <span class="k">if</span> <span class="n">k</span><span class="o">==</span> <span class="n">root_obs</span> <span class="k">else</span> <span class="mi">30</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]</span>
+<span class="c1"># node_shape = clin[&#39;Dead&#39;].replace({False: &#39;alive&#39;, True: &#39;deceased&#39;}).loc[[node_labels[kk] for kk in nodelist]].values.tolist()</span>
+<span class="c1"># node_shape_response = clin[&#39;Response&#39;].loc[[node_labels[kk] for kk in nodelist]].values.tolist()</span>
+<span class="n">node_shape_pam50</span> <span class="o">=</span> <span class="n">clin</span><span class="p">[</span><span class="s1">&#39;PAM50&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">node_shape_os</span> <span class="o">=</span> <span class="n">TEcut</span><span class="p">[</span><span class="s1">&#39;OS_STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;Deceased&#39;</span><span class="p">,</span> 
+                                            <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;Alive&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">nsm_pam50</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;LumA&#39;</span><span class="p">:</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;Basal&#39;</span><span class="p">:</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;LumB&#39;</span><span class="p">:</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;Her2&#39;</span><span class="p">:</span> <span class="s1">&#39;s&#39;</span><span class="p">}</span>
+<span class="n">nsm_os</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Alive&#39;</span><span class="p">:</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;Deceased&#39;</span><span class="p">:</span> <span class="s1">&#39;o&#39;</span><span class="p">}</span>
+
+<span class="n">node_colors_record</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">node_colors_record</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]</span>
+<span class="n">node_colors_record</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;pseudo-distance to root&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">poser</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">poser</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]</span> 
+<span class="n">node_colors_record</span><span class="p">[</span><span class="s1">&#39;OS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TEcut</span><span class="p">[</span><span class="s1">&#39;OS_MONTHS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> 
+<span class="n">node_colors_record</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;mean </span><span class="si">{</span><span class="n">gene_sig_label</span><span class="si">}</span><span class="s2"> rna signature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">gene_sig</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">])))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="c1"># node_colors_record[&#39;CD28 rna&#39;] = keeper.data[&#39;rna&#39;].subset(features=[&#39;CD28&#39;]).loc[&#39;CD28&#39;].loc[[node_labels[kk] for kk in nodelist]].values.tolist()</span>
+
+<span class="k">for</span> <span class="n">gn</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CD28&#39;</span><span class="p">,</span> <span class="s1">&#39;ITK&#39;</span><span class="p">,</span> <span class="s1">&#39;LCK&#39;</span><span class="p">,</span> <span class="s1">&#39;CD4&#39;</span><span class="p">,</span> <span class="s1">&#39;CD247&#39;</span><span class="p">,</span><span class="s1">&#39;CD80&#39;</span><span class="p">,</span><span class="s1">&#39;CD86&#39;</span><span class="p">,</span> <span class="s1">&#39;ITGB7&#39;</span><span class="p">]:</span> <span class="c1"># [&#39;CD28&#39;, &#39;CD4&#39;, &#39;CCR5&#39;, &#39;CD3G&#39;, &#39;LCP2&#39;, &#39;LCK&#39;, &#39;ITK&#39;, &#39;ITGB7&#39;]: # [&#39;CD28&#39;, &#39;GZMB&#39;, &#39;TGFBR2&#39;, &#39;TNF&#39;]:</span>
+    <span class="n">node_colors_record</span><span class="p">[</span><span class="n">gn</span><span class="p">]</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">gn</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gn</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="c1"># gridspec_kw={&#39;hspace&#39;:0.001, &#39;wspace&#39;: 0.02},</span>
+                         <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">fontsize</span> <span class="o">=</span> <span class="mi">11</span> <span class="c1"># 42</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POSE: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">nodes colored by:&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">);</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">ttl</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">node_shape</span><span class="p">,</span> <span class="n">nsm</span><span class="p">,</span> <span class="n">ncde</span><span class="p">,</span> <span class="n">ntm</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">node_colors_record</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
+                                                           <span class="p">[</span><span class="s1">&#39;tab10&#39;</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="s1">&#39;tab20&#39;</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span><span class="mi">20</span> <span class="k">else</span> <span class="s1">&#39;gist_rainbow&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;nipy_spectral&#39;</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="n">node_shape_pam50</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">[</span><span class="n">node_shape_os</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">node_shape_pam50</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="n">nsm_pam50</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">[</span><span class="n">nsm_os</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">nsm_pam50</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1">#  + [{0: &#39;NIV3-NAIVE&#39;, 1: &#39;NIV3-PROG&#39;}] + [None]*3,</span>
+                                                           <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">axes</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">nfv</span><span class="o">.</span><span class="n">plot_topology</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                           <span class="n">with_node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_font_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_edge_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">node_cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">edgelist</span><span class="p">,</span> <span class="n">node_cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                           <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">nc</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span>                   
+                           <span class="n">node_shape</span><span class="o">=</span><span class="n">node_shape</span><span class="p">,</span> <span class="n">node_shape_mapper</span><span class="o">=</span><span class="n">nsm</span><span class="p">,</span> 
+                           <span class="n">border_linewidths</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="c1"># 0.5, </span>
+                           <span class="n">bordercolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">edge_style</span><span class="o">=</span><span class="n">edge_style</span><span class="p">,</span> 
+                           <span class="n">edge_style_mapper</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;POSE + NN&#39;</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;POSE&#39;</span><span class="p">:</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;NN&#39;</span><span class="p">:</span> <span class="s1">&#39;:&#39;</span><span class="p">},</span>
+                           <span class="n">node_labels</span><span class="o">=</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">node_cbar_label</span><span class="o">=</span><span class="n">ttl</span><span class="p">,</span>
+                           <span class="n">node_cmap_drawedges</span><span class="o">=</span><span class="n">ncde</span><span class="p">,</span>
+                           <span class="n">node_ticklabels_mapper</span><span class="o">=</span><span class="n">ntm</span><span class="p">,</span>
+                          <span class="p">)</span>        
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ad33960d3f81018d4171409625017dad2b16e52c805ec6ae7cae491db6c09844.png" src="../../_images/ad33960d3f81018d4171409625017dad2b16e52c805ec6ae7cae491db6c09844.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_obs</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">root</span>
+<span class="n">nodelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="p">)</span>
+<span class="n">edgelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+<span class="n">node_labels</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">G_poser_nn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">}</span>
+<span class="n">edge_style</span> <span class="o">=</span> <span class="p">[</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">ee</span><span class="p">][</span><span class="s1">&#39;edge_origin&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">edgelist</span><span class="p">]</span>
+<span class="n">node_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span> <span class="k">if</span> <span class="n">k</span><span class="o">==</span> <span class="n">root_obs</span> <span class="k">else</span> <span class="mi">30</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]</span>
+<span class="c1"># node_shape = clin[&#39;Dead&#39;].replace({False: &#39;alive&#39;, True: &#39;deceased&#39;}).loc[[node_labels[kk] for kk in nodelist]].values.tolist()</span>
+<span class="c1"># node_shape_response = clin[&#39;Response&#39;].loc[[node_labels[kk] for kk in nodelist]].values.tolist()</span>
+<span class="n">node_shape_pam50</span> <span class="o">=</span> <span class="n">clin</span><span class="p">[</span><span class="s1">&#39;PAM50&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">node_shape_os</span> <span class="o">=</span> <span class="n">TEcut</span><span class="p">[</span><span class="s1">&#39;OS_STATUS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;Deceased&#39;</span><span class="p">,</span> 
+                                            <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;Alive&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">nsm_pam50</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;LumA&#39;</span><span class="p">:</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;Basal&#39;</span><span class="p">:</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;LumB&#39;</span><span class="p">:</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;Her2&#39;</span><span class="p">:</span> <span class="s1">&#39;s&#39;</span><span class="p">}</span>
+<span class="n">nsm_os</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Alive&#39;</span><span class="p">:</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;Deceased&#39;</span><span class="p">:</span> <span class="s1">&#39;o&#39;</span><span class="p">}</span>
+
+<span class="n">node_colors_record</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">node_colors_record</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]</span>
+<span class="n">node_colors_record</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;pseudo-distance to root&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">poser</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">poser</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]</span> 
+<span class="n">node_colors_record</span><span class="p">[</span><span class="s1">&#39;OS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TEcut</span><span class="p">[</span><span class="s1">&#39;OS_MONTHS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> 
+<span class="n">node_colors_record</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;mean </span><span class="si">{</span><span class="n">gene_sig_label</span><span class="si">}</span><span class="s2"> rna signature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">gene_sig</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">])))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="c1"># node_colors_record[&#39;CD28 rna&#39;] = keeper.data[&#39;rna&#39;].subset(features=[&#39;CD28&#39;]).loc[&#39;CD28&#39;].loc[[node_labels[kk] for kk in nodelist]].values.tolist()</span>
+
+<span class="k">for</span> <span class="n">gn</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CD28&#39;</span><span class="p">,</span> <span class="s1">&#39;CD4&#39;</span><span class="p">,</span> <span class="s1">&#39;CCR5&#39;</span><span class="p">,</span> <span class="s1">&#39;CD3G&#39;</span><span class="p">,</span> <span class="s1">&#39;LCP2&#39;</span><span class="p">,</span> <span class="s1">&#39;LCK&#39;</span><span class="p">,</span> <span class="s1">&#39;ITK&#39;</span><span class="p">,</span> <span class="s1">&#39;ITGB7&#39;</span><span class="p">]:</span> <span class="c1"># [&#39;CD28&#39;, &#39;GZMB&#39;, &#39;TGFBR2&#39;, &#39;TNF&#39;]: </span>
+    <span class="c1"># [&#39;CD28&#39;, &#39;ITK&#39;, &#39;LCK&#39;, &#39;CD4&#39;, &#39;CD247&#39;,&#39;CD80&#39;,&#39;CD86&#39;]</span>
+    
+    <span class="n">node_colors_record</span><span class="p">[</span><span class="n">gn</span><span class="p">]</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">gn</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gn</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="c1"># gridspec_kw={&#39;hspace&#39;:0.001, &#39;wspace&#39;: 0.02},</span>
+                         <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">fontsize</span> <span class="o">=</span> <span class="mi">11</span> <span class="c1"># 42</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POSE: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">nodes colored by:&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">);</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">ttl</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">node_shape</span><span class="p">,</span> <span class="n">nsm</span><span class="p">,</span> <span class="n">ncde</span><span class="p">,</span> <span class="n">ntm</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">node_colors_record</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
+                                                           <span class="p">[</span><span class="s1">&#39;tab10&#39;</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="s1">&#39;tab20&#39;</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span><span class="mi">20</span> <span class="k">else</span> <span class="s1">&#39;gist_rainbow&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;nipy_spectral&#39;</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="n">node_shape_pam50</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">[</span><span class="n">node_shape_os</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">node_shape_pam50</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="n">nsm_pam50</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">[</span><span class="n">nsm_os</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">nsm_pam50</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1">#  + [{0: &#39;NIV3-NAIVE&#39;, 1: &#39;NIV3-PROG&#39;}] + [None]*3,</span>
+                                                           <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">axes</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">nfv</span><span class="o">.</span><span class="n">plot_topology</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                           <span class="n">with_node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_font_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_edge_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">node_cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">edgelist</span><span class="p">,</span> <span class="n">node_cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                           <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">nc</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span>                   
+                           <span class="n">node_shape</span><span class="o">=</span><span class="n">node_shape</span><span class="p">,</span> <span class="n">node_shape_mapper</span><span class="o">=</span><span class="n">nsm</span><span class="p">,</span> 
+                           <span class="n">border_linewidths</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="c1"># 0.5, </span>
+                           <span class="n">bordercolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">edge_style</span><span class="o">=</span><span class="n">edge_style</span><span class="p">,</span> 
+                           <span class="n">edge_style_mapper</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;POSE + NN&#39;</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;POSE&#39;</span><span class="p">:</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;NN&#39;</span><span class="p">:</span> <span class="s1">&#39;:&#39;</span><span class="p">},</span>
+                           <span class="n">node_labels</span><span class="o">=</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">node_cbar_label</span><span class="o">=</span><span class="n">ttl</span><span class="p">,</span>
+                           <span class="n">node_cmap_drawedges</span><span class="o">=</span><span class="n">ncde</span><span class="p">,</span>
+                           <span class="n">node_ticklabels_mapper</span><span class="o">=</span><span class="n">ntm</span><span class="p">,</span>
+                          <span class="p">)</span>        
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/d9e36d8593fce2beef77524966ff1e6409fef6961c3a2a6d95e72ad8c613f67c.png" src="../../_images/d9e36d8593fce2beef77524966ff1e6409fef6961c3a2a6d95e72ad8c613f67c.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">node_colors_record</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">node_colors_record</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">gn</span> <span class="ow">in</span> <span class="n">gene_sig</span><span class="p">:</span>
+    <span class="n">node_colors_record</span><span class="p">[</span><span class="n">gn</span><span class="p">]</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">gn</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gn</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="mi">21</span><span class="p">),</span> <span class="c1"># gridspec_kw={&#39;hspace&#39;:0.001, &#39;wspace&#39;: 0.02},</span>
+                         <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">fontsize</span> <span class="o">=</span> <span class="mi">11</span> <span class="c1"># 42</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POSE: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">nodes colored by:&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">);</span>
+<span class="n">node_size</span><span class="o">=</span><span class="mi">5</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">ttl</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">node_shape</span><span class="p">,</span> <span class="n">nsm</span><span class="p">,</span> <span class="n">ncde</span><span class="p">,</span> <span class="n">ntm</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">node_colors_record</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
+                                                           <span class="p">[</span><span class="s1">&#39;tab10&#39;</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="s1">&#39;tab20&#39;</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span><span class="mi">20</span> <span class="k">else</span> <span class="s1">&#39;gist_rainbow&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;nipy_spectral&#39;</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="n">node_shape_pam50</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1"># 2 + [node_shape_os] + [node_shape_pam50]*6,</span>
+                                                           <span class="p">[</span><span class="n">nsm_pam50</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1"># *2 + [nsm_os] + [nsm_pam50]*6,</span>
+                                                           <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1"># *8,</span>
+                                                           <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1"># *8, #  + [{0: &#39;NIV3-NAIVE&#39;, 1: &#39;NIV3-PROG&#39;}] + [None]*3,</span>
+                                                           <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">axes</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">nfv</span><span class="o">.</span><span class="n">plot_topology</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                           <span class="n">with_node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_font_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_edge_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">node_cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">edgelist</span><span class="p">,</span> <span class="n">node_cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                           <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">nc</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span>                   
+                           <span class="n">node_shape</span><span class="o">=</span><span class="n">node_shape</span><span class="p">,</span> <span class="n">node_shape_mapper</span><span class="o">=</span><span class="n">nsm</span><span class="p">,</span> 
+                           <span class="n">border_linewidths</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="c1"># 0.5, </span>
+                           <span class="n">bordercolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">edge_style</span><span class="o">=</span><span class="n">edge_style</span><span class="p">,</span> 
+                           <span class="n">edge_style_mapper</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;POSE + NN&#39;</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;POSE&#39;</span><span class="p">:</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;NN&#39;</span><span class="p">:</span> <span class="s1">&#39;:&#39;</span><span class="p">},</span>
+                           <span class="n">node_labels</span><span class="o">=</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">node_cbar_label</span><span class="o">=</span><span class="n">ttl</span><span class="p">,</span>
+                           <span class="n">node_cmap_drawedges</span><span class="o">=</span><span class="n">ncde</span><span class="p">,</span>
+                           <span class="n">node_ticklabels_mapper</span><span class="o">=</span><span class="n">ntm</span><span class="p">,</span>
+                           <span class="n">edge_show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/88cad519a5d675cac73dba5d28644fe4358c40dabeee698ad3ff010c38ca1c83.png" src="../../_images/88cad519a5d675cac73dba5d28644fe4358c40dabeee698ad3ff010c38ca1c83.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">node_colors_record</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">node_colors_record</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">G_poser_nn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;branch&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">gn</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CD28&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="s1">&#39;CD28&#39;</span><span class="p">)):</span> <span class="c1"># gene_sig:</span>
+    <span class="n">node_colors_record</span><span class="p">[</span><span class="n">gn</span><span class="p">]</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">gn</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gn</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">node_labels</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="c1"># gridspec_kw={&#39;hspace&#39;:0.001, &#39;wspace&#39;: 0.02},</span>
+                         <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">fontsize</span> <span class="o">=</span> <span class="mi">11</span> <span class="c1"># 42</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POSE: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">nodes colored by:&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">);</span>
+<span class="n">node_size</span><span class="o">=</span><span class="mi">5</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">ttl</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">node_shape</span><span class="p">,</span> <span class="n">nsm</span><span class="p">,</span> <span class="n">ncde</span><span class="p">,</span> <span class="n">ntm</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">node_colors_record</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> 
+                                                           <span class="p">[</span><span class="s1">&#39;tab10&#39;</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="s1">&#39;tab20&#39;</span> <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span><span class="mi">20</span> <span class="k">else</span> <span class="s1">&#39;gist_rainbow&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;nipy_spectral&#39;</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                                           <span class="p">[</span><span class="n">node_shape_pam50</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1"># 2 + [node_shape_os] + [node_shape_pam50]*6,</span>
+                                                           <span class="p">[</span><span class="n">nsm_pam50</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1"># *2 + [nsm_os] + [nsm_pam50]*6,</span>
+                                                           <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1"># *8,</span>
+                                                           <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">node_colors_record</span><span class="p">),</span> <span class="c1"># *8, #  + [{0: &#39;NIV3-NAIVE&#39;, 1: &#39;NIV3-PROG&#39;}] + [None]*3,</span>
+                                                           <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">axes</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">nfv</span><span class="o">.</span><span class="n">plot_topology</span><span class="p">(</span><span class="n">G_poser_nn</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                           <span class="n">with_node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_font_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">with_edge_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">node_cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">edgelist</span><span class="p">,</span> <span class="n">node_cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                           <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">nc</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span>                   
+                           <span class="n">node_shape</span><span class="o">=</span><span class="n">node_shape</span><span class="p">,</span> <span class="n">node_shape_mapper</span><span class="o">=</span><span class="n">nsm</span><span class="p">,</span> 
+                           <span class="n">border_linewidths</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="c1"># 0.5, </span>
+                           <span class="n">bordercolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">edge_style</span><span class="o">=</span><span class="n">edge_style</span><span class="p">,</span> 
+                           <span class="n">edge_style_mapper</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;POSE + NN&#39;</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;POSE&#39;</span><span class="p">:</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;NN&#39;</span><span class="p">:</span> <span class="s1">&#39;:&#39;</span><span class="p">},</span>
+                           <span class="n">node_labels</span><span class="o">=</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">node_cbar_label</span><span class="o">=</span><span class="n">ttl</span><span class="p">,</span>
+                           <span class="n">node_cmap_drawedges</span><span class="o">=</span><span class="n">ncde</span><span class="p">,</span>
+                           <span class="n">node_ticklabels_mapper</span><span class="o">=</span><span class="n">ntm</span><span class="p">,</span>
+                           <span class="n">edge_show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/7f56427a5174153e37a091328a19c6636524357f3ba338ab2b2aad9d15447dee.png" src="../../_images/7f56427a5174153e37a091328a19c6636524357f3ba338ab2b2aad9d15447dee.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gene_sig</span><span class="p">]</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">a</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">clustermap</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.matrix.ClusterGrid at 0x7fa8c8234f70&gt;
+</pre></div>
+</div>
+<img alt="../../_images/28999d485eaccd32733c80c33d213956eeea304ec7f4d0c8bb11bec1bdf59a7f.png" src="../../_images/28999d485eaccd32733c80c33d213956eeea304ec7f4d0c8bb11bec1bdf59a7f.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/tutorial/notebooks/poser_tutorial_BC_rna_COPY.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023-2025, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

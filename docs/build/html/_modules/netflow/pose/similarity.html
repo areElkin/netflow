@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -364,11 +365,90 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for netflow.pose.similarity</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span> <span class="k">as</span> <span class="n">ddict</span>
 
 <span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">logger</span>
 
+
+<div class="viewcode-block" id="mutual_knn_indices"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.mutual_knn_indices">[docs]</a><span class="k">def</span> <span class="nf">mutual_knn_indices</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get indices of mutual k-nearest neighbors (nn).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    d : `numpy.ndarray`, (m, m)</span>
+<span class="sd">        Symmetric distance matrix.</span>
+<span class="sd">    n_neighbors : {`int`, `None`}</span>
+<span class="sd">        Number of mutual nns to include (does not include self),</span>
+<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is its closest neighbor).</span>
+<span class="sd">        If `None`, all neighbors are used (same as k-nns since all neighbors are mutually included).</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    kmnn_indices : `defaultdict[`list`]` of the form ``{m : [up to ``n_neighbors`` mutual nns]}``</span>
+<span class="sd">        Defaultdict keyed by row index referrencing the row indices of its mutual nns out of ``n_neighbors`` nns.</span>
+<span class="sd">        Note, this does not include itself in output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">indices</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="n">get_knn_indices_distances</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">)</span>
+    <span class="n">kmnn_indices</span> <span class="o">=</span> <span class="n">ddict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">nbrs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indices</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">nbr</span> <span class="ow">in</span> <span class="n">nbrs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nbr</span> <span class="o">&lt;=</span> <span class="n">ix</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">ix</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">[</span><span class="n">nbr</span><span class="p">]:</span>
+                <span class="n">kmnn_indices</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nbr</span><span class="p">)</span>
+                <span class="n">kmnn_indices</span><span class="p">[</span><span class="n">nbr</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">kmnn_indices</span></div>
+
+
+<div class="viewcode-block" id="edges_from_mutual_knn_indices"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.edges_from_mutual_knn_indices">[docs]</a><span class="k">def</span> <span class="nf">edges_from_mutual_knn_indices</span><span class="p">(</span><span class="n">kmnn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Convert mutual k-nns to a list of edges.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kmnn : `defaultdict`</span>
+<span class="sd">        The mutual k-nn indices as returned from ``mutual_knn_indices``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    edges : `list`</span>
+<span class="sd">        The list of edges corresponding to the mutual k-nns.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="n">ix</span><span class="p">],</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nns</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">ix</span><span class="p">])</span> <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">nns</span> <span class="ow">in</span> <span class="n">kmnn</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
+    <span class="k">return</span> <span class="n">edges</span></div>
+
+
+<div class="viewcode-block" id="mutual_knn_edges"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.mutual_knn_edges">[docs]</a><span class="k">def</span> <span class="nf">mutual_knn_edges</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get edges between indices of mutual k-nearest neighbors (nn) from distance matrix.</span>
+
+<span class="sd">    .. note:: Self is not included as one of the k-nns.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    d : `numpy.ndarray`, (m, m)</span>
+<span class="sd">        Symmetric distance matrix.</span>
+<span class="sd">    n_neighbors : {`int`, `None`}</span>
+<span class="sd">        Number of mutual nns to include (does not include self),</span>
+<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is its closest neighbor).</span>
+<span class="sd">        If `None`, all neighbors are used (same as k-nns since all neighbors are mutually included).</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    edges : `list`</span>
+<span class="sd">        The list of edges corresponding to the mutual k-nns.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">indices</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="n">get_knn_indices_distances</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">)</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">nbrs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indices</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">nbr</span> <span class="ow">in</span> <span class="n">nbrs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nbr</span> <span class="o">&lt;=</span> <span class="n">ix</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">ix</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">[</span><span class="n">nbr</span><span class="p">]:</span>
+                <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ix</span><span class="p">,</span> <span class="n">nbr</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">edges</span></div>
 
 
 <div class="viewcode-block" id="get_knn_indices_distances"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.get_knn_indices_distances">[docs]</a><span class="k">def</span> <span class="nf">get_knn_indices_distances</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -380,8 +460,9 @@ document.write(`
 <span class="sd">        Symmetric distance matrix.</span>
 <span class="sd">    n_neighbors : {`int`, `None`}</span>
 <span class="sd">        K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,</span>
-<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it&#39;s closest neighbor).</span>
+<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is its closest neighbor).</span>
 <span class="sd">        If `None`, all neighbors are used.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    indices : `numpy.ndarray`, (m, n_neighbors)</span>
@@ -513,7 +594,7 @@ document.write(`
         <span class="k">return</span> <span class="kc">None</span></div>
 
 <span class="c1"># this used to be def similarity_measure_()</span>
-<div class="viewcode-block" id="distance_to_similarity_"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.distance_to_similarity_">[docs]</a><span class="k">def</span> <span class="nf">distance_to_similarity_</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="_distance_to_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity._distance_to_similarity">[docs]</a><span class="k">def</span> <span class="nf">_distance_to_similarity</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert distance matrix to symmetric similarity measure.</span>
 
@@ -595,6 +676,8 @@ document.write(`
     <span class="n">mask</span> <span class="o">=</span> <span class="n">K</span> <span class="o">&gt;</span> <span class="mf">1e-11</span>
     <span class="n">K</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
+    <span class="c1"># K = (K + K.T) / 2</span>
+
     <span class="k">return</span> <span class="n">K</span></div>
 
 
@@ -656,7 +739,7 @@ document.write(`
             
     <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
-    <span class="n">K</span> <span class="o">=</span> <span class="n">distance_to_similarity_</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="n">sigmas</span><span class="p">,</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">_distance_to_similarity</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="n">sigmas</span><span class="p">,</span>
                                 <span class="n">knn</span><span class="o">=</span><span class="n">knn</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">K</span>
@@ -696,6 +779,7 @@ document.write(`
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
@@ -726,7 +810,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

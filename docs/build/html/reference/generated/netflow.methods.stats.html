@@ -1,0 +1,879 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>netflow.methods.stats &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.methods.stats';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="netflow.methods.tools" href="netflow.methods.tools.html" />
+    <link rel="prev" title="netflow.methods.metrics" href="netflow.methods.metrics.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">netflow v0.0.dev Manual</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../building/index.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview/index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorial/index.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../main_namespace.html">netflow</a><input checked class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.keepers.html">netflow.keepers</a><input checked class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.keepers.keeper.html">netflow.keepers.keeper</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.pose.html">netflow.pose</a><input checked class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.similarity.html">netflow.pose.similarity</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">netflow.methods.stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.tools.html">netflow.methods.tools</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items">
+  <p class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../overview/index.html" class="nav-link">netflow User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="netflow.methods.html" class="nav-link">netflow.methods</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">netflow.methods.stats</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="module-netflow.methods.stats">
+<span id="netflow-methods-stats"></span><h1>netflow.methods.stats<a class="headerlink" href="#module-netflow.methods.stats" title="Permalink to this headline">#</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.compute_pearson" title="netflow.methods.stats.compute_pearson"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_pearson</span></code></a>(row_x, row_y)</p></td>
+<td><p>Compute Pearson correlation with each row in Y for a given row in X.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.stats.compute_pearson_parallel" title="netflow.methods.stats.compute_pearson_parallel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_pearson_parallel</span></code></a>(X, Y[, ...])</p></td>
+<td><p>Compute Pearson correlation between each row of X and all rows of Y in parallel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.compute_spearman" title="netflow.methods.stats.compute_spearman"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_spearman</span></code></a>(row_x, row_y)</p></td>
+<td><p>Compute Spearman correlation with each row in Y for a given row in X.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.stats.compute_spearman_parallel" title="netflow.methods.stats.compute_spearman_parallel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_spearman_parallel</span></code></a>(X, Y[, ...])</p></td>
+<td><p>Compute Spearman correlation between each row of X and all rows of Y in parallel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.mann_whitney_u_test" title="netflow.methods.stats.mann_whitney_u_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mann_whitney_u_test</span></code></a>(values1, values2[, ...])</p></td>
+<td><p>Perform the Mann-Whitney U rank test on two independent samples.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.stats.perform_stat_test" title="netflow.methods.stats.perform_stat_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">perform_stat_test</span></code></a>(values1, values2, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.stat_test" title="netflow.methods.stats.stat_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stat_test</span></code></a>(df1, df2[, test, alpha, method])</p></td>
+<td><p>Perform statistical test between datasets with FWER correction.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.stats.t_test" title="netflow.methods.stats.t_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_test</span></code></a>(values1, values2[, alternative])</p></td>
+<td><p>Calculate the T-test for the means of <em>two independent</em> samples of scores.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.wilcoxon_signed_rank_test" title="netflow.methods.stats.wilcoxon_signed_rank_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wilcoxon_signed_rank_test</span></code></a>(values1[, ...])</p></td>
+<td><p>The Wilcoxon signed-rank test.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.compute_pearson">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_pearson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_pearson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_pearson" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Pearson correlation with each row in Y for a given row in X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>row_x</strong> (<em>array_like</em>) – 1-D arrays representing multiple observations of a single variable.
+The correlation is computed between <code class="docutils literal notranslate"><span class="pre">row_x</span></code> and <code class="docutils literal notranslate"><span class="pre">row_y</span></code>.</p></li>
+<li><p><strong>row_y</strong> (<em>array_like</em>) – 1-D arrays representing multiple observations of a single variable.
+The correlation is computed between <code class="docutils literal notranslate"><span class="pre">row_x</span></code> and <code class="docutils literal notranslate"><span class="pre">row_y</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>correlation</strong> (<cite>float</cite>) – The correlation.</p></li>
+<li><p><strong>p_value</strong> (<cite>float</cite>) – The p-value.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.compute_pearson_parallel">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_pearson_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_processors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_pearson_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_pearson_parallel" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Pearson correlation between each row of X and all rows of Y in parallel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<cite>pandas.DataFrame</cite>) – Dataframes containing multiple variables and observations.
+Each row represents a variable and each column is an observation of each variable.
+<cite>X</cite> and <cite>Y</cite> must have the same number of columns (i.e., the same observations)
+but they need not have the same number of variables.</p></li>
+<li><p><strong>Y</strong> (<cite>pandas.DataFrame</cite>) – Dataframes containing multiple variables and observations.
+Each row represents a variable and each column is an observation of each variable.
+<cite>X</cite> and <cite>Y</cite> must have the same number of columns (i.e., the same observations)
+but they need not have the same number of variables.</p></li>
+<li><p><strong>num_processors</strong> (<cite>int</cite>) – Number of processors to use. Defaults to None (uses all available).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>correlations</strong> (<cite>dict</cite>) – The resulting correlations in the form <code class="docutils literal notranslate"><span class="pre">{index_row_X:</span> <span class="pre">{index_row_Y:</span> <span class="pre">corr}}</span></code></p></li>
+<li><p><strong>p_values</strong> (<cite>dict</cite>) – The resulting p_values in the form <code class="docutils literal notranslate"><span class="pre">{index_row_X:</span> <span class="pre">{index_row_Y:</span> <span class="pre">p_value}}</span></code></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.compute_spearman">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_spearman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_spearman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_spearman" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Spearman correlation with each row in Y for a given row in X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>row_x</strong> (<em>array_like</em>) – 1-D arrays representing multiple observations of a single variable.
+The correlation is computed between <code class="docutils literal notranslate"><span class="pre">row_x</span></code> and <code class="docutils literal notranslate"><span class="pre">row_y</span></code>.</p></li>
+<li><p><strong>row_y</strong> (<em>array_like</em>) – 1-D arrays representing multiple observations of a single variable.
+The correlation is computed between <code class="docutils literal notranslate"><span class="pre">row_x</span></code> and <code class="docutils literal notranslate"><span class="pre">row_y</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>correlation</strong> (<cite>float</cite>) – The correlation.</p></li>
+<li><p><strong>p_value</strong> (<cite>float</cite>) – The p-value.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.compute_spearman_parallel">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_spearman_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_processors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_spearman_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_spearman_parallel" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Spearman correlation between each row of X and all rows of Y in parallel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<cite>pandas.DataFrame</cite>) – Dataframes containing multiple variables and observations.
+Each row represents a variable and each column is an observation of each variable.
+<cite>X</cite> and <cite>Y</cite> must have the same number of columns (i.e., the same observations)
+but they need not have the same number of variables.</p></li>
+<li><p><strong>Y</strong> (<cite>pandas.DataFrame</cite>) – Dataframes containing multiple variables and observations.
+Each row represents a variable and each column is an observation of each variable.
+<cite>X</cite> and <cite>Y</cite> must have the same number of columns (i.e., the same observations)
+but they need not have the same number of variables.</p></li>
+<li><p><strong>num_processors</strong> (<cite>int</cite>) – Number of processors to use. Defaults to None (uses all available).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>correlations</strong> (<cite>dict</cite>) – The resulting correlations in the form <code class="docutils literal notranslate"><span class="pre">{index_row_X:</span> <span class="pre">{index_row_Y:</span> <span class="pre">corr}}</span></code></p></li>
+<li><p><strong>p_values</strong> (<cite>dict</cite>) – The resulting p_values in the form <code class="docutils literal notranslate"><span class="pre">{index_row_X:</span> <span class="pre">{index_row_Y:</span> <span class="pre">p_value}}</span></code></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.mann_whitney_u_test">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">mann_whitney_u_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#mann_whitney_u_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.mann_whitney_u_test" title="Permalink to this definition">#</a></dt>
+<dd><p>Perform the Mann-Whitney U rank test on two independent samples.</p>
+<p>The Mann-Whitney U test is a nonparametric test of the null hypothesis
+that the distribution underlying sample <cite>x</cite> is the same as the
+distribution underlying sample <cite>y</cite>. It is often used as a test of
+difference in location between distributions.</p>
+<p>Computed via <code class="docutils literal notranslate"><span class="pre">scipy.stats.mannwhitneyu</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values1</strong> (<em>array-like</em>) – The arrays must have the same shape, except in the dimension
+corresponding to <cite>axis</cite> (the first, by default), which can be
+specified in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p></li>
+<li><p><strong>values2</strong> (<em>array-like</em>) – The arrays must have the same shape, except in the dimension
+corresponding to <cite>axis</cite> (the first, by default), which can be
+specified in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p></li>
+<li><p><strong>alternative</strong> (<em>{'two-sided'</em><em>, </em><em>'less'</em><em>, </em><em>'greater'}</em><em>, </em><em>optional</em>) – <p>Defines the alternative hypothesis.
+The following options are available (default is ‘two-sided’):</p>
+<ul>
+<li><p>’two-sided’: the means of the distributions underlying the samples
+are unequal.</p></li>
+<li><p>’less’: the mean of the distribution underlying the first sample
+is less than the mean of the distribution underlying the second
+sample.</p></li>
+<li><p>’greater’: the mean of the distribution underlying the first
+sample is greater than the mean of the distribution underlying
+the second sample.</p></li>
+</ul>
+</p></li>
+<li><p><strong>kwarags</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.mannwhitneyu</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>p_value</strong> – The p-value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.perform_stat_test">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">perform_stat_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#perform_stat_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.perform_stat_test" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.stat_test">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">stat_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MWU'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fdr_bh'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#stat_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.stat_test" title="Permalink to this definition">#</a></dt>
+<dd><p>Perform statistical test between datasets with FWER correction.</p>
+<p>The statistical tests are Computed via <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df1</strong> (<cite>pandas.DataFrame</cite>) – The measurements, where rows are features and columns are observations.
+The dataframes  must have the same number of features (rows).
+If <code class="docutils literal notranslate"><span class="pre">test='wilcoxon'</span></code>, they must also have the same number of
+observationas (columns).</p></li>
+<li><p><strong>df2</strong> (<cite>pandas.DataFrame</cite>) – The measurements, where rows are features and columns are observations.
+The dataframes  must have the same number of features (rows).
+If <code class="docutils literal notranslate"><span class="pre">test='wilcoxon'</span></code>, they must also have the same number of
+observationas (columns).</p></li>
+<li><p><strong>test</strong> (<cite>str</cite>) – <p>The statistical test that should be performed. Options are:</p>
+<ul>
+<li><p>’MWU’ : Mann Whitney-U Test (default).</p></li>
+<li><p>’t-test’ : T-test</p></li>
+<li><p>’wilcoxon’ : Wilcoxon Signed Rank Test</p></li>
+</ul>
+</p></li>
+<li><p><strong>alpha</strong> (<cite>float</cite>) – The family-wise error rate (FWER), should be between 0 and 1.</p></li>
+<li><p><strong>method</strong> (<cite>str</cite>) – <p>Method for multiple test correction, default=’fdr_bh’.</p>
+<p>Options:</p>
+<ul>
+<li><p><cite>bonferroni</cite> : one-step correction</p></li>
+<li><p><cite>sidak</cite> : one-step correction</p></li>
+<li><p><cite>holm-sidak</cite> : step down method using Sidak adjustments</p></li>
+<li><p><cite>holm</cite> : step-down method using Bonferroni adjustments</p></li>
+<li><p><cite>simes-hochberg</cite> : step-up method  (independent)</p></li>
+<li><p><cite>hommel</cite> : closed method based on Simes tests (non-negative)</p></li>
+<li><p><cite>fdr_bh</cite> : Benjamini/Hochberg  (non-negative)</p></li>
+<li><p><cite>fdr_by</cite> : Benjamini/Yekutieli (negative)</p></li>
+<li><p><cite>fdr_tsbh</cite> : two stage fdr correction (non-negative)</p></li>
+<li><p><cite>fdr_tsbky</cite> : two stage fdr correction (non-negative)</p></li>
+</ul>
+</p></li>
+<li><p><strong>kwargs</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code> for performing the
+statistical test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>record</strong> – Record of each feature, p-value, and corrected p-value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.t_test">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">t_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#t_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.t_test" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the T-test for the means of <em>two independent</em> samples of scores.</p>
+<p>This is a test for the null hypothesis that 2 independent samples
+have identical average (expected) values. This test assumes that the
+populations have identical variances by default.</p>
+<p>Computed via <code class="docutils literal notranslate"><span class="pre">scipy.stats.ttest_ind</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values1</strong> (<em>array-like</em>) – The arrays must have the same shape, except in the dimension
+corresponding to <cite>axis</cite> (the first, by default), which can be
+specified in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p></li>
+<li><p><strong>values2</strong> (<em>array-like</em>) – The arrays must have the same shape, except in the dimension
+corresponding to <cite>axis</cite> (the first, by default), which can be
+specified in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p></li>
+<li><p><strong>alternative</strong> (<em>{'two-sided'</em><em>, </em><em>'less'</em><em>, </em><em>'greater'}</em><em>, </em><em>optional</em>) – <p>Defines the alternative hypothesis.
+The following options are available (default is ‘two-sided’):</p>
+<ul>
+<li><p>’two-sided’: the means of the distributions underlying the samples
+are unequal.</p></li>
+<li><p>’less’: the mean of the distribution underlying the first sample
+is less than the mean of the distribution underlying the second
+sample.</p></li>
+<li><p>’greater’: the mean of the distribution underlying the first
+sample is greater than the mean of the distribution underlying
+the second sample.</p></li>
+</ul>
+</p></li>
+<li><p><strong>kwarags</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.ttest_ind</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>p_value</strong> – The p-value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.wilcoxon_signed_rank_test">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">wilcoxon_signed_rank_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#wilcoxon_signed_rank_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.wilcoxon_signed_rank_test" title="Permalink to this definition">#</a></dt>
+<dd><p>The Wilcoxon signed-rank test.</p>
+<p>The Wilcoxon signed-rank test tests the null hypothesis that two
+related paired samples come from the same distribution. In particular,
+it tests whether the distribution of the differences x - y is symmetric
+about zero. It is a non-parametric version of the paired T-test.</p>
+<p>Computed via <code class="docutils literal notranslate"><span class="pre">scipy.stats.wilcoxon</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values1</strong> (<em>array-like</em>) – Either the first set of measurements (in which case <code class="docutils literal notranslate"><span class="pre">y</span></code> is the second
+set of measurements), or the differences between two sets of
+measurements (in which case <code class="docutils literal notranslate"><span class="pre">y</span></code> is not to be specified.)  Must be
+one-dimensional.</p></li>
+<li><p><strong>values2</strong> (<em>array-like</em>) – Optional. Either the second set of measurements (if <code class="docutils literal notranslate"><span class="pre">x</span></code> is the first set of
+measurements), or not specified (if <code class="docutils literal notranslate"><span class="pre">x</span></code> is the differences between
+two sets of measurements.)  Must be one-dimensional.</p></li>
+<li><p><strong>alternative</strong> (<em>{'two-sided'</em><em>, </em><em>'less'</em><em>, </em><em>'greater'}</em><em>, </em><em>optional</em>) – <p>Defines the alternative hypothesis.
+The following options are available (default is ‘two-sided’):</p>
+<ul>
+<li><p>’two-sided’: the means of the distributions underlying the samples
+are unequal.</p></li>
+<li><p>’less’: the mean of the distribution underlying the first sample
+is less than the mean of the distribution underlying the second
+sample.</p></li>
+<li><p>’greater’: the mean of the distribution underlying the first
+sample is greater than the mean of the distribution underlying
+the second sample.</p></li>
+</ul>
+</p></li>
+<li><p><strong>kwarags</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.wilcoxon</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>p_value</strong> – The p-value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="netflow.methods.metrics.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">netflow.methods.metrics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="netflow.methods.tools.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">netflow.methods.tools</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="current visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html#modules">Modules</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.keepers.html">netflow.keepers</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.html">netflow.probe</a></li>
+<li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l6 current toc-h6 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.methods.stats</a></li>
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.tools.html">netflow.methods.tools</a></li>
+</ul>
+</li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/reference/generated/netflow.methods.stats.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023-2025, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

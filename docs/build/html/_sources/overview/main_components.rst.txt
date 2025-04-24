@@ -6,6 +6,6 @@ The main netflow components
    :maxdepth: 1
    :titlesonly:
 
-   netflow.keepers <generated/netflow.keepers>
-   netflow.pose <generated/netflow.pose>
-   netflow.probe <generated/netflow.probe> 
+   netflow.keepers <../reference/generated/netflow.keepers>
+   netflow.pose <../reference/generated/netflow.pose>
+   netflow.probe <../reference/generated/netflow.probe> 

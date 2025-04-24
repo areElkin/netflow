@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -377,6 +378,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">sklearn.decomposition</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">checks</span>
 <span class="kn">from</span> <span class="nn">.._utils</span> <span class="kn">import</span> <span class="n">_docstring_parameter</span><span class="p">,</span> <span class="n">_desc_distance</span><span class="p">,</span> \
@@ -384,12 +386,15 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">unstack_triu_</span>
 <span class="kn">from</span> <span class="nn">..methods.classes</span> <span class="kn">import</span> <span class="n">InfoNet</span>
 <span class="kn">from</span> <span class="nn">..pose</span> <span class="kn">import</span> <span class="n">similarity</span> <span class="k">as</span> <span class="n">nfs</span>
-<span class="kn">from</span> <span class="nn">..pose.organization</span> <span class="kn">import</span> <span class="n">compute_transitions</span><span class="p">,</span> <span class="n">dpt_from_augmented_sym_transitions</span><span class="p">,</span> <span class="n">POSER</span>
+<span class="kn">from</span> <span class="nn">..pose</span> <span class="kn">import</span> <span class="n">organization</span> <span class="k">as</span> <span class="n">nfo</span>
+<span class="c1"># from ..pose.organization import compute_transitions, dpt_from_augmented_sym_transitions, POSER, compute_rw_transitions, </span>
 <span class="c1"># import netflow.InfoNet as InfoNet</span>
 <span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span><span class="p">,</span> <span class="n">set_verbose</span>
 
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">reload</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">nfo</span><span class="p">)</span>
 
-
+<span class="n">nfo</span> <span class="o">=</span> <span class="n">reload</span><span class="p">(</span><span class="n">nfo</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
@@ -486,6 +491,15 @@ document.write(`
 <div class="viewcode-block" id="DataKeeper.__iter__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">yield</span> <span class="n">DataView</span><span class="p">(</span><span class="n">dkeeper</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataKeeper.keys"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataKeeper.items"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
+        
 
 
     <span class="nd">@property</span>
@@ -603,7 +617,7 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># np.ndarray</span>
             <span class="n">feature_labels</span> <span class="o">=</span> <span class="kc">None</span>        
         
-        <span class="n">checks</span><span class="o">.</span><span class="n">check_matrix_no_nan</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># checks.check_matrix_no_nan(data)</span>
         <span class="c1"># checks.check_matrix_nonnegative(data)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_features_labels</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature_labels</span>
@@ -896,6 +910,14 @@ document.write(`
 <div class="viewcode-block" id="DistanceKeeper.__iter__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">yield</span> <span class="n">DistanceView</span><span class="p">(</span><span class="n">dkeeper</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DistanceKeeper.keys"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DistanceKeeper.items"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
 
     
     <span class="nd">@property</span>
@@ -1225,6 +1247,14 @@ document.write(`
 <div class="viewcode-block" id="GraphKeeper.__iter__"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">graph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">yield</span> <span class="n">graph</span></div>
+
+            
+<div class="viewcode-block" id="GraphKeeper.keys"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GraphKeeper.items"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
 
 
     <span class="nd">@property</span>
@@ -1764,13 +1794,13 @@ document.write(`
     
 
 <div class="viewcode-block" id="Keeper.load_data"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                  
-                  <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                  <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cols_as_obs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Load data from file into the keeper.</span>
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
-<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">           Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">           Additional formats will be added in the future.</span>
 <span class="sd">                  </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1788,13 +1818,19 @@ document.write(`
 <span class="sd">        delimiter: `str`, optional (default: &#39;,&#39;)</span>
 <span class="sd">            Delimiter to use.</span>
 <span class="sd">        dtype</span>
-<span class="sd">            If provided, ensure to convert data type after loaded. </span>
+<span class="sd">            If provided, ensure to convert data type after loaded.</span>
+<span class="sd">        cols_as_obs : `bool` (default = `True`)</span>
+<span class="sd">            If `True`, columns in the loaded data are observations, otherwise,</span>
+<span class="sd">            the rows are observations.</span>
 <span class="sd">        **kwargs</span>
 <span class="sd">            Additional key-word arguments passed to ``pandas.read_csv``.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">load_from_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
                               <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cols_as_obs</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span>
         <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
@@ -1806,11 +1842,11 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        Assumed that the distance array is stored with the first row and first column as</span>
-<span class="sd">        the index and header, respectively.</span>
+<span class="sd">           Assumed that the distance array is stored with the first row and first column as</span>
+<span class="sd">           the index and header, respectively.</span>
 <span class="sd">        </span>
-<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
-<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">           Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">           Additional formats will be added in the future.</span>
 <span class="sd">                  </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1841,11 +1877,11 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion</span>
-<span class="sd">        (excluding self-pairs) and a single column with the pairwise distances.</span>
+<span class="sd">           Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion</span>
+<span class="sd">           (excluding self-pairs) and a single column with the pairwise distances.</span>
 <span class="sd">        </span>
-<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
-<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">           Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">           Additional formats will be added in the future.</span>
 <span class="sd">                  </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1876,11 +1912,11 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        Assumed that the distance array is stored with the first row and first column as</span>
-<span class="sd">        the index and header, respectively.</span>
+<span class="sd">           Assumed that the distance array is stored with the first row and first column as</span>
+<span class="sd">           the index and header, respectively.</span>
 <span class="sd">        </span>
-<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
-<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">           Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">           Additional formats will be added in the future.</span>
 <span class="sd">                  </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1912,11 +1948,11 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion</span>
-<span class="sd">        (excluding self-pairs) and a single column with the pairwise distances.</span>
-<span class="sd">        </span>
-<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
-<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">           Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion</span>
+<span class="sd">           (excluding self-pairs) and a single column with the pairwise distances.</span>
+
+<span class="sd">           Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">           Additional formats will be added in the future.</span>
 <span class="sd">                  </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1950,14 +1986,14 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        Currently loads graph from edgelist. Future release will allow different</span>
-<span class="sd">        graph types (e.g., adjacency, graphml).</span>
-<span class="sd">        </span>
-<span class="sd">        Assumed that the edge-list is stored as two columns, where the first row</span>
-<span class="sd">        is labeled as source and target.</span>
-<span class="sd">        </span>
-<span class="sd">        Currently loads data using ``pandas.read_csv``.</span>
-<span class="sd">        Additional formats will be added in the future.</span>
+<span class="sd">           Currently loads graph from edgelist. Future release will allow different</span>
+<span class="sd">           graph types (e.g., adjacency, graphml).</span>
+
+<span class="sd">           Assumed that the edge-list is stored as two columns, where the first row</span>
+<span class="sd">           is labeled as source and target.</span>
+
+<span class="sd">           Currently loads data using ``pandas.read_csv``.</span>
+<span class="sd">           Additional formats will be added in the future.</span>
 <span class="sd">                  </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1994,8 +2030,8 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
-<span class="sd">        Future releases will allow for other formats.</span>
+<span class="sd">           This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
+<span class="sd">           Future releases will allow for other formats.</span>
 
 <span class="sd">        Data set is saved to the file named &#39;{self.outdir}/data_{label}.{file_format}&#39;.</span>
 
@@ -2027,8 +2063,8 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
-<span class="sd">        Future releases will allow for other formats.</span>
+<span class="sd">           This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
+<span class="sd">           Future releases will allow for other formats.</span>
 
 <span class="sd">        Distance is saved to the file named &#39;{self.outdir}/distance_{label}.{file_format}&#39;.</span>
 
@@ -2060,8 +2096,8 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
-<span class="sd">        Future releases will allow for other formats.</span>
+<span class="sd">           This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
+<span class="sd">           Future releases will allow for other formats.</span>
 
 <span class="sd">        Similarity is saved to the file named &#39;{self.outdir}/similarity_{label}.{file_format}&#39;.</span>
 
@@ -2093,8 +2129,8 @@ document.write(`
 
 <span class="sd">        .. Note::</span>
 
-<span class="sd">        This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
-<span class="sd">        Future releases will allow for other formats.</span>
+<span class="sd">           This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.</span>
+<span class="sd">           Future releases will allow for other formats.</span>
 
 <span class="sd">        Misc data is saved to the file named &#39;{self.outdir}/misc_{label}.{file_format}&#39;.</span>
 
@@ -2209,7 +2245,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="Keeper.distance_density_argmin"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.distance_density_argmin">[docs]</a>    <span class="k">def</span> <span class="nf">distance_density_argmin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; Find the observation with the largest density from a distnace.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Find the observation with the smallest density from a distance.</span>
 
 <span class="sd">        The density of an observation is its net distance to all other observations.</span>
 
@@ -2225,6 +2261,27 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">density</span><span class="p">()</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="n">density</span><span class="o">.</span><span class="n">idxmin</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obs</span></div>
+
+
+<div class="viewcode-block" id="Keeper.distance_density_argmax"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.distance_density_argmax">[docs]</a>    <span class="k">def</span> <span class="nf">distance_density_argmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Find the observation with the largest density from a distance.</span>
+
+<span class="sd">        The density of an observation is its net distance to all other observations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : `str`</span>
+<span class="sd">            The reference label for the distance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        obs : `int`</span>
+<span class="sd">            The index of the observation with the largest density.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">density</span><span class="p">()</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">density</span><span class="o">.</span><span class="n">idxmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obs</span></div>
 
@@ -2276,18 +2333,18 @@ document.write(`
                                                    <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute Wasserstein distances between feature profiles of every two observations</span>
 
-<span class="sd">        .. note::</span>
+<span class="sd">        .. Note::</span>
 
-<span class="sd">          If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.</span>
-<span class="sd">          Before starting the computation, check if the file exists. If so, load and remove already computed</span>
-<span class="sd">          nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
-<span class="sd">          the previously computed and saved results before saving and returning the combined results.</span>
+<span class="sd">           If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.</span>
+<span class="sd">           Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">           nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
+<span class="sd">           the previously computed and saved results before saving and returning the combined results.</span>
 
-<span class="sd">          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
-<span class="sd">          distance and do not provide any further information.</span>
+<span class="sd">           Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
+<span class="sd">           distance and do not provide any further information.</span>
 
-<span class="sd">          The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)</span>
-<span class="sd">          and can be accessed by ``self.distances[f&#39;{data_key}_{label}_wass_dist_observation_pairwise_profiles&#39;]``.</span>
+<span class="sd">        The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)</span>
+<span class="sd">        and can be accessed by ``self.distances[f&#39;{data_key}_{label}_wass_dist_observation_pairwise_profiles&#39;]``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2320,15 +2377,20 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        wds : `pandas.DataFrame`</span>
 <span class="sd">            Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names,</span>
-<span class="sd">            saved in ``keeper.distances`` with the key ``f&#39;{data_key}_{label}_wass_dist_observation_pairwise_profiles&#39;``.</span>
+<span class="sd">            saved in ``keeper.distances`` with the key ``f&#39;{data_key}_{label}_profile_wass&#39;``,</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_key</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">graph_distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">graph_distances</span> <span class="o">=</span> <span class="n">inet</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">edge_weight</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s1">_profile_wass&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_profile_wass&#39;</span>
+            
         <span class="n">inet</span><span class="o">.</span><span class="n">pairwise_observation_profile_wass_distance</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">graph_distances</span><span class="o">=</span><span class="n">graph_distances</span><span class="p">,</span> 
-                                                        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_wass_dist_observation_pairwise_profiles&#39;</span><span class="p">,</span>
+                                                        <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
                                                         <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise profile Wasserstein distances&#39;</span><span class="p">,</span>
                                                         <span class="n">proc</span><span class="o">=</span><span class="n">proc</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
                                                         <span class="n">measure_cutoff</span><span class="o">=</span><span class="n">measure_cutoff</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="n">solvr</span><span class="p">)</span></div>
@@ -2338,18 +2400,18 @@ document.write(`
                                                   <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute Euclidean distances between feature profiles of every two observations</span>
 
-<span class="sd">        .. note::</span>
+<span class="sd">        .. Note::</span>
 
-<span class="sd">          If ``object.outdir`` is not `None`, Euclidean distances are saved to file.</span>
-<span class="sd">          Before starting the computation, check if the file exists. If so, load and remove already computed</span>
-<span class="sd">          nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with</span>
-<span class="sd">          the previously computed and saved results before saving and returning the combined results.</span>
+<span class="sd">           If ``object.outdir`` is not `None`, Euclidean distances are saved to file.</span>
+<span class="sd">           Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">           nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with</span>
+<span class="sd">           the previously computed and saved results before saving and returning the combined results.</span>
 
-<span class="sd">          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
-<span class="sd">          distance and do not provide any further information.</span>
+<span class="sd">           Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
+<span class="sd">           distance and do not provide any further information.</span>
 
-<span class="sd">          The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)</span>
-<span class="sd">          and can be accessed by ``self.distances[f&#39;{data_key}_{label}_euc_dist_observation_pairwise_profiles&#39;]``.</span>
+<span class="sd">        The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)</span>
+<span class="sd">        and can be accessed by ``self.distances[f&#39;{data_key}_{label}_profile_euc&#39;]``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2371,13 +2433,18 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        eds : `pandas.DataFrame`</span>
 <span class="sd">            Euclidean distances between pairwise profiles where rows are observation-pairs and columns are node names,</span>
-<span class="sd">            saved in ``keeper.distances`` with the key ``f&#39;{data_key}_{label}_euc_dist_observation_pairwise_profiles&#39;``.</span>
+<span class="sd">            saved in ``keeper.distances`` with the key ``f&#39;{data_key}_{label}_profile_euc&#39;``.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_key</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s1">_profile_euc&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_profile_euc&#39;</span>
+
         <span class="n">inet</span><span class="o">.</span><span class="n">pairwise_observation_profile_euc_distance</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
-                                                       <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_euc_dist_observation_pairwise_profiles&#39;</span><span class="p">,</span>
+                                                       <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> 
                                                        <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise profile Euclidean distances&#39;</span><span class="p">,</span>
                                                        <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -2389,18 +2456,18 @@ document.write(`
                                                         <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute Wasserstein distances between feature neighborhoods of every two observations</span>
 
-<span class="sd">        .. note::</span>
+<span class="sd">        .. Note::</span>
 
-<span class="sd">          If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.</span>
-<span class="sd">          Before starting the computation, check if the file exists. If so, load and remove already computed</span>
-<span class="sd">          nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
-<span class="sd">          the previously computed and saved results before saving and returning the combined results.</span>
+<span class="sd">           If ``object.outdir`` is not `None`, Wasserstein distances are saved to file every 10 iterations.</span>
+<span class="sd">           Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">           nodes from the iteration. Wasserstein distances are computed for the remaining nodes, combined with</span>
+<span class="sd">           the previously computed and saved results before saving and returning the combined results.</span>
 
-<span class="sd">          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
-<span class="sd">          distance and do not provide any further information.</span>
+<span class="sd">           Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein</span>
+<span class="sd">           distance and do not provide any further information.</span>
 
-<span class="sd">          The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by</span>
-<span class="sd">          ``self.misc[f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;]``.</span>
+<span class="sd">        The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by</span>
+<span class="sd">        ``self.misc[f&quot;{data_key}_{label}_nbhd_wass_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;]``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2441,16 +2508,21 @@ document.write(`
 <span class="sd">            Wasserstein distances between pairwise observations where rows are observation-pairs and columns are</span>
 <span class="sd">            feature (node) names.</span>
 <span class="sd">            saved in ``keeper.misc`` with the key</span>
-<span class="sd">            ``f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;``.</span>
+<span class="sd">            ``f&quot;{data_key}_{label}_nbhd_wass_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_key</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">graph_distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">graph_distances</span> <span class="o">=</span> <span class="n">inet</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">edge_weight</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s2">_nbhd_wass_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">_nbhd_wass_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self&quot;</span>
+            
         <span class="n">inet</span><span class="o">.</span><span class="n">multiple_pairwise_observation_neighborhood_wass_distance</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="n">include_self</span><span class="p">,</span>
                                                                       <span class="n">graph_distances</span><span class="o">=</span><span class="n">graph_distances</span><span class="p">,</span>
-                                                                      <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">_wass_dist_observation_pairwise_nbhds_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self&quot;</span><span class="p">,</span>
+                                                                      <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
                                                                       <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise 1-hop nbhd Wasserstein distances&#39;</span><span class="p">,</span>
                                                                       <span class="n">proc</span><span class="o">=</span><span class="n">proc</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
                                                                       <span class="n">measure_cutoff</span><span class="o">=</span><span class="n">measure_cutoff</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="n">solvr</span><span class="p">)</span></div>
@@ -2461,18 +2533,18 @@ document.write(`
                                                         <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute Euclidean distances between feature neighborhoods of every two observations</span>
 
-<span class="sd">        .. note::</span>
+<span class="sd">        .. Note::</span>
 
-<span class="sd">          If ``object.outdir`` is not `None`, Euclidean distances are saved to file every 10 iterations.</span>
-<span class="sd">          Before starting the computation, check if the file exists. If so, load and remove already computed</span>
-<span class="sd">          nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with</span>
-<span class="sd">          the previously computed and saved results before saving and returning the combined results.</span>
+<span class="sd">           If ``object.outdir`` is not `None`, Euclidean distances are saved to file every 10 iterations.</span>
+<span class="sd">           Before starting the computation, check if the file exists. If so, load and remove already computed</span>
+<span class="sd">           nodes from the iteration. Euclidean distances are computed for the remaining nodes, combined with</span>
+<span class="sd">           the previously computed and saved results before saving and returning the combined results.</span>
 
-<span class="sd">          Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Euclidean</span>
-<span class="sd">          distance and do not provide any further information.</span>
+<span class="sd">           Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Euclidean</span>
+<span class="sd">           distance and do not provide any further information.</span>
 
-<span class="sd">          The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by</span>
-<span class="sd">          ``self.misc[f&quot;{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;]``.</span>
+<span class="sd">        The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by</span>
+<span class="sd">        ``self.misc[f&quot;{data_key}_{label}_nbhd_euc_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;]``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2504,13 +2576,18 @@ document.write(`
 <span class="sd">            Euclidean distances between pairwise observations where rows are observation-pairs and columns are</span>
 <span class="sd">            feature (node) names.</span>
 <span class="sd">            saved in ``keeper.misc`` with the key</span>
-<span class="sd">            ``f&quot;{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;``.</span>
+<span class="sd">            ``f&quot;{data_key}_{label}_nbhd_euc_with{&#39;&#39; if include_self else &#39;out&#39;}_self&quot;``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inet</span> <span class="o">=</span> <span class="n">InfoNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_key</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">data_key</span><span class="p">)</span>
 
-        <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">_euc_dist_observation_pairwise_nbhds_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s2">_nbhd_euc_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">_nbhd_euc_with</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">include_self</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;out&#39;</span><span class="si">}</span><span class="s2">_self&quot;</span>
+            
         <span class="k">if</span> <span class="n">normalize</span> <span class="p">:</span>
             <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">label</span><span class="p">,</span> <span class="s1">&#39;normalized&#39;</span><span class="p">])</span>
+            
         <span class="n">inet</span><span class="o">.</span><span class="n">multiple_pairwise_observation_neighborhood_euc_distance</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="n">include_self</span><span class="p">,</span>
                                                                      <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
                                                                      <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Computing pairwise 1-hop nbhd Euclidean distances&#39;</span><span class="p">,</span>
@@ -2645,7 +2722,7 @@ document.write(`
 <span class="sd">        The following are saved to the distance keeper:</span>
 
 <span class="sd">            d : The new distance is saved to the keeper in</span>
-<span class="sd">               ``keeper.distances[f&quot;distance_from_{similarity_key}&quot;].</span>
+<span class="sd">               ``keeper.distances[f&quot;distance_from_{similarity_key}&quot;]``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarities</span><span class="p">[</span><span class="n">similarity_key</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;distance_from_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
@@ -2700,7 +2777,7 @@ document.write(`
 <div class="viewcode-block" id="Keeper.compute_transitions_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_transitions_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_transitions_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute symmetric and asymmetric transition matrices and store in keeper.</span>
 
-<span class="sd">        .. note:: Code primarily copied from `scanpy.neighbors`.</span>
+<span class="sd">        .. Note:: Code primarily copied from `scanpy.neighbors`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2717,14 +2794,14 @@ document.write(`
 <span class="sd">        Adds the following to `keeper.misc` (with 0s on the diagonals):</span>
 <span class="sd">            transitions_asym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)</span>
 <span class="sd">                Asymmetric Transition matrix.</span>
-<span class="sd">            transitions_sym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            Transitions_sym_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)</span>
 <span class="sd">                Symmetric Transition matrix.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">compute_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="o">=</span><span class="n">density_normalize</span><span class="p">)</span></div>
+        <span class="n">nfo</span><span class="o">.</span><span class="n">compute_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="o">=</span><span class="n">density_normalize</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Keeper.compute_dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<div class="viewcode-block" id="Keeper.compute_dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the diffusion pseudotime metric between observations,</span>
 <span class="sd">        computed from the symmetric transitions.</span>
 
@@ -2732,7 +2809,7 @@ document.write(`
 
 <span class="sd">            - :math:`T` is the symmetric transition matrix</span>
 <span class="sd">            - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`</span>
-<span class="sd">            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2</span>
+<span class="sd">            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2`</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2744,21 +2821,46 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        dpt : `numpy.ndarray`, (n_observations, n_observations)</span>
 <span class="sd">            Pairwise-observation Diffusion pseudotime distances are stored</span>
-<span class="sd">            in keeper.distances[&quot;dpt_from_{key}&quot;].</span>
+<span class="sd">            in keeper.distances[dpt_key] where ``dpt_key=&quot;dpt_from_{key}&quot;``.</span>
+<span class="sd">            If the full spectrum is not used (i.e., ``0 &lt; n_comps &lt; n_observations&quot;``),</span>
+<span class="sd">            then ``dpt_key=&quot;dpt_from_{key}_{n_comps}comps&quot;``.</span>
+<span class="sd">        n_comps : `int`</span>
+<span class="sd">            Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.</span>
+<span class="sd">            Alternatively, if set ``n_comps &gt;= n_observations``, the whole spectrum will be computed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span></div>
+        <span class="n">nfo</span><span class="o">.</span><span class="n">dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="n">n_comps</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Keeper.compute_rw_transitions_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_rw_transitions_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_rw_transitions_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the row-stochastic transition matrix and store in keeper.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        similarity_key : `str`</span>
+<span class="sd">            Reference key to the `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            symmetric similarity measure (with 1s on the diagonal) stored in the similarities</span>
+<span class="sd">            in the keeper.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Adds the following to `keeper.misc` (with 0s on the diagonals):</span>
+<span class="sd">            transitions_rw_{similarity_key} : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">                Asymmetric random walk transition matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">nfo</span><span class="o">.</span><span class="n">compute_rw_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Keeper.compute_dpt_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Keeper.compute_dpt_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the diffusion pseudotime metric between observations,</span>
 <span class="sd">        computed from similarity </span>
 
-<span class="sd">        .. note::</span>
+<span class="sd">        .. Note::</span>
 
 <span class="sd">            - This entails computing the augmented symmetric transitions.</span>
 <span class="sd">            - :math:`T` is the symmetric transition matrix</span>
 <span class="sd">            - :math:`M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)`</span>
-<span class="sd">            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2</span>
+<span class="sd">            - :math:`dpt(x,z) = ||M(x, .) - M(y, .)||^2`</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2769,33 +2871,238 @@ document.write(`
 <span class="sd">        density_normalize : `bool`</span>
 <span class="sd">            The density rescaling of Coifman and Lafon (2006): Then only the</span>
 <span class="sd">            geometry of the data matters, not the sampled density.</span>
-
+<span class="sd">        n_comps : `int`</span>
+<span class="sd">            Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.</span>
+<span class="sd">            Alternatively, if set ``n_comps &gt;= n_observations``, the whole spectrum will be computed.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        The following are stored in the keeper :</span>
 <span class="sd">           transitions_asym : `numpy.ndarray`, (n_observations, n_observations)</span>
 <span class="sd">                Asymmetric Transition matrix (with 0s on the diagonal) added to</span>
-<span class="sd">                ``keeper.misc[f&quot;transitions_asym_{similarity_key}&quot;].</span>
+<span class="sd">                ``keeper.misc[f&quot;transitions_asym_{similarity_key}&quot;]``.</span>
 <span class="sd">           transitions_sym : `numpy.ndarray`, (n_observations, n_observations)</span>
 <span class="sd">                Symmetric Transition matrix (with 0s on the diagonal) added to</span>
-<span class="sd">                ``keeper.misc[f&quot;transitions_sym_{similarity_key}&quot;].</span>
+<span class="sd">                ``keeper.misc[f&quot;transitions_sym_{similarity_key}&quot;]``.</span>
 <span class="sd">        </span>
 <span class="sd">           dpt : `numpy.ndarray`, (n_observations, n_observations)</span>
 <span class="sd">               Pairwise-observation Diffusion pseudotime distances are stored</span>
-<span class="sd">               in keeper.distances[&quot;dpt_from_transitions_asym_{similarity_key}&quot;].</span>
+<span class="sd">               in keeper.distances[dpt_key] where</span>
+<span class="sd">               ``dpt_key=&quot;dpt_from_transitions_asym_{similarity_key}&quot;``.</span>
+<span class="sd">               If the full spectrum is not used (i.e., ``0 &lt; n_comps &lt; n_observations&quot;``),</span>
+<span class="sd">               then ``dpt_key=&quot;dpt_from_transitions_asym_{similarity_key}_{n_comps}comps&quot;``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">compute_transitions_from_similarity</span><span class="p">(</span><span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">)</span>
         <span class="n">T_sym_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;transitions_sym_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T_sym_key</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">density_normalize</span><span class="p">:</span>
+            <span class="n">T_sym_key</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">T_sym_key</span><span class="p">,</span> <span class="s2">&quot;density_normalized&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">T_sym_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_transitions_from_similarity</span><span class="p">(</span><span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">)</span>        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T_sym_key</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="n">n_comps</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Keeper.construct_pose"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.construct_pose">[docs]</a>    <span class="k">def</span> <span class="nf">construct_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Keeper.integrate_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.integrate_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">integrate_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transition_keys</span><span class="p">,</span> <span class="n">integrated_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Integrate transitions</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        transition_keys : `list`</span>
+<span class="sd">            Reference keys of transitions to integrate.</span>
+<span class="sd">        integrated_key : `str`</span>
+<span class="sd">            (Optional) Specify key used to store the integrated transitions into the keeper.</span>
+<span class="sd">            Default behavior is to integrate the keys of the original transitions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The following is added to the similarity keeper :</span>
+
+<span class="sd">          - integrated transition : The integrated transition, where the reference key, if not provided, is fused from the original labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">integrated_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>            
+            <span class="n">integrated_key</span> <span class="o">=</span> <span class="n">fuse_labels</span><span class="p">(</span><span class="n">transition_keys</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;fused&#39;</span><span class="p">,</span> <span class="s1">&#39;integrated&#39;</span><span class="p">)</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">transition_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="c1"># .data</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">transition_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">p_cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="c1"># .data</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">@</span> <span class="n">p_cur</span>
+
+        <span class="c1"># ensure symmetric</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">integrated_key</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Keeper.integrate_transitions_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.integrate_transitions_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">integrate_transitions_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                              <span class="n">similarity_keys</span><span class="p">,</span> <span class="n">integrated_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                              <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                              <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the integrated transition from similarities,</span>
+
+<span class="sd">        .. Note::</span>
+
+<span class="sd">            - This entails computing the augmented symmetric transitions.</span>
+<span class="sd">            - :math:`T` is the symmetric transition matrix</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        similarity_keys : `list`</span>
+<span class="sd">            Reference keys of similarities to compute transitions and integrate.</span>
+<span class="sd">        integrated_key : `str`</span>
+<span class="sd">            (Otional) Specify key used to store the integrated transitions into the keeper.</span>
+<span class="sd">            Default behavior is to integrate the keys of the original transitions.</span>
+<span class="sd">        density_normalize : `bool`</span>
+<span class="sd">            The density rescaling of Coifman and Lafon (2006): Then only the</span>
+<span class="sd">            geometry of the data matters, not the sampled density.</span>
+<span class="sd">        n_comps : `int`</span>
+<span class="sd">            Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.</span>
+<span class="sd">            Alternatively, if set ``n_comps &gt;= n_observations``, the whole spectrum will be computed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The following are stored in the keeper :</span>
+<span class="sd">        </span>
+<span class="sd">           - transitions_asym : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">                Asymmetric Transition matrix (with 0s on the diagonal) added to</span>
+<span class="sd">                ``keeper.misc[f&quot;transitions_asym_{similarity_key}&quot;]``.</span>
+<span class="sd">           - transitions_sym : `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">                Symmetric Transition matrix (with 0s on the diagonal) added to</span>
+<span class="sd">                ``keeper.misc[f&quot;transitions_sym_{similarity_key}&quot;]``.</span>
+<span class="sd">           - transitions_i : The integrated transition, where the reference key, if not provided, is fused from the original labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">transition_keys</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">similarity_key</span> <span class="ow">in</span> <span class="n">similarity_keys</span><span class="p">:</span>
+            <span class="n">T_sym_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;transitions_sym_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">density_normalize</span><span class="p">:</span>
+                <span class="n">T_sym_key</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">T_sym_key</span><span class="p">,</span> <span class="s2">&quot;density_normalized&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">T_sym_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compute_transitions_from_similarity</span><span class="p">(</span><span class="n">similarity_key</span><span class="p">,</span>
+                                                         <span class="n">density_normalize</span><span class="p">)</span>
+            <span class="n">transition_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T_sym_key</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">integrate_transitions</span><span class="p">(</span><span class="n">transition_keys</span><span class="p">,</span> <span class="n">integrated_key</span><span class="o">=</span><span class="n">integrated_key</span><span class="p">)</span></div>
+        
+
+<div class="viewcode-block" id="Keeper.compute_multiscale_VNE_transition_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_multiscale_VNE_transition_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_multiscale_VNE_transition_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span>
+                                                          <span class="n">tau_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                          <span class="n">do_save</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the multi-scale transition matrix based on the elbow of the Von Neumann Entropy (VNE)</span>
+
+<span class="sd">        as described in GSPA and PHATE https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py,</span>
+<span class="sd">        https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        similarity_key : `str`</span>
+<span class="sd">            Reference key to the `numpy.ndarray`, (n_observations, n_observations)</span>
+<span class="sd">            symmetric similarity measure (with 1s on the diagonal) stored in the similarities</span>
+<span class="sd">            in the keeper.</span>
+<span class="sd">        tau_max : `int`</span>
+<span class="sd">            Max scale ``tau`` tested for VNE (default is 100).</span>
+<span class="sd">        do_save : `bool`</span>
+<span class="sd">            If `True`, save to ``keeper``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        P : `numpy.ndarray` (n_observations, n_observations)</span>
+<span class="sd">            The symmetric VNE multi-scale transition matrix (with 0s on the diagonals).</span>
+<span class="sd">            If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key ``&#39;transitions_sym_multiscaleVNE_{similarity_key}&#39;``</span>
+<span class="sd">        P_asym : `numpy.ndarray` (n_observations, n_observations)</span>
+<span class="sd">            The random-walk VNE multi-scale transition matrix (with 0s on the diagonals).</span>
+<span class="sd">            If ``do_save`` is `True`, ``P_asym`` is added to the ``keeper.misc`` with the key ``&#39;transitions_multiscaleVNE_{similarity_key}&#39;``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">P_sym_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;transitions_sym_multiscaleVNE_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">P_asym_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;transitions_multiscaleVNE_</span><span class="si">{</span><span class="n">similarity_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        
+        <span class="k">if</span> <span class="n">P_sym_label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span> <span class="ow">and</span> <span class="n">P_asym_label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">:</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">P_sym_label</span><span class="p">]</span>
+            <span class="n">P_asym</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">P_asym_label</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">P</span><span class="p">,</span> <span class="n">P_asym</span> <span class="o">=</span> <span class="n">nfo</span><span class="o">.</span><span class="n">compute_multiscale_VNE_transitions_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                                                               <span class="n">similarity_key</span><span class="p">,</span>
+                                                                               <span class="n">tau_max</span><span class="o">=</span><span class="n">tau_max</span><span class="p">,</span>
+                                                                               <span class="n">do_save</span><span class="o">=</span><span class="n">do_save</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">P_asym</span></div>
+    
+    
+<div class="viewcode-block" id="Keeper.integrate_multiscale_VNE_transitions_from_similarities"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.integrate_multiscale_VNE_transitions_from_similarities">[docs]</a>    <span class="k">def</span> <span class="nf">integrate_multiscale_VNE_transitions_from_similarities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_keys</span><span class="p">,</span>
+                                                               <span class="n">tau_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                               <span class="n">integrated_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Integrate multi-scale transitions where scale is determined by elbow</span>
+<span class="sd">        of Von Neumann Entropy (VNE)</span>
+
+<span class="sd">        As described in https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        similarity_keys : `list`</span>
+<span class="sd">            Reference keys of similarities to compute transitions and integrate.</span>
+<span class="sd">        tau_max : `int`</span>
+<span class="sd">            Max scale ``tau`` to test Von Neumann Entropy on (default is 100).</span>
+<span class="sd">        integrated_key : `str`</span>
+<span class="sd">            (Optional) Specify key used to store the integrated transitions into the keeper.</span>
+<span class="sd">            Default behavior is to integrate the keys of the original transitions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The following is added to the similarity keeper :</span>
+
+<span class="sd">          - integrated transition : The (symmetric) integrated multi-scale transition, where the reference key, if not provided, is fused from the original labels.</span>
+<span class="sd">          - integrated asymmetric transition : The (asymmetric random-walk) integrated multi-scale transition, where the reference key, if not provided, is fused from the original labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">integrated_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># flabel = &#39;integrated_sym_VNE&#39; if use_affinity_diffusion_matrix else &#39;integrated_VNE&#39;</span>
+            <span class="c1"># integrated_key = fuse_labels(similarity_keys).replace(&#39;fused&#39;, flabel)</span>
+            <span class="n">integrated_key</span> <span class="o">=</span> <span class="n">fuse_labels</span><span class="p">(</span><span class="n">similarity_keys</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;fused&#39;</span><span class="p">,</span> <span class="s1">&#39;integrated_VNE&#39;</span><span class="p">)</span>
+
+        <span class="n">P_sym_integrated_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sym_</span><span class="si">{</span><span class="n">integrated_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">P_asym_integrated_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;asym_</span><span class="si">{</span><span class="n">integrated_key</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="n">P_sym_integrated_label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span> <span class="ow">and</span> <span class="n">P_asym_integrated_label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Already computed </span><span class="si">{</span><span class="n">P_sym_integrated_label</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">P_asym_integrated_label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+        
+
+            <span class="n">p</span><span class="p">,</span> <span class="n">p_asym</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_multiscale_VNE_transition_from_similarity</span><span class="p">(</span><span class="n">similarity_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                                               <span class="n">tau_max</span><span class="o">=</span><span class="n">tau_max</span><span class="p">,</span>
+                                                                               <span class="c1"># use_affinity_diffusion_matrix=use_affinity_diffusion_matrix,</span>
+                                                                               <span class="n">do_save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">similarity_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">p_cur</span><span class="p">,</span> <span class="n">p_asym_cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_multiscale_VNE_transition_from_similarity</span><span class="p">(</span><span class="n">key</span><span class="p">,</span>
+                                                                                           <span class="n">tau_max</span><span class="o">=</span><span class="n">tau_max</span><span class="p">,</span>
+
+                                                                                           <span class="c1"># use_affinity_diffusion_matrix=use_affinity_diffusion_matrix,</span>
+                                                                                           <span class="n">do_save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">@</span> <span class="n">p_cur</span>
+                <span class="n">p_asym</span> <span class="o">=</span> <span class="n">p_asym</span> <span class="o">@</span> <span class="n">p_asym_cur</span>
+
+            <span class="c1"># ensure symmetric</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">p_asym</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_asym</span> <span class="o">+</span> <span class="n">p_asym</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">P_sym_integrated_label</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Encountered error when adding </span><span class="si">{</span><span class="n">P_sym_integrated_label</span><span class="si">}</span><span class="s2">: </span><span class="se">\n</span><span class="s2"> .. </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">p_asym</span><span class="p">,</span> <span class="n">P_asym_integrated_label</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Encountered error when adding </span><span class="si">{</span><span class="n">P_asym_integrated_label</span><span class="si">}</span><span class="s2">: </span><span class="se">\n</span><span class="s2"> .. </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+        
+
+<div class="viewcode-block" id="Keeper.construct_pose"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.construct_pose">[docs]</a>    <span class="k">def</span> <span class="nf">construct_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">root_as_tip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                        <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">choose_largest_segment</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                        <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;haghverdi16&#39;</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                        <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">n_branches</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                       <span class="p">):</span>
+                       <span class="n">n_branches</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mutual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">k_mnn</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                       <span class="n">connect_closest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">annotate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="p">):</span>                
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Construct the POSE from specified distance.</span>
 
 <span class="sd">        Parameters</span>
@@ -2803,14 +3110,18 @@ document.write(`
 <span class="sd">        key : `str`</span>
 <span class="sd">            The label used to reference the distance matrix stored in ``keeper.distances``,</span>
 <span class="sd">            of size (n_observations, n_observations).</span>
-<span class="sd">        root : {`None`, `int`, &#39;density&#39;, &#39;ratio&#39;}</span>
+<span class="sd">        root : {`None`, `int`, &#39;density&#39;, &#39;density_inv&#39;, &#39;ratio&#39;}</span>
 <span class="sd">            The root. If `None`, &#39;density&#39; is used.</span>
 
-<span class="sd">            options</span>
-<span class="sd">            -------</span>
+<span class="sd">            Options:</span>
+
 <span class="sd">            - `int` : index of observation</span>
 <span class="sd">            - &#39;density&#39; : select observation with minimal distance-density</span>
+<span class="sd">            - &#39;density_inv&#39; : select observation with maximal distance-density</span>
 <span class="sd">            - &#39;ratio&#39; : select observation which leads to maximal triangular ratio distance</span>
+<span class="sd">        root_as_tip : `bool`</span>
+<span class="sd">            If `True`, force first tip as the root.</span>
+<span class="sd">            Defaults to `False` following scanpy implementation.</span>
 <span class="sd">        min_branch_size : {`int`, `float`}</span>
 <span class="sd">            During recursive splitting of branches, only consider splitting a branch with at least</span>
 <span class="sd">            ``min_branch_size &gt; 2`` data points.</span>
@@ -2842,34 +3153,123 @@ document.write(`
 <span class="sd">            until a segement is successfully branched or no branchable segments</span>
 <span class="sd">            remain. Otherwise, if `False`, attempt to perform branching only once </span>
 <span class="sd">            on the next potentially branchable segment.</span>
-
-<span class="sd">            ..note::</span>
-
-<span class="sd">              This is only applicable when branching is being performed. If previous</span>
-<span class="sd">              iterations of branching has already been performed, it is not possible to</span>
-<span class="sd">              identify the number of iterations where no branching was performed.</span>
+<span class="sd">            Note: This is only applicable when branching is being performed. If previous</span>
+<span class="sd">            iterations of branching has already been performed, it is not possible to</span>
+<span class="sd">            identify the number of iterations where no branching was performed.</span>
+<span class="sd">        mutual : `bool` (default = `False`)</span>
+<span class="sd">            If `True`, add ``k_mnn`` mutual nn edges. Otherwise, add single nn edge.</span>
+<span class="sd">            When `False`, ``k_mnn`` is ignored.</span>
+<span class="sd">        k_mnn : `int` (``0 &lt; k_mnn &lt; len(G)``)</span>
+<span class="sd">            The number of nns to consider when extracting mutual nns.</span>
+<span class="sd">            Note, this is ignored when ``mutual`` is `False`.</span>
+<span class="sd">        connect_closest : `bool` (default = False)</span>
+<span class="sd">            If `True`, connect branches by points with smallest distance between the branches.</span>
+<span class="sd">            Otherwise, connect by continuum of ordering. </span>
+<span class="sd">        annotate : `bool`</span>
+<span class="sd">            If `True`, annotate edges and nodes with POSE features.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        poser : `netflow.pose.POSER`</span>
 <span class="sd">            The object used to construct the POSE.</span>
 <span class="sd">        G_poser_nn : `networkx.Graph`</span>
-<span class="sd">            The updated graph with nearest neighbor edges and edge attribute &quot;edge_origin&quot;</span>
-<span class="sd">            with the possible values :</span>
+<span class="sd">            The updated graph with nearest neighbor edges.</span>
+<span class="sd">            If ``annotate`` is `True`, edge attribute &quot;edge_origin&quot;</span>
+<span class="sd">            is added with the possible values :</span>
 
 <span class="sd">            - &quot;POSE&quot; : for edges in the original graph that are not nearest neighbor edges</span>
 <span class="sd">            - &quot;NN&quot; : for nearest neighbor edges that were not in the original graph</span>
 <span class="sd">            - &quot;POSE + NN&quot; : for edges in the original graph that are also nearest neighbor edges</span>
+<span class="sd">        &quot;&quot;&quot;</span>                
+        <span class="n">poser</span> <span class="o">=</span> <span class="n">nfo</span><span class="o">.</span><span class="n">POSER</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">root_as_tip</span><span class="o">=</span><span class="n">root_as_tip</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="n">min_branch_size</span><span class="p">,</span>
+                          <span class="n">choose_largest_segment</span><span class="o">=</span><span class="n">choose_largest_segment</span><span class="p">,</span>
+                          <span class="n">connect_closest</span><span class="o">=</span><span class="n">connect_closest</span><span class="p">,</span>
+                          <span class="n">flavor</span><span class="o">=</span><span class="n">flavor</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="n">allow_kendall_tau_shift</span><span class="p">,</span>
+                          <span class="n">smooth_corr</span><span class="o">=</span><span class="n">smooth_corr</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="n">brute</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="n">G_poser</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">branchings_segments</span><span class="p">(</span><span class="n">n_branches</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="n">until_branched</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="n">annotate</span><span class="p">)</span>
+        <span class="n">G_poser_nn</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">construct_pose_nn_topology</span><span class="p">(</span><span class="n">G_poser</span><span class="p">,</span> <span class="n">mutual</span><span class="o">=</span><span class="n">mutual</span><span class="p">,</span> <span class="n">k_mnn</span><span class="o">=</span><span class="n">k_mnn</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="n">annotate</span><span class="p">)</span>
+
+        <span class="c1"># label = [key]</span>
+        <span class="c1"># if root is not None:</span>
+        <span class="c1">#     label.append(f&quot;root_{root}&quot;)</span>
+        <span class="c1"># label.append(f&quot;n_branches_{n_branches}&quot;)</span>
+        <span class="c1"># label.append(f&quot;min_branch_size_{min_branch_size}&quot;)</span>
+        <span class="c1"># if choose_largest_segment:</span>
+        <span class="c1">#     label.append(&quot;choose_largest_segment&quot;)</span>
+        <span class="c1"># label.append(f&quot;flavor_{flavor}&quot;)</span>
+        <span class="c1"># if allow_kendall_tau_shift:</span>
+        <span class="c1">#     label.append(&quot;allow_kendall_tau_shift&quot;)</span>
+        <span class="c1"># if smooth_corr:</span>
+        <span class="c1">#     label.append(&quot;smooth_corr&quot;)</span>
+        <span class="c1"># if brute:</span>
+        <span class="c1">#     label.append(&quot;brute&quot;)</span>
+        <span class="c1"># if split:</span>
+        <span class="c1">#     label.append(&quot;split&quot;)</span>
+        <span class="c1"># if until_branched:</span>
+        <span class="c1">#     label.append(&quot;until_branched&quot;)</span>
+        <span class="c1"># label = &quot;_&quot;.join(label)</span>
+        <span class="c1"># keeper.add_graph(G_poser_nn, &quot;POSE_{label}&quot;)</span>
+
+        <span class="k">return</span> <span class="n">poser</span><span class="p">,</span> <span class="n">G_poser_nn</span></div>
+
+<div class="viewcode-block" id="Keeper.PCA"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.PCA">[docs]</a>    <span class="k">def</span> <span class="nf">PCA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Principle component analysis (PCA) decomposition.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : `str`</span>
+<span class="sd">            The reference key of the data in the data-keeper that PCA decomposition</span>
+<span class="sd">            will be performed on.</span>
+<span class="sd">        n_components : {`None`, `int`}</span>
+<span class="sd">            The number of principle components to keep.</span>
+<span class="sd">            If `None`, all principle components are kept.</span>
+<span class="sd">        random_state : {`None`, `int`}</span>
+<span class="sd">            Random state used for certain solvers. Pass an `int` for reproducible results across runs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PCA data with label &quot;{key}_PCA&quot; is added to the data keeper.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">poser</span> <span class="o">=</span> <span class="n">POSER</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="n">min_branch_size</span><span class="p">,</span>
-                      <span class="n">choose_largest_segment</span><span class="o">=</span><span class="n">choose_largest_segment</span><span class="p">,</span>
-                      <span class="n">flavor</span><span class="o">=</span><span class="n">flavor</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="n">allow_kendall_tau_shift</span><span class="p">,</span>
-                      <span class="n">smooth_corr</span><span class="o">=</span><span class="n">smooth_corr</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="n">brute</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">pca_obj</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">decomposition</span><span class="o">.</span><span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="n">data_pca</span> <span class="o">=</span> <span class="n">pca_obj</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
-        <span class="n">G_poser</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">branchings_segments</span><span class="p">(</span><span class="n">n_branches</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="n">until_branched</span><span class="p">)</span>
-        <span class="n">G_poser_nn</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">construct_pose_nn_topology</span><span class="p">(</span><span class="n">G_poser</span><span class="p">)</span>
+        <span class="n">data_pca</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_pca</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                                <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;PC</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data_pca</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])],</span>
+                                <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data_pca</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_PCA&quot;</span><span class="p">)</span></div>
+        
 
-        <span class="k">return</span> <span class="n">poser</span><span class="p">,</span> <span class="n">G_poser_nn</span></div></div>
+<div class="viewcode-block" id="Keeper.log1p"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.log1p">[docs]</a>    <span class="k">def</span> <span class="nf">log1p</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Logarithmic data transformation.</span>
+
+<span class="sd">        Computes :math:`data = \\log(data + 1)` with the natural logarithm as the default base.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : `str`</span>
+<span class="sd">            The reference key of the data in the data-keeper that will be</span>
+<span class="sd">            logarithmically transformed.</span>
+<span class="sd">        base : {`None`, `int`}</span>
+<span class="sd">            Base used for the logarithmic transformation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Logarithmically transformed data with label &quot;{key}_log1p&quot; is added to the data keeper.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">[:]</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">[:]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">base</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">base</span><span class="p">),</span> <span class="n">out</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">obs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_log1p&quot;</span><span class="p">)</span></div></div>
+        
 
 </pre></div>
 
@@ -2904,6 +3304,7 @@ document.write(`
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
@@ -2934,7 +3335,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

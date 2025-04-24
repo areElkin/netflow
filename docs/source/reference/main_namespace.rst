@@ -17,11 +17,7 @@ Modules
       pose
       probe
       methods
-      classes
-      metrics
       checks
-      app
-      pseudotime
       utils
 
 

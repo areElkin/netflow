@@ -1,8 +1,6 @@
-Usage
-=====
 
-Installation
-------------
+Installation via pip
+--------------------
 
 To use netflow, first install it using pip:
 

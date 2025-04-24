@@ -81,7 +81,11 @@ TO DO: UPDATE WITH TUTORIALS
             BC POSE tutorial
 	    
 
-
+*********************************
+Primary netflow analysis workflow
+*********************************
+.. image:: ../_static/netflow_ux_flow.png
+	   :width: 800
 	    
 
 

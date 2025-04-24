@@ -60,6 +60,8 @@ extensions = [
     # "nbsphinx",
     'sphinx_copybutton',  #  for adding “copy to clipboard” buttons to all text/code boxes
 ]
+# pygments_style = 'sphinx'
+# highlight_language = 'python'
 
 # For using with MyST Parser, for Markdown documentation, it is recommended to use the colon_fence syntax extension:
 # extensions.append("myst_parser")
@@ -199,6 +201,7 @@ html_title = f"{project} v{version} Manual"
 # html_favicon
 
 # html_css_files
+html_css_files = ['custom.css']
 
 html_last_updated_fmt = '%b %d, %Y'
 
