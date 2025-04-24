@@ -140,7 +140,7 @@ def plot_topology(G,
     {node,edge}_cbar_label_y : {`None`, `float`}
         Optional y position for node and edge colorbar label, if displayed.
     {node,edge}_cbar_label_kws : {`None`, `dict`}
-        Colorbar label keyword arguments passed to ``matplotlib.pyplot.colorbar.set_label).. 
+        Colorbar label keyword arguments passed to ``matplotlib.pyplot.colorbar.set_label``).
     node_shape :  string or array of shapes  (default='o')
         The shape of the node.  Can be a single shape or a sequence of shapes
         with the same length as nodelist. Shape specification is as 
@@ -297,7 +297,7 @@ def plot_topology(G,
             node_cmap_drawedges = False
     if edge_cmap_drawedges is None:
         if edge_cbar and (not isinstance(edge_color, str)) and (edge_cmap is not None):        
-            edge_cmap_drawedges = True if edge_cmap in qualitative_cmaps.keys() else False
+            edge_cmap_drawedges = True if edge_cmap.name in qualitative_cmaps.keys() else False
         else:
             edge_cmap_drawedges = False
     
