@@ -179,7 +179,7 @@ def pairwise_observation_euc_distances(profiles, metric='euclidean', **kwargs):
      ed : pandas Series
          Euclidean distances between pairwise observations
      """
-     n = profiles.shape[1]     
+     N = profiles.shape[1]     
      eds = pd.DataFrame(data=ss.distance.cdist(profiles.T.values, profiles.T.values, metric=metric, **kwargs),
                         index=profiles.columns.tolist(), columns=profiles.columns.tolist())
      eds = eds.stack(dropna=False)[np.triu(np.ones(eds.shape), 1).astype(bool).reshape(eds.size)]
@@ -447,8 +447,7 @@ def norm_features_as_sym_dist(keeper, key, label, features=None, method='L1',
         - 'median' : Median of :math:`x`
     is_distance : `bool`
         Indicate if the multi-feature pairwise-observations are distances or similarities.
-        If `True`, they are treated as distances. If `False, they are treated as similarities.
-
+        If `True`, they are treated as distances. If `False`, they are treated as similarities.
     """
 
     Xnorm = norm_features(keeper, key, features=features, method=method, label=None)

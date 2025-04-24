@@ -425,7 +425,7 @@ def get_node_colors(G, node_color_attr, D=None, node_cmap='jet'):
         - int : treated as the id of an observation and the distance to that
                 observation is used as the node colors, extracted from the corresponding
                 row in ``D``.
-        . numpy.array : expected to be the same length as the number of nodes in ``G``
+        - numpy.array : expected to be the same length as the number of nodes in ``G``
                         with the values to be mapped to colors for each node,
                         ordered consecutively by node index.
     D : `numpy.ndarray` (n, n)
@@ -565,7 +565,7 @@ def nx_to_cytoscape(G, pos=None,
         - int : treated as the id of an observation and the distance to that
                 observation is used as the node colors, extracted from the corresponding
                 row in ``D``.
-        . numpy.array : expected to be the same length as the number of nodes in ``G``
+        - numpy.array : expected to be the same length as the number of nodes in ``G``
                         with the values to be mapped to colors for each node,
                         ordered consecutively by node index.
     D : `numpy.ndarray` (n, n)
