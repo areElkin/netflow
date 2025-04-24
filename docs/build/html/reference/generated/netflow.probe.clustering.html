@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -49,7 +50,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.probe.clustering';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="netflow.probe.visualization" href="netflow.probe.visualization.html" />
+    <link rel="next" title="netflow.probe.jupyter_app" href="netflow.probe.jupyter_app.html" />
     <link rel="prev" title="netflow.probe" href="netflow.probe.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
@@ -318,19 +319,18 @@ document.write(`
 </li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">netflow.probe.clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.stats.html">netflow.methods.stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.tools.html">netflow.methods.tools</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -376,8 +376,6 @@ document.write(`
 
 
 
-
-
 <nav aria-label="Breadcrumbs">
   <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
     
@@ -387,10 +385,7 @@ document.write(`
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">netflow API</a></li>
-    
-    
-    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    <li class="breadcrumb-item"><a href="../../overview/index.html" class="nav-link">netflow User Guide</a></li>
     
     
     <li class="breadcrumb-item"><a href="netflow.probe.html" class="nav-link">netflow.probe</a></li>
@@ -435,6 +430,12 @@ document.write(`
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.clustering.high_res_clustered_branch_graph" title="netflow.probe.clustering.high_res_clustered_branch_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">high_res_clustered_branch_graph</span></code></a>(G, clustering)</p></td>
 <td><p>Extract higher resolution graph from clustering on POSE branches.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.clustering.louvain" title="netflow.probe.clustering.louvain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">louvain</span></code></a>(G[, weight, resolution, seed])</p></td>
+<td><p>Compute Louvain communities on graph, intended for POSE</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.clustering.louvain_paritioned" title="netflow.probe.clustering.louvain_paritioned"><code class="xref py py-obj docutils literal notranslate"><span class="pre">louvain_paritioned</span></code></a>(G, class_attr[, ...])</p></td>
+<td><p>Compute Louvain communities on graph and further partition restricted to existing classifier (e.g., branches intended for POSE)</p></td>
 </tr>
 </tbody>
 </table>
@@ -554,6 +555,76 @@ containing observations incident to edges between branches in the original POSE.
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.clustering.louvain">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.clustering.</span></span><span class="sig-name descname"><span class="pre">louvain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inverted-distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/clustering.html#louvain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.clustering.louvain" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Louvain communities on graph, intended for POSE</p>
+<p>Louvain communities are computed via <code class="docutils literal notranslate"><span class="pre">networkx.community.louvain_communities</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<cite>networkx.Graph</cite>) – The graph.</p></li>
+<li><p><strong>weight</strong> ({<cite>None</cite>, <cite>str</cite>}) – The edge attribute of the value used as the weight. If None, set to 1
+for all edges (default value = ‘inverted_distance’).</p></li>
+<li><p><strong>resolution</strong> (<cite>float</cite>) – Influences algorithm preference for larger (resolution value greater than 1)
+or smaller (resolution value smaller than 1) communities.</p></li>
+<li><p><strong>seed</strong> (<cite>int</cite>) – Random generator state.</p></li>
+<li><p><strong>kwargs</strong> (<cite>dict</cite>) – Keyword arguments passed to <code class="docutils literal notranslate"><span class="pre">networkx.community.louvain_communities</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>lvp</strong> – Index of community each node is partitioned into, keyed by the nodes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>dict</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.clustering.louvain_paritioned">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.clustering.</span></span><span class="sig-name descname"><span class="pre">louvain_paritioned</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">louvain_attr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inverted-distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/clustering.html#louvain_paritioned"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.clustering.louvain_paritioned" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Louvain communities on graph and further partition restricted to existing classifier (e.g., branches intended for POSE)</p>
+<p>Louvain communities are computed via <code class="docutils literal notranslate"><span class="pre">networkx.community.louvain_communities</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<cite>networkx.Graph</cite>) – The graph.</p></li>
+<li><p><strong>class_attr</strong> (<cite>str</cite>) – The node attribute of the value of the pre-assigned class attribute against
+which the Louvain communities should be partitioned.</p></li>
+<li><p><strong>louvain_attr</strong> ({<cite>None</cite>, <cite>str</cite>}) – (Optional) Node attribute where Louvain community indices are stored.
+If provided, first check if the attribute already exists in <code class="docutils literal notranslate"><span class="pre">G</span></code> to use
+pre-compouted Louvain community idices (if it exists, remaining argument
+values are ignored). Otherwise, the computed Louvain community indices are
+stored in this node attribute. If not provided, Louvain communities are
+computed and not stored.</p></li>
+<li><p><strong>weight</strong> ({<cite>None</cite>, <cite>str</cite>}) – The edge attribute of the value used as the weight. If None, set to 1
+for all edges (default value = ‘inverted_distance’).
+(Ignored if pre-existing Louvain communiites were saved in <code class="docutils literal notranslate"><span class="pre">louvain_attr</span></code>.)</p></li>
+<li><p><strong>resolution</strong> (<cite>float</cite>) – Influences algorithm preference for larger (resolution value greater than 1)
+or smaller (resolution value smaller than 1) communities.
+(Ignored if pre-existing Louvain communiites were saved in <code class="docutils literal notranslate"><span class="pre">louvain_attr</span></code>.)</p></li>
+<li><p><strong>seed</strong> (<cite>int</cite>) – Random generator state.
+(Ignored if pre-existing Louvain communiites were saved in <code class="docutils literal notranslate"><span class="pre">louvain_attr</span></code>.)</p></li>
+<li><p><strong>kwargs</strong> (<cite>dict</cite>) – Keyword arguments passed to <code class="docutils literal notranslate"><span class="pre">networkx.community.louvain_communities</span></code>.
+(Ignored if pre-existing Louvain communiites were saved in <code class="docutils literal notranslate"><span class="pre">louvain_attr</span></code>.)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>f”{class_attr}_{louvain_attr}” : The class partitioned and Louvain community
+reference index in the form “{class-index}-{Louvain-index}”
+(<code class="docutils literal notranslate"><span class="pre">louvain_attr</span></code> defaults to “lvp” if not provided).</p></li>
+<li><p>louvain_attr - The Louvain community reference index, if provided.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The following node attributes are added to the graph <code class="docutils literal notranslate"><span class="pre">G</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -577,11 +648,11 @@ containing observations incident to edges between branches in the original POSE.
       </div>
     </a>
     <a class="right-next"
-       href="netflow.probe.visualization.html"
+       href="netflow.probe.jupyter_app.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">netflow.probe.visualization</p>
+        <p class="prev-next-title">netflow.probe.jupyter_app</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -606,6 +677,7 @@ containing observations incident to edges between branches in the original POSE.
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
 <li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
@@ -614,15 +686,12 @@ containing observations incident to edges between branches in the original POSE.
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
 <li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.html">netflow.probe</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l6 current toc-h6 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.probe.clustering</a></li>
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
 <li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -670,7 +739,7 @@ containing observations incident to edges between branches in the original POSE.
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

@@ -19,17 +19,9 @@ API definition
 
 * :py:mod:`netflow`
 
-* :py:mod:`netflow.metrics`
-
-* :py:mod:`netflow.classes`
-
-* :py:mod:`netflow.pseudotime`
-
 * :py:mod:`netflow.utils`
 
 * :py:mod:`netflow.checks`
-
-* :py:mod:`netflow.app`
 
 * :py:mod:`netflow.keepers`
 
@@ -50,6 +42,8 @@ API definition
 * :py:mod:`netflow.probe`
 
   - :py:mod:`netflow.probe.visualization`
+
+  - :py:mod:`netflow.probe.jupyter_app`
 
 ..
    add :hidden: below to hide in main section and only

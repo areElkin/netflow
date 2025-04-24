@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -49,8 +50,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.checks';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="netflow.app" href="netflow.app.html" />
-    <link rel="prev" title="netflow.metrics" href="netflow.metrics.html" />
+    <link rel="next" title="netflow.utils" href="netflow.utils.html" />
+    <link rel="prev" title="The main netflow namespace" href="../main_namespace.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -318,19 +319,18 @@ document.write(`
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.stats.html">netflow.methods.stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.tools.html">netflow.methods.tools</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">netflow.checks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -476,8 +476,8 @@ document.write(`
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>G</strong> (<em>networkx graph</em>) – The graph.</p></li>
 <li><p><strong>component</strong> (<em>{'node'</em><em>, </em><em>'edge'}</em>) – Component of graph the weights are attributed to.</p></li>
-<li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Graph attribute of the weight.</p></li>
-<li><p><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>default = TOL</em>) – The tolerance to check that no weights are below <cite>tol</cite>.</p></li>
+<li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Graph attribute of the weight.</p></li>
+<li><p><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default = TOL</em>) – The tolerance to check that no weights are below <cite>tol</cite>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -515,20 +515,20 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="netflow.metrics.html"
+       href="../main_namespace.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">netflow.metrics</p>
+        <p class="prev-next-title">The main netflow namespace</p>
       </div>
     </a>
     <a class="right-next"
-       href="netflow.app.html"
+       href="netflow.utils.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">netflow.app</p>
+        <p class="prev-next-title">netflow.utils</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -553,6 +553,7 @@ document.write(`
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
 <li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
@@ -561,11 +562,7 @@ document.write(`
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.html">netflow.probe</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.checks</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -613,7 +610,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

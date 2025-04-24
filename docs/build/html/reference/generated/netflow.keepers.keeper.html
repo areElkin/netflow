@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -319,19 +320,18 @@ document.write(`
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.stats.html">netflow.methods.stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.tools.html">netflow.methods.tools</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -377,8 +377,6 @@ document.write(`
 
 
 
-
-
 <nav aria-label="Breadcrumbs">
   <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
     
@@ -388,10 +386,7 @@ document.write(`
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">netflow API</a></li>
-    
-    
-    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    <li class="breadcrumb-item"><a href="../../overview/index.html" class="nav-link">netflow User Guide</a></li>
     
     
     <li class="breadcrumb-item"><a href="netflow.keepers.html" class="nav-link">netflow.keepers</a></li>
@@ -574,6 +569,16 @@ observation labels among the different keepers.</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">features_labels</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.features_labels" title="Permalink to this definition">#</a></dt>
 <dd><p>A dictionary of feature labels for each data set.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataKeeper.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.items" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataKeeper.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataKeeper.keys" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.DataKeeper.num_features">
@@ -910,6 +915,16 @@ with a 2-multi-index of the pairwise observation labels.</p></li>
 <dd><p>A dictionary of all distances.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceKeeper.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.items" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DistanceKeeper.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.keys" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.DistanceKeeper.num_observations">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_observations</span></span><a class="headerlink" href="#netflow.keepers.keeper.DistanceKeeper.num_observations" title="Permalink to this definition">#</a></dt>
@@ -1172,6 +1187,16 @@ the netwwork descriptor or label for each input of the form
 <dd><p>A dictionary of all the graphs.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.GraphKeeper.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#GraphKeeper.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.GraphKeeper.items" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.GraphKeeper.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#GraphKeeper.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.GraphKeeper.keys" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1328,6 +1353,26 @@ columns corresponding to the observations in the same order. Default values are 
 <p>Subsets of a data set, distance or similarity should be stored in <code class="docutils literal notranslate"><span class="pre">Keeper.misc</span></code> as a <cite>pandas.DataFrame</cite>
 to keep track of the subset of observations (and features).</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.PCA">
+<span class="sig-name descname"><span class="pre">PCA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.PCA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.PCA" title="Permalink to this definition">#</a></dt>
+<dd><p>Principle component analysis (PCA) decomposition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<cite>str</cite>) – The reference key of the data in the data-keeper that PCA decomposition
+will be performed on.</p></li>
+<li><p><strong>n_components</strong> ({<cite>None</cite>, <cite>int</cite>}) – The number of principle components to keep.
+If <cite>None</cite>, all principle components are kept.</p></li>
+<li><p><strong>random_state</strong> ({<cite>None</cite>, <cite>int</cite>}) – Random state used for certain solvers. Pass an <cite>int</cite> for reproducible results across runs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>PCA data with label “{key}_PCA” is added to the data keeper.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">similarities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graphs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">misc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.__init__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -1452,7 +1497,7 @@ with a 2-multi-index of the pairwise observation labels.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions">
-<span class="sig-name descname"><span class="pre">compute_dpt_from_augmented_sym_transitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_dpt_from_augmented_sym_transitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_dpt_from_augmented_sym_transitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_dpt_from_augmented_sym_transitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the diffusion pseudotime metric between observations,
 computed from the symmetric transitions.</p>
 <div class="admonition note">
@@ -1460,7 +1505,7 @@ computed from the symmetric transitions.</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(T\)</span> is the symmetric transition matrix</p></li>
 <li><p><span class="math notranslate nohighlight">\(M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)\)</span></p></li>
-<li><p>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>dpt(x,z) = ||M(x, .) - M(y, .)||^2</p></li>
+<li><p><span class="math notranslate nohighlight">\(dpt(x,z) = ||M(x, .) - M(y, .)||^2\)</span></p></li>
 </ul>
 </div>
 <dl class="field-list simple">
@@ -1469,18 +1514,22 @@ computed from the symmetric transitions.</p>
 stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>dpt</strong> – Pairwise-observation Diffusion pseudotime distances are stored
-in keeper.distances[“dpt_from_{key}”].</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>numpy.ndarray</cite>, (n_observations, n_observations)</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>dpt</strong> (<cite>numpy.ndarray</cite>, (n_observations, n_observations)) – Pairwise-observation Diffusion pseudotime distances are stored
+in keeper.distances[dpt_key] where <code class="docutils literal notranslate"><span class="pre">dpt_key=&quot;dpt_from_{key}&quot;</span></code>.
+If the full spectrum is not used (i.e., <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">n_comps</span> <span class="pre">&lt;</span> <span class="pre">n_observations&quot;</span></code>),
+then <code class="docutils literal notranslate"><span class="pre">dpt_key=&quot;dpt_from_{key}_{n_comps}comps&quot;</span></code>.</p></li>
+<li><p><strong>n_comps</strong> (<cite>int</cite>) – Number of eigenvalues/vectors to be computed, set <code class="docutils literal notranslate"><span class="pre">n_comps</span> <span class="pre">=</span> <span class="pre">0</span></code> to compute the whole spectrum.
+Alternatively, if set <code class="docutils literal notranslate"><span class="pre">n_comps</span> <span class="pre">&gt;=</span> <span class="pre">n_observations</span></code>, the whole spectrum will be computed.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_dpt_from_similarity">
-<span class="sig-name descname"><span class="pre">compute_dpt_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_dpt_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_dpt_from_similarity" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_dpt_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_dpt_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_dpt_from_similarity" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the diffusion pseudotime metric between observations,
 computed from similarity</p>
 <div class="admonition note">
@@ -1489,7 +1538,7 @@ computed from similarity</p>
 <li><p>This entails computing the augmented symmetric transitions.</p></li>
 <li><p><span class="math notranslate nohighlight">\(T\)</span> is the symmetric transition matrix</p></li>
 <li><p><span class="math notranslate nohighlight">\(M(x,z) = \sum_{i=1}^{n-1} (\lambda_i * (1 - \lambda_i))\psi_i(x)\psi_i^T(z)\)</span></p></li>
-<li><p>:math:<a href="#id3"><span class="problematic" id="id4">`</span></a>dpt(x,z) = ||M(x, .) - M(y, .)||^2</p></li>
+<li><p><span class="math notranslate nohighlight">\(dpt(x,z) = ||M(x, .) - M(y, .)||^2\)</span></p></li>
 </ul>
 </div>
 <dl class="field-list simple">
@@ -1500,24 +1549,80 @@ symmetric similarity measure (with 1s on the diagonal) stored in the similaritie
 in the keeper.</p></li>
 <li><p><strong>density_normalize</strong> (<cite>bool</cite>) – The density rescaling of Coifman and Lafon (2006): Then only the
 geometry of the data matters, not the sampled density.</p></li>
+<li><p><strong>n_comps</strong> (<cite>int</cite>) – Number of eigenvalues/vectors to be computed, set <code class="docutils literal notranslate"><span class="pre">n_comps</span> <span class="pre">=</span> <span class="pre">0</span></code> to compute the whole spectrum.
+Alternatively, if set <code class="docutils literal notranslate"><span class="pre">n_comps</span> <span class="pre">&gt;=</span> <span class="pre">n_observations</span></code>, the whole spectrum will be computed.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl>
 <dt>transitions_asym<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Asymmetric Transition matrix (with 0s on the diagonal) added to
-<a href="#id5"><span class="problematic" id="id6">``</span></a>keeper.misc[f”transitions_asym_{similarity_key}”].</p>
+<code class="docutils literal notranslate"><span class="pre">keeper.misc[f&quot;transitions_asym_{similarity_key}&quot;]</span></code>.</p>
 </dd>
 <dt>transitions_sym<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Symmetric Transition matrix (with 0s on the diagonal) added to
-<a href="#id7"><span class="problematic" id="id8">``</span></a>keeper.misc[f”transitions_sym_{similarity_key}”].</p>
+<code class="docutils literal notranslate"><span class="pre">keeper.misc[f&quot;transitions_sym_{similarity_key}&quot;]</span></code>.</p>
 </dd>
 <dt>dpt<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Pairwise-observation Diffusion pseudotime distances are stored
-in keeper.distances[“dpt_from_transitions_asym_{similarity_key}”].</p>
+in keeper.distances[dpt_key] where
+<code class="docutils literal notranslate"><span class="pre">dpt_key=&quot;dpt_from_transitions_asym_{similarity_key}&quot;</span></code>.
+If the full spectrum is not used (i.e., <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">n_comps</span> <span class="pre">&lt;</span> <span class="pre">n_observations&quot;</span></code>),
+then <code class="docutils literal notranslate"><span class="pre">dpt_key=&quot;dpt_from_transitions_asym_{similarity_key}_{n_comps}comps&quot;</span></code>.</p>
 </dd>
 </dl>
 </p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>The following are stored in the keeper</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_multiscale_VNE_transition_from_similarity">
+<span class="sig-name descname"><span class="pre">compute_multiscale_VNE_transition_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_multiscale_VNE_transition_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_multiscale_VNE_transition_from_similarity" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the multi-scale transition matrix based on the elbow of the Von Neumann Entropy (VNE)</p>
+<p>as described in GSPA and PHATE <a class="github reference external" href="https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py">KrishnaswamyLab/spARC</a>,
+<a class="reference external" href="https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf">https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>similarity_key</strong> (<cite>str</cite>) – Reference key to the <cite>numpy.ndarray</cite>, (n_observations, n_observations)
+symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+in the keeper.</p></li>
+<li><p><strong>tau_max</strong> (<cite>int</cite>) – Max scale <code class="docutils literal notranslate"><span class="pre">tau</span></code> tested for VNE (default is 100).</p></li>
+<li><p><strong>do_save</strong> (<cite>bool</cite>) – If <cite>True</cite>, save to <code class="docutils literal notranslate"><span class="pre">keeper</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>P</strong> (<cite>numpy.ndarray</cite> (n_observations, n_observations)) – The symmetric VNE multi-scale transition matrix (with 0s on the diagonals).
+If <code class="docutils literal notranslate"><span class="pre">do_save</span></code> is <cite>True</cite>, <code class="docutils literal notranslate"><span class="pre">P</span></code> is added to the <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code> with the key <code class="docutils literal notranslate"><span class="pre">'transitions_sym_multiscaleVNE_{similarity_key}'</span></code></p></li>
+<li><p><strong>P_asym</strong> (<cite>numpy.ndarray</cite> (n_observations, n_observations)) – The random-walk VNE multi-scale transition matrix (with 0s on the diagonals).
+If <code class="docutils literal notranslate"><span class="pre">do_save</span></code> is <cite>True</cite>, <code class="docutils literal notranslate"><span class="pre">P_asym</span></code> is added to the <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code> with the key <code class="docutils literal notranslate"><span class="pre">'transitions_multiscaleVNE_{similarity_key}'</span></code></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_rw_transitions_from_similarity">
+<span class="sig-name descname"><span class="pre">compute_rw_transitions_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_rw_transitions_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_rw_transitions_from_similarity" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the row-stochastic transition matrix and store in keeper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>similarity_key</strong> (<cite>str</cite>) – Reference key to the <cite>numpy.ndarray</cite>, (n_observations, n_observations)
+symmetric similarity measure (with 1s on the diagonal) stored in the similarities
+in the keeper.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl>
+<dt>transitions_rw_{similarity_key}<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Asymmetric random walk transition matrix.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Adds the following to <cite>keeper.misc</cite> (with 0s on the diagonals)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1614,7 +1719,7 @@ Written to <code class="docutils literal notranslate"><span class="pre">keeper.s
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.compute_transitions_from_similarity">
-<span class="sig-name descname"><span class="pre">compute_transitions_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_transitions_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_transitions_from_similarity" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_transitions_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_transitions_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_transitions_from_similarity" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute symmetric and asymmetric transition matrices and store in keeper.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1634,7 +1739,7 @@ geometry of the data matters, not the sampled density.</p></li>
 <dd class="field-even"><p><dl>
 <dt>transitions_asym_{similarity_key}<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Asymmetric Transition matrix.</p>
 </dd>
-<dt>transitions_sym_{similarity_key}<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Symmetric Transition matrix.</p>
+<dt>Transitions_sym_{similarity_key}<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Symmetric Transition matrix.</p>
 </dd>
 </dl>
 </p>
@@ -1647,20 +1752,24 @@ geometry of the data matters, not the sampled density.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.construct_pose">
-<span class="sig-name descname"><span class="pre">construct_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose_largest_segment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flavor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'haghverdi16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_kendall_tau_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_branches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">until_branched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.construct_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.construct_pose" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">construct_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_as_tip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose_largest_segment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flavor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'haghverdi16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_kendall_tau_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_corr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">brute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_branches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">until_branched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_mnn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connect_closest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.construct_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.construct_pose" title="Permalink to this definition">#</a></dt>
 <dd><p>Construct the POSE from specified distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the distance matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>,
 of size (n_observations, n_observations).</p></li>
-<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, ‘density’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
+<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, ‘density’, ‘density_inv’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
+<p>Options:</p>
 <ul>
 <li><p><cite>int</cite> : index of observation</p></li>
 <li><p>’density’ : select observation with minimal distance-density</p></li>
+<li><p>’density_inv’ : select observation with maximal distance-density</p></li>
 <li><p>’ratio’ : select observation which leads to maximal triangular ratio distance</p></li>
 </ul>
 </p></li>
+<li><p><strong>root_as_tip</strong> (<cite>bool</cite>) – If <cite>True</cite>, force first tip as the root.
+Defaults to <cite>False</cite> following scanpy implementation.</p></li>
 <li><p><strong>min_branch_size</strong> ({<cite>int</cite>, <cite>float</cite>}) – During recursive splitting of branches, only consider splitting a branch with at least
 <code class="docutils literal notranslate"><span class="pre">min_branch_size</span> <span class="pre">&gt;</span> <span class="pre">2</span></code> data points.
 If a <cite>float</cite>, <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> refers to the fraction of the total number of data points
@@ -1668,7 +1777,7 @@ If a <cite>float</cite>, <code class="docutils literal notranslate"><span class=
 <li><p><strong>choose_largest_segment</strong> (<cite>bool</cite>) – If <cite>True</cite>, select largest segment for branching.</p></li>
 <li><p><strong>flavor</strong> (<em>{'haghverdi16'</em><em>, </em><em>'wolf17_tri'</em><em>, </em><em>'wolf17_bi'</em><em>, </em><em>'wolf17_bi_un'}</em>) – Branching algorithm (based on <cite>scanpy</cite> implementation).</p></li>
 <li><p><strong>allow_kendall_tau_shift</strong> (<cite>bool</cite>) – If a very small branch is detected upon splitting, shift away from
-maximum correlation in Kendall tau criterion of <a class="reference internal" href="../../references.html#haghverdi16" id="id9"><span>[Haghverdi16]</span></a> to
+maximum correlation in Kendall tau criterion of <a class="reference internal" href="../../references.html#haghverdi16" id="id1"><span>[Haghverdi16]</span></a> to
 stabilize the splitting.</p></li>
 <li><p><strong>smooth_corr</strong> (<cite>bool</cite>, default = <cite>False</cite>) – If <cite>True</cite>, smooth correlations before identifying cut points for branch splitting.</p></li>
 <li><p><strong>brute</strong> (<cite>bool</cite>) – If <cite>True</cite>, data points not associated with any branch upon split are combined with
@@ -1679,24 +1788,28 @@ determine a single branching off of the main segment.
 This is ignored if flavor is not ‘haghverdi16’.
 If <cite>True</cite>, <code class="docutils literal notranslate"><span class="pre">brute</span></code> is ignored.</p></li>
 <li><p><strong>n_branches</strong> (<cite>int</cite>) – Number of branches to look for (<code class="docutils literal notranslate"><span class="pre">n_branches</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p></li>
-<li><p><strong>until_branched</strong> (<cite>bool</cite>) – <p>If <cite>True</cite>, iteratively find segment to branch and perform branching
+<li><p><strong>until_branched</strong> (<cite>bool</cite>) – If <cite>True</cite>, iteratively find segment to branch and perform branching
 until a segement is successfully branched or no branchable segments
 remain. Otherwise, if <cite>False</cite>, attempt to perform branching only once
-on the next potentially branchable segment.</p>
-<p>..note:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">only</span> <span class="n">applicable</span> <span class="n">when</span> <span class="n">branching</span> <span class="ow">is</span> <span class="n">being</span> <span class="n">performed</span><span class="o">.</span> <span class="n">If</span> <span class="n">previous</span>
-<span class="n">iterations</span> <span class="n">of</span> <span class="n">branching</span> <span class="n">has</span> <span class="n">already</span> <span class="n">been</span> <span class="n">performed</span><span class="p">,</span> <span class="n">it</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">possible</span> <span class="n">to</span>
-<span class="n">identify</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">iterations</span> <span class="n">where</span> <span class="n">no</span> <span class="n">branching</span> <span class="n">was</span> <span class="n">performed</span><span class="o">.</span>
-</pre></div>
-</div>
-</p></li>
+on the next potentially branchable segment.
+Note: This is only applicable when branching is being performed. If previous
+iterations of branching has already been performed, it is not possible to
+identify the number of iterations where no branching was performed.</p></li>
+<li><p><strong>mutual</strong> (<cite>bool</cite> (default = <cite>False</cite>)) – If <cite>True</cite>, add <code class="docutils literal notranslate"><span class="pre">k_mnn</span></code> mutual nn edges. Otherwise, add single nn edge.
+When <cite>False</cite>, <code class="docutils literal notranslate"><span class="pre">k_mnn</span></code> is ignored.</p></li>
+<li><p><strong>k_mnn</strong> (<cite>int</cite> (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">k_mnn</span> <span class="pre">&lt;</span> <span class="pre">len(G)</span></code>)) – The number of nns to consider when extracting mutual nns.
+Note, this is ignored when <code class="docutils literal notranslate"><span class="pre">mutual</span></code> is <cite>False</cite>.</p></li>
+<li><p><strong>connect_closest</strong> (<cite>bool</cite> (default = False)) – If <cite>True</cite>, connect branches by points with smallest distance between the branches.
+Otherwise, connect by continuum of ordering.</p></li>
+<li><p><strong>annotate</strong> (<cite>bool</cite>) – If <cite>True</cite>, annotate edges and nodes with POSE features.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>poser</strong> (<cite>netflow.pose.POSER</cite>) – The object used to construct the POSE.</p></li>
-<li><p><strong>G_poser_nn</strong> (<cite>networkx.Graph</cite>) – The updated graph with nearest neighbor edges and edge attribute “edge_origin”
-with the possible values :</p>
+<li><p><strong>G_poser_nn</strong> (<cite>networkx.Graph</cite>) – The updated graph with nearest neighbor edges.
+If <code class="docutils literal notranslate"><span class="pre">annotate</span></code> is <cite>True</cite>, edge attribute “edge_origin”
+is added with the possible values :</p>
 <ul>
 <li><p>”POSE” : for edges in the original graph that are not nearest neighbor edges</p></li>
 <li><p>”NN” : for nearest neighbor edges that were not in the original graph</p></li>
@@ -1721,7 +1834,7 @@ with the key <code class="docutils literal notranslate"><span class="pre">&quot;
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>d<span class="classifier">The new distance is saved to the keeper in</span></dt><dd><p><a href="#id10"><span class="problematic" id="id11">``</span></a>keeper.distances[f”distance_from_{similarity_key}”].</p>
+<dt>d<span class="classifier">The new distance is saved to the keeper in</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">keeper.distances[f&quot;distance_from_{similarity_key}&quot;]</span></code>.</p>
 </dd>
 </dl>
 </p>
@@ -1757,9 +1870,27 @@ with the key <code class="docutils literal notranslate"><span class="pre">&quot;
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.distance_density_argmax">
+<span class="sig-name descname"><span class="pre">distance_density_argmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.distance_density_argmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.distance_density_argmax" title="Permalink to this definition">#</a></dt>
+<dd><p>Find the observation with the largest density from a distance.</p>
+<p>The density of an observation is its net distance to all other observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<cite>str</cite>) – The reference label for the distance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>obs</strong> – The index of the observation with the largest density.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.distance_density_argmin">
 <span class="sig-name descname"><span class="pre">distance_density_argmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.distance_density_argmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.distance_density_argmin" title="Permalink to this definition">#</a></dt>
-<dd><p>Find the observation with the largest density from a distnace.</p>
+<dd><p>Find the observation with the smallest density from a distance.</p>
 <p>The density of an observation is its net distance to all other observations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1792,9 +1923,9 @@ nodes from the iteration. Euclidean distances are computed for the remaining nod
 the previously computed and saved results before saving and returning the combined results.</p>
 <p>Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Euclidean
 distance and do not provide any further information.</p>
-<p>The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by
-<code class="docutils literal notranslate"><span class="pre">self.misc[f&quot;{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;]</span></code>.</p>
 </div>
+<p>The resulting observation-pairwise Euclidean distances are saved to misc (aka self.misc) and can be accessed by
+<code class="docutils literal notranslate"><span class="pre">self.misc[f&quot;{data_key}_{label}_nbhd_euc_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;]</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1806,7 +1937,7 @@ If <cite>None</cite>, all features are used.</p></li>
 <li><p><strong>include_self</strong> (<cite>bool</cite>) – If <cite>True</cite>, add node in neighborhood which will result in computing normalized profile over the neighborhood.
 If <cite>False</cite>, node is not included in neighborhood which results in computing the transition distribution
 over the neighborhood.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
 and name of file to store stacked results.</p></li>
 <li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
 <li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
@@ -1817,7 +1948,7 @@ and name of file to store stacked results.</p></li>
 <dd class="field-even"><p><strong>eds</strong> – Euclidean distances between pairwise observations where rows are observation-pairs and columns are
 feature (node) names.
 saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code> with the key
-<code class="docutils literal notranslate"><span class="pre">f&quot;{data_key}_{label}_euc_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">f&quot;{data_key}_{label}_nbhd_euc_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
@@ -1837,15 +1968,15 @@ nodes from the iteration. Euclidean distances are computed for the remaining nod
 the previously computed and saved results before saving and returning the combined results.</p>
 <p>Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
 distance and do not provide any further information.</p>
-<p>The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
-and can be accessed by <code class="docutils literal notranslate"><span class="pre">self.distances[f'{data_key}_{label}_euc_dist_observation_pairwise_profiles']</span></code>.</p>
 </div>
+<p>The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
+and can be accessed by <code class="docutils literal notranslate"><span class="pre">self.distances[f'{data_key}_{label}_profile_euc']</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data_key</strong> (<cite>str</cite>) – The key to the data in the data keeper that should be used.</p></li>
 <li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features to compute profile distances on. If <cite>None</cite>, all features are used.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
 name of file to store stacked results.</p></li>
 <li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
 <li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
@@ -1854,7 +1985,7 @@ name of file to store stacked results.</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>eds</strong> – Euclidean distances between pairwise profiles where rows are observation-pairs and columns are node names,
-saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> with the key <code class="docutils literal notranslate"><span class="pre">f'{data_key}_{label}_euc_dist_observation_pairwise_profiles'</span></code>.</p>
+saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> with the key <code class="docutils literal notranslate"><span class="pre">f'{data_key}_{label}_profile_euc'</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
@@ -1897,11 +2028,113 @@ is fused from the original labels.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.integrate_multiscale_VNE_transitions_from_similarities">
+<span class="sig-name descname"><span class="pre">integrate_multiscale_VNE_transitions_from_similarities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrated_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.integrate_multiscale_VNE_transitions_from_similarities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.integrate_multiscale_VNE_transitions_from_similarities" title="Permalink to this definition">#</a></dt>
+<dd><p>Integrate multi-scale transitions where scale is determined by elbow
+of Von Neumann Entropy (VNE)</p>
+<p>As described in <a class="reference external" href="https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf">https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>similarity_keys</strong> (<cite>list</cite>) – Reference keys of similarities to compute transitions and integrate.</p></li>
+<li><p><strong>tau_max</strong> (<cite>int</cite>) – Max scale <code class="docutils literal notranslate"><span class="pre">tau</span></code> to test Von Neumann Entropy on (default is 100).</p></li>
+<li><p><strong>integrated_key</strong> (<cite>str</cite>) – (Optional) Specify key used to store the integrated transitions into the keeper.
+Default behavior is to integrate the keys of the original transitions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>integrated transition : The (symmetric) integrated multi-scale transition, where the reference key, if not provided, is fused from the original labels.</p></li>
+<li><p>integrated asymmetric transition : The (asymmetric random-walk) integrated multi-scale transition, where the reference key, if not provided, is fused from the original labels.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The following is added to the similarity keeper</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.integrate_transitions">
+<span class="sig-name descname"><span class="pre">integrate_transitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transition_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrated_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.integrate_transitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.integrate_transitions" title="Permalink to this definition">#</a></dt>
+<dd><p>Integrate transitions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transition_keys</strong> (<cite>list</cite>) – Reference keys of transitions to integrate.</p></li>
+<li><p><strong>integrated_key</strong> (<cite>str</cite>) – (Optional) Specify key used to store the integrated transitions into the keeper.
+Default behavior is to integrate the keys of the original transitions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>integrated transition : The integrated transition, where the reference key, if not provided, is fused from the original labels.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The following is added to the similarity keeper</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.integrate_transitions_from_similarity">
+<span class="sig-name descname"><span class="pre">integrate_transitions_from_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">similarity_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrated_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.integrate_transitions_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.integrate_transitions_from_similarity" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the integrated transition from similarities,</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This entails computing the augmented symmetric transitions.</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span> is the symmetric transition matrix</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>similarity_keys</strong> (<cite>list</cite>) – Reference keys of similarities to compute transitions and integrate.</p></li>
+<li><p><strong>integrated_key</strong> (<cite>str</cite>) – (Otional) Specify key used to store the integrated transitions into the keeper.
+Default behavior is to integrate the keys of the original transitions.</p></li>
+<li><p><strong>density_normalize</strong> (<cite>bool</cite>) – The density rescaling of Coifman and Lafon (2006): Then only the
+geometry of the data matters, not the sampled density.</p></li>
+<li><p><strong>n_comps</strong> (<cite>int</cite>) – Number of eigenvalues/vectors to be computed, set <code class="docutils literal notranslate"><span class="pre">n_comps</span> <span class="pre">=</span> <span class="pre">0</span></code> to compute the whole spectrum.
+Alternatively, if set <code class="docutils literal notranslate"><span class="pre">n_comps</span> <span class="pre">&gt;=</span> <span class="pre">n_observations</span></code>, the whole spectrum will be computed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul>
+<li><dl>
+<dt>transitions_asym<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Asymmetric Transition matrix (with 0s on the diagonal) added to
+<code class="docutils literal notranslate"><span class="pre">keeper.misc[f&quot;transitions_asym_{similarity_key}&quot;]</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>transitions_sym<span class="classifier"><cite>numpy.ndarray</cite>, (n_observations, n_observations)</span></dt><dd><p>Symmetric Transition matrix (with 0s on the diagonal) added to
+<code class="docutils literal notranslate"><span class="pre">keeper.misc[f&quot;transitions_sym_{similarity_key}&quot;]</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><p>transitions_i : The integrated transition, where the reference key, if not provided, is fused from the original labels.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The following are stored in the keeper</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.load_data">
-<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.load_data" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols_as_obs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.load_data" title="Permalink to this definition">#</a></dt>
 <dd><p>Load data from file into the keeper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Currently loads data using <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.
 Additional formats will be added in the future.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1914,6 +2147,8 @@ in <code class="docutils literal notranslate"><span class="pre">file_name</span>
 Currently, this is ignored.</p></li>
 <li><p><strong>delimiter</strong> (<cite>str</cite>, optional (default: ‘,’)) – Delimiter to use.</p></li>
 <li><p><strong>dtype</strong> – If provided, ensure to convert data type after loaded.</p></li>
+<li><p><strong>cols_as_obs</strong> (<cite>bool</cite> (default = <cite>True</cite>)) – If <cite>True</cite>, columns in the loaded data are observations, otherwise,
+the rows are observations.</p></li>
 <li><p><strong>**kwargs</strong> – Additional key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.</p></li>
 </ul>
 </dd>
@@ -1924,10 +2159,13 @@ Currently, this is ignored.</p></li>
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.load_distance">
 <span class="sig-name descname"><span class="pre">load_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.load_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.load_distance" title="Permalink to this definition">#</a></dt>
 <dd><p>Load distance from file into the keeper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Assumed that the distance array is stored with the first row and first column as
 the index and header, respectively.</p>
 <p>Currently loads data using <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.
 Additional formats will be added in the future.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1949,12 +2187,15 @@ Currently, this is ignored.</p></li>
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.load_graph">
 <span class="sig-name descname"><span class="pre">load_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'graph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'source'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'target'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.load_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.load_graph" title="Permalink to this definition">#</a></dt>
 <dd><p>Load network (edgelist) from file into graph and store in the keeper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Currently loads graph from edgelist. Future release will allow different
 graph types (e.g., adjacency, graphml).</p>
 <p>Assumed that the edge-list is stored as two columns, where the first row
 is labeled as source and target.</p>
 <p>Currently loads data using <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.
 Additional formats will be added in the future.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1980,10 +2221,13 @@ passed to <code class="docutils literal notranslate"><span class="pre">networkx.
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.load_similarity">
 <span class="sig-name descname"><span class="pre">load_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'similarity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.load_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.load_similarity" title="Permalink to this definition">#</a></dt>
 <dd><p>Load similarity from file into the keeper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Assumed that the distance array is stored with the first row and first column as
 the index and header, respectively.</p>
 <p>Currently loads data using <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.
 Additional formats will be added in the future.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2005,10 +2249,13 @@ Currently, this is ignored.</p></li>
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.load_stacked_distance">
 <span class="sig-name descname"><span class="pre">load_stacked_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.load_stacked_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.load_stacked_distance" title="Permalink to this definition">#</a></dt>
 <dd><p>Load distance in stacked form from file, convert to unstacked form and store in the keeper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion
 (excluding self-pairs) and a single column with the pairwise distances.</p>
 <p>Currently loads data using <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.
 Additional formats will be added in the future.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2030,10 +2277,13 @@ Currently, this is ignored.</p></li>
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.load_stacked_similarity">
 <span class="sig-name descname"><span class="pre">load_stacked_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'similarity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.load_stacked_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.load_stacked_similarity" title="Permalink to this definition">#</a></dt>
 <dd><p>Load similarity in stacked form from file, convert to unstacked form and store in the keeper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Assumed that the stacked distances are stored with a 2-multi-index of the pairwise-observattion
 (excluding self-pairs) and a single column with the pairwise distances.</p>
 <p>Currently loads data using <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.
 Additional formats will be added in the future.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2048,6 +2298,25 @@ Currently, this is ignored.</p></li>
 <li><p><strong>delimiter</strong> (<cite>str</cite>, optional (default: ‘,’)) – Delimiter to use.</p></li>
 <li><p><strong>**kwargs</strong> – Additional key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">pandas.read_csv</span></code>.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.log1p">
+<span class="sig-name descname"><span class="pre">log1p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.log1p"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.log1p" title="Permalink to this definition">#</a></dt>
+<dd><p>Logarithmic data transformation.</p>
+<p>Computes <span class="math notranslate nohighlight">\(data = \log(data + 1)\)</span> with the natural logarithm as the default base.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<cite>str</cite>) – The reference key of the data in the data-keeper that will be
+logarithmically transformed.</p></li>
+<li><p><strong>base</strong> ({<cite>None</cite>, <cite>int</cite>}) – Base used for the logarithmic transformation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Logarithmically transformed data with label “{key}_log1p” is added to the data keeper.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2091,8 +2360,11 @@ Currently, this is ignored.</p></li>
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.save_data">
 <span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.save_data" title="Permalink to this definition">#</a></dt>
 <dd><p>Save data to file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
 Future releases will allow for other formats.</p>
+</div>
 <p>Data set is saved to the file named ‘{self.outdir}/data_{label}.{file_format}’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2110,8 +2382,11 @@ Future releases will allow for other formats.</p>
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.save_distance">
 <span class="sig-name descname"><span class="pre">save_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.save_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.save_distance" title="Permalink to this definition">#</a></dt>
 <dd><p>Save distance to file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
 Future releases will allow for other formats.</p>
+</div>
 <p>Distance is saved to the file named ‘{self.outdir}/distance_{label}.{file_format}’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2129,8 +2404,11 @@ Future releases will allow for other formats.</p>
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.save_misc">
 <span class="sig-name descname"><span class="pre">save_misc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.save_misc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.save_misc" title="Permalink to this definition">#</a></dt>
 <dd><p>Save misc data to file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
 Future releases will allow for other formats.</p>
+</div>
 <p>Misc data is saved to the file named ‘{self.outdir}/misc_{label}.{file_format}’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2148,8 +2426,11 @@ Future releases will allow for other formats.</p>
 <dt class="sig sig-object py" id="netflow.keepers.keeper.Keeper.save_similarity">
 <span class="sig-name descname"><span class="pre">save_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.save_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.save_similarity" title="Permalink to this definition">#</a></dt>
 <dd><p>Save similarity to file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>This currently only saves a pandas DataFrame to .txt, .csv, or .tsv.
 Future releases will allow for other formats.</p>
+</div>
 <p>Similarity is saved to the file named ‘{self.outdir}/similarity_{label}.{file_format}’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2255,9 +2536,9 @@ nodes from the iteration. Wasserstein distances are computed for the remaining n
 the previously computed and saved results before saving and returning the combined results.</p>
 <p>Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
 distance and do not provide any further information.</p>
-<p>The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by
-<code class="docutils literal notranslate"><span class="pre">self.misc[f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;]</span></code>.</p>
 </div>
+<p>The resulting observation-pairwise Wasserstein distances are saved to misc  (aka self.misc) and can be accessed by
+<code class="docutils literal notranslate"><span class="pre">self.misc[f&quot;{data_key}_{label}_nbhd_wass_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;]</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2269,7 +2550,7 @@ If <cite>None</cite>, all features are used.</p></li>
 <li><p><strong>include_self</strong> (<cite>bool</cite>) – If <cite>True</cite>, add node in neighborhood which will result in computing normalized profile over the neighborhood.
 If <cite>False</cite>, node is not included in neighborhood which results in computing the transition distribution
 over the neighborhood.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
 and name of file to store stacked results.</p></li>
 <li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the
 <span class="math notranslate nohighlight">\(n\)</span> nodes (ordered from <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span>).
@@ -2286,7 +2567,7 @@ ignored if <code class="docutils literal notranslate"><span class="pre">graph_di
 <dd class="field-even"><p><strong>wds</strong> – Wasserstein distances between pairwise observations where rows are observation-pairs and columns are
 feature (node) names.
 saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code> with the key
-<code class="docutils literal notranslate"><span class="pre">f&quot;{data_key}_{label}_wass_dist_observation_pairwise_nbhds_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">f&quot;{data_key}_{label}_nbhd_wass_with{''</span> <span class="pre">if</span> <span class="pre">include_self</span> <span class="pre">else</span> <span class="pre">'out'}_self&quot;</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
@@ -2306,9 +2587,9 @@ nodes from the iteration. Wasserstein distances are computed for the remaining n
 the previously computed and saved results before saving and returning the combined results.</p>
 <p>Only nodes with at least 2 neighbors are included, as leaf nodes will all have the same Wassserstein
 distance and do not provide any further information.</p>
+</div>
 <p>The resulting observation-pairwise Wasserstein distances are saved to the DistanceKeeper (aka self.distances)
 and can be accessed by <code class="docutils literal notranslate"><span class="pre">self.distances[f'{data_key}_{label}_wass_dist_observation_pairwise_profiles']</span></code>.</p>
-</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2316,7 +2597,7 @@ and can be accessed by <code class="docutils literal notranslate"><span class="p
 <li><p><strong>graph_key</strong> (<em>'str'</em>) – The key to the graph in the graph keeper that should be used.
 (Does not have to include all features in the data)</p></li>
 <li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features to compute profile distances on. If <cite>None</cite>, all features are used.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
 name of file to store stacked results.</p></li>
 <li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the <span class="math notranslate nohighlight">\(n\)</span> nodes (ordered from <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span>).
 If <cite>None</cite>, use hop distance.</p></li>
@@ -2330,7 +2611,7 @@ ignored if <code class="docutils literal notranslate"><span class="pre">graph_di
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>wds</strong> – Wasserstein distances between pairwise profiles where rows are observation-pairs and columns are node names,
-saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> with the key <code class="docutils literal notranslate"><span class="pre">f'{data_key}_{label}_wass_dist_observation_pairwise_profiles'</span></code>.</p>
+saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> with the key <code class="docutils literal notranslate"><span class="pre">f'{data_key}_{label}_profile_wass'</span></code>,</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
@@ -2393,6 +2674,7 @@ saved in <code class="docutils literal notranslate"><span class="pre">keeper.dis
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
 <li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
@@ -2407,11 +2689,7 @@ saved in <code class="docutils literal notranslate"><span class="pre">keeper.dis
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.html">netflow.probe</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.app.html">netflow.app</a></li>
-<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -2459,7 +2737,7 @@ saved in <code class="docutils literal notranslate"><span class="pre">keeper.dis
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

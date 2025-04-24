@@ -12,26 +12,19 @@ netflow consists of 3 main components:
    
 #. :py:mod:`netflow.probe` - This library provides tools for downstream visualization and analysis of the POSE.
 
-And a few helper components:
+And a few helper components can be found in:
 
 - :py:mod:`netflow.methods`
-
-- :py:mod:`netflow.metrics`
-
-- :py:mod:`netflow.classes`
 
 .. toctree::
    :maxdepth: 1
    :hidden:
    :titlesonly:
 
-   netflow.keepers <generated/netflow.keepers>
-   netflow.pose <generated/netflow.pose>
-   netflow.probe <generated/netflow.probe>
-   netflow.methods <generated/netflow.methods>
-   netflow.metrics <generated/netflow.metrics>
-   netflow.classes <generated/netflow.classes>
-   
+   netflow.keepers <../reference/generated/netflow.keepers>
+   netflow.pose <../reference/generated/netflow.pose>
+   netflow.probe <../reference/generated/netflow.probe>
+   netflow.methods <../reference/generated/netflow.methods>
 
    
    

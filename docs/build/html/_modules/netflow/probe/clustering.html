@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -589,6 +590,112 @@ document.write(`
     <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">sorted</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">columns</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">R</span></div>
              
+
+<div class="viewcode-block" id="louvain"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain">[docs]</a><span class="k">def</span> <span class="nf">louvain</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;inverted-distance&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute Louvain communities on graph, intended for POSE</span>
+
+<span class="sd">    Louvain communities are computed via ``networkx.community.louvain_communities``</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : `networkx.Graph`</span>
+<span class="sd">        The graph.</span>
+<span class="sd">    weight : {`None`, `str`}</span>
+<span class="sd">        The edge attribute of the value used as the weight. If None, set to 1</span>
+<span class="sd">        for all edges (default value = &#39;inverted_distance&#39;).</span>
+<span class="sd">    resolution : `float`</span>
+<span class="sd">        Influences algorithm preference for larger (resolution value greater than 1)</span>
+<span class="sd">        or smaller (resolution value smaller than 1) communities.</span>
+<span class="sd">    seed : `int`</span>
+<span class="sd">        Random generator state.</span>
+<span class="sd">    kwargs : `dict`</span>
+<span class="sd">        Keyword arguments passed to ``networkx.community.louvain_communities``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lvp : `dict`</span>
+<span class="sd">       Index of community each node is partitioned into, keyed by the nodes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">louvain_partition</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">louvain_communities</span><span class="p">(</span><span class="n">G</span><span class="p">,</span>
+                                                         <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+                                                         <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                                                         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+                                                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">lvp</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">partition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">louvain_partition</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">partition</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="louvain_paritioned"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain_paritioned">[docs]</a><span class="k">def</span> <span class="nf">louvain_paritioned</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">class_attr</span><span class="p">,</span> <span class="n">louvain_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;inverted-distance&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute Louvain communities on graph and further partition restricted to existing classifier (e.g., branches intended for POSE)</span>
+
+<span class="sd">    Louvain communities are computed via ``networkx.community.louvain_communities``</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : `networkx.Graph`</span>
+<span class="sd">        The graph.</span>
+<span class="sd">    class_attr : `str`</span>
+<span class="sd">        The node attribute of the value of the pre-assigned class attribute against</span>
+<span class="sd">        which the Louvain communities should be partitioned.</span>
+<span class="sd">    louvain_attr : {`None`, `str`}</span>
+<span class="sd">        (Optional) Node attribute where Louvain community indices are stored.</span>
+<span class="sd">        If provided, first check if the attribute already exists in ``G`` to use</span>
+<span class="sd">        pre-compouted Louvain community idices (if it exists, remaining argument</span>
+<span class="sd">        values are ignored). Otherwise, the computed Louvain community indices are</span>
+<span class="sd">        stored in this node attribute. If not provided, Louvain communities are</span>
+<span class="sd">        computed and not stored.</span>
+<span class="sd">    weight : {`None`, `str`}</span>
+<span class="sd">        The edge attribute of the value used as the weight. If None, set to 1</span>
+<span class="sd">        for all edges (default value = &#39;inverted_distance&#39;).</span>
+<span class="sd">        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)</span>
+<span class="sd">    resolution : `float`</span>
+<span class="sd">        Influences algorithm preference for larger (resolution value greater than 1)</span>
+<span class="sd">        or smaller (resolution value smaller than 1) communities.</span>
+<span class="sd">        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)</span>
+<span class="sd">    seed : `int`</span>
+<span class="sd">        Random generator state.</span>
+<span class="sd">        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)</span>
+<span class="sd">    kwargs : `dict`</span>
+<span class="sd">        Keyword arguments passed to ``networkx.community.louvain_communities``.</span>
+<span class="sd">        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The following node attributes are added to the graph ``G`` :</span>
+
+<span class="sd">        - f&quot;{class_attr}_{louvain_attr}&quot; : The class partitioned and Louvain community</span>
+<span class="sd">          reference index in the form &quot;{class-index}-{Louvain-index}&quot;</span>
+<span class="sd">          (``louvain_attr`` defaults to &quot;lvp&quot; if not provided).</span>
+<span class="sd">        - louvain_attr - The Louvain community reference index, if provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ca</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">class_attr</span><span class="p">))</span>
+
+
+    <span class="k">if</span> <span class="n">louvain_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lvp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">louvain_attr</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lvp</span> <span class="o">=</span> <span class="p">{}</span>
+        
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lvp</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
+        <span class="n">louvain_partition</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">louvain_communities</span><span class="p">(</span><span class="n">G</span><span class="p">,</span>
+                                                             <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+                                                             <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                                                             <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+                                                             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">lvp</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">partition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">louvain_partition</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">partition</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">louvain_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">lvp</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">louvain_attr</span><span class="p">)</span>
+
+    <span class="n">louvain_str</span> <span class="o">=</span> <span class="n">louvain_attr</span> <span class="k">if</span> <span class="n">louvain_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;lvp&#39;</span>
+
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ca</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">lvp</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span>
+                           <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">class_attr</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">louvain_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    
+            
+    
+    
 </pre></div>
 
                 </article>
@@ -622,6 +729,7 @@ document.write(`
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
 </ul>
@@ -652,7 +760,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>

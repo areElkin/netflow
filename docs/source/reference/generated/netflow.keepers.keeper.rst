@@ -1,4 +1,4 @@
-﻿netflow.keepers.keeper
+netflow.keepers.keeper
 ======================
 
 .. automodule:: netflow.keepers.keeper

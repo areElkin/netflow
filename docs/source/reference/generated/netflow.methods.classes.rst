@@ -1,4 +1,4 @@
-﻿netflow.methods.classes
+netflow.methods.classes
 =======================
 
 .. automodule:: netflow.methods.classes

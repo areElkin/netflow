@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -318,19 +319,18 @@ document.write(`
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="generated/netflow.probe.html">netflow.probe</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="generated/netflow.methods.html">netflow.methods</a><input checked class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/netflow.methods.stats.html">netflow.methods.stats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/netflow.methods.tools.html">netflow.methods.tools</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="generated/netflow.classes.html">netflow.classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/netflow.metrics.html">netflow.metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/netflow.checks.html">netflow.checks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/netflow.app.html">netflow.app</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/netflow.pseudotime.html">netflow.pseudotime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/netflow.utils.html">netflow.utils</a></li>
 </ul>
 </li>
@@ -409,12 +409,8 @@ to a particular aspect of analysis. These are summarized in the following table:
 <h2>API definition<a class="headerlink" href="#api-definition" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../index.html#module-netflow" title="netflow"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow</span></code></a></p></li>
-<li><p><a class="reference internal" href="generated/netflow.metrics.html#module-netflow.metrics" title="netflow.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.metrics</span></code></a></p></li>
-<li><p><a class="reference internal" href="generated/netflow.classes.html#module-netflow.classes" title="netflow.classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.classes</span></code></a></p></li>
-<li><p><a class="reference internal" href="generated/netflow.pseudotime.html#module-netflow.pseudotime" title="netflow.pseudotime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.pseudotime</span></code></a></p></li>
 <li><p><a class="reference internal" href="generated/netflow.utils.html#module-netflow.utils" title="netflow.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.utils</span></code></a></p></li>
 <li><p><a class="reference internal" href="generated/netflow.checks.html#module-netflow.checks" title="netflow.checks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.checks</span></code></a></p></li>
-<li><p><a class="reference internal" href="generated/netflow.app.html#module-netflow.app" title="netflow.app"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.app</span></code></a></p></li>
 <li><p><a class="reference internal" href="generated/netflow.keepers.html#module-netflow.keepers" title="netflow.keepers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.keepers</span></code></a></p>
 <ul>
 <li><p><a class="reference internal" href="generated/netflow.keepers.keeper.html#module-netflow.keepers.keeper" title="netflow.keepers.keeper"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.keepers.keeper</span></code></a></p></li>
@@ -435,6 +431,7 @@ to a particular aspect of analysis. These are summarized in the following table:
 <li><p><a class="reference internal" href="generated/netflow.probe.html#module-netflow.probe" title="netflow.probe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.probe</span></code></a></p>
 <ul>
 <li><p><a class="reference internal" href="generated/netflow.probe.visualization.html#module-netflow.probe.visualization" title="netflow.probe.visualization"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.probe.visualization</span></code></a></p></li>
+<li><p><a class="reference internal" href="generated/netflow.probe.jupyter_app.html#module-netflow.probe.jupyter_app" title="netflow.probe.jupyter_app"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netflow.probe.jupyter_app</span></code></a></p></li>
 </ul>
 </li>
 </ul>
@@ -501,6 +498,7 @@ to a particular aspect of analysis. These are summarized in the following table:
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../tutorial/index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="current reference internal nav-link" href="#">API reference</a><ul class="visible nav section-nav flex-column">
 <li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-definition">API definition</a><ul class="nav section-nav flex-column">
 <li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="main_namespace.html">netflow</a></li>
@@ -546,7 +544,7 @@ to a particular aspect of analysis. These are summarized in the following table:
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023-2024, The netflow community.
+      © Copyright 2023-2025, The netflow community.
       <br/>
     
   </p>
