@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>POSE pipeline &#8212; netflow v0.0.dev Manual</title>
+    <title>Multiple myeloma example &#8212; netflow v0.0.dev Manual</title>
   
   
   
@@ -50,6 +50,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorial/notebooks/MM_example';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Breast cancer example" href="BC_example.html" />
+    <link rel="prev" title="Keeper tutorial" href="keeper_tutorial.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -145,7 +147,7 @@
                     </li>
                 
 
-                    <li class="nav-item">
+                    <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../index.html">
                         Tutorials
                       </a>
@@ -224,7 +226,7 @@ document.write(`
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -256,7 +258,7 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item">
+                    <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../index.html">
                         Tutorials
                       </a>
@@ -299,6 +301,53 @@ document.write(`
       </div>
     
   </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="keeper_tutorial.html">Keeper tutorial</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Multiple myeloma example</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="BC_example.html">Breast cancer example</a></li>
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="GBM_multimodal_example.html">Glioblastoma multiforme multi-omics example</a></li>
+
+
+
+
+
+
+</ul>
+</div>
+</nav></div>
+    </div>
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
@@ -345,7 +394,10 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">POSE pipeline</li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Multiple myeloma example</li>
   </ul>
 </nav>
 </div>
@@ -362,8 +414,11 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="pose-pipeline">
-<h1>POSE pipeline<a class="headerlink" href="#pose-pipeline" title="Permalink to this headline">#</a></h1>
+  <section id="multiple-myeloma-example">
+<h1>Multiple myeloma example<a class="headerlink" href="#multiple-myeloma-example" title="Permalink to this headline">#</a></h1>
+</section>
+<section id="pose-pipeline-overview">
+<h1>POSE pipeline overview<a class="headerlink" href="#pose-pipeline-overview" title="Permalink to this headline">#</a></h1>
 <p>(Single-modal) In this tutorial, we demonstrate how to perform the POSE pipeline on multiple myeloma (MM) RNA data restricted to the WEE1 neighborhood. This analysis entails the following:</p>
 <ol class="arabic simple">
 <li><p>Upload data</p></li>
@@ -1869,6 +1924,24 @@ the iteration does not terminate until either a branch has been split or the pro
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="keeper_tutorial.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Keeper tutorial</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="BC_example.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Breast cancer example</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
@@ -1886,11 +1959,79 @@ the iteration does not terminate until either a branch has been split or the pro
     <i class="fa-solid fa-list"></i> On this page
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="current visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#primary-netflow-analysis-workflow">Primary netflow analysis workflow</a></li>
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html">Keeper tutorial</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#load-libraries">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#set-up-directories">Set up directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#load-data">Load data</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#initialize-the-keeper">Initialize the Keeper</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#load-data-into-the-keeper">Load data into the Keeper</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#load-data-into-keeper-at-time-of-instatiation">Load data into keeper at time of instatiation</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#load-data-into-keeper-from-file">Load data into Keeper from file</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#extract-data-from-the-keeper">Extract data from the Keeper</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#save-data-from-the-keeper">Save data from the Keeper</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#extract-keeper-subset">Extract Keeper subset</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#extract-data-subset">Extract data subset</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#iterating-through-feature-data-distances-or-similarities">Iterating through feature data, distances or similarities</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#membership">Membership</a></li>
+<li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="current reference internal nav-link" href="#">Multiple myeloma example</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pose-pipeline-overview">POSE pipeline overview</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-libraries">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directories">Directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow-pipeline">NetFlow pipeline</a><ul class="nav section-nav flex-column">
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-load-data">Step 1: Load data</a><ul class="nav section-nav flex-column">
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-clinical-data">Load the clinical data</a></li>
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-rna-data">Load the RNA data:</a></li>
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-feature-graph">Load the feature graph</a></li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-compute-sample-pairwise-distances-on-the-wee1-neighborhood">Step 2: Compute sample-pairwise distances on the WEE1 neighborhood:</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-extract-net-neighborhood-distances">Step 3: Extract net neighborhood distances</a><ul class="nav section-nav flex-column">
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#distance-from-a-single-feature-neighborhood">Distance from a single feature neighborhood</a></li>
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#distance-from-norm-of-feature-neighborhood-distances">Distance from norm of feature neighborhood distances</a></li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-profile-distances">Feature profile distances</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-compute-similarities-from-distances">Step 4: Compute similarities from distances</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-compute-diffusion-distances">Step 5: Compute diffusion distances</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-compute-the-pose">Step 6: Compute the POSE</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-7-probe-the-pose">Step 7: Probe the POSE</a><ul class="nav section-nav flex-column">
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bl-clustering">BL-clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-8-visualizing-the-pose">Step 8: Visualizing the POSE</a><ul class="nav section-nav flex-column">
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-visualization">Interactive visualization</a><ul class="nav section-nav flex-column">
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#kaplan-meier-survival-analysis-from-selected-samples">Kaplan-Meier Survival analysis from selected samples</a></li>
+</ul>
+</li>
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#panel-visualization">Panel visualization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html">Breast cancer example</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#pose-pipeline-overview">Pose pipeline overview</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#load-libraries">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#set-up-directories">Set up directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#load-clinical-data">Load clinical data</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#initialize-the-keeper">Initialize the Keeper</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#compute-observation-pairwise-distances">Compute observation-pairwise distances</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#compute-similarities-from-distances">Compute similarities from distances</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#fused-similarities">Fused similarities</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#compute-diffusion-distances">Compute diffusion distances</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#compute-the-pose">Compute the POSE</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html">Glioblastoma multiforme multi-omics example</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#load-libraries">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#colors">Colors</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#directories">Directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#initialize-the-keeper">Initialize the keeper</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#netflow-pipeline">NetFlow pipeline</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#references">References</a></li>
+</ul>
+</li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
 </ul>

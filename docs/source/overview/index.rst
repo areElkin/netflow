@@ -4,6 +4,13 @@
 netflow User Guide
 ******************
 
+
+=================================
+Primary netflow analysis workflow
+=================================
+.. image:: ../_static/netflow_ux_flow.png
+	   :width: 600
+		   
 ===========================
 The main netflow components
 ===========================

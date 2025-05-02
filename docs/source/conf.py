@@ -59,7 +59,9 @@ extensions = [
     'myst_nb',
     # "nbsphinx",
     'sphinx_copybutton',  #  for adding “copy to clipboard” buttons to all text/code boxes
+    'sphinxcontrib.bibtex', # for references in jupyter notebook tutorials
 ]
+bibtex_bibfiles = ['references.bib']
 # pygments_style = 'sphinx'
 # highlight_language = 'python'
 
@@ -222,7 +224,7 @@ html_show_sourcelink = True
 
 # plot_html_show_source_link = False
 
-nb_execution_mode = 'off'  # Do not execute the notebook
+nb_execution_mode = 'off' # 'cache'  # Do not execute the notebook
 # nb_kernel_rgx_aliases = {"*": "geo_env_test"}
 
 # html_sourcelink_suffix = ''
