@@ -35,18 +35,18 @@ TO DO: UPDATE WITH TUTORIALS
 
         +++
 
-        .. button-ref:: notebooks/poser_tutorial_BC_rna
+        .. button-ref:: notebooks/BC_example
             :expand:
             :color: secondary
             :click-parent:
 
-            BC POSE tutorial
+            BC POSE example
 	    
 
     .. grid-item-card::
 
-        POSE pipeline - MM (OLD)
-	^^^^^^^^^^^^^^^^^^^^^^^^
+        POSE pipeline - MM
+	^^^^^^^^^^^^^^^^^^
 
 	This tutorial walks through the POSE pipeline for a single modality.
 	The pipeline is demonstrated on multiple myeloma (MM) rna data
@@ -54,31 +54,30 @@ TO DO: UPDATE WITH TUTORIALS
 
         +++
 
-        .. button-ref:: notebooks/pose_pipeline_MM_rna_apop
+        .. button-ref:: notebooks/MM_example
             :expand:
             :color: secondary
             :click-parent:
 
-            MM POSE tutorial
+            MM POSE example
 
 
     .. grid-item-card::
 
-        POSE pipeline - BC (OLD)
-	^^^^^^^^^^^^^^^^^^^^^^^^
+        POSE pipeline - multi-modal
+	^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	This tutorial walks through the POSE pipeline for a single modality.
-	The pipeline is demonstrated on breast cancer (BC) rna data
-	from TCGA.
+	This tutorial walks through the POSE pipeline for a multi-omic dataset.
+	The pipeline is demonstrated on glioblastama (GBM) data from TCGA.
 
         +++
 
-        .. button-ref:: notebooks/pose_pipeline_BC_rna
+        .. button-ref:: notebooks/GBM_multimodal_example
             :expand:
             :color: secondary
             :click-parent:
 
-            BC POSE tutorial
+            GBM POSE example
 	    
 
 *********************************

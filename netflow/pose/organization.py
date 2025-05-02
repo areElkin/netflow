@@ -75,7 +75,8 @@ logger = _gen_logger(__name__)
 def get_pose(keeper, key, label, n_branches, until_branched=False, 
              root=None, min_branch_size=5, choose_largest_segment=False,
              flavor='haghverdi16', allow_kendall_tau_shift=False,
-             smooth_corr=False, brute=True, split=True, connect_closest=False,
+             smooth_corr=False, brute=True, split=True,
+             connect_closest=False, connect_trunk='classic',
              mutual=False, k_mnn=3,
              verbose=None):
     """ Compute the pose and saved to keeper.
@@ -137,8 +138,19 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
         The number of nns to consider when extracting mutual nns.
         Note, this is ignored when ``mutual`` is `False`.
     connect_closest : `bool` (default = False)
-            If `True`, connect branches by points with smallest distance between the branches.
-            Otherwise, connect by continuum of ordering. 
+        If `True`, connect branches by points with smallest distance between the branches.
+        Otherwise, connect by continuum of ordering.
+    connect_trunk : {'classic', 'endpoint', 'dual'}, default = 'classic'
+        Specify how to connect segments to unresolved/unidentified trunk.
+        Note, this only applies when a split results in a trunk consisting of unresolved/unidentified points.
+        Additionally, this is ignored if ``flavor ~= 'haghverdi16'``.
+        It is also ignored If ``flavor = `haghverdi16'`` and ``split = False``.
+
+        Options:
+
+        - `classic` : point identified in trunk is connected to the point in the segment closest to it
+        - `endpoint` : point identified in trunk is connected to the the segment's second tip
+        - `dual` : point identified in trunk is connected to both points determined by `classic` and `endpoint`
 
     Returns
     -------
@@ -158,7 +170,7 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
     """
     poser = POSER(keeper, key, root=root,
                   min_branch_size=min_branch_size, choose_largest_segment=choose_largest_segment,
-                  connect_closest=connect_closest,
+                  connect_closest=connect_closest, connect_trunk=connect_trunk,
                   flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
                   smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
     G_pose = poser.branchings_segments(n_branches, until_branched=until_branched)
@@ -990,18 +1002,30 @@ class POSER:
         undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,
         not associated with any branch (and assigned branch index -1).
     split : `bool` (default = True)
-            if `True`, split segment into multiple branches. Otherwise,
-            determine a single branching off of the main segment.
-            This is ignored if flavor is not 'haghverdi16'.
-            If `True`, ``brute`` is ignored.
+        if `True`, split segment into multiple branches. Otherwise,
+        determine a single branching off of the main segment.
+        This is ignored if flavor is not 'haghverdi16'.
+        If `True`, ``brute`` is ignored.
     connect_closest : `bool` (default = False)
-            If `True`, connect branches by points with smallest distance between the branches.
-            Otherwise, connect by continuum of ordering. 
+        If `True`, connect branches by points with smallest distance between the branches.
+        Otherwise, connect by continuum of ordering.
+    connect_trunk : {'classic', 'endpoint', 'dual'}, default = 'classic'
+        Specify how to connect segments to unresolved/unidentified trunk.
+        Note, this only applies when a split results in a trunk consisting of unresolved/unidentified points.
+        Additionally, this is ignored if ``flavor ~= 'haghverdi16'``.
+        It is also ignored If ``flavor = `haghverdi16'`` and ``split = False``.
+
+        Options:
+
+        - `classic` : point identified in trunk is connected to the point in the segment closest to it
+        - `endpoint` : point identified in trunk is connected to the the segment's second tip
+        - `dual` : point identified in trunk is connected to both points determined by `classic` and `endpoint`
     """
     def __init__(self, keeper, key, root=None, root_as_tip=False,
                  min_branch_size=5, choose_largest_segment=False,
                  flavor='haghverdi16', allow_kendall_tau_shift=False,
-                 smooth_corr=True, brute=True, split=True, connect_closest=False,
+                 smooth_corr=True, brute=True, split=True,
+                 connect_closest=False, connect_trunk='classic',
                  verbose=None):
 
         if verbose is not None:
@@ -1027,6 +1051,7 @@ class POSER:
         self.brute = brute
         self.split = split
         self.connect_closest = connect_closest
+        self.connect_trunk = connect_trunk
 
         if root is None:
             root = "density"
@@ -1639,7 +1664,20 @@ class POSER:
                         # ssegs_connects[inewseg].append(closest_cell)
                         # RE END MODIFIED
 
-                        ssegs_connects.append([[trunk, inewseg], [closest_cell_a, closest_cell_b]])
+                        # TESTING HERE!!!
+                        if self.connect_trunk == 'classic':
+                            # trunk is connected to point in seg closest to the selected trunk point
+                            ssegs_connects.append([[trunk, inewseg], [closest_cell_a, closest_cell_b]])
+                        elif self.connect_trunk == 'endpoint':
+                            # (new) trunk is connected to seg endpoint
+                            ssegs_connects.append([[trunk, inewseg], [closest_cell_a, newseg_tips[1]]])
+                        elif self.connect_trunk == 'dual':
+                            # trunk is connected two places in seg according to 'classic' and 'endpoint'
+                            ssegs_connects.append([[trunk, inewseg], [closest_cell_a, closest_cell_b]])
+                            if closest_cell_b != newseg_tips[1]:
+                                ssegs_connects.append([[trunk, inewseg], [closest_cell_a, newseg_tips[1]]])
+                        else:
+                            raise ValueError("Unexpected value for ``connect_trunk``, must be one of ['classic', 'endpoint', 'dual']")
 
                 # also compute tips for the undecided cells
                 tip_0 = undecided_cells[

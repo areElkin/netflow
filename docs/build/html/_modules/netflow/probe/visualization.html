@@ -664,7 +664,7 @@ document.write(`
             <span class="n">node_cmap_drawedges</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">edge_cmap_drawedges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">edge_cbar</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">edge_cmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>        
-            <span class="n">edge_cmap_drawedges</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">edge_cmap</span> <span class="ow">in</span> <span class="n">qualitative_cmaps</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">False</span>
+            <span class="n">edge_cmap_drawedges</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">edge_cmap</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">qualitative_cmaps</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">edge_cmap_drawedges</span> <span class="o">=</span> <span class="kc">False</span>
     

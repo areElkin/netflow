@@ -1,4 +1,4 @@
-
+To see documentation,from `netflow/docs` directory, run `$ open build/html/index.html`.
 
 ## Acknowledgments
 There are many great works that have inspired the development of this package. We would like to acknowledge a few such sources that have contributed  more than just inspiration, either in methodology or code, for their contribution:

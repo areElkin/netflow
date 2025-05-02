@@ -486,12 +486,14 @@ document.write(`
 </li>
 <li><p>Has reported overall survival status</p></li>
 <li><p>Overall survival &gt; 3.5 months (Figure 1)</p>
+  <!-- - <img src="attachment:6fc3253c-59fc-4cd5-b9d3-e407edd6a484.png" alt="OS histogram" width="200"/> -->
 <ul>
-<li><img src="attachment:6fc3253c-59fc-4cd5-b9d3-e407edd6a484.png" alt="OS histogram" width="200"/>
+<li><img src="example_data/breast_tcga/overall_survival_hist.png" alt="OS historgram" width="200"/>    
 </li>
 <li><p>distribution of age of patients excluded is similar to distribution of the age of all samples (Figure 2)</p></li>
 </ul>
-  <img src="attachment:822ef528-aa96-48a6-80c5-12710e35b110.png" alt="OS histogram" width="200"/>
+  <img src="example_data/breast_tcga/age_histogram.png" alt="age histogram" width="200"/>
+  <!-- <img src="attachment:822ef528-aa96-48a6-80c5-12710e35b110.png" alt="age histogram" width="200"/> -->
 </li>
 <li><p>Has reported PAM50 subtype</p></li>
 <li><p>Has RNA, CNA and methylation data</p></li>
@@ -745,51 +747,51 @@ document.write(`
   <tbody>
     <tr>
       <th>ABCB8</th>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>3.0</td>
-      <td>2.0</td>
-      <td>3.0</td>
-      <td>2.0</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>2</td>
       <td>...</td>
-      <td>3.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>SAT1</th>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
       <td>...</td>
-      <td>3.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
     </tr>
   </tbody>
 </table>
@@ -879,11 +881,6 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">03:01:07</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_dat<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">a:1227</span> | &gt;&gt;&gt; Added data input rna to the     
-keeper.                                                                                                            
-</pre>
-</div></div>
 </div>
 <p>The first time data is loaded into <code class="docutils literal notranslate"><span class="pre">keeper</span></code>, it sets the observation labels that must be consistent with any other feature data set, pairwise-observation distances data and pairwise-observation similarities data that will be added to <code class="docutils literal notranslate"><span class="pre">keeper</span></code> here on out.</p>
 <p>If instead the feature data was provided as a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, observation labels default to <code class="docutils literal notranslate"><span class="pre">'X0',</span> <span class="pre">'X1',</span> <span class="pre">...</span></code>.</p>
@@ -904,11 +901,6 @@ keeper.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">03:32:59</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_dat<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">a:1227</span> | &gt;&gt;&gt; Added data input cna to the     
-keeper.                                                                                                            
-</pre>
-</div></div>
 </div>
 <p>Similarly, we can add the graphs associated with the RNA data:</p>
 <div class="cell docutils container">
@@ -917,11 +909,6 @@ keeper.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">03:34:22</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_graph:<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1372</span> | &gt;&gt;&gt; Added graph input rna to the   
-keeper.                                                                                                            
-</pre>
-</div></div>
 </div>
 <p>If we had pairwise-observation distances or similarities, we could add them to <code class="docutils literal notranslate"><span class="pre">keeper</span></code> in the same manner using the methods:</p>
 <ul class="simple">
@@ -943,11 +930,6 @@ keeper.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">03:39:24</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1390</span> | &gt;&gt;&gt; Added misc input my_gene_list to
-the keeper.                                                                                                        
-</pre>
-</div></div>
 </div>
 </section>
 <section id="load-data-into-keeper-at-time-of-instatiation">
@@ -985,14 +967,6 @@ the keeper.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:09:53</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_dat<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">a:1227</span> | &gt;&gt;&gt; Added data input rna to the     
-keeper.                                                                                                            
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:09:53</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_dat<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">a:1227</span> | &gt;&gt;&gt; Added data input cna to the     
-keeper.                                                                                                            
-</pre>
-</div></div>
 </div>
 <p>We next add the graphs associated with RNA and CNA. (See the documentation for more details and the expected edgelist format.)</p>
 <div class="cell docutils container">
@@ -1005,14 +979,6 @@ keeper.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:09:55</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_graph:<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1372</span> | &gt;&gt;&gt; Added graph input rna to the   
-keeper.                                                                                                            
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:09:55</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_graph:<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1372</span> | &gt;&gt;&gt; Added graph input cna to the   
-keeper.                                                                                                            
-</pre>
-</div></div>
 </div>
 <p>Similarities and distances can be loaded from file into the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> in the same manner via:</p>
 <ul class="simple">
@@ -1178,11 +1144,6 @@ keeper.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:10:03</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_mis<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">c:1390</span> | &gt;&gt;&gt; Added misc input my_gene_list to
-the keeper.                                                                                                        
-</pre>
-</div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1250,12 +1211,6 @@ the keeper.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">04:55:07</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:__init__:<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1080</span> | &gt;&gt;&gt; Created directory               
-<span style="color: #800080; text-decoration-color: #800080">/Users/renae12/Documents/MSKCC/dev/netflow/docs/source/tutorial/notebooks/example_data/</span><span style="color: #ff00ff; text-decoration-color: #ff00ff">results_netflow_breast_tcga_</span>
-<span style="color: #ff00ff; text-decoration-color: #ff00ff">sub.</span>                                                                                                               
-</pre>
-</div></div>
 </div>
 </section>
 <section id="extract-data-subset">
@@ -1344,11 +1299,6 @@ the keeper.
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.keepers.keeper: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">04</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2024</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">05:09:20</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> | keeper:add_distan<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">ce:1256</span> | &gt;&gt;&gt; Added distance input rna_euc
-to the keeper.                                                                                                     
-</pre>
-</div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

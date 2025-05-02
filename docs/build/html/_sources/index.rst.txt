@@ -19,7 +19,7 @@ netflow documentation
 
         **netflow** is an open-source software for analyzing
         and visualizing relationships among observations leveraging
-        multi-modal and multi-scale features.
+        multi-scale and multi-modal features.
 
     .. grid-item-card::
 
