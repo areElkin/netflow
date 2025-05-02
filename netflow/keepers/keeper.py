@@ -2774,7 +2774,7 @@ class Keeper:
                        flavor='haghverdi16', allow_kendall_tau_shift=False,
                        smooth_corr=True, brute=True, split=True, verbose=None,
                        n_branches=2, until_branched=False, mutual=False, k_mnn=3,
-                       connect_closest=False,
+                       connect_closest=False, connect_trunk='classic',
                        annotate=True,
                        ):                
         """ Construct the POSE from specified distance.
@@ -2838,9 +2838,20 @@ class Keeper:
             Note, this is ignored when ``mutual`` is `False`.
         connect_closest : `bool` (default = False)
             If `True`, connect branches by points with smallest distance between the branches.
-            Otherwise, connect by continuum of ordering. 
+            Otherwise, connect by continuum of ordering.
+        connect_trunk : {'classic', 'endpoint', 'dual'}, default = 'classic'
+            Specify how to connect segments to unresolved/unidentified trunk.
+            Note, this only applies when a split results in a trunk consisting of unresolved/unidentified points.
+            Additionally, this is ignored if ``flavor ~= 'haghverdi16'``.
+            It is also ignored If ``flavor = `haghverdi16'`` and ``split = False``.
+
+            Options:
+
+            - `classic` : point identified in trunk is connected to the point in the segment closest to it
+            - `endpoint` : point identified in trunk is connected to the the segment's second tip
+            - `dual` : point identified in trunk is connected to both points determined by `classic` and `endpoint`
         annotate : `bool`
-            If `True`, annotate edges and nodes with POSE features.
+            If `True`, annotate edges and nodes with POSE features. 
 
         Returns
         -------
@@ -2857,7 +2868,7 @@ class Keeper:
         """                
         poser = nfo.POSER(self, key, root=root, root_as_tip=root_as_tip, min_branch_size=min_branch_size,
                           choose_largest_segment=choose_largest_segment,
-                          connect_closest=connect_closest,
+                          connect_closest=connect_closest, connect_trunk=connect_trunk,
                           flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
                           smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
 
