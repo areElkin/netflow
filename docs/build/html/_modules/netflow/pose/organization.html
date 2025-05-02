@@ -442,7 +442,8 @@ document.write(`
 <div class="viewcode-block" id="get_pose"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.get_pose">[docs]</a><span class="k">def</span> <span class="nf">get_pose</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">n_branches</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
              <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">choose_largest_segment</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;haghverdi16&#39;</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-             <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">connect_closest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">connect_closest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">connect_trunk</span><span class="o">=</span><span class="s1">&#39;classic&#39;</span><span class="p">,</span>
              <span class="n">mutual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">k_mnn</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
              <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the pose and saved to keeper.</span>
@@ -504,8 +505,19 @@ document.write(`
 <span class="sd">        The number of nns to consider when extracting mutual nns.</span>
 <span class="sd">        Note, this is ignored when ``mutual`` is `False`.</span>
 <span class="sd">    connect_closest : `bool` (default = False)</span>
-<span class="sd">            If `True`, connect branches by points with smallest distance between the branches.</span>
-<span class="sd">            Otherwise, connect by continuum of ordering. </span>
+<span class="sd">        If `True`, connect branches by points with smallest distance between the branches.</span>
+<span class="sd">        Otherwise, connect by continuum of ordering.</span>
+<span class="sd">    connect_trunk : {&#39;classic&#39;, &#39;endpoint&#39;, &#39;dual&#39;}, default = &#39;classic&#39;</span>
+<span class="sd">        Specify how to connect segments to unresolved/unidentified trunk.</span>
+<span class="sd">        Note, this only applies when a split results in a trunk consisting of unresolved/unidentified points.</span>
+<span class="sd">        Additionally, this is ignored if ``flavor ~= &#39;haghverdi16&#39;``.</span>
+<span class="sd">        It is also ignored If ``flavor = `haghverdi16&#39;`` and ``split = False``.</span>
+
+<span class="sd">        Options:</span>
+
+<span class="sd">        - `classic` : point identified in trunk is connected to the point in the segment closest to it</span>
+<span class="sd">        - `endpoint` : point identified in trunk is connected to the the segment&#39;s second tip</span>
+<span class="sd">        - `dual` : point identified in trunk is connected to both points determined by `classic` and `endpoint`</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -525,7 +537,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">poser</span> <span class="o">=</span> <span class="n">POSER</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
                   <span class="n">min_branch_size</span><span class="o">=</span><span class="n">min_branch_size</span><span class="p">,</span> <span class="n">choose_largest_segment</span><span class="o">=</span><span class="n">choose_largest_segment</span><span class="p">,</span>
-                  <span class="n">connect_closest</span><span class="o">=</span><span class="n">connect_closest</span><span class="p">,</span>
+                  <span class="n">connect_closest</span><span class="o">=</span><span class="n">connect_closest</span><span class="p">,</span> <span class="n">connect_trunk</span><span class="o">=</span><span class="n">connect_trunk</span><span class="p">,</span>
                   <span class="n">flavor</span><span class="o">=</span><span class="n">flavor</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="n">allow_kendall_tau_shift</span><span class="p">,</span>
                   <span class="n">smooth_corr</span><span class="o">=</span><span class="n">smooth_corr</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="n">brute</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="n">G_pose</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">branchings_segments</span><span class="p">(</span><span class="n">n_branches</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="n">until_branched</span><span class="p">)</span>
@@ -1199,7 +1211,7 @@ document.write(`
     <span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">P_asym</span></div>
 
 
-<div class="viewcode-block" id="_dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization._dpt_from_augmented_sym_transitions">[docs]</a><span class="k">def</span> <span class="nf">_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="_dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization._dpt_from_augmented_sym_transitions">[docs]</a><span class="k">def</span> <span class="nf">_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">return_eigs</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Return the diffusion pseudotime metric between observations,</span>
 <span class="sd">    computed from the symmetric transitions.</span>
 
@@ -1232,10 +1244,14 @@ document.write(`
     <span class="n">EVALS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">evals</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">evals</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
     <span class="n">M</span> <span class="o">=</span> <span class="n">evecs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">@</span> <span class="n">EVALS</span> <span class="o">@</span> <span class="n">evecs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">T</span>
     <span class="n">dpt</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">return_eigs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dpt</span><span class="p">,</span> <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span>
+    
     <span class="k">return</span> <span class="n">dpt</span></div>
 
 
-<div class="viewcode-block" id="dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.dpt_from_augmented_sym_transitions">[docs]</a><span class="k">def</span> <span class="nf">dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.dpt_from_augmented_sym_transitions">[docs]</a><span class="k">def</span> <span class="nf">dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">save_eig</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the diffusion pseudotime metric between observations,</span>
 <span class="sd">    computed from the symmetric transitions.</span>
 
@@ -1266,12 +1282,17 @@ document.write(`
 <span class="sd">        then ``dpt_key=&quot;dpt_from_{key}_{n_comps}comps&quot;``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">T</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-    <span class="n">dpt</span> <span class="o">=</span> <span class="n">_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="n">n_comps</span><span class="p">)</span>
+    
+    <span class="n">dpt</span><span class="p">,</span> <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="n">n_comps</span><span class="p">,</span> <span class="n">return_eigs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">dpt_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;dpt_from_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">n_comps</span> <span class="o">&lt;</span> <span class="n">keeper</span><span class="o">.</span><span class="n">num_observations</span><span class="p">:</span>
         <span class="n">dpt_key</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">dpt_key</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n_comps</span><span class="si">}</span><span class="s2">comps&quot;</span><span class="p">])</span>
-    <span class="n">keeper</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="n">dpt</span><span class="p">,</span> <span class="n">dpt_key</span><span class="p">)</span></div>
+    <span class="n">keeper</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="n">dpt</span><span class="p">,</span> <span class="n">dpt_key</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">save_eig</span><span class="p">:</span>
+        <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">evals</span><span class="p">,</span> <span class="n">dpt_key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;dpt_from&#39;</span><span class="p">,</span> <span class="s1">&#39;evals&#39;</span><span class="p">))</span>
+        <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">evecs</span><span class="p">,</span> <span class="n">dpt_key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;dpt_from&#39;</span><span class="p">,</span> <span class="s1">&#39;evecs&#39;</span><span class="p">))</span></div>
     
 
 <div class="viewcode-block" id="root_max_ratio"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.root_max_ratio">[docs]</a><span class="k">def</span> <span class="nf">root_max_ratio</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
@@ -1348,18 +1369,30 @@ document.write(`
 <span class="sd">        undecided (trunk) points. Otherwise, if `False`, they are treated as individual islands,</span>
 <span class="sd">        not associated with any branch (and assigned branch index -1).</span>
 <span class="sd">    split : `bool` (default = True)</span>
-<span class="sd">            if `True`, split segment into multiple branches. Otherwise,</span>
-<span class="sd">            determine a single branching off of the main segment.</span>
-<span class="sd">            This is ignored if flavor is not &#39;haghverdi16&#39;.</span>
-<span class="sd">            If `True`, ``brute`` is ignored.</span>
+<span class="sd">        if `True`, split segment into multiple branches. Otherwise,</span>
+<span class="sd">        determine a single branching off of the main segment.</span>
+<span class="sd">        This is ignored if flavor is not &#39;haghverdi16&#39;.</span>
+<span class="sd">        If `True`, ``brute`` is ignored.</span>
 <span class="sd">    connect_closest : `bool` (default = False)</span>
-<span class="sd">            If `True`, connect branches by points with smallest distance between the branches.</span>
-<span class="sd">            Otherwise, connect by continuum of ordering. </span>
+<span class="sd">        If `True`, connect branches by points with smallest distance between the branches.</span>
+<span class="sd">        Otherwise, connect by continuum of ordering.</span>
+<span class="sd">    connect_trunk : {&#39;classic&#39;, &#39;endpoint&#39;, &#39;dual&#39;}, default = &#39;classic&#39;</span>
+<span class="sd">        Specify how to connect segments to unresolved/unidentified trunk.</span>
+<span class="sd">        Note, this only applies when a split results in a trunk consisting of unresolved/unidentified points.</span>
+<span class="sd">        Additionally, this is ignored if ``flavor ~= &#39;haghverdi16&#39;``.</span>
+<span class="sd">        It is also ignored If ``flavor = `haghverdi16&#39;`` and ``split = False``.</span>
+
+<span class="sd">        Options:</span>
+
+<span class="sd">        - `classic` : point identified in trunk is connected to the point in the segment closest to it</span>
+<span class="sd">        - `endpoint` : point identified in trunk is connected to the the segment&#39;s second tip</span>
+<span class="sd">        - `dual` : point identified in trunk is connected to both points determined by `classic` and `endpoint`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="POSER.__init__"><a class="viewcode-back" href="../../../reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">root_as_tip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">choose_largest_segment</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;haghverdi16&#39;</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">connect_closest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">connect_closest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">connect_trunk</span><span class="o">=</span><span class="s1">&#39;classic&#39;</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1385,6 +1418,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">brute</span> <span class="o">=</span> <span class="n">brute</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="n">split</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect_closest</span> <span class="o">=</span> <span class="n">connect_closest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect_trunk</span> <span class="o">=</span> <span class="n">connect_trunk</span>
 
         <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">root</span> <span class="o">=</span> <span class="s2">&quot;density&quot;</span>
@@ -1936,7 +1970,7 @@ document.write(`
                 <span class="k">if</span> <span class="n">newseg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="c1"># logger.debug(&quot;Unique segment is empty, continuing branching without it.&quot;)</span>
                     <span class="c1"># continue # TODO - future release switch return to continue for finer resolution partitioning</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Unique segment is empty, removing from consideration and no branching performed.&quot;</span><span class="p">)</span>                    
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Unique segment is empty, removing from consideration and no branching performed.&quot;</span><span class="p">)</span>
                     <span class="k">return</span> <span class="kc">None</span>
 
                 <span class="n">ssegs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newseg</span><span class="p">)</span>
@@ -1997,7 +2031,20 @@ document.write(`
                         <span class="c1"># ssegs_connects[inewseg].append(closest_cell)</span>
                         <span class="c1"># RE END MODIFIED</span>
 
-                        <span class="n">ssegs_connects</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="n">trunk</span><span class="p">,</span> <span class="n">inewseg</span><span class="p">],</span> <span class="p">[</span><span class="n">closest_cell_a</span><span class="p">,</span> <span class="n">closest_cell_b</span><span class="p">]])</span>
+                        <span class="c1"># TESTING HERE!!!</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_trunk</span> <span class="o">==</span> <span class="s1">&#39;classic&#39;</span><span class="p">:</span>
+                            <span class="c1"># trunk is connected to point in seg closest to the selected trunk point</span>
+                            <span class="n">ssegs_connects</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="n">trunk</span><span class="p">,</span> <span class="n">inewseg</span><span class="p">],</span> <span class="p">[</span><span class="n">closest_cell_a</span><span class="p">,</span> <span class="n">closest_cell_b</span><span class="p">]])</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_trunk</span> <span class="o">==</span> <span class="s1">&#39;endpoint&#39;</span><span class="p">:</span>
+                            <span class="c1"># (new) trunk is connected to seg endpoint</span>
+                            <span class="n">ssegs_connects</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="n">trunk</span><span class="p">,</span> <span class="n">inewseg</span><span class="p">],</span> <span class="p">[</span><span class="n">closest_cell_a</span><span class="p">,</span> <span class="n">newseg_tips</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_trunk</span> <span class="o">==</span> <span class="s1">&#39;dual&#39;</span><span class="p">:</span>
+                            <span class="c1"># trunk is connected two places in seg according to &#39;classic&#39; and &#39;endpoint&#39;</span>
+                            <span class="n">ssegs_connects</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="n">trunk</span><span class="p">,</span> <span class="n">inewseg</span><span class="p">],</span> <span class="p">[</span><span class="n">closest_cell_a</span><span class="p">,</span> <span class="n">closest_cell_b</span><span class="p">]])</span>
+                            <span class="k">if</span> <span class="n">closest_cell_b</span> <span class="o">!=</span> <span class="n">newseg_tips</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                                <span class="n">ssegs_connects</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="n">trunk</span><span class="p">,</span> <span class="n">inewseg</span><span class="p">],</span> <span class="p">[</span><span class="n">closest_cell_a</span><span class="p">,</span> <span class="n">newseg_tips</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected value for ``connect_trunk``, must be one of [&#39;classic&#39;, &#39;endpoint&#39;, &#39;dual&#39;]&quot;</span><span class="p">)</span>
 
                 <span class="c1"># also compute tips for the undecided cells</span>
                 <span class="n">tip_0</span> <span class="o">=</span> <span class="n">undecided_cells</span><span class="p">[</span>
@@ -2184,7 +2231,7 @@ document.write(`
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        newseg : `list`</span>
-<span class="sd">            New segment.</span>
+<span class="sd">            New segment (local with respect to original segment).</span>
 <span class="sd">        tip : `int`</span>
 <span class="sd">            Local index of the first tip, with respect to the original segment that determinned</span>
 <span class="sd">            ``Dseg`` before the split.</span>

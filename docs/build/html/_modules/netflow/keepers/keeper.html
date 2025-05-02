@@ -379,6 +379,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">sklearn.decomposition</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">checks</span>
 <span class="kn">from</span> <span class="nn">.._utils</span> <span class="kn">import</span> <span class="n">_docstring_parameter</span><span class="p">,</span> <span class="n">_desc_distance</span><span class="p">,</span> \
@@ -651,7 +652,27 @@ document.write(`
         <span class="n">data_subset</span> <span class="o">=</span> <span class="n">DataKeeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observation_labels</span><span class="o">=</span><span class="n">observations</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">data_subset</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">observations</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">data_subset</span>    </div></div>
+        <span class="k">return</span> <span class="n">data_subset</span></div>
+
+
+<div class="viewcode-block" id="DataKeeper.standardize"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.standardize">[docs]</a>    <span class="k">def</span> <span class="nf">standardize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Standardize features by removing the mean and scaling to unit variance</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : `str`</span>
+<span class="sd">            The reference key of the data in the data-keeper that will be</span>
+<span class="sd">            standardized.</span>
+<span class="sd">        kwargs </span>
+<span class="sd">          Keyword arguments passed to `sklearn.preprocessing.StandardScalar`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data_z : `pandas.DataFrame`</span>
+<span class="sd">            The standardized data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_z</span></div></div>
             
 
 <div class="viewcode-block" id="DataView"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView">[docs]</a><span class="k">class</span> <span class="nc">DataView</span><span class="p">:</span>
@@ -814,7 +835,27 @@ document.write(`
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
                           <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">,</span>
                           <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span></div></div>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="DataView.standardize"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.standardize">[docs]</a>    <span class="k">def</span> <span class="nf">standardize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Standardize features by removing the mean and scaling to unit variance</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwargs </span>
+<span class="sd">          Keyword arguments passed to `sklearn.preprocessing.StandardScalar`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data_z : `pandas.DataFrame`</span>
+<span class="sd">            The standardized data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+        <span class="c1"># data_z = (data - data.mean(axis=1)[:, np.newaxis]) / data.std(axis=1)[:, np.newaxis]</span>
+        <span class="n">data_z</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">data_z</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_z</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_z</span></div></div>
+        
     
 
         
@@ -2801,7 +2842,7 @@ document.write(`
         <span class="n">nfo</span><span class="o">.</span><span class="n">compute_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="o">=</span><span class="n">density_normalize</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Keeper.compute_dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Keeper.compute_dpt_from_augmented_sym_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">save_eig</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the diffusion pseudotime metric between observations,</span>
 <span class="sd">        computed from the symmetric transitions.</span>
 
@@ -2828,7 +2869,7 @@ document.write(`
 <span class="sd">            Number of eigenvalues/vectors to be computed, set ``n_comps = 0`` to compute the whole spectrum.</span>
 <span class="sd">            Alternatively, if set ``n_comps &gt;= n_observations``, the whole spectrum will be computed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nfo</span><span class="o">.</span><span class="n">dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="n">n_comps</span><span class="p">)</span></div>
+        <span class="n">nfo</span><span class="o">.</span><span class="n">dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="n">n_comps</span><span class="p">,</span> <span class="n">save_eig</span><span class="o">=</span><span class="n">save_eig</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Keeper.compute_rw_transitions_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_rw_transitions_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_rw_transitions_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the row-stochastic transition matrix and store in keeper.</span>
@@ -2851,7 +2892,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="Keeper.compute_dpt_from_similarity"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_similarity">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dpt_from_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                                    <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+                                    <span class="n">n_comps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">save_eig</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Compute the diffusion pseudotime metric between observations,</span>
 <span class="sd">        computed from similarity </span>
 
@@ -2898,7 +2939,7 @@ document.write(`
         <span class="k">if</span> <span class="n">T_sym_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">misc</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">compute_transitions_from_similarity</span><span class="p">(</span><span class="n">similarity_key</span><span class="p">,</span> <span class="n">density_normalize</span><span class="p">)</span>        
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T_sym_key</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="n">n_comps</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_dpt_from_augmented_sym_transitions</span><span class="p">(</span><span class="n">T_sym_key</span><span class="p">,</span> <span class="n">n_comps</span><span class="o">=</span><span class="n">n_comps</span><span class="p">,</span> <span class="n">save_eig</span><span class="o">=</span><span class="n">save_eig</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Keeper.integrate_transitions"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.integrate_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">integrate_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transition_keys</span><span class="p">,</span> <span class="n">integrated_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -3100,7 +3141,7 @@ document.write(`
                        <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;haghverdi16&#39;</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                        <span class="n">smooth_corr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">n_branches</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mutual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">k_mnn</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                       <span class="n">connect_closest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">connect_closest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">connect_trunk</span><span class="o">=</span><span class="s1">&#39;classic&#39;</span><span class="p">,</span>
                        <span class="n">annotate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="p">):</span>                
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Construct the POSE from specified distance.</span>
@@ -3164,9 +3205,20 @@ document.write(`
 <span class="sd">            Note, this is ignored when ``mutual`` is `False`.</span>
 <span class="sd">        connect_closest : `bool` (default = False)</span>
 <span class="sd">            If `True`, connect branches by points with smallest distance between the branches.</span>
-<span class="sd">            Otherwise, connect by continuum of ordering. </span>
+<span class="sd">            Otherwise, connect by continuum of ordering.</span>
+<span class="sd">        connect_trunk : {&#39;classic&#39;, &#39;endpoint&#39;, &#39;dual&#39;}, default = &#39;classic&#39;</span>
+<span class="sd">            Specify how to connect segments to unresolved/unidentified trunk.</span>
+<span class="sd">            Note, this only applies when a split results in a trunk consisting of unresolved/unidentified points.</span>
+<span class="sd">            Additionally, this is ignored if ``flavor ~= &#39;haghverdi16&#39;``.</span>
+<span class="sd">            It is also ignored If ``flavor = `haghverdi16&#39;`` and ``split = False``.</span>
+
+<span class="sd">            Options:</span>
+
+<span class="sd">            - `classic` : point identified in trunk is connected to the point in the segment closest to it</span>
+<span class="sd">            - `endpoint` : point identified in trunk is connected to the the segment&#39;s second tip</span>
+<span class="sd">            - `dual` : point identified in trunk is connected to both points determined by `classic` and `endpoint`</span>
 <span class="sd">        annotate : `bool`</span>
-<span class="sd">            If `True`, annotate edges and nodes with POSE features.</span>
+<span class="sd">            If `True`, annotate edges and nodes with POSE features. </span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -3183,7 +3235,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>                
         <span class="n">poser</span> <span class="o">=</span> <span class="n">nfo</span><span class="o">.</span><span class="n">POSER</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">root_as_tip</span><span class="o">=</span><span class="n">root_as_tip</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="n">min_branch_size</span><span class="p">,</span>
                           <span class="n">choose_largest_segment</span><span class="o">=</span><span class="n">choose_largest_segment</span><span class="p">,</span>
-                          <span class="n">connect_closest</span><span class="o">=</span><span class="n">connect_closest</span><span class="p">,</span>
+                          <span class="n">connect_closest</span><span class="o">=</span><span class="n">connect_closest</span><span class="p">,</span> <span class="n">connect_trunk</span><span class="o">=</span><span class="n">connect_trunk</span><span class="p">,</span>
                           <span class="n">flavor</span><span class="o">=</span><span class="n">flavor</span><span class="p">,</span> <span class="n">allow_kendall_tau_shift</span><span class="o">=</span><span class="n">allow_kendall_tau_shift</span><span class="p">,</span>
                           <span class="n">smooth_corr</span><span class="o">=</span><span class="n">smooth_corr</span><span class="p">,</span> <span class="n">brute</span><span class="o">=</span><span class="n">brute</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
@@ -3268,7 +3320,33 @@ document.write(`
             <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">base</span><span class="p">),</span> <span class="n">out</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">obs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_log1p&quot;</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_log1p&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Keeper.standardize"><a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.standardize">[docs]</a>    <span class="k">def</span> <span class="nf">standardize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Standardize features in DataKeeper by removing the mean and scaling to unit variance</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : `str`</span>
+<span class="sd">            The reference key of the data in the data-keeper that will be</span>
+<span class="sd">            standardized.</span>
+<span class="sd">        label : {`str`, `None`}</span>
+<span class="sd">            The label used to store the standardized data. If `None`, default</span>
+<span class="sd">            label ``f&#39;{key}_z&#39;`` is used.</span>
+<span class="sd">        kwargs </span>
+<span class="sd">          Keyword arguments passed to `sklearn.preprocessing.StandardScalar`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data_z : `pandas.DataFrame`</span>
+<span class="sd">            The standardized data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_z&quot;</span>
+
+        <span class="n">data_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data_z</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div></div>
         
 
 </pre></div>

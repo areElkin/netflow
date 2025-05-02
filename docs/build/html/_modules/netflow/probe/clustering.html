@@ -591,7 +591,7 @@ document.write(`
     <span class="k">return</span> <span class="n">R</span></div>
              
 
-<div class="viewcode-block" id="louvain"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain">[docs]</a><span class="k">def</span> <span class="nf">louvain</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;inverted-distance&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="louvain"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain">[docs]</a><span class="k">def</span> <span class="nf">louvain</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;inverted_distance&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute Louvain communities on graph, intended for POSE</span>
 
 <span class="sd">    Louvain communities are computed via ``networkx.community.louvain_communities``</span>
@@ -621,11 +621,17 @@ document.write(`
                                                          <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
                                                          <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
                                                          <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">lvp</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">partition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">louvain_partition</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">partition</span><span class="p">}</span></div>
+    <span class="n">lvp</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">partition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">louvain_partition</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">partition</span><span class="p">}</span>
+    <span class="c1"># lvp = np.zeros(len(G))</span>
+    <span class="c1"># for ix, cc in enumerate(louvain_partition):</span>
+    <span class="c1">#     lvp[list(cc)] = ix</span>
+        
+    <span class="c1"># lvp = dict(zip(range(len(G)), lvp))</span>
+    <span class="k">return</span> <span class="n">lvp</span></div>
 
 
 <div class="viewcode-block" id="louvain_paritioned"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain_paritioned">[docs]</a><span class="k">def</span> <span class="nf">louvain_paritioned</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">class_attr</span><span class="p">,</span> <span class="n">louvain_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;inverted-distance&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                       <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;inverted_distance&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute Louvain communities on graph and further partition restricted to existing classifier (e.g., branches intended for POSE)</span>
 
@@ -678,12 +684,13 @@ document.write(`
         <span class="n">lvp</span> <span class="o">=</span> <span class="p">{}</span>
         
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lvp</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
-        <span class="n">louvain_partition</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">louvain_communities</span><span class="p">(</span><span class="n">G</span><span class="p">,</span>
-                                                             <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
-                                                             <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
-                                                             <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-                                                             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">lvp</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">partition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">louvain_partition</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">partition</span><span class="p">}</span>
+        <span class="n">lvp</span> <span class="o">=</span> <span class="n">louvain</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># louvain_partition = nx.community.louvain_communities(G,</span>
+        <span class="c1">#                                                      weight=weight,</span>
+        <span class="c1">#                                                      resolution=resolution,</span>
+        <span class="c1">#                                                      seed=seed,</span>
+        <span class="c1">#                                                      **kwargs)</span>
+        <span class="c1"># lvp = {node: i for i, partition in enumerate(louvain_partition) for node in partition}</span>
         <span class="k">if</span> <span class="n">louvain_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">lvp</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">louvain_attr</span><span class="p">)</span>
 
@@ -691,6 +698,7 @@ document.write(`
 
     <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ca</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">lvp</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span>
                            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">class_attr</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">louvain_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
 
     
             

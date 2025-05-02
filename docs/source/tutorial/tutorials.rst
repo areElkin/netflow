@@ -12,13 +12,12 @@ Tutorials will be uploaded here
         POSE pipeline - MM
 	^^^^^^^^^^^^^^^^^^
 
-	This tutorial walks through the POSE pipeline for a single modality.
-	The pipeline is demonstrated on multiple myeloma (MM) rna data
-	restricted to the apoptosis pathway.
+	(alt) This tutorial walks through the POSE pipeline for a single modality.
+	The pipeline is demonstrated on multiple myeloma (MM) rna data.
 
         +++
 
-        .. button-ref:: notebooks/pose_pipeline_MM_rna_apop
+        .. button-ref:: notebooks/MM_example
             :expand:
             :color: secondary
             :click-parent:
@@ -31,4 +30,4 @@ Tutorials will be uploaded here
    :caption: Tutorials:
 
    .. tutorials
-   .. notebooks/pose_pipeline_MM_rna_apop	    
+   .. notebooks/MM_example

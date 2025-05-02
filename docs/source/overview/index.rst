@@ -4,6 +4,9 @@
 netflow User Guide
 ******************
 
+===========================
+The main netflow components
+===========================
 netflow consists of 3 main components:
 
 #. :py:mod:`netflow.keepers` - This library provides the keeper data structure for loading, storing, analyzing and saving data.
