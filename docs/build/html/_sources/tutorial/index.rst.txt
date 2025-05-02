@@ -4,14 +4,13 @@
 Tutorials
 *********
 
-TO DO: UPDATE WITH TUTORIALS
 
 .. grid:: 2
 
     .. grid-item-card::
 
-        Keeper
-	^^^^^^
+        Keeper tutorial
+	^^^^^^^^^^^^^^^
 
 	This tutorial walks through the Keeper data structure.
 
@@ -20,72 +19,81 @@ TO DO: UPDATE WITH TUTORIALS
         .. button-ref:: notebooks/keeper_tutorial
             :expand:
             :color: secondary
+            :outline:
             :click-parent:
 
-            Keeper tutorial
+            To the keeper tutorial
+
+	       
 
     .. grid-item-card::
 
-        POSE pipeline - BC
-	^^^^^^^^^^^^^^^^^^
+        POSE pipeline - multiple myeloma (MM) example
+	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	This tutorial walks through the POSE pipeline for a single modality.
-	The pipeline is demonstrated on breast cancer (BC) rna data
-	from TCGA.
-
-        +++
-
-        .. button-ref:: notebooks/BC_example
-            :expand:
-            :color: secondary
-            :click-parent:
-
-            BC POSE example
-	    
-
-    .. grid-item-card::
-
-        POSE pipeline - MM
-	^^^^^^^^^^^^^^^^^^
-
-	This tutorial walks through the POSE pipeline for a single modality.
-	The pipeline is demonstrated on multiple myeloma (MM) rna data
-	restricted to the apoptosis pathway.
+	The pipeline is demonstrated on MM rna data from COMPASS.
 
         +++
 
         .. button-ref:: notebooks/MM_example
             :expand:
             :color: secondary
-            :click-parent:
+	    :outline:
+            :click-parent:	    
 
-            MM POSE example
+            To the MM example
+	    
 
-
+	    
     .. grid-item-card::
 
-        POSE pipeline - multi-modal
-	^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        POSE pipeline - breast cancer (BC) example
+	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	This tutorial walks through the POSE pipeline for a single modality,
+	and touches on the multi-omic fused analysis.
+	The pipeline is demonstrated on BC rna data from TCGA.
+
+        +++
+
+        .. button-ref:: notebooks/BC_example
+            :expand:
+            :color: secondary
+	    :outline:
+            :click-parent:
+
+            To the BC example	
+
+	    
+	    
+    .. grid-item-card::
+
+        POSE pipeline - glioblastoma multiforme (GBM) multi-modal example
+	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	This tutorial walks through the POSE pipeline for a multi-omic dataset.
-	The pipeline is demonstrated on glioblastama (GBM) data from TCGA.
+	The pipeline is demonstrated on GBM data from TCGA. 
 
         +++
 
         .. button-ref:: notebooks/GBM_multimodal_example
             :expand:
             :color: secondary
+	    :outline:
             :click-parent:
 
-            GBM POSE example
+            To the multi-modal GBM example
+
+
 	    
 
-*********************************
-Primary netflow analysis workflow
-*********************************
-.. image:: ../_static/netflow_ux_flow.png
-	   :width: 800
-	    
+.. toctree::
+   :hidden:
 
+   notebooks/keeper_tutorial   
+   notebooks/MM_example
+   notebooks/BC_example
+   notebooks/GBM_multimodal_example
 
-
+      

@@ -2,10 +2,18 @@
  "cells": [
   {
    "cell_type": "markdown",
+   "id": "f628deeb-5f37-43ef-8b61-5f6108c64414",
+   "metadata": {},
+   "source": [
+    "# Multiple myeloma example"
+   ]
+  },
+  {
+   "cell_type": "markdown",
    "id": "f8770706-0b33-4e16-a087-ab339b402f30",
    "metadata": {},
    "source": [
-    "# POSE pipeline"
+    "# POSE pipeline overview"
    ]
   },
   {

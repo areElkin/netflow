@@ -41,6 +41,10 @@ References
    *From Louvain to Leiden: guaranteeing well-connected communities*
    `arXiv <https://arxiv.org/abs/1810.08473>`__.
 
+.. [Wang2014similarity] Wang *et al.* (2014),
+   *Similarity network fusion for aggregating data types on a genomic scale*
+   `Nature Methods <https://www.nature.com/articles/nmeth.2810>`__.
+
 .. [Wolf18] Wolf *et al.* (2018),
    *Scanpy: large-scale single-cell gene expression data analysis*,
    `Genome Biology <https://doi.org/10.1186/s13059-017-1382-0>`__.
