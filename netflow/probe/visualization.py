@@ -75,6 +75,7 @@ def plot_topology(G,
                   node_font_family='sans-serif', # 1, 4 was font_family (same for nodes and edges)
                   edge_font_family='sans-serif', # 5 was font_family
                   node_ticklabels_mapper=None,
+                  edge_ticklabels_mapper=None,
                   node_bbox=None, # 4 was bbox
                   edge_bbox=None, # 5 was bbox
                   node_horizontalalignment='center', # 4 was horizontalalignment
@@ -221,7 +222,7 @@ def plot_topology(G,
         Font weight    
     {node,edge}_font_family : string (default='sans-serif')
         Font family
-    node_ticklabels_mapper : {`None`, `dict`} (default=None)
+    {node,edge}_ticklabels_mapper : {`None`, `dict`} (default=None)
         If provided, used to assign labels to numeric values in color-bar when a
         discrete colormap is used.
     node_bbox : Matplotlib bbox, (default is Matplotlib's ax.text default)
@@ -328,8 +329,8 @@ def plot_topology(G,
     # for node colorbar:
     if node_cbar and (not isinstance(node_color, str)) and (node_cmap is not None):
         nc_set = sorted(set([k for k in node_color if node_vmin <= k <= node_vmax]))
-        cur_vmax = max(nc_set)
-        cur_vmin = min(nc_set)
+        cur_vmax = max(nc_set) if node_vmax is None else node_vmax
+        cur_vmin = min(nc_set) if node_vmin is None else node_vmin
 
         if isinstance(node_cmap, ListedColormap) or (node_cmap in qualitative_cmaps.keys()):
             if isinstance(node_cmap, ListedColormap):
@@ -337,18 +338,14 @@ def plot_topology(G,
             elif node_cmap in qualitative_cmaps.keys():
                 node_vmax = qualitative_cmaps[node_cmap]            
             if len(nc_set) <= node_vmax: # qualitative_cmaps[node_cmap]:
-                # node_boundaries = [k/qualitative_cmaps[node_cmap] for k in range(max(node_color)+2)]
-                # node_boundaries = [k/qualitative_cmaps[node_cmap] for k in range(cur_vmin, cur_vmax+2)]
                 node_boundaries = [k/node_vmax for k in range(cur_vmin, cur_vmax+2)]
-                # ticks = [k/qualitative_cmaps[node_cmap] + 0.5*(1/qualitative_cmaps[node_cmap]) for k in range(max(node_color)+1)]
-                # node_ticks = [k/qualitative_cmaps[node_cmap] + 0.5*(1/qualitative_cmaps[node_cmap]) for k in range(cur_vmin, cur_vmax+1)]
                 node_ticks = [k/node_vmax + 0.5*(1/node_vmax) for k in range(cur_vmin, cur_vmax+1)]
                 if node_ticklabels_mapper is None:
                     node_ticklabels = [str(k) for k in nc_set]
                 else:
                     node_ticklabels = [node_ticklabels_mapper[k] for k in nc_set]
                 node_norm = BoundaryNorm(node_boundaries, len(nc_set))
-            else:
+            else: # TODO: check boundaries in colorbar when there are more values than there are discrete colors
                 if node_cmap_drawedges:
                     # node_boundaries = np.append(np.append(nc_set[0], np.array(nc_set[:-1]) + (np.diff(nc_set) / 2)), nc_set[-1]) # nc_set                    
                     node_boundaries = np.append(np.append(nc_set[0]-(np.diff(nc_set[:2])/2), np.array(nc_set[:-1]) + (np.diff(nc_set) / 2)),
@@ -391,21 +388,23 @@ def plot_topology(G,
                 node_boundaries = None
                 if cur_vmax > cur_vmin:
                     node_ticks = [cur_vmin, cur_vmax]
-                    node_ticklabels = [str(np.round(nc_set[0], 2)), str(np.round(nc_set[-1], 2))]
+                    # node_ticklabels = [str(np.round(nc_set[0], 2)), str(np.round(nc_set[-1], 2))]
+                    node_ticklabels = [str(np.round(cur_vmin, 2)), str(np.round(cur_vmax, 2))]
                     node_norm = plt.Normalize(vmin=cur_vmin, vmax=cur_vmax)
                 else:
                     node_boundaries = [cur_vmin- 1e-3, cur_vmin+1e-3]
                     node_ticks = [cur_vmin]
-                    node_ticklabels = [str(np.round(nc_set[0], 2))]
+                    # node_ticklabels = [str(np.round(nc_set[0], 2))]
+                    node_ticklabels = [str(np.round(cur_vmin, 2))]
                     # node_norm = plt.Normalize(vmin=nc_set[0], vmax=nc_set[0]+1e-3)
-                    node_norm = plt.Normalize(vmin=nc_set[0], vmax=nc_set[0]+1e-3)
+                    node_norm = plt.Normalize(vmin=cur_vmin, vmax=cur_vmin+1e-3)
             # node_ticks = [cur_vmin, cur_vmax]
             # node_ticklabels = [str(np.round(nc_set[0], 2)), str(np.round(nc_set[-1], 2))]
             # node_norm = plt.Normalize(vmin=cur_vmin, vmax=cur_vmax)
 
     elif (not isinstance(node_color, str)) and (node_cmap is not None):
         if isinstance(node_cmap, ListedColormap):
-                node_vmax = node_cmap.N
+            node_vmax = node_cmap.N
         elif node_cmap in qualitative_cmaps.keys():
             node_vmax = max(node_vmax, qualitative_cmaps[node_cmap])
 
@@ -417,12 +416,12 @@ def plot_topology(G,
             edge_vmax = max(edge_color)
             
     if edge_cbar and (not isinstance(edge_color, str)) and (edge_cmap is not None):
-        
         ec_set = sorted(set([k for k in edge_color if edge_vmin <= k <= edge_vmax]))
-        cur_vmax = max(ec_set)
-        cur_vmin = min(ec_set)
-        # if edge_cmap in qualitative_cmaps.keys():
-        #     edge_vmax = qualitative_cmaps[edge_cmap]            
+        cur_vmax = max(ec_set) if edge_vmax is None else edge_vmax
+        cur_vmin = min(ec_set) if edge_vmin is None else edge_vmin
+        
+        # if edge_cmap.name in qualitative_cmaps.keys():
+        #     edge_vmax = edge_cmap.N
         #     if len(ec_set) <= qualitative_cmaps[edge_cmap]:
         #         # edge_boundaries = [k/qualitative_cmaps[edge_cmap] for k in range(max(edge_color)+2)]
         #         edge_boundaries = [k/qualitative_cmaps[edge_cmap] for k in range(cur_vmin, cur_vmax+2)]
@@ -448,8 +447,13 @@ def plot_topology(G,
                                         ec_set[-1] + (np.diff(ec_set[-2:]) / 2)) 
         else:
             edge_boundaries = None
-        edge_ticks = [cur_vmin, cur_vmax]
-        edge_ticklabels = [str(np.round(ec_set[0], 3)), str(np.round(ec_set[-1], 3))]
+        if edge_ticklabels_mapper is None:
+            edge_ticks = [cur_vmin, cur_vmax]
+            # edge_ticklabels = [str(np.round(ec_set[0], 3)), str(np.round(ec_set[-1], 3))]
+            edge_ticklabels = [str(np.round(cur_vmin, 3)), str(np.round(cur_vmax, 3))]
+        else:
+            edge_ticks = sorted([tk for tk in edge_ticklabels_mapper.keys() if cur_vmin <= tk <= cur_vmax])
+            edge_ticklabels = [str(edge_ticklabels_mapper[tk]) for tk in edge_ticks]
         edge_norm = plt.Normalize(vmin=cur_vmin, vmax=cur_vmax)
         
     for shape_class in set(node_shape):
@@ -598,11 +602,17 @@ def plot_topology(G,
 
         # edge_cbar_label = "edges" if edge_cbar_label is None else "edges: " + edge_cbar_label
         edge_cbar_label = "edges" if edge_cbar_label is None else edge_cbar_label
-        if edge_cbar_label is not None:
-            edge_cbar_labelpad = -10 # -30
         if edge_cbar_label_kws is None:
             edge_cbar_label_kws = {}
-        cur_edge_cbar.set_label(edge_cbar_label, labelpad=edge_cbar_labelpad, y=edge_cbar_label_y, **edge_cbar_label_kws)
+        if edge_cbar_label is not None:
+            # edge_cbar_labelpad = -10 # -30
+            if 'labelpad' not in edge_cbar_label_kws:
+                # edge_cbar_labelpad = edge_cbar_label_kws['labelpad']
+                edge_cbar_label_kws['labelpad'] = -10
+                
+        
+        cur_edge_cbar.set_label(edge_cbar_label, # labelpad=edge_cbar_labelpad,
+                                y=edge_cbar_label_y, **edge_cbar_label_kws)
 
         if edge_ticklabels is not None:
             if edge_cbar_ticks_kws is None:

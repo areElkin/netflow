@@ -19,6 +19,7 @@ import plotly.graph_objects as go
 from dash import callback_context, Dash, html, dcc, Input, Output, State, no_update
 from datetime import datetime
 from jupyter_dash import JupyterDash
+from lifelines.statistics import logrank_test
 from matplotlib import colormaps as mpl_cm
 
 from .visualization import sin_layout, wavy_curve_layout # , forceatlas2_layout
@@ -72,6 +73,13 @@ styles = {
         'border-radius': '10px',
         'margin-bottom': '6px',
     },
+    'fieldset-panel-stat': {
+        'border': 'thin solid lightgrey', # #614051',
+        'border-radius': '10px',
+        'margin-bottom': '6px',
+        'overflow-y': 'scroll',
+        'height': '37%', # '34%',
+    },
     'stat-panel-container': {
         'width': '20%',
         # 'flex': '1.2 1.1 0', # '0.15',
@@ -83,6 +91,7 @@ styles = {
         'border-radius': '20px', 
         'padding': '3px',
         'margin': '3px',
+        # 'overflow-y': 'scroll', 
     },
     'stat-panel' : {        
         'display': 'block', # 'inline-block',
@@ -722,8 +731,8 @@ def renderer(keeper, pose_key, distance_key):
     #     html.Div(id='content', children=["shut down app?"]),
     #     # end new add
     app.layout = html.Div(style=styles['container'],                          
-                          children=[                              
-                              html.Div(className='control-panel-container',                                       
+                          children=[
+                              html.Div(className='control-panel-container',
                                        style=styles['control-panel-container'], children=[
                                            html.H2("NetFlow POSE", style=styles['h4']),
                                            html.H3("Settings", style=styles['h4']),
@@ -936,7 +945,7 @@ def renderer(keeper, pose_key, distance_key):
                                                #                     ),
                                                # ]),
                                                dcc.Interval(id='interval', interval=1000, n_intervals=0),  # Interval to capture dimensions periodically
-                                               
+
                                            ],
                                                     style=styles['control-panel'], # styles['control-panel-container'],
                                                     ),
@@ -1027,41 +1036,55 @@ def renderer(keeper, pose_key, distance_key):
                                   html.H3("Statistical Testing", style=styles['h4']),
                                   # html.H4("Options", style=styles['h3']),
                                   # html.Div(style=styles['stat-panel'], # {'display': 'flex', 'flex': 0.3, 'height': '100%'},
-                                  html.Fieldset(style=styles['fieldset-panel'], # styles['stat-panel'], 
-                                           children=[
-                                               html.Legend('Options', style=styles['fieldset-legend']),
-                                               html.Div([
-                                                   html.Label("Dataset:", style=styles['label']),
-                                                   dcc.Dropdown(
-                                                       id='stat-keeper-data-dropdown',
-                                                       # BBB options=[{'label': 'None',
-                                                       # BBB          'value': 'None'}] + [{'label': dataset.label,
-                                                       # BBB                                'value': dataset.label} for dataset in keeper.data],
-                                                       options=[{'label': dataset.label,
-                                                                 'value': dataset.label} for dataset in keeper.data],
-                                                       value=None), # BBB 'None'),
-                                                   ]),
-                                               html.Div([
-                                                   html.Label("Statistical test:", style=styles['label_tspace']),
-                                                   dcc.Dropdown(id='stat-test-dropdown',
-                                                                options=[{'label': 'Mann Whitney U Test', 'value': 'MWU'},
-                                                                         {'label': 'T-test', 'value': 't-test'}], value='MWU'),
-                                                   html.Div(children=["alpha: ",
-                                                                      dcc.Input(id='alpha-label', type='number', min=0., max=1., value=0.05, step=0.001)]),
-                                                   ]),
-                                               html.Div([
-                                                   html.Label("Multiple test correction:", style=styles['label_tspace']),
-                                                   dcc.Dropdown(id='correction-drop-down',
-                                                                options=[{'label': k,
-                                                                          'value': kk} for k,kk in zip(['Bonferroni', 'Sidak', 'Holm-Sidak', 'Holm',
-                                                                                                        'Simes-Hochber', 'Hommel', 'FDR-BH',
-                                                                                                        'FDR-BY', 'FDR-TSBH', 'FDR-TSBKY'],
-                                                                                                       ['bonferroni', 'sidak', 'holm-sidak', 'holm',
-                                                                                                        'simes-hochber', 'hommel', 'fdr_bh',
-                                                                                                        'fdr_by', 'fdr_tsbh', 'fdr_tsbky'])],
-                                                                value='fdr_bh'),
-                                                   ]),
-                                           ]),
+                                  html.Fieldset(style=styles['fieldset-panel-stat'], # styles['stat-panel'],
+                                                children=[
+                                                    html.Legend('Options', style=styles['fieldset-legend']),
+                                                    html.Div([
+                                                        html.Label("Dataset:", style=styles['label']),
+                                                        dcc.Dropdown(
+                                                            id='stat-keeper-data-dropdown',
+                                                            # BBB options=[{'label': 'None',
+                                                            # BBB          'value': 'None'}] + [{'label': dataset.label,
+                                                            # BBB                                'value': dataset.label} for dataset in keeper.data],
+                                                            options=[{'label': dataset.label,
+                                                                      'value': dataset.label} for dataset in keeper.data],
+                                                            value=None), # BBB 'None'),
+                                                    ]),
+                                                    html.Div([
+                                                        html.Label("Statistical test:", style=styles['label_tspace']),
+                                                        dcc.Dropdown(id='stat-test-dropdown',
+                                                                     options=[{'label': 'Mann Whitney U Test', 'value': 'MWU'},
+                                                                              {'label': 'T-test', 'value': 't-test'}], value='MWU'),
+                                                        html.Div(children=["alpha: ",
+                                                                           dcc.Input(id='alpha-label', type='number', min=0., max=1., value=0.05, step=0.001)]),
+                                                    ]),
+                                                    html.Div([
+                                                        html.Label("Multiple test correction:", style=styles['label_tspace']),
+                                                        dcc.Dropdown(id='correction-drop-down',
+                                                                     options=[{'label': k,
+                                                                               'value': kk} for k,kk in zip(['Bonferroni', 'Sidak', 'Holm-Sidak', 'Holm',
+                                                                                                             'Simes-Hochber', 'Hommel', 'FDR-BH',
+                                                                                                             'FDR-BY', 'FDR-TSBH', 'FDR-TSBKY'],
+                                                                                                            ['bonferroni', 'sidak', 'holm-sidak', 'holm',
+                                                                                                             'simes-hochber', 'hommel', 'fdr_bh',
+                                                                                                             'fdr_by', 'fdr_tsbh', 'fdr_tsbky'])],
+                                                                     value='fdr_bh'),
+                                                    ]),
+                                                    # HERE SURV!
+                                                    html.Div([
+                                                        html.Label("Log-rank survival:", style=styles['label_tspace']),
+                                                        html.Label("Dataset:", style=styles['label']),
+                                                        dcc.Dropdown(
+                                                            id='surv-keeper-data-dropdown', # 'keeper-data-dropdown'
+                                                            options=[{'label': dataset.label,
+                                                                      'value': dataset.label} for dataset in keeper.data],
+                                                            value=None),
+                                                        html.Label("Time:", style=styles['label']),
+                                                        dcc.Dropdown(id='time-attr', options=[], value=None), # 'feature-label'
+                                                        html.Label("Event status:", style=styles['label']),
+                                                        dcc.Dropdown(id='event-attr', options=[], value=None), # 'feature-label'
+                                                    ]),
+                                                ]),
                                   # html.H4("Results", style=styles['h3']),
                                   # html.Fieldset(style={'width': '100%'}, # styles['stat-panel'],
                                   #          children=[
@@ -1072,13 +1095,13 @@ def renderer(keeper, pose_key, distance_key):
                                            ),
                                   html.Button("Download Data", id="btn-download", n_clicks=0, style={'display': 'none'}),
                                   dcc.Download(id="download-data"),
-                                  html.Pre(id="box-selected-labels", style=styles['pre_box_labels'], 
+                                  html.Pre(id="box-selected-labels", style=styles['pre_box_labels'],
                                            children=['Selected nodes'],
                                            ),
                                   html.Div(children=[
                                       dbc.Switch(id='box-selected-switch', label='Highlight selected nodes',
                                                  value=True,
-                                                 class_name='custom-switch-container', # # The class of the container (div) 
+                                                 class_name='custom-switch-container', # # The class of the container (div)
                                                  input_class_name='custom-control-input', # The class of the <input> checkbox element.
                                                  input_style={}, #  The style of the <input> checkbox element.
                                                  label_class_name='custom-control-label', # CSS classes to apply to the <label> element for each item.
@@ -1283,16 +1306,33 @@ def renderer(keeper, pose_key, distance_key):
     #     Input('alpha-label', 'value'),
     #     Input('correction-drop-down', 'value'),
     # )    
-    def display_selected_nodes(data, keeper_data_label, test, alpha, method):
-        # print(f"display_selected_nodes : TRIGGERED INPUT = {callback_context.triggered[0]['prop_id']}")
+    def display_selected_nodes(data, keeper_data_label, test, alpha, method,
+                               surv_data_label, surv_t_label, surv_e_label):
+                              # print(f"display_selected_nodes : TRIGGERED INPUT = {callback_context.triggered[0]['prop_id']}")
         # print(f"display selected nodes = is box data none: {data is None} - data = {data}")
-        if (not data) or (keeper_data_label is None): # BBB == 'None') :
+
+        if not data:
             return "", {'display': 'none'}, 'Selected nodes' # [] # "No nodes selected."
-                              
+
         selected_obs = set([node['name'] for node in data])
         unselected_obs = list(set(keeper.observation_labels) - selected_obs)
         selected_obs = list(selected_obs)
-        label_output = "Selected nodes' labels: " + ", ".join(selected_obs)
+
+        label_output = f"Selected nodes' labels (n={len(selected_obs)}): " + ", ".join(selected_obs)
+
+        if (surv_t_label is not None) and (surv_e_label is not None):
+            if (len(selected_obs) > 1) and (len(unselected_obs) > 1):
+                surv_df = keeper.data[surv_data_label].to_frame()
+                surv_df = surv_df.loc[[surv_t_label, surv_e_label]].T
+                lr = logrank_test(surv_df.loc[selected_obs, surv_t_label], surv_df.loc[unselected_obs, surv_t_label],
+                                  event_observed_A=surv_df.loc[selected_obs, surv_e_label],
+                                  event_observed_B=surv_df.loc[unselected_obs, surv_e_label])
+                label_output = "Selected nodes' labels " + f"(n={len(selected_obs)}; log-rank p = {lr.p_value:2.2e}): " + ", ".join(selected_obs)
+
+        
+        if (not data) or (keeper_data_label is None): # BBB == 'None') :
+            # return "", {'display': 'none'}, 'Selected nodes' # [] # "No nodes selected."
+            return "", {'display': 'none'}, label_output # mlti
         
         df = keeper.data[keeper_data_label].to_frame()
         # select columns that are floats or integers:
@@ -1497,6 +1537,10 @@ def renderer(keeper, pose_key, distance_key):
         Output('box-output', 'children'), # new (box_selected_table)
         Output('btn-download', 'style'), # new (stat_download_button_style)
         Output("box-selected-labels", 'children'), # new (box_selected_output)
+        Output('time-attr', 'value'),                  # *** surv_t_label
+        Output('time-attr', 'options'),                  # *** surv_t_opts
+        Output('event-attr', 'value'),                 # *** surv_e_label
+        Output('event-attr', 'options'),                 # *** surv_e_opts
         Output('network-graph', 'tapNodeData'),             # (tap_node_data) # ABC added
         Output('network-graph', 'selectedNodeData'),        # new (selected_node_data) xxx
         # Output('node-colormap-type', 'value'),  # 
@@ -1518,6 +1562,11 @@ def renderer(keeper, pose_key, distance_key):
         Input('stat-test-dropdown', 'value'),              # new (stat_test) xxx
         Input('alpha-label', 'value'),                     # new (alpha) xxx
         Input('correction-drop-down', 'value'),            # new (stat_correction) xxx
+        Input('surv-keeper-data-dropdown', 'value'),  # *** surv_data_label
+        Input('time-attr', 'value'),                  # *** surv_t_label
+        State('time-attr', 'options'),                  # *** surv_t_opts
+        Input('event-attr', 'value'),                 # *** surv_e_label
+        State('event-attr', 'options'),                 # *** surv_e_opts
         State('network-graph', 'elements'), # (elements_in)
         State('container-dimensions', 'data'), # (dimensions)
         State('network-graph', 'zoom'), # (current_zoom)
@@ -1552,6 +1601,8 @@ def renderer(keeper, pose_key, distance_key):
                      selected_node_data, # stored_tap_node_data, # new
                      stored_selected_node_data, stat_keeper_data_label, # new
                      stat_test, alpha, stat_correction, # new
+                     surv_data_label,
+                     surv_t_label, surv_t_opts, surv_e_label, surv_e_opts,  # ***
                      elements_in, dimensions,
                      current_zoom, current_pan, # feature_n_clicks, # here
                      data_label, ft_label, fl_label_opts,
@@ -1611,7 +1662,8 @@ def renderer(keeper, pose_key, distance_key):
                     current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
                     node_fixed_color, mouseover_node_data,
                     stored_selected_node_data, box_selected_table, stat_download_button_style,
-                    box_selected_output, tap_node_data, None) # selected_node_data)
+                    box_selected_output, surv_t_label, surv_t_opts, surv_e_label, surv_e_opts,
+                    tap_node_data, None) # selected_node_data)
             
         if (triggered_input == 'network-graph') and (triggered_attr == 'selectedNodeData'):  # 'boxSelectedData'): #
             tap_label = '' if tap_node_data is None else tap_node_data['name']            # ABC commented line
@@ -1673,7 +1725,8 @@ def renderer(keeper, pose_key, distance_key):
                 box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
                                                                                                              stat_keeper_data_label,
                                                                                                              stat_test, alpha,
-                                                                                                             stat_correction)
+                                                                                                             stat_correction,
+                                                                                                             surv_data_label, surv_t_label, surv_e_label)
 
                 # update elements
                 if stored_selected_node_data is None:
@@ -1743,16 +1796,21 @@ def renderer(keeper, pose_key, distance_key):
                         current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
                         node_fixed_color, mouseover_node_data,
                         # stored_tap_node_data,
-                        stored_selected_node_data, box_selected_table, stat_download_button_style,
-                        box_selected_output, tap_node_data, None) # selected_node_data)
-            # ABC END INDENTATION
+                        stored_selected_node_data, box_selected_table, stat_download_button_style,                        
+                        box_selected_output,
+                        surv_t_label, surv_t_opts, surv_e_label, surv_e_opts,
+                        tap_node_data, None) # selected_node_data)
+                              # ABC END INDENTATION
 
 
-        if triggered_input in ['stat-keeper-data-dropdown', 'stat-test-dropdown', 'alpha-label', 'correction-drop-down']:
+                              
+        if triggered_input in ['stat-keeper-data-dropdown', 'stat-test-dropdown', 'alpha-label', 'correction-drop-down',
+                               'time-attr', 'event-attr']:
             box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
                                                                                                          stat_keeper_data_label,
                                                                                                          stat_test, alpha,
-                                                                                                         stat_correction)
+                                                                                                         stat_correction,
+                                                                                                         surv_data_label, surv_t_label, surv_e_label)
             # bb = "\n".join([f"\n\n output selected node data: {selected_node_data}",
             #                 f" output tap node data: {tap_node_data}",
             #                 f" output stored selected node data: {stored_selected_node_data}"])
@@ -1763,7 +1821,9 @@ def renderer(keeper, pose_key, distance_key):
                     node_fixed_color, mouseover_node_data,
                     # stored_tap_node_data,
                     stored_selected_node_data, box_selected_table, stat_download_button_style,
-                    box_selected_output, tap_node_data, None) # selected_node_data)
+                    box_selected_output,
+                    surv_t_label, surv_t_opts, surv_e_label, surv_e_opts,
+                    tap_node_data, None) # selected_node_data)
         
 
         if triggered_input == 'keeper-data-dropdown':
@@ -1779,8 +1839,31 @@ def renderer(keeper, pose_key, distance_key):
                     node_fixed_color, mouseover_node_data,
                     # stored_tap_node_data,
                     stored_selected_node_data, box_selected_table, stat_download_button_style,
-                    box_selected_output, tap_node_data, None) # selected_node_data)
-        
+                    box_selected_output,
+                    surv_t_label, surv_t_opts, surv_e_label, surv_e_opts,
+                    tap_node_data, None) # selected_node_data)
+
+        if triggered_input == 'surv-keeper-data-dropdown':
+            surv_t_opts = surv_e_opts = set_feature_options(surv_data_label)
+            surv_e_label = surv_t_label = None
+            
+            # box_selected_table, stat_download_button_style, box_selected_output = display_selected_nodes(stored_selected_node_data,
+            #                                                                                              stat_keeper_data_label,
+            #                                                                                              stat_test, alpha,
+            #                                                                                              stat_correction,
+            #                                                                                              surv_data_label, surv_t_label, surv_e_label)
+            if '(log-rank p' in box_selected_output:
+                box_selected_output = ''.join([box_selected_output.split(' (log-rank p')[0], ':', box_selected_output.split('):')[-1]])
+
+            return (elements_in, # stylesheet, # select_node_data,
+                    node_attr, data_label, ft_label, fl_label_opts,
+                    current_zoom, current_pan, node_cbar_vis_in, edge_cbar_vis_in, 
+                    node_fixed_color, mouseover_node_data,
+                    # stored_tap_node_data,
+                    stored_selected_node_data, box_selected_table, stat_download_button_style,
+                    box_selected_output,
+                    surv_t_label, surv_t_opts, surv_e_label, surv_e_opts,
+                    tap_node_data, None) # selected_node_data)
             
         D = keeper.distances[pose_dist_key].data
         G = keeper.graphs[pose_key]
@@ -2052,7 +2135,9 @@ def renderer(keeper, pose_key, distance_key):
                 node_fixed_color, mouseover_node_data,
                 # stored_tap_node_data,
                 stored_selected_node_data, box_selected_table, stat_download_button_style,
-                box_selected_output, tap_node_data, None) # selected_node_data)
+                box_selected_output,
+                surv_t_label, surv_t_opts, surv_e_label, surv_e_opts,
+                tap_node_data, None) # selected_node_data)
 
     
     @app.callback(Output('cytoscape-mouseoverNodeData', 'children'),
