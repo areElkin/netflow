@@ -17,17 +17,6 @@ Create conda environment
 Note: conda environment creation was tested on MacOS.
 TODO: provide instructions for other operating systems
 
-via requirements.txt
---------------------
-
-Run the following from the main netflow directory:
-
-.. code-block:: console
-
-    $ conda create --name <env> --file requirements.txt
-
-Note: `env` should be replaced with the desired name of the environment.
-
 via env.yml
 -----------
 
@@ -101,6 +90,18 @@ After creating the environment, it can be activated by:
 
    $ conda activate <env>
  
+
+Add conda environment to Jupyter notebook
+=========================================
+
+After activating the environment, type the following:
+
+.. code-block:: console
+
+   $ python -m ipykernel install --user --name=<env>
+
+After using the above command, the conda environment <env> should appear in Jupyter notebooks.
+
 
 
 

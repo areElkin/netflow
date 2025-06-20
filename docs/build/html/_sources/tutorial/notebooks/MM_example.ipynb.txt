@@ -89,7 +89,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 118,
+   "execution_count": 1,
    "id": "8540d6ad-1032-468a-a103-10ab35a97de0",
    "metadata": {},
    "outputs": [],
@@ -117,13 +117,13 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
+   "execution_count": 2,
    "id": "a1044eec-5973-4df1-99ac-f0308f9ca1ce",
    "metadata": {},
    "outputs": [],
    "source": [
-    "sys.path.insert(0, pathlib.Path(pathlib.Path('.').absolute()).parents[3].resolve().as_posix())\n",
-    "# sys.path.insert(0, pathlib.Path(pathlib.Path('.').absolute()).parents[0].resolve().as_posix())"
+    "sys.path.insert(0, Path(Path('.').absolute()).parents[3].resolve().as_posix())\n",
+    "# sys.path.insert(0, Path(Path('.').absolute()).parents[0].resolve().as_posix())"
    ]
   },
   {
@@ -138,7 +138,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 121,
+   "execution_count": 3,
    "id": "6d88da91-52a2-42da-9f39-3356b9f01691",
    "metadata": {},
    "outputs": [],
@@ -185,7 +185,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
+   "execution_count": 4,
    "id": "19424433-4a6c-4c0f-af17-83146f5fe0e9",
    "metadata": {},
    "outputs": [],
@@ -196,7 +196,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": 5,
    "id": "7db312bb-048d-411b-bfef-a3b0b74d3fa0",
    "metadata": {},
    "outputs": [],
@@ -216,7 +216,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
+   "execution_count": 6,
    "id": "9d2a5cce-00d3-4ff3-a30e-d454fd6ae46f",
    "metadata": {},
    "outputs": [],
@@ -245,7 +245,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 50,
+   "execution_count": 7,
    "id": "7c37121c-8956-4879-bd24-c9abf21abae4",
    "metadata": {},
    "outputs": [],
@@ -281,7 +281,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 51,
+   "execution_count": 8,
    "id": "e9865d73-a983-4a41-b098-fe8cbd2315a2",
    "metadata": {},
    "outputs": [],
@@ -299,17 +299,17 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 52,
+   "execution_count": 12,
    "id": "75ceb541-e926-4aaf-9911-47112f769c93",
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<netflow.keepers.keeper.DataView at 0x7fdd88c31f70>"
+       "<netflow.keepers.keeper.DataView at 0x7fecf2443220>"
       ]
      },
-     "execution_count": 52,
+     "execution_count": 12,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -330,7 +330,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 53,
+   "execution_count": 9,
    "id": "622c9ac3-abb7-4420-81cb-9793c11c3f09",
    "metadata": {},
    "outputs": [
@@ -544,7 +544,7 @@
        "[4 rows x 659 columns]"
       ]
      },
-     "execution_count": 53,
+     "execution_count": 9,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -564,7 +564,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 54,
+   "execution_count": 10,
    "id": "0c4fc9bf-c48c-4667-8afb-7aa1f7f52faa",
    "metadata": {},
    "outputs": [],
@@ -590,7 +590,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 55,
+   "execution_count": 11,
    "id": "0761df3b-2b3e-41fc-ac46-dc44c57fd6b1",
    "metadata": {},
    "outputs": [
@@ -736,7 +736,7 @@
        "[2 rows x 659 columns]"
       ]
      },
-     "execution_count": 55,
+     "execution_count": 11,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -862,7 +862,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 58,
+   "execution_count": 12,
    "id": "a2f485d6-bf5a-4c8d-9875-dc99fc05876b",
    "metadata": {},
    "outputs": [],
@@ -932,7 +932,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 60,
+   "execution_count": 13,
    "id": "df2daa3a-d77d-461b-a5ae-26812e4476b5",
    "metadata": {},
    "outputs": [],
@@ -961,20 +961,20 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 61,
+   "execution_count": 14,
    "id": "74da9daa-64e8-4fac-acf0-d301bec3623d",
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/html": [
-       "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">netflow.methods.classes: <span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">05</span>/<span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">01</span>/<span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">2025</span> <span style=\"color: #00ff00; text-decoration-color: #00ff00; font-weight: bold\">12:56:46</span>  PM | <span style=\"color: #808000; text-decoration-color: #808000; font-weight: bold\">MSG</span> |                                                           \n",
+       "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">netflow.methods.classes: <span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">06</span>/<span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">20</span>/<span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">2025</span> <span style=\"color: #00ff00; text-decoration-color: #00ff00; font-weight: bold\">05:49:49</span>  PM | <span style=\"color: #808000; text-decoration-color: #808000; font-weight: bold\">MSG</span> |                                                           \n",
        "classes:multiple_pairwise_observation_neighborhood_euc_distan<span style=\"color: #00ff00; text-decoration-color: #00ff00; font-weight: bold\">ce:928</span> | &gt;&gt;&gt; Loaded saved observation pairwise <span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">1</span>-hop  \n",
        "neighborhood Euclidean distances from RNA_nbhd_euc_with_self profiles of size <span style=\"font-weight: bold\">(</span><span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">216811</span>, <span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">1</span><span style=\"font-weight: bold\">)</span>.                         \n",
        "</pre>\n"
       ],
       "text/plain": [
-       "netflow.methods.classes: \u001b[1;36m05\u001b[0m/\u001b[1;36m01\u001b[0m/\u001b[1;36m2025\u001b[0m \u001b[1;92m12:56:46\u001b[0m  PM | \u001b[1;33mMSG\u001b[0m |                                                           \n",
+       "netflow.methods.classes: \u001b[1;36m06\u001b[0m/\u001b[1;36m20\u001b[0m/\u001b[1;36m2025\u001b[0m \u001b[1;92m05:49:49\u001b[0m  PM | \u001b[1;33mMSG\u001b[0m |                                                           \n",
        "classes:multiple_pairwise_observation_neighborhood_euc_distan\u001b[1;92mce:928\u001b[0m | >>> Loaded saved observation pairwise \u001b[1;36m1\u001b[0m-hop  \n",
        "neighborhood Euclidean distances from RNA_nbhd_euc_with_self profiles of size \u001b[1m(\u001b[0m\u001b[1;36m216811\u001b[0m, \u001b[1;36m1\u001b[0m\u001b[1m)\u001b[0m.                         \n"
       ]
@@ -1199,7 +1199,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 75,
+   "execution_count": 15,
    "id": "7a16bb68-632f-459a-a705-d1052a3f0dde",
    "metadata": {},
    "outputs": [],
@@ -1336,7 +1336,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 81,
+   "execution_count": 16,
    "id": "26dcc26b-350d-46c8-8776-e668da7e13a4",
    "metadata": {},
    "outputs": [
@@ -1346,7 +1346,7 @@
        "201"
       ]
      },
-     "execution_count": 81,
+     "execution_count": 16,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1389,7 +1389,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 82,
+   "execution_count": 17,
    "id": "7536736a-11df-4436-9761-2939b338c7e3",
    "metadata": {},
    "outputs": [
@@ -1407,7 +1407,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 83,
+   "execution_count": 18,
    "id": "4da7d906-2131-45ea-b120-aa1be656cff1",
    "metadata": {},
    "outputs": [
@@ -1417,7 +1417,7 @@
        "168"
       ]
      },
-     "execution_count": 83,
+     "execution_count": 18,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1457,7 +1457,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 84,
+   "execution_count": 19,
    "id": "bfe902ed-e640-4af3-ad5b-01b26cd7acd9",
    "metadata": {},
    "outputs": [],
@@ -1469,7 +1469,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 85,
+   "execution_count": 20,
    "id": "c4b3becb-77ef-419d-ac4a-366905c77a08",
    "metadata": {},
    "outputs": [],
@@ -1563,7 +1563,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 88,
+   "execution_count": 21,
    "id": "7940c47e-81cb-4142-9d77-99c24f87ff31",
    "metadata": {},
    "outputs": [],
@@ -1581,7 +1581,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 89,
+   "execution_count": 22,
    "id": "cf8ecf06-5c45-47b7-9ae4-b4e77b0f65af",
    "metadata": {},
    "outputs": [],
@@ -1640,7 +1640,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 92,
+   "execution_count": 23,
    "id": "b919c51d-f0e5-4561-a540-c00f8137d200",
    "metadata": {},
    "outputs": [],
@@ -1715,7 +1715,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 98,
+   "execution_count": 24,
    "id": "7d2fafab-aeaf-4fce-8152-f163c2f7a3b2",
    "metadata": {},
    "outputs": [
@@ -1852,7 +1852,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 105,
+   "execution_count": 25,
    "id": "e09c1c86-3ace-44e4-ad0b-b9882c140257",
    "metadata": {},
    "outputs": [],
@@ -1937,7 +1937,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 110,
+   "execution_count": 26,
    "id": "d3a5fd8e-35e3-47ce-a291-2528d04eb081",
    "metadata": {},
    "outputs": [
@@ -1956,7 +1956,7 @@
        "        "
       ],
       "text/plain": [
-       "<IPython.lib.display.IFrame at 0x7fddc5267a30>"
+       "<IPython.lib.display.IFrame at 0x7fa660ee0b20>"
       ]
      },
      "metadata": {},
@@ -1989,7 +1989,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 111,
+   "execution_count": 27,
    "id": "4410bc8c-08bc-4a73-979f-091778a3a64a",
    "metadata": {},
    "outputs": [],
@@ -2460,21 +2460,13 @@
     "# . Louvain - 4.155E-12\n",
     "# . risk - 5.659E-15"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "129af1d7-f43b-4416-8346-1ff053939e00",
-   "metadata": {},
-   "outputs": [],
-   "source": []
   }
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "geo_env_test",
+   "display_name": "nf_env",
    "language": "python",
-   "name": "geo_env_test"
+   "name": "nf_env"
   },
   "language_info": {
    "codemirror_mode": {

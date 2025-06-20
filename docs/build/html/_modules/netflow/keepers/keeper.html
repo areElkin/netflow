@@ -392,10 +392,10 @@ document.write(`
 <span class="c1"># import netflow.InfoNet as InfoNet</span>
 <span class="kn">from</span> <span class="nn">.._logging</span> <span class="kn">import</span> <span class="n">_gen_logger</span><span class="p">,</span> <span class="n">set_verbose</span>
 
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">reload</span>
-<span class="n">reload</span><span class="p">(</span><span class="n">nfo</span><span class="p">)</span>
+<span class="c1"># from importlib import reload</span>
+<span class="c1"># reload(nfo)</span>
+<span class="c1"># nfo = reload(nfo)</span>
 
-<span class="n">nfo</span> <span class="o">=</span> <span class="n">reload</span><span class="p">(</span><span class="n">nfo</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 

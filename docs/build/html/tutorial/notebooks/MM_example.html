@@ -490,8 +490,8 @@ where for each observation $i$, $\sigma_i$ is the distance to its $k$-th nearest
 <p>If <code class="docutils literal notranslate"><span class="pre">netflow</span></code> has not been installed, add the path to the library:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
-<span class="c1"># sys.path.insert(0, pathlib.Path(pathlib.Path(&#39;.&#39;).absolute()).parents[0].resolve().as_posix())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+<span class="c1"># sys.path.insert(0, Path(Path(&#39;.&#39;).absolute()).parents[0].resolve().as_posix())</span>
 </pre></div>
 </div>
 </div>
@@ -606,7 +606,7 @@ where for each observation $i$, $\sigma_i$ is the distance to its $k$-th nearest
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;netflow.keepers.keeper.DataView at 0x7fdd88c31f70&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;netflow.keepers.keeper.DataView at 0x7fecf2443220&gt;
 </pre></div>
 </div>
 </div>
@@ -1003,7 +1003,7 @@ Any metric that can be passed to scipy.spatial.distance.cdist is acceptable. If 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.methods.classes: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">05</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">01</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2025</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">12:56:46</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> |                                                           
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">netflow.methods.classes: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">06</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">20</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2025</span> <span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">05:49:49</span>  PM | <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">MSG</span> |                                                           
 classes:multiple_pairwise_observation_neighborhood_euc_distan<span style="color: #00ff00; text-decoration-color: #00ff00; font-weight: bold">ce:928</span> | &gt;&gt;&gt; Loaded saved observation pairwise <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>-hop  
 neighborhood Euclidean distances from RNA_nbhd_euc_with_self profiles of size <span style="font-weight: bold">(</span><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">216811</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span><span style="font-weight: bold">)</span>.                         
 </pre>

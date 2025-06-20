@@ -385,14 +385,6 @@ document.write(`
 <h2>Create conda environment<a class="headerlink" href="#create-conda-environment" title="Permalink to this headline">#</a></h2>
 <p>Note: conda environment creation was tested on MacOS.
 TODO: provide instructions for other operating systems</p>
-<section id="via-requirements-txt">
-<h3>via requirements.txt<a class="headerlink" href="#via-requirements-txt" title="Permalink to this headline">#</a></h3>
-<p>Run the following from the main netflow directory:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>&lt;env&gt;<span class="w"> </span>--file<span class="w"> </span>requirements.txt
-</pre></div>
-</div>
-<p>Note: <cite>env</cite> should be replaced with the desired name of the environment.</p>
-</section>
 <section id="via-env-yml">
 <h3>via env.yml<a class="headerlink" href="#via-env-yml" title="Permalink to this headline">#</a></h3>
 <p>First, optionally set the environment name. The default environment name is <cite>geo_env_test</cite>.
@@ -461,6 +453,14 @@ in step 1, if you renamed the environemnt. Otherwise, it is <cite>geo_env_test</
 </pre></div>
 </div>
 </section>
+<section id="add-conda-environment-to-jupyter-notebook">
+<h2>Add conda environment to Jupyter notebook<a class="headerlink" href="#add-conda-environment-to-jupyter-notebook" title="Permalink to this headline">#</a></h2>
+<p>After activating the environment, type the following:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>&lt;env&gt;
+</pre></div>
+</div>
+<p>After using the above command, the conda environment &lt;env&gt; should appear in Jupyter notebooks.</p>
+</section>
 <section id="future-installation-options">
 <h2>Future installation options<a class="headerlink" href="#future-installation-options" title="Permalink to this headline">#</a></h2>
 <p>Note: pip install has not yet been tested.</p>
@@ -522,11 +522,11 @@ in step 1, if you renamed the environemnt. Otherwise, it is <cite>geo_env_test</
     <ul class="current visible nav section-nav flex-column">
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="current reference internal nav-link" href="#">Installation</a><ul class="visible nav section-nav flex-column">
 <li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-conda-environment">Create conda environment</a><ul class="nav section-nav flex-column">
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#via-requirements-txt">via requirements.txt</a></li>
 <li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#via-env-yml">via env.yml</a></li>
 </ul>
 </li>
 <li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-the-conda-environment">Activate the conda environment</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-conda-environment-to-jupyter-notebook">Add conda environment to Jupyter notebook</a></li>
 <li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#future-installation-options">Future installation options</a><ul class="nav section-nav flex-column">
 <li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="usage.html">1. usage</a></li>
 </ul>
