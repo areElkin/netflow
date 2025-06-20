@@ -25,10 +25,10 @@ from ..pose import organization as nfo
 # import netflow.InfoNet as InfoNet
 from .._logging import _gen_logger, set_verbose
 
-from importlib import reload
-reload(nfo)
+# from importlib import reload
+# reload(nfo)
+# nfo = reload(nfo)
 
-nfo = reload(nfo)
 logger = _gen_logger(__name__)
 
 
