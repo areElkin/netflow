@@ -199,8 +199,8 @@ html_static_path = ['_static']
 # }
 
 html_title = f"{project} v{version} Manual"
-html_logo = "_static/netflow_logo.png"
-html_favicon = "_static/netflow_logo.png"
+html_logo = "_static/NF_logo3.png"  # "_static/netflow_logo.png"
+# html_favicon = "_static/NF_logo3.png"  # "_static/netflow_logo.png"
 
 # html_css_files
 html_css_files = ['custom.css']
