@@ -29,8 +29,7 @@
     "4. Convert net distances to a single sample pairwise similarity matrix\n",
     "5. Compute scale-free DPT distance from similirities\n",
     "6. Compue the POSE from the DPT distances\n",
-    "8. Probe the POSE - clustering\n",
-    "9. Visualize the POSE"
+    "8. Probe the POSE"
    ]
   },
   {
@@ -67,8 +66,9 @@
     "        \n",
     "5. Compute scale-free DPT distance from similairites.\n",
     "6. Compute POSE from DPT distances.\n",
-    "7. Perform BL-clustering on the final POSE.\n",
-    "8. Visualization (interactive)"
+    "7. Probing the POSE entails:\n",
+    "    1. Perform BL-clustering on the final POSE\n",
+    "    2. Visualization (interactive)"
    ]
   },
   {
@@ -751,7 +751,7 @@
    "id": "6e36c64e-a071-4f97-a1fd-869eadf4dfe9",
    "metadata": {},
    "source": [
-    "You can also extract a subset of the data - for a specified subset of features and/or samples:"
+    "As a side note, you can also extract a subset of the data - for a specified subset of features and/or samples:"
    ]
   },
   {

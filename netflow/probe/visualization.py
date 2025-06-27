@@ -332,11 +332,14 @@ def plot_topology(G,
         cur_vmax = max(nc_set) if node_vmax is None else node_vmax
         cur_vmin = min(nc_set) if node_vmin is None else node_vmin
 
+        # nc_max = max(nc_set) # **add
+        # nc_min = min(nc_set) # **add
+
         if isinstance(node_cmap, ListedColormap) or (node_cmap in qualitative_cmaps.keys()):
             if isinstance(node_cmap, ListedColormap):
-                node_vmax = node_cmap.N
+                node_vmax = node_cmap.N + cur_vmin
             elif node_cmap in qualitative_cmaps.keys():
-                node_vmax = qualitative_cmaps[node_cmap]            
+                node_vmax = qualitative_cmaps[node_cmap] + cur_vmin
             if len(nc_set) <= node_vmax: # qualitative_cmaps[node_cmap]:
                 node_boundaries = [k/node_vmax for k in range(cur_vmin, cur_vmax+2)]
                 node_ticks = [k/node_vmax + 0.5*(1/node_vmax) for k in range(cur_vmin, cur_vmax+1)]

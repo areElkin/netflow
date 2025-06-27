@@ -31,8 +31,31 @@ Tutorials
         POSE pipeline - multiple myeloma (MM) example
 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	This tutorial walks through the POSE pipeline for a single modality.
-	The pipeline is demonstrated on MM rna data from COMPASS.
+	This tutorial walks through the POSE pipeline performed on
+	single-modality RNA data of MM samples from COMPASS as
+	described in the origianl manuscript. 
+
+        +++
+
+        .. button-ref:: notebooks/MM_paper_example
+            :expand:
+            :color: secondary
+	    :outline:
+            :click-parent:	    
+
+            To the MM example
+
+	    
+    .. grid-item-card::
+
+        POSE pipeline - extended multiple myeloma (MM) example
+	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	This tutorial is an extended version of the MM analysis that
+	walks through the POSE pipeline performed on single-modality
+	RNA data of MM samples from COMPASS as described in the
+	origianl manuscript, with additional descriptions of alternative
+	computational options.
 
         +++
 
@@ -42,7 +65,7 @@ Tutorials
 	    :outline:
             :click-parent:	    
 
-            To the MM example
+            To the extended MM example
 	    
 
 	    
