@@ -1,11 +1,24 @@
-Documentation including installation instructions and Jupyter notebook tutorials can be found in `docs/build/html/index.html`.
-To open the documentation from the terminal in the `netflow/docs` directory, run `$ open build/html/index.html`.
+# NetFlow
+=========
 
-# Installation instructions may also be found here:
 
-[Installation](docs/source/building/index.rst)
+
+## Documentation
+----------------
+
+NetFlow documentation can be found in `docs/build/html/index.html`
+- To open the documentation from the terminal in the `netflow/docs` directory, run ```$ open build/html/index.html```.
+- The documentation includes installation instructions and Jupyter notebook tutorials
+
+## Installation
+---------------
+
+Installation instructions are provided in the documentation and may be directly accessed here: [Installation](docs/source/building/index.rst)
+
 
 ## Acknowledgments
+------------------
+
 There are many great works that have inspired the development of this package. We would like to acknowledge a few such sources that have contributed  more than just inspiration, either in methodology or code, for their contribution:
 
 TDA
@@ -16,4 +29,6 @@ This package includes code from [Scanpy](https://github.com/scverse/scanpy), whi
 
 
 ## License Information
+----------------------
+
 This project is licensed under the "BSD 3-Clause License" - see the LICENSE file for details about both licenses used by our project.
