@@ -20,12 +20,12 @@ TODO: provide instructions for other operating systems
 via env.yml
 -----------
 
-First, optionally set the environment name. The default environment name is `geo_env_test`.
+First, optionally set the environment name. The default environment name is `nf_env`.
 To rename it:
 
 Option 1: Manually rename the environment:
 
-   - Open env.yml and replace `geo_env_test` with the new environment name `<env>`
+   - Open env.yml and replace `nf_env` with the new environment name `<env>`
      on the first and last line 
 
 
@@ -35,13 +35,13 @@ Option 2: Edit the file from the terminal:
 
      .. code-block:: console
 
-	$ sed -i '' -e '1s/geo_env_test/<env>/' -e '$s/geo_env_test/<env>/' env.yml
+	$ sed -i '' -e '1s/nf_env/<env>/' -e '$s/nf_env/<env>/' env.yml
 
    - If on Linux (or GNU):
 
      .. code-block:: console
 
-	$ sed -i -e '1s/geo_env_test/<env>/' -e '$s/geo_env_test/<env>/' env.yml
+	$ sed -i -e '1s/nf_env/<env>/' -e '$s/nf_env/<env>/' env.yml
 
 where `<env>` should be replaced with the desired environment name.
 
@@ -57,9 +57,9 @@ Option 2: Edit the file from the terminal:
 
    On MacOS, environments are typically stored to `/Users/<user-name>/opt/anaconda3/envs/<env>`.
    If this is the case, replace `<user-name>` accordingly. (Note, `<env>` will have been updated
-   in step 1, if you renamed the environemnt. Otherwise, it is `geo_env_test`.)
+   in step 1, if you renamed the environemnt. Otherwise, it is `nf_env`.)
 
-   For example, considering the default environment `geo_env_test`, replacing `<user-name>` to
+   For example, considering the default environment `nf_env`, replacing `<user-name>` to
    `my_user_name` can be done as follows: 
 
    - If on macOS (or using BSD):

@@ -387,12 +387,12 @@ document.write(`
 TODO: provide instructions for other operating systems</p>
 <section id="via-env-yml">
 <h3>via env.yml<a class="headerlink" href="#via-env-yml" title="Permalink to this headline">#</a></h3>
-<p>First, optionally set the environment name. The default environment name is <cite>geo_env_test</cite>.
+<p>First, optionally set the environment name. The default environment name is <cite>nf_env</cite>.
 To rename it:</p>
 <p>Option 1: Manually rename the environment:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>Open env.yml and replace <cite>geo_env_test</cite> with the new environment name <cite>&lt;env&gt;</cite>
+<li><p>Open env.yml and replace <cite>nf_env</cite> with the new environment name <cite>&lt;env&gt;</cite>
 on the first and last line</p></li>
 </ul>
 </div></blockquote>
@@ -400,12 +400,12 @@ on the first and last line</p></li>
 <blockquote>
 <div><ul>
 <li><p>If on macOS (or using BSD):</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;1s/geo_env_test/&lt;env&gt;/&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;$s/geo_env_test/&lt;env&gt;/&#39;</span><span class="w"> </span>env.yml
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;1s/nf_env/&lt;env&gt;/&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;$s/nf_env/&lt;env&gt;/&#39;</span><span class="w"> </span>env.yml
 </pre></div>
 </div>
 </li>
 <li><p>If on Linux (or GNU):</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;1s/geo_env_test/&lt;env&gt;/&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;$s/geo_env_test/&lt;env&gt;/&#39;</span><span class="w"> </span>env.yml
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;1s/nf_env/&lt;env&gt;/&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;$s/nf_env/&lt;env&gt;/&#39;</span><span class="w"> </span>env.yml
 </pre></div>
 </div>
 </li>
@@ -424,8 +424,8 @@ The prefix is specified on the last line of env.yml. To set the prefix:</p>
 <blockquote>
 <div><p>On MacOS, environments are typically stored to <cite>/Users/&lt;user-name&gt;/opt/anaconda3/envs/&lt;env&gt;</cite>.
 If this is the case, replace <cite>&lt;user-name&gt;</cite> accordingly. (Note, <cite>&lt;env&gt;</cite> will have been updated
-in step 1, if you renamed the environemnt. Otherwise, it is <cite>geo_env_test</cite>.)</p>
-<p>For example, considering the default environment <cite>geo_env_test</cite>, replacing <cite>&lt;user-name&gt;</cite> to
+in step 1, if you renamed the environemnt. Otherwise, it is <cite>nf_env</cite>.)</p>
+<p>For example, considering the default environment <cite>nf_env</cite>, replacing <cite>&lt;user-name&gt;</cite> to
 <cite>my_user_name</cite> can be done as follows:</p>
 <ul>
 <li><p>If on macOS (or using BSD):</p>

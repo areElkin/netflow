@@ -1,4 +1,9 @@
-To see documentation,from `netflow/docs` directory, run `$ open build/html/index.html`.
+Documentation including installation instructions and Jupyter notebook tutorials can be found in `docs/build/html/index.html`.
+To open the documentation from the terminal in the `netflow/docs` directory, run `$ open build/html/index.html`.
+
+# Installation instructions may also be found here:
+
+[Installation](docs/source/building/index.rst)
 
 ## Acknowledgments
 There are many great works that have inspired the development of this package. We would like to acknowledge a few such sources that have contributed  more than just inspiration, either in methodology or code, for their contribution:
