@@ -11,6 +11,7 @@ from lifelines.plotting import add_at_risk_counts
 from lifelines.statistics import logrank_test
 from matplotlib.colors import BoundaryNorm, Colormap, to_rgba_array, ListedColormap
 from matplotlib.lines import Line2D
+from numbers import Number
 
 from .clustering import high_res_branch_graph
 from .._logging import _gen_logger, set_verbose
@@ -19,6 +20,728 @@ logger = _gen_logger(__name__)
 
 
 def plot_topology(G, 
+                  pos=None, # 1, 2, 3, 4, 5
+                  with_node_labels=False, # 1 was with_labels
+                  with_edge_labels=False,
+                  ax=None, # 1, 2, 3, 4, 5
+                  nodelist=None,  # 1, 2, 3
+                  edgelist=None, # 1, 3
+                  node_size=300, # 1, 2, 3
+                  node_color='#1f78b4', # 1, 2
+                  edge_color='k', # 1, 3
+                  node_cbar=False,
+                  edge_cbar=False,
+                  node_cbar_kws={'location':'bottom', 'orientation':'horizontal', 'pad':0.01},
+                  edge_cbar_kws={'location':'bottom', 'orientation':'horizontal', 'pad':0.1},
+                  node_cbar_ticks_kws=None,
+                  edge_cbar_ticks_kws=None,
+                  node_cbar_label=None,
+                  edge_cbar_label=None,
+                  node_cbar_labelpad=None, #  (default = -10),
+                  edge_cbar_labelpad=None,
+                  node_cbar_label_y=None,
+                  edge_cbar_label_y=None,
+                  node_cbar_label_kws=None,
+                  edge_cbar_label_kws=None,
+                  node_shape='o', # 1, 2, 3
+                  node_shape_mapper=None,
+                  node_alpha=None, # 1, 2 was alpha (same for nodes and edges)
+                  edge_alpha=None, # 3, 5 was alpha
+                  node_label_alpha=None, # 4 was alpha
+                  edge_label_alpha=None, # 5 was alpha
+                  node_cmap=None, # 1, 2 was cmap
+                  edge_cmap=None, # 1, 3
+                  node_vmin=None, # 1, 2 was vmin
+                  node_vmax=None, # 1, 2 was vmax
+                  edge_vmin=None, # 1, 3
+                  edge_vmax=None, # 1, 3
+                  node_cmap_drawedges=None,
+                  edge_cmap_drawedges=None,
+                  border_linewidths=None, # 1, 2 was linewidths
+                  bordercolors=None, # 2 was edgecolors
+                  edge_width=1.0, # 1, 3 was width                  
+                  edge_style='solid', # 1, 3 was style
+                  edge_style_mapper=None,
+                  node_labels=None, # 1, 4 was labels
+                  edge_labels=None,  # 5
+                  node_show_legend=None,
+                  edge_show_legend=None,
+                  legend_kws=None,
+                  node_font_size=12, # 1, 4 was font_size (same for nodes and edges)
+                  edge_font_size=10, # 5 was font_size
+                  node_font_color='k', # 1, 4 was font_color (same for nodes and edges)
+                  edge_font_color='k', # 5 was font_color
+                  node_font_weight='normal', # 1, 4 was font_weight (same for nodes and edges)
+                  edge_font_weight='normal', # 5 was font_weight
+                  node_font_family='sans-serif', # 1, 4 was font_family (same for nodes and edges)
+                  edge_font_family='sans-serif', # 5 was font_family
+                  node_ticklabels_mapper=None,
+                  edge_ticklabels_mapper=None,
+                  node_bbox=None, # 4 was bbox
+                  edge_bbox=None, # 5 was bbox
+                  node_horizontalalignment='center', # 4 was horizontalalignment
+                  edge_horizontalalignment='center', # 5 was horizontalalignment
+                  node_verticalalignment='center', # 4 was verticalalignment
+                  edge_verticalalignment='center', # 5 was verticalalignment
+                  node_clip_on=True, # 4 was clip_on
+                  edge_clip_on=True, # 5 was clip_on                  
+                  margins=None, # 2
+                  min_source_margin=0, # 3
+                  min_target_margin=0, # 3
+                  edge_label_pos=0.5, # 5 was label_pos                      
+                  rotate=True, # 5
+                 ):
+    """ Draw the graph topology.
+
+    Draw the graph topology with NetworkX with options for 
+    multiple node shapes. 
+    
+    Parameters
+    ----------
+    G : graph
+        A networkx graph    
+    pos : dictionary, optional
+        A dictionary with nodes as keys and positions as values.
+        If not specified a kamada kawai layout positioning will be computed.
+        See :py:mod:`networkx.drawing.layout` for functions that
+        compute node positions.    
+    with_{node,edge}_labels :  bool (default=False)
+        Set to True to draw labels on the nodes and edges.    
+    ax : Matplotlib Axes object, optional
+        Draw the graph in the specified Matplotlib axes.
+    nodelist : list (default=list(G))
+        Draw only specified nodes.
+    edgelist : list (default=list(G.edges()))
+        Draw only specified edges.
+    node_size : scalar or array (default=300)
+        Size of nodes.  If an array is specified it must be the
+        same length as nodelist.
+    node_color : color or array of colors (default='#1f78b4')
+        Node color. Can be a single color or a sequence of colors with the same
+        length as nodelist. Color can be string or rgb (or rgba) tuple of
+        floats from 0-1. If numeric values are specified they will be
+        mapped to colors using the cmap and vmin,vmax parameters. See
+        matplotlib.scatter for more details.
+    edge_color : color or array of colors (default='k')
+        Edge color. Can be a single color or a sequence of colors with the same
+        length as edgelist. Color can be string or rgb (or rgba) tuple of
+        floats from 0-1. If numeric values are specified they will be
+        mapped to colors using the edge_cmap and edge_vmin,edge_vmax parameters.
+    {node,edge}_cbar : bool (default = False)
+        If `True`, show color bar for node and edge colors.
+        This is ignored if {node,edge}_color is a str.
+    {node,edge}_cbar_kws : dict
+        Optional keyword arguments passed to `matplotlib.pyplot.colorbar` for
+        the node and edge colorbars.    
+    {node,edge}_cbar_ticks_kws : {`None`, `dict`}
+        Keyword arguments passed to ``matplotlib.pyplot.colorbar.set_ticklabels()``
+    {node,edge}_cbar_label : {`None`, `str`}
+        Optional label for node and edge colorbar, if displayed.
+    {node,edge}_cbar_labelpad : {`None`, `int`} (default = -10)
+        Optional padding for node and edge colorbar label, if displayed.
+    {node,edge}_cbar_label_y : {`None`, `float`}
+        Optional y position for node and edge colorbar label, if displayed.
+    {node,edge}_cbar_label_kws : {`None`, `dict`}
+        Colorbar label keyword arguments passed to ``matplotlib.pyplot.colorbar.set_label``).
+    node_shape :  string or array of shapes  (default='o')
+        The shape of the node.  Can be a single shape or a sequence of shapes
+        with the same length as nodelist. Shape specification is as 
+        matplotlib.scatter marker, one of 'os^>v<dph8'.
+        Alternatively, to add a description of the node class represented by
+        the shape to the legend, provide a single node class label or a
+        sequence of node class labels with the same length as nodelist. If 
+        shape speficiations are not one of 'os^>v<dph8', they are treated as 
+        node class labels and are added to the legend. Use ``node_shape_mapper`` 
+        to manually specify the shape for each class.
+    node_shape_mapper : None or dict (default=None)
+        A dictionary to map node class labels to shapes, keyed by node class labels
+        that is expected to have a key for all unique node class labels in ``node_shape``. 
+        The default is to cycle through the possible shapes 'os^>v<dph8', which may 
+        not be unique if there are more classes than unique markers. This is ignored
+        if ``node_shape`` contains the shapes directly.
+    node_alpha : float, array of floats or None (default=None)
+        The node transparency.  This can be a single alpha value,
+        in which case it will be applied to all the nodes of color. Otherwise,
+        if it is an array, the elements of alpha will be applied to the colors
+        in order (cycling through alpha multiple times if necessary).
+    edge_alpha : float or None (default=None)
+        The edge transparency.
+    node_label_alpha : float or None (default=None)
+        The node label text transparency
+    edge_label_alpha : float or None (default=None)
+        The text transparency   
+    {node,edge}_cmap : Matplotlib colormap, optional
+        Colormap for mapping intensities of nodes and edges
+    {node,edge}_vmin,{node,edge}_vmax : float, optional
+        Minimum and maximum for node and edge colormap scaling
+    {node,edge}_cmap_drawedges : `bool`
+        Whether to draw lines at color boundries on node,edge colorbar.
+        This is ignored if no colorbar is being shown.
+        Default behavior is to draw edges for a discrete colormap and
+        not for continuous colormaps.
+    border_linewidths : scalar or sequence (default=1.0) 
+        Line width of symbol border.
+    bordercolors : [None | scalar | sequence] (default = node_color)
+        Colors of node borders.    
+    edge_width : float or array of floats (default=1.0) 
+        Line width of edges                          
+    edge_style : string or array of strings (default=solid line)
+        Edge line style. Can be a single style or a sequence of styles
+        with the same length as edgelist. Styles can be any of
+        '-', '--', '-.', ':' or words like 'solid' or 'dashed'.
+        (See `matplotlib.patches.FancyArrowPatch`: `linestyle`)
+        Alternatively, to add a description of the edge class represented by
+        the style to the legend, provide a single edge class label or a
+        sequence of edge class labels with the same length as edgelist. If 
+        style speficiations are not one of
+        ['-', '--', '-.', ':', 'solid', 'dashed', 'dotted', 'dashdot'], they are treated 
+        as edge  class labels and are added to the legend. Use ``edge_style_mapper`` 
+        to manually specify the style for each class.
+    edge_style_mapper : None or dict (default=None)
+        A dictionary to map  edge class labels to styles, keyed by edge class 
+        and is expected to have a key for all include all unique edge class labels in
+        ``edge_style``. 
+        The default is to cycle through the possible edge styles ['-', '--', '-.', ':'],    
+        which may not be unique if there are more classes than unique styles. 
+        This is ignored if ``edge_style`` contains the styles directly.
+    node_labels : dictionary (default=None)
+        Node labels in a dictionary of text labels keyed by node
+    edge_labels : dictionary (default=None)
+        Edge labels in a dictionary of labels keyed by edge two-tuple.
+        Only labels for the keys in the dictionary are drawn.
+    {node,edge}_show_legend : `bool`
+        If `True`, add legend with node shape or edge style.
+        Default is `True`, but this is ignored if ``node_shape`` or
+        ``edge_style`` is not provided.    
+    legend_kws : {`None`, `dict`} (default=None)
+        Keyword arguments passed to ``ax.legend``.
+    {node,edge}_font_size : int (default=12 for nodes, 10 for edges)
+        Font size for text labels    
+    {node,edge}_font_color : string (default='k' black)
+        Font color string
+    {node,edge}_font_weight : string (default='normal')
+        Font weight    
+    {node,edge}_font_family : string (default='sans-serif')
+        Font family
+    {node,edge}_ticklabels_mapper : {`None`, `dict`} (default=None)
+        If provided, used to assign labels to numeric values in color-bar when a
+        discrete colormap is used.    
+    node_bbox : Matplotlib bbox, (default is Matplotlib's ax.text default)
+        Specify text box properties (e.g. shape, color etc.) for node labels.
+    edge_bbox : Matplotlib bbox, optional
+        Specify text box properties (e.g. shape, color etc.) for edge labels.
+        Default is {boxstyle='round', ec=(1.0, 1.0, 1.0), fc=(1.0, 1.0, 1.0)}.
+    {node,edge}_horizontalalignment : string (default='center')
+        Horizontal alignment {'center', 'right', 'left'}    
+    {node,edge}_verticalalignment : string (default='center')
+        Vertical alignment {'center', 'top', 'bottom', 'baseline', 'center_baseline'}
+    {node,edge}_clip_on : bool (default=True)
+        Turn on clipping of node labels at axis boundaries
+    margins : float or 2-tuple, optional
+        Sets the padding for axis autoscaling. Increase margin to prevent
+        clipping for nodes that are near the edges of an image. Values should
+        be in the range ``[0, 1]``. See :meth:`matplotlib.axes.Axes.margins`
+        for details. The default is `None`, which uses the Matplotlib default.
+    min_source_margin : int (default=0)
+        The minimum margin (gap) at the begining of the edge at the source.    
+    min_target_margin : int (default=0)
+        The minimum margin (gap) at the end of the edge at the target.
+    edge_label_pos : float (default=0.5)
+        Position of edge label along edge (0=head, 0.5=center, 1=tail)
+    rotate : bool (deafult=True)
+        Rotate edge labels to lie parallel to edges
+
+    Notes
+    -----
+    - If node_cmap is a discrete cmap or a ListedColormap and node_vmin is provided and larger than the min node_color
+      or node_vmax is provided and smaller than the max node_color, then any values below node_vmin or above node_vmax
+      will be shown as the same color (and label, if ticklabels were given) as node_vmin and node_vmax.
+    
+    See Also
+    --------
+    networkx.draw
+    networkx.draw_networkx
+    networkx.draw_networkx_nodes
+    networkx.draw_networkx_edges
+    networkx.draw_networkx_labels
+    networkx.draw_networkx_edge_labels
+    """
+    node_shape_options = 'os^>v<dph8'
+    edge_style_options = ['-', '--', '-.', ':', 'solid', 'dashed', 'dotted', 'dashdot']
+
+    qualitative_cmaps = {'Pastel1': 9, 
+                         'Pastel2': 8, 
+                         'Paired': 12, 
+                         'Accent': 8,                         
+                         'Dark2': 8, 
+                         'Set1': 9, 
+                         'Set2': 8, 
+                         'Set3': 12,
+                         'tab10': 10, 
+                         'tab20': 20, 
+                         'tab20b': 20, 
+                         'tab20c': 20} 
+    
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=(7, 7))
+
+    if pos is None:
+        pos = nx.layout.kamada_kawai_layout(G)
+
+    if nodelist is None:
+        nodelist = list(G)
+
+    if edgelist is None:
+        edgelist = list(G.edges())
+
+    if isinstance(node_color, str):
+        node_cmap = None
+        node_cbar = False
+        node_vmin = None
+        node_vmax = None
+        node_cbar_kws = None
+        node_cbar_ticks_kws = None
+        node_cbar_label = None
+        node_cbar_labelpad = None
+        node_cbar_label_y = None
+        node_cbar_label_kws = None
+        node_cmap_drawedges = False
+        node_ticklabels_mapper = None
+        
+    else: # if isinstance(node_color, Iterable): #  and not isinstance(node_color, str):
+        # check if sequence is float or strings
+        # if strings, check if colors or categories
+        try:  # if colors - don't do colorbar
+            _ = to_rgba_array(node_color)
+            node_cmap = None
+            node_cbar = False
+            node_vmin = None
+            node_vmax = None
+            node_cbar_kws = None
+            node_cbar_ticks_kws = None
+            node_cbar_label = None
+            node_cbar_labelpad = None
+            node_cbar_label_y = None
+            node_cbar_label_kws = None
+            node_cmap_drawedges = False
+            node_ticklabels_mapper = None
+        except:
+            if not isinstance(node_color[0], Number):  # if categories - return error
+                raise ValueError("Unexpected values for node_color - expected Number")
+
+            # first check if node_cmap is None and set
+            if node_cmap is None:
+                node_cmap = plt.get_cmap().name
+                
+            if node_cmap_drawedges is None:
+                if node_cbar is False:
+                    node_cmap_drawedges = False
+                elif isinstance(node_cmap, ListedColormap) or (node_cmap in qualitative_cmaps.keys()):
+                    node_cmap_drawedges = True
+                else:
+                    node_cmap_drawedges = False
+
+            # unique set of values
+            nc_set_full = sorted(set(node_color))
+
+            if (node_vmin is None) and (node_vmax is None):
+                nc_set = nc_set_full
+                node_vmin = min(nc_set)
+                node_vmax = max(nc_set)
+            elif node_vmax is None:  # node_vmin is not None
+                nc_set = sorted(set([k for k in node_color if node_vmin <= k]))
+                node_vmax = max(nc_set)
+            elif node_vmin is None:  # node_vmax is not None
+                nc_set = sorted(set([k for k in node_color if k <= node_vmax]))
+                node_vmin = min(nc_set)
+            else:  # (node_vmin is not None) and (node_vmax is not None)
+                nc_set = sorted(set([k for k in node_color if node_vmin <= k <= node_vmax]))
+            
+            # discrete cmap:
+            if isinstance(node_cmap, ListedColormap) or (node_cmap in qualitative_cmaps.keys()):
+                # if number of unique values are larger than number of discrete values - return error                
+                Nvalues = len(nc_set)
+                    
+                if isinstance(node_cmap, ListedColormap):
+                    Ncmap = node_cmap.N
+                else:
+                    Ncmap = qualitative_cmaps[node_cmap]
+                
+                if Nvalues != Ncmap: # if Nvalues > Ncmap:
+                    # raise ValueError("To use a discrete colormap, the number of unique values should not exceed the number of colors.")
+                    # cycle the colormap:
+                    if isinstance(node_cmap, ListedColormap):
+                        node_cmap = ListedColormap([k for _, k in zip(range(Nvalues), itertools.cycle(node_cmap.colors))])
+                    else:
+                        node_cmap = ListedColormap([k for _, k in zip(range(Nvalues),
+                                                                      itertools.cycle(plt.get_cmap(node_cmap).colors))])
+                    Ncmap = node_cmap.N
+
+                if (min(node_color) < node_vmin) or (max(node_color) > node_vmax):
+                    node_color = [min(node_vmax, max(node_vmin, k)) for k in node_color] # first map to min-max range
+                node_boundaries = np.arange(Nvalues + 1) - 0.5                
+                node_norm = BoundaryNorm(boundaries=node_boundaries, ncolors=Nvalues)
+                if isinstance(node_cmap, ListedColormap):
+                    # if Nvalues < Ncmap:
+                    #     cb_node_cmap = ListedColormap(node_cmap.colors[:Nvalues])
+                    # else:
+                    #     cb_node_cmap = node_cmap
+                    cb_node_cmap = node_cmap
+                else:                    
+                    cb_node_cmap = plt.get_cmap(node_cmap, Nvalues)
+                color_dict = {val: cb_node_cmap(i) for i, val in enumerate(nc_set)}
+                node_color = [color_dict[val] for val in node_color]
+                node_vmax = None
+                node_vmin = None
+                node_cmap = None
+                
+                if node_cbar:
+                    node_ticks = np.arange(Nvalues) # node_boundaries + 0.5
+                    if node_ticklabels_mapper is None:
+                        node_ticklabels = [str(k) for k in nc_set]
+                    else:
+                        node_ticklabels = [node_ticklabels_mapper[k] for k in nc_set]
+                    if not node_cmap_drawedges:
+                        node_boundaries=None
+
+            else: # continuous colorbar
+                node_cmap_drawedges = False
+                node_ticklabels_mapper = None
+                node_boundaries = None
+
+                if node_vmin is None:
+                    node_vmin = min(node_colors)
+                if node_vmax is None:
+                    node_vmax = max(node_colors)
+
+                if node_cbar:
+                    cb_node_cmap = plt.get_cmap(node_cmap)
+                    if node_vmax > node_vmin:
+                        node_ticks = [node_vmin, node_vmax]
+                        node_ticklabels = [str(np.round(node_vmin, 2)), str(np.round(node_vmax, 2))]
+                        node_norm = plt.Normalize(vmin=node_vmin, vmax=node_vmax)
+                    else:
+                        node_boundaries = [node_vmin - 1e-3, node_vmin + 1e-3]
+                        node_ticks = [node_vmin]
+                        node_ticklabels = [str(np.round(node_vmin, 2))]
+                        node_norm = plt.Normalize(vmin=node_vmin, vmax=node_vmin+1e-3)
+
+        
+    
+
+    legend_handles = []
+    # draw nodes for each shape
+    if isinstance(node_shape, str):
+        node_shape = [node_shape]*len(nodelist)
+    if set(node_shape).issubset(set(node_shape_options)): # plot for each shape without legend
+        node_shape_mapper = None
+    else: # plot for each shape with legend
+        if node_shape_mapper is None:
+            node_shape_mapper = dict(zip(sorted(set(node_shape)), itertools.cycle(node_shape_options)))
+        node_shape = [node_shape_mapper[k] for k in node_shape]
+
+    for shape_class in set(node_shape):
+        indices = [i for i, j in enumerate(node_shape) if j == shape_class]
+        nodelist_tmp = [nodelist[i] for i in indices]
+        if isinstance(node_size, Iterable) and not isinstance(node_size, str):
+            node_size_tmp = [node_size[i] for i in indices]
+        else:
+            node_size_tmp = node_size
+        if isinstance(node_color, Iterable) and not isinstance(node_color, str):
+            node_color_tmp = [node_color[i] for i in indices]
+        else:
+            node_color_tmp = node_color
+        if isinstance(border_linewidths, Iterable):
+            border_linewidths_tmp = [border_linewidths[i] for i in indices]
+        else:
+            border_linewidths_tmp = border_linewidths
+        if bordercolors is None:
+            bordercolors_tmp = bordercolors
+        elif isinstance(bordercolors, Iterable) and not isinstance(bordercolors, str):
+            bordercolors_tmp = [bordercolors[i] for i in indices]
+        else:
+            bordercolors_tmp = bordercolors
+
+            nx_nodes = nx.draw_networkx_nodes(G, pos, ax=ax, nodelist=nodelist_tmp, node_size=node_size_tmp,
+                                              node_color=node_color_tmp, node_shape=shape_class,
+                                              alpha=node_alpha, # MAYBE CHANGE TO ALPHA BY NODE?
+                                              cmap=node_cmap, vmin=node_vmin, vmax=node_vmax,
+                                              linewidths=border_linewidths_tmp, edgecolors=bordercolors_tmp,
+                                              margins=margins,
+                                              )
+    if node_shape_mapper is not None:
+        node_show_legend =  True if node_show_legend is None else node_show_legend
+        if node_show_legend:
+            for class_label, class_shape in node_shape_mapper.items():
+                legend_handles.append(Line2D([0], [0], marker=class_shape, color='k',
+                                             label=class_label, lw=0,
+                                             markerfacecolor='gray', markersize=10))
+
+    # edges
+    if isinstance(edge_color, str):
+        edge_cmap = None
+        edge_cbar = False
+        edge_vmin = None
+        edge_vmax = None
+        edge_cbar_kws = None
+        edge_cbar_ticks_kws = None
+        edge_cbar_label = None
+        edge_cbar_labelpad = None
+        edge_cbar_label_y = None
+        edge_cbar_label_kws = None
+        edge_cmap_drawedges = False
+        edge_ticklabels_mapper = None
+
+    else: # if (isinstance(edge_color, Iterable)) and (not isinstance(edge_color, str)):
+        # check if sequence is float or strings
+        # if strings, check if colors or categories
+        try:  # if colors - don't do colorbar
+            _ = to_rgba_array(edge_color)
+            edge_cmap = None
+            edge_cbar = False
+            edge_vmin = None
+            edge_vmax = None
+            edge_cbar_kws = None
+            edge_cbar_ticks_kws = None
+            edge_cbar_label = None
+            edge_cbar_labelpad = None
+            edge_cbar_label_y = None
+            edge_cbar_label_kws = None
+            edge_cmap_drawedges = False
+            edge_ticklabels_mapper = None
+        except:
+            if not isinstance(edge_color[0], Number):  # if categories - return error
+                raise ValueError("Unexpected values for edge_color - expected Number")
+
+            # first check if edge_cmap is None and set
+            if edge_cmap is None:
+                edge_cmap = plt.get_cmap()
+                
+            if edge_cmap_drawedges is None:
+                if edge_cbar is False:
+                    edge_cmap_drawedges = False
+                elif isinstance(edge_cmap, ListedColormap) or (edge_cmap.name in qualitative_cmaps.keys()):
+                    edge_cmap_drawedges = True
+                else:
+                    edge_cmap_drawedges = False
+
+            # unique set of values
+            nc_set_full = sorted(set(node_color))
+
+            if (edge_vmin is None) and (edge_vmax is None):
+                ec_set = ec_set_full
+                edge_vmin = min(ec_set)
+                edge_vmax = max(ec_set)
+            elif edge_vmax is None:  # edge_vmin is not None
+                ec_set = sorted(set([k for k in edge_color if edge_vmin <= k]))
+                edge_vmax = max(ec_set)
+            elif edge_vmin is None:  # edge_vmax is not None
+                ec_set = sorted(set([k for k in edge_color if k <= edge_vmax]))
+                edge_vmin = min(ec_set)
+            else:  # (edge_vmin is not None) and (edge_vmax is not None)
+                ec_set = sorted(set([k for k in edge_color if edge_vmin <= k <= edge_vmax]))
+
+            # discrete cmap:
+            if isinstance(edge_cmap, ListedColormap) or (edge_cmap.name in qualitative_cmaps.keys()):
+                # if number of unique values are larger than number of discrete values - return error                
+                Nevalues = len(ec_set)
+                    
+                # if isinstance(edge_cmap, ListedColormap):
+                #     Necmap = edge_cmap.N
+                # else:
+                #     Necmap = qualitative_cmaps[edge_cmap.name]
+                Necmap = edge_cmap.N
+                
+                if Nevalues != Necmap: # if Nevalues > Necmap:
+                    # raise ValueError("To use a discrete colormap, the number of unique values should not exceed the number of colors.")
+                    # cycle the colormap:
+                    # if isinstance(edge_cmap, ListedColormap):
+                    #     edge_cmap = ListedColormap([k for _, k in zip(range(Nevalues), itertools.cycle(edge_cmap.colors))])
+                    # else:
+                    #     edge_cmap = ListedColormap([k for _, k in zip(range(Nevalues),
+                    #                                                   itertools.cycle(plt.get_cmap(edge_cmap).colors))])
+                    edge_cmap = ListedColormap([k for _, k in zip(range(Nevalues), itertools.cycle(edge_cmap.colors))])
+                    Necmap = edge_cmap.N
+
+                if (min(edge_color) < edge_vmin) or (max(edge_color) > edge_vmax):
+                    edge_color = [min(edge_vmax, max(edge_vmin, k)) for k in edge_color] # first map to min-max range
+                edge_boundaries = np.arange(Nevalues + 1) - 0.5                
+                edge_norm = BoundaryNorm(boundaries=edge_boundaries, ncolors=Nevalues)
+                cb_edge_cmap = edge_cmap
+                color_dict = {val: cb_edge_cmap(i) for i, val in enumerate(ec_set)}
+                edge_color = [color_dict[val] for val in edge_color]
+                edge_vmax = None
+                edge_vmin = None
+                edge_cmap = None
+
+                if edge_cbar:
+                    edge_ticks = np.arange(Nevalues) # node_boundaries + 0.5
+                    if edge_ticklabels_mapper is None:
+                        edge_ticklabels = [str(np.round(k, 2)) for k in ec_set]
+                    else:
+                        edge_ticklabels = [edge_ticklabels_mapper[k] for k in ec_set]
+                    if not edge_cmap_drawedges:
+                        edge_boundaries=None
+
+            else: # continuous colorbar
+                edge_cmap_drawedges = False
+                edge_ticklabels_mapper = None
+                edge_boundaries = None
+
+                if edge_vmin is None:
+                    edge_vmin = min(edge_colors)
+                if edge_vmax is None:
+                    edge_vmax = max(edge_colors)
+
+                if edge_cbar:
+                    cb_edge_cmap = edge_cmap
+                    if edge_vmax > edge_vmin:
+                        edge_ticks = [edge_vmin, edge_vmax]
+                        edge_ticklabels = [str(np.round(edge_vmin, 2)), str(np.round(edge_vmax, 2))]
+                        edge_norm = plt.Normalize(vmin=edge_vmin, vmax=edge_vmax)
+                    else:
+                        edge_boundaries = [edge_vmin - 1e-3, edge_vmin + 1e-3]
+                        edge_ticks = [edge_vmin]
+                        edge_ticklabels = [str(np.round(edge_vmin, 2))]
+                        edge_norm = plt.Normalize(vmin=edge_vmin, vmax=edge_vmin+1e-3)
+            
+    # draw edges for each style
+    if isinstance(edge_style, str):
+        edge_style = [edge_style]*len(edgelist)
+    if set(edge_style).issubset(set(edge_style_options)): # plot for each style without legend
+        edge_style_mapper = None
+    else: # plot for each style with legend
+        if edge_style_mapper is None:
+            edge_style_mapper = dict(zip(sorted(set(edge_style)), itertools.cycle(edge_style_options))) 
+        edge_style = [edge_style_mapper[k] for k in edge_style]
+    
+    for edge_class in set(edge_style):
+        indices = [i for i, j in enumerate(edge_style) if j == edge_class]
+        edgelist_tmp = [edgelist[i] for i in indices]
+
+        if isinstance(edge_width, Iterable):
+            edge_width_tmp = [edge_width[i] for i in indices]
+        else:
+            edge_width_tmp = edge_width
+        if isinstance(edge_color, Iterable) and not isinstance(edge_color, str):
+            edge_color_tmp = [edge_color[i] for i in indices]
+        else:
+            edge_color_tmp = edge_color
+        
+        nx.draw_networkx_edges(G, pos, edgelist=edgelist_tmp, # None, 
+                               width=edge_width_tmp, edge_color=edge_color_tmp, style=edge_class,
+                               alpha=edge_alpha,
+                               edge_cmap=edge_cmap,
+                               edge_vmin=edge_vmin, edge_vmax=edge_vmax, ax=ax,
+                               node_size=node_size, 
+                               nodelist=nodelist, 
+                               node_shape='8', # node_shape, # 'o',  
+                               min_source_margin=min_source_margin, min_target_margin=min_target_margin,
+                               )
+
+    if edge_style_mapper is not None:
+        edge_show_legend =  True if edge_show_legend is None else edge_show_legend
+        if edge_show_legend:
+            for class_label, class_style in edge_style_mapper.items():
+                legend_handles.append(Line2D([0], [0], marker=None, color='k',
+                                             label=class_label, lw=2, ls=class_style))
+
+    if with_node_labels:
+        nx.draw_networkx_labels(G, pos, labels=node_labels, font_size=node_font_size, font_color=node_font_color, 
+                                font_family=node_font_family, font_weight=node_font_weight, alpha=node_label_alpha, 
+                                bbox=node_bbox, horizontalalignment=node_horizontalalignment, 
+                                verticalalignment=node_verticalalignment, ax=ax, clip_on=node_clip_on, 
+                                )
+
+    if with_edge_labels:
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, label_pos=edge_label_pos, 
+                          font_size=edge_font_size, font_color=edge_font_color, 
+                          font_family=edge_font_family, font_weight=edge_font_weight, # 'normal', 
+                          alpha=edge_label_alpha, bbox=edge_bbox, horizontalalignment=edge_horizontalalignment,
+                          verticalalignment=edge_verticalalignment, ax=ax, rotate=rotate, clip_on=edge_clip_on,
+                         )
+
+    if len(legend_handles) > 0:
+        if legend_kws is None:
+            legend_kws = {}
+        legend = ax.legend(handles=legend_handles, **legend_kws)
+
+    if node_cbar:
+        # if isinstance(cb_node_cmap, ListedColormap) or (cb_node_cmap.name in qualitative_cmaps.keys()):
+            # cur_node_cbar = mpl.colorbar.ColorbarBase(ax, cmap=cb_node_cmap, norm=node_norm,
+        #                                           boundaries=node_boundaries, ticks=node_ticks,
+        #                                           draw_edges=node_cmap_drawedges, **node_cbar_kws)
+        node_sm = plt.cm.ScalarMappable(cmap=cb_node_cmap, norm=node_norm)
+        node_sm._A = []
+        cur_node_cbar = plt.colorbar(node_sm, ax=ax, ticks=node_ticks, boundaries=node_boundaries,
+                                     drawedges=node_cmap_drawedges, **node_cbar_kws)
+        pad_node_ticklabels = False
+        if node_ticklabels is not None:
+            if node_cbar_ticks_kws is None:
+                node_cbar_ticks_kws = {}
+            cur_node_cbar.set_ticklabels(node_ticklabels, **node_cbar_ticks_kws);
+            if (len(node_ticklabels) > 2) or (len(node_ticklabels) == 1):
+                pad_node_ticklabels = True
+
+        # node_cbar_label = "nodes" if node_cbar_label is None else "nodes: " + node_cbar_label
+        node_cbar_label = "nodes" if node_cbar_label is None else node_cbar_label
+        if node_cbar_label is not None:
+            # if ( ( (node_cmap is None) or ( (not isinstance(node_cmap, ListedColormap)) and (node_cmap not in qualitative_cmaps) ) ) and (not pad_node_ticklabels) ):
+            if (not pad_node_ticklabels) and (not isinstance(cb_node_cmap, ListedColormap)) and (cb_node_cmap.name not in qualitative_cmaps):
+                node_cbar_labelpad = -10
+            else:
+                node_cbar_labelpad = 1
+            # node_cbar_labelpad = (-10 if (((node_cmap is None) or (node_cmap not in qualitative_cmaps)) and (not pad_node_ticklabels)) else 1) # -30
+
+        if node_cbar_label_kws is None:
+            node_cbar_label_kws = {}
+        if 'labelpad' not in node_cbar_label_kws:
+            node_cbar_label_kws['labelpad'] = node_cbar_labelpad
+        cur_node_cbar.set_label(node_cbar_label, # labelpad=node_cbar_labelpad,
+                                y=node_cbar_label_y, **node_cbar_label_kws)
+
+
+    if edge_cbar:
+        edge_sm = plt.cm.ScalarMappable(cmap=cb_edge_cmap, norm=edge_norm)
+        edge_sm._A = []
+        cur_edge_cbar = plt.colorbar(edge_sm, ax=ax, ticks=edge_ticks, boundaries=edge_boundaries,
+                                     drawedges=edge_cmap_drawedges, **edge_cbar_kws)
+
+        # is this section used?
+        pad_edge_ticklabels = False 
+        if edge_ticklabels is not None:
+            if edge_cbar_ticks_kws is None:
+                edge_cbar_ticks_kws = {}
+            cur_edge_cbar.set_ticklabels(edge_ticklabels, **edge_cbar_ticks_kws);
+            if (len(edge_ticklabels) > 2) or (len(edge_ticklabels) == 1):
+                pad_edge_ticklabels = True
+
+        # edge_cbar_label = "edges" if edge_cbar_label is None else "edges: " + edge_cbar_label
+        edge_cbar_label = "edges" if edge_cbar_label is None else edge_cbar_label
+        if edge_cbar_label is not None:
+            if (not pad_edge_ticklabels) and (not isinstance(cb_edge_cmap, ListedColormap)) and (cb_edge_cmap.name not in qualitative_cmaps):
+                edge_cbar_labelpad = -10
+            else:
+                edge_cbar_labelpad = 1
+
+        if edge_cbar_label_kws is None:
+            edge_cbar_label_kws = {}
+        if 'labelpad' not in edge_cbar_label_kws:
+            edge_cbar_label_kws['labelpad'] = edge_cbar_labelpad
+        cur_edge_cbar.set_label(edge_cbar_label,
+                                y=edge_cbar_label_y, **edge_cbar_label_kws)
+
+
+    return ax
+            
+            
+
+        
+
+
+
+        
+def plot_topology2(G, 
                   pos=None, # 1, 2, 3, 4, 5
                   with_node_labels=False, # 1 was with_labels
                   with_edge_labels=False,
@@ -350,7 +1073,7 @@ def plot_topology(G,
                 node_norm = BoundaryNorm(node_boundaries, len(nc_set))
             else: # TODO: check boundaries in colorbar when there are more values than there are discrete colors
                 if node_cmap_drawedges:
-                    # node_boundaries = np.append(np.append(nc_set[0], np.array(nc_set[:-1]) + (np.diff(nc_set) / 2)), nc_set[-1]) # nc_set                    
+                    # Node_boundaries = np.append(np.append(nc_set[0], np.array(nc_set[:-1]) + (np.diff(nc_set) / 2)), nc_set[-1]) # nc_set                    
                     node_boundaries = np.append(np.append(nc_set[0]-(np.diff(nc_set[:2])/2), np.array(nc_set[:-1]) + (np.diff(nc_set) / 2)),
                                                 nc_set[-1] + (np.diff(nc_set[-2:]) / 2)) 
                 else:
