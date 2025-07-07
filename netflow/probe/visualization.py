@@ -462,13 +462,13 @@ def plot_topology(G,
         else:
             bordercolors_tmp = bordercolors
 
-            nx_nodes = nx.draw_networkx_nodes(G, pos, ax=ax, nodelist=nodelist_tmp, node_size=node_size_tmp,
-                                              node_color=node_color_tmp, node_shape=shape_class,
-                                              alpha=node_alpha, # MAYBE CHANGE TO ALPHA BY NODE?
-                                              cmap=node_cmap, vmin=node_vmin, vmax=node_vmax,
-                                              linewidths=border_linewidths_tmp, edgecolors=bordercolors_tmp,
-                                              margins=margins,
-                                              )
+        nx.draw_networkx_nodes(G, pos, ax=ax, nodelist=nodelist_tmp, node_size=node_size_tmp,
+                               node_color=node_color_tmp, node_shape=shape_class,
+                               alpha=node_alpha, # MAYBE CHANGE TO ALPHA BY NODE?
+                               cmap=node_cmap, vmin=node_vmin, vmax=node_vmax,
+                               linewidths=border_linewidths_tmp, edgecolors=bordercolors_tmp,
+                               margins=margins,
+                               )
     if node_shape_mapper is not None:
         node_show_legend =  True if node_show_legend is None else node_show_legend
         if node_show_legend:
