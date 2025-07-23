@@ -7,6 +7,7 @@ dash_cytoscape==0.2.0
 dash-table==5.0.0
 dash-html-components==2.0.0
 fastcluster==1.2.6
+jupyter-dash==0.4.2
 lifelines==0.27.4
 matplotlib
 more-itertools==9.1.0
