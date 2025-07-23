@@ -2156,7 +2156,8 @@ class POSER:
         
         return G
 
-
+        
+    
     def _construct_topology(self, segs, annotate=True):
         """ Construct POSE connections between data points.
 
@@ -2356,3 +2357,104 @@ class POSER:
         nx.set_edge_attributes(G, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in G.edges()}, name="inverted_distance")
 
         return G
+
+
+    def _construct_mst_topology(self, annotate=True):
+        """ Construct MST backbone topology graph.
+
+        Parameters
+        ----------
+        annotate : `bool`
+            If `True`, add observation label as node attribute, referenced by 'name'.
+        
+        Returns
+        -------
+        Gmst : `networkx.Graph`
+            Graph where each node is a data point and edges reflect MST connections between them.
+        """
+        d = pd.DataFrame(self.distances)
+        edgelist = utl.stack_triu_(d)
+        edgelist.name = 'weight'
+        edgelist = edgelist.reset_index().rename(columns={'level_0': 'source', 'level_1': 'target'})
+        Gfull = nx.from_pandas_edgelist(edgelist, edge_attr='weight')
+        Gmst = nx.minimum_spanning_tree(Gfull)
+
+        if annotate:
+            nx.set_node_attributes(Gmst, dict(zip(range(self.distances.shape[0]),
+                                                  self.observation_labels)), name='name')
+        return Gmst
+
+
+    def construct_pose_mst_nn_topology(self, G, mutual=False, k_mnn=1, annotate=True):
+        """ Add nearest neighbor (nn) edges to MST POSE topology.
+
+        .. note:: Mutual nns tend to be sparser than nns so allow to select more
+                  than just the first nn if restricting to mutual neighbors.
+
+        Parameters
+        ----------
+        G : `networkx.Graph`
+            Nearest-neighbor edges are added to a copy of the MST POSE graph.
+        mutual : `bool` (default = `False`)
+            If `True`, add ``k_mnn`` mutual nn edges. Otherwise, add single nn edge.
+            When `False`, ``k_mnn`` is ignored.
+        k_mnn : `int` (``0 < k_mnn < len(G)``)
+            The number of nns to consider when extracting mutual nns.
+            Note, this is ignored when ``mutual`` is `False`.
+        annotate : `bool`
+            If `True`, annotate edges.
+
+        Returns
+        -------
+        Gnn : `networkx.Graph`
+            The updated graph with nearest neighbor edges.
+            If ``annotate`` is `True`, edge attribute "edge_origin"
+            is added with the possible values :
+
+            - "POSE" : for edges in the original MST graph that are not nearest neighbor edges
+            - "NN" : for nearest neighbor edges that were not in the original MST graph
+            - "POSE + NN" : for edges in the original MST graph that are also nearest neighbor edges
+        """
+        Gnn = G.copy()
+        d = self.distances
+        # d = d + (np.max(d)+1e-3)*np.eye(*d.shape)
+
+        if mutual:
+            nn_edges = mutual_knn_edges(d, n_neighbors=k_mnn)
+            nn_edges = [tuple(sorted(ee)) for ee in nn_edges]  # TODO: this might be redundant if returned in sorted order already
+        else:
+            # nn = np.argmin(d, axis=0)        
+            nn = np.argpartition(d, 1, axis=1)[:, 1]            
+            nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
+            nn_edges = list(set(nn_edges))
+            
+        
+        if annotate:
+            # nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
+            # nn_edges = list(set(nn_edges))
+
+            pose_edges = list(set([tuple(sorted(ee)) for ee in Gnn.edges()]))
+
+            nn_unique_edges = list(set(nn_edges) - set(pose_edges))
+            pose_unique_edges = list(set(pose_edges) - set(nn_edges))
+            nn_pose_edges = list(set(nn_edges) & set(pose_edges))
+
+            if len(nn_unique_edges) + len(nn_pose_edges) != len(nn_edges):
+                raise AssertionError("Unexpected number of nearest-neighbor edges.")
+
+            Gnn.add_edges_from(nn_unique_edges)
+
+            nx.set_edge_attributes(Gnn, {**{ee: "POSE + NN" for ee in nn_pose_edges},
+                                         **{ee: "NN" for ee in nn_unique_edges},
+                                         **{ee: "POSE" for ee in pose_unique_edges}},
+                                   name="edge_origin")
+
+            
+            nx.set_edge_attributes(Gnn, {ee: self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="distance")
+            nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
+
+        else:
+            # nn_edges = [tuple([i,j]) for i, j in zip(range(d.shape[0]), nn)]
+            Gnn.add_edges_from(nn_edges)
+
+        return Gnn
