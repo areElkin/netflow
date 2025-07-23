@@ -22,15 +22,15 @@ from jupyter_dash import JupyterDash
 from lifelines.statistics import logrank_test
 from matplotlib import colormaps as mpl_cm
 
-from .visualization import sin_layout, wavy_curve_layout # , forceatlas2_layout
+from .visualization import sin_layout, wavy_curve_layout forceatlas2_layout
 from ..methods.stats import stat_test
 
 from ..methods import stats as ms
 
-from importlib import reload
-from . import visualization as nfv
-reload(nfv)
-forceatlas2_layout = nfv.forceatlas2_layout
+# from importlib import reload
+# from . import visualization as nfv
+# reload(nfv)
+# forceatlas2_layout = nfv.forceatlas2_layout
 
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -1910,7 +1910,7 @@ def renderer(keeper, pose_key, distance_key):
                 pos = nx.planar_layout(G)
                 positions_records[layout] = pos
             elif layout == 'forceatlas2':
-                pos = forceatlas2_layout(G)
+                pos = nfv.forceatlas2_layout(G)
                 positions_records[layout] = pos
             elif layout == 'sin':
                 pos = sin_layout(G, keeper.distances[distance_key].to_frame())
