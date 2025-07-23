@@ -46,8 +46,10 @@ This project is licensed under the "BSD 3-Clause License" - see the LICENSE file
 
 Please cite our paper if you use this code in your work
 
+```
 @article{elkin2025netflow,
   title={NetFlow: a framework to explore topological representations of high-dimensional biomedical data},
   author={Elkin, Rena and Oh, Jung Hun and Simhal, Anish K and Deasy, Joseph O},
   year={2025},
 }
+```
