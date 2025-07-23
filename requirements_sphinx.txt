@@ -1,21 +1,21 @@
-cvxpy=1.2.1
-lifelines=0.27.4
+cvxpy==1.2.1
+lifelines==0.27.4
 matplotlib
 myst-nb
-networkx=2.8.4
-numpy=1.21.2
-pandas=1.4.1
+networkx==2.8.4
+numpy==1.21.2
+pandas==1.4.1
 pydata-sphinx-theme
-scikit-learn=1.0.2
-scipy=1.8.1
+scikit-learn==1.0.2
+scipy==1.8.1
 sphinx
 sphinx-copybutton
 sphinx-design
 sphinxcontrib-fulltoc
-statsmodels=0.13.2
-tqdm=4.64.1
-multiprocess=0.70.14
-pot=0.8.2
+statsmodels==0.13.2
+tqdm==4.64.1
+multiprocess==0.70.14
+pot==0.8.2
 
 
 
