@@ -35,7 +35,7 @@ There are many great works that have inspired the development of this package. W
 - OMT
 - DPT
 
-This package includes code from [Scanpy](https://github.com/scverse/scanpy), which is licensed under the BSD 3-Clause License. The original license text can be found in the `LICENSE` file included in this package. In particular, the code pertainng to the computation of the diffusion pseudo-time distance (DPT) and branching algorithm proposed in [Haghverdi16]_ incorporated in this package were primiarily sourced or adapted from the Scanpy implementation. We would like to give a special thanks to the contriubtors of that project for providing the underlying functionality for the DPT branching procedure. 
+This package includes code from [Scanpy](https://github.com/scverse/scanpy), which is licensed under the BSD 3-Clause License. The original license text can be found in the `LICENSE` file included in this package. In particular, the code pertainng to the computation of the diffusion pseudo-time distance (DPT) and branching algorithm proposed in Haghverdi, et al. (2016) incorporated in this package were primiarily sourced or adapted from the Scanpy implementation. We would like to give a special thanks to the contriubtors of that project for providing the underlying functionality for the DPT branching procedure. 
 
 
 ## License Information
