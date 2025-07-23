@@ -1,0 +1,10 @@
+sphinx
+myst-nb
+sphinxcontrib-fulltoc
+sphinx-copybutton
+sphinx-design
+matplotlib
+pydata-sphinx-theme
+
+
+
