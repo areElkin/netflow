@@ -22,7 +22,7 @@ from jupyter_dash import JupyterDash
 from lifelines.statistics import logrank_test
 from matplotlib import colormaps as mpl_cm
 
-from .visualization import sin_layout, wavy_curve_layout forceatlas2_layout
+from .visualization import sin_layout, wavy_curve_layout, forceatlas2_layout
 from ..methods.stats import stat_test
 
 from ..methods import stats as ms
