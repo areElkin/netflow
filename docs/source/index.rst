@@ -8,7 +8,7 @@
 .. module:: netflow
 
 *********************
-netflow documentation
+NetFlow documentation
 *********************
 
 **Date**: |today| **Version**: |version|
