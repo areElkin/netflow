@@ -526,7 +526,7 @@ def plot_topology(G,
                     edge_cmap_drawedges = False
 
             # unique set of values
-            nc_set_full = sorted(set(node_color))
+            ec_set_full = sorted(set(edge_color))
 
             if (edge_vmin is None) and (edge_vmax is None):
                 ec_set = ec_set_full
