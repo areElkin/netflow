@@ -1,0 +1,853 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>netflow.methods.metrics &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.methods.metrics';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="netflow.methods.stats" href="netflow.methods.stats.html" />
+    <link rel="prev" title="netflow.methods.classes" href="netflow.methods.classes.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.dev" />
+    <meta name="docbuild:last-update" content="Jul 24, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/NF_logo3.png" class="logo__image only-light" alt="netflow v0.0.dev Manual - Home"/>
+    <img src="../../_static/NF_logo3.png" class="logo__image only-dark pst-js-only" alt="netflow v0.0.dev Manual - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorial/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorial/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../main_namespace.html">netflow</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.keepers.html">netflow.keepers</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.keepers.keeper.html">netflow.keepers.keeper</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.pose.html">netflow.pose</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.similarity.html">netflow.pose.similarity</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.stats.html">netflow.methods.stats</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items" aria-labelledby="pst-indices-navigation-heading-2">
+  <p id="pst-indices-navigation-heading-2" class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../overview/index.html" class="nav-link">netflow User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="netflow.methods.html" class="nav-link">netflow.methods</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">netflow.methods.metrics</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-netflow.methods.metrics">
+<span id="netflow-methods-metrics"></span><h1>netflow.methods.metrics<a class="headerlink" href="#module-netflow.methods.metrics" title="Permalink to this heading">#</a></h1>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.metrics.OTD" title="netflow.methods.metrics.OTD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OTD</span></code></a>(x, y, d[, solvr, flag])</p></td>
+<td><p>Compute the optimal transportation distance (OTD) of the given density distributions trying first with POT package and then by CVXPY.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.metrics.norm_features" title="netflow.methods.metrics.norm_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norm_features</span></code></a>(keeper, key[, features, ...])</p></td>
+<td><p>Norm of multi-feature data points in keeper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.metrics.norm_features_" title="netflow.methods.metrics.norm_features_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norm_features_</span></code></a>(X[, method])</p></td>
+<td><p>Norm of multi-feature data points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.metrics.norm_features_as_sym_dist" title="netflow.methods.metrics.norm_features_as_sym_dist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norm_features_as_sym_dist</span></code></a>(keeper, key, label)</p></td>
+<td><p>Construct symmetric distance matrix between observations from the norm of multi-feature pairwise-observation distances.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.metrics.optimal_transportation_distance" title="netflow.methods.metrics.optimal_transportation_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimal_transportation_distance</span></code></a>(x, y, d[, solvr])</p></td>
+<td><p>Compute the optimal transportation distance (OTD) of the given density distributions by CVXPY.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.metrics.pairwise_observation_euc_distances" title="netflow.methods.metrics.pairwise_observation_euc_distances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_observation_euc_distances</span></code></a>(profiles)</p></td>
+<td><p>Compute observation-pairwise Euclidean distances between the profiles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.metrics.pairwise_observation_wass_distances" title="netflow.methods.metrics.pairwise_observation_wass_distances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_observation_wass_distances</span></code></a>(...[, ...])</p></td>
+<td><p>Compute observation-pairwise Wasserstein distances between the profiles on a fixed weighted graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.metrics.wass_distance" title="netflow.methods.metrics.wass_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wass_distance</span></code></a>(observations, profiles, ...[, ...])</p></td>
+<td><p>Compute Wasserstein distance between profiles of two observations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.metrics.OTD">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.metrics.</span></span><span class="sig-name descname"><span class="pre">OTD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/metrics.html#OTD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.metrics.OTD" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the optimal transportation distance (OTD) of the given density distributions
+trying first with POT package and then by CVXPY.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>(</em><em>m</em><em>,</em><em>) </em><em>numpy.ndarray</em>) – Source’s density distributions, includes source and source’s neighbors.</p></li>
+<li><p><strong>y</strong> (<em>(</em><em>n</em><em>,</em><em>) </em><em>numpy.ndarray</em>) – Target’s density distributions, includes source and source’s neighbors.</p></li>
+<li><p><strong>d</strong> (<em>(</em><em>m</em><em>, </em><em>n</em><em>) </em><em>numpy.ndarray</em>) – Shortest path matrix.</p></li>
+<li><p><strong>flag</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Optional flag included in logger output to identify inputs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>m</strong> – Optimal transportation distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.metrics.norm_features">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.metrics.</span></span><span class="sig-name descname"><span class="pre">norm_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/metrics.html#norm_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.metrics.norm_features" title="Permalink to this definition">#</a></dt>
+<dd><p>Norm of multi-feature data points in keeper.</p>
+<p>Intended to compute the norm of pairwise distances between observations <span class="math notranslate nohighlight">\(s_q\)</span>
+and <span class="math notranslate nohighlight">\(s_r\)</span> for all features
+<span class="math notranslate nohighlight">\(f_i \in F\)</span>: <span class="math notranslate nohighlight">\(D_{qr}^{(F)} = [d_{qr}^{(f_1)}, ..., d_{qr}^{(f_m)}]\)</span></p>
+<p>The multi-feature distances array is of the form <span class="math notranslate nohighlight">\(D^{(F)} = [d_{ij}]\)</span> of size
+(n_observations * (n_observations - 1) / 2, n_features).
+<span class="math notranslate nohighlight">\(F\)</span> is the set of features where <span class="math notranslate nohighlight">\(|F| = ` n_features, with a multi-index of size 2
+of the form :math:`(obs_i, obs_j)\)</span> and <span class="math notranslate nohighlight">\(d_{ij}\)</span> is the distance between
+pairwise-observations
+<span class="math notranslate nohighlight">\(i = (obs_p, obs_q)\)</span> with respect to feature <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">label</span></code> is provided, the resulting norm is stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc[label]</span></code>.
+Otherwise, if <code class="docutils literal notranslate"><span class="pre">label</span></code> is <cite>None</cite>, the resulting norm is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keeper</strong> (<cite>netflow.Keeper</cite>) – The keeper object that stores the multiple pairwise-observation distances.</p></li>
+<li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the multiple pairwise-observation distances stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>,
+of size (n_observations * (n_observations - 1) / 2, n_features).
+The norm is computed on the rows of <code class="docutils literal notranslate"><span class="pre">keeper.misc[key]</span></code>.</p></li>
+<li><p><strong>features</strong> ({<cite>None</cite>, <cite>List</cite> [<cite>str</cite>]}) – Subset of features to include. If provided, restrict to norm over columns corresponding to features
+in the specified list. If <cite>None</cite>, use all columns.</p></li>
+<li><p><strong>method</strong> (<em>{'L1'</em><em>, </em><em>'L2'</em><em>, </em><em>'inf'</em><em>, </em><em>'mean'</em><em>, </em><em>'median'}</em>) – <p>Indicate which norm to compute. For each row of the form <span class="math notranslate nohighlight">\(x = [x_1, x_2, ..., x_n]\)</span> :</p>
+<p>Options:</p>
+<ul>
+<li><p>’L1’ : <span class="math notranslate nohighlight">\(\sum_{i=1}^n abs(x_i)\)</span></p></li>
+<li><p>’L2’ : <span class="math notranslate nohighlight">\(\sqrt{\sum_{i=1}^n (x_i)^2}\)</span></p></li>
+<li><p>’inf’ : <span class="math notranslate nohighlight">\(max_i abs(x_i)\)</span></p></li>
+<li><p>’mean’ : Mean of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+<li><p>’median’ : Median of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+</ul>
+</p></li>
+<li><p><strong>label</strong> ({<cite>None</cite>, <cite>str</cite>}) – Label used to store resulting norm in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>. If <cite>None</cite>, the resulting norm is returned
+instead of storing it in the keeper.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>n</strong> – Norm of the row(s) of length n_observations * (n_observations - 1) / 2..</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>pandas.Series</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.metrics.norm_features_">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.metrics.</span></span><span class="sig-name descname"><span class="pre">norm_features_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/metrics.html#norm_features_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.metrics.norm_features_" title="Permalink to this definition">#</a></dt>
+<dd><p>Norm of multi-feature data points.</p>
+<p>Intended to compute the norm of pairwise distances between observations <span class="math notranslate nohighlight">\(s_q\)</span>
+and <span class="math notranslate nohighlight">\(s_r\)</span> for all features
+<span class="math notranslate nohighlight">\(f_i \in F\)</span>: <span class="math notranslate nohighlight">\(D_{qr}^{(F)} = [d_{qr}^{(f_1)}, ..., d_{qr}^{(f_m)}]\)</span></p>
+<p>The multi-feature distances array is of the form <span class="math notranslate nohighlight">\(D^{(F)} = [d_{ij}]\)</span> of size
+(n_observations * (n_observations - 1) / 2, n_features).
+<span class="math notranslate nohighlight">\(F\)</span> is the set of features where <span class="math notranslate nohighlight">\(|F| = ` n_features, with a multi-index of size 2
+of the form :math:`(obs_i, obs_j)\)</span> and <span class="math notranslate nohighlight">\(d_{ij}\)</span> is the distance between
+pairwise-observations
+<span class="math notranslate nohighlight">\(i = (obs_p, obs_q)\)</span> with respect to feature <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<cite>pandas.DataFrame</cite>, (n_observations * (n_observations - 1) / 2, n_features)) – The matrix of  multiple pairwise-observation distances.
+The norm is computed on the rows of <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>{'L1'</em><em>, </em><em>'L2'</em><em>, </em><em>'inf'</em><em>, </em><em>'mean'</em><em>, </em><em>'median'}</em>) – <p>Indicate which norm to compute. For each row of the form <span class="math notranslate nohighlight">\(x = [x_1, x_2, ..., x_n]\)</span> :</p>
+<p>Options:</p>
+<ul>
+<li><p>’L1’ : <span class="math notranslate nohighlight">\(\sum_{i=1}^n abs(x_i)\)</span></p></li>
+<li><p>’L2’ : <span class="math notranslate nohighlight">\(\sqrt{\sum_{i=1}^n (x_i)^2}\)</span></p></li>
+<li><p>’inf’ : <span class="math notranslate nohighlight">\(max_i abs(x_i)\)</span></p></li>
+<li><p>’mean’ : Mean of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+<li><p>’median’ : Median of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>n</strong> – Norm of the row(s).
+When not a <cite>float</cite>, If <code class="docutils literal notranslate"><span class="pre">X</span></code> is a <cite>pandas.DataFrame</cite>, <code class="docutils literal notranslate"><span class="pre">n</span></code> is a <cite>pandas.Series</cite>.
+Otherwise, if <code class="docutils literal notranslate"><span class="pre">X</span></code> is a <cite>numpy.ndarray</cite>, <code class="docutils literal notranslate"><span class="pre">n</span></code> is a <cite>numpy.ndarray</cite> vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>float</cite> or array-like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.metrics.norm_features_as_sym_dist">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.metrics.</span></span><span class="sig-name descname"><span class="pre">norm_features_as_sym_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/metrics.html#norm_features_as_sym_dist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.metrics.norm_features_as_sym_dist" title="Permalink to this definition">#</a></dt>
+<dd><p>Construct symmetric distance matrix between observations from the norm of
+multi-feature pairwise-observation distances.</p>
+<p>Intended to compute the norm of pairwise distances between observations <span class="math notranslate nohighlight">\(s_q\)</span>
+and <span class="math notranslate nohighlight">\(s_r\)</span> for all features
+<span class="math notranslate nohighlight">\(f_i \in F\)</span>: <span class="math notranslate nohighlight">\(D_{qr}^{(F)} = [d_{qr}^{(f_1)}, ..., d_{qr}^{(f_m)}]\)</span></p>
+<p>The multi-feature distances array is of the form <span class="math notranslate nohighlight">\(D^{(F)} = [d_{ij}]\)</span> of size
+(n_observations * (n_observations - 1) / 2, n_features).
+<span class="math notranslate nohighlight">\(F\)</span> is the set of features where <span class="math notranslate nohighlight">\(|F| = ` n_features, with a multi-index of size 2
+of the form :math:`(obs_i, obs_j)\)</span> and <span class="math notranslate nohighlight">\(d_{ij}\)</span> is the distance between
+pairwise-observations
+<span class="math notranslate nohighlight">\(i = (obs_p, obs_q)\)</span> with respect to feature <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<p>The multi-feature pairwise-observations are by default treated as distances,
+but they could be similarities. If they are similarities, set <code class="docutils literal notranslate"><span class="pre">is_distance</span></code>
+to <cite>False</cite>. Note: similarities will have 1. along the diagonal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keeper</strong> (<cite>netflow.Keeper</cite>) – The keeper object that stores the multiple pairwise-observation distances.</p></li>
+<li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the multiple pairwise-observation distances stored in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>,
+of size (n_observations * (n_observations - 1) / 2, n_features).
+The norm is computed on the rows of <code class="docutils literal notranslate"><span class="pre">keeper.misc[key]</span></code>.</p></li>
+<li><p><strong>label</strong> (<cite>str</cite>) – Label used to store resulting distance matrix. If <code class="docutils literal notranslate"><span class="pre">is_distance</span></code> is <cite>True</cite>, the matrix is stored in
+<code class="docutils literal notranslate"><span class="pre">keeper.distances[label]</span></code>. Otherwise, it is a similarity matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.similarity[label]</span></code>.</p></li>
+<li><p><strong>features</strong> ({<cite>None</cite>, <cite>List</cite> [<cite>str</cite>]}) – Subset of features to include. If provided, restrict to norm over columns corresponding to features
+in the specified list. If <cite>None</cite>, use all columns.</p></li>
+<li><p><strong>method</strong> (<em>{'L1'</em><em>, </em><em>'L2'</em><em>, </em><em>'inf'</em><em>, </em><em>'mean'</em><em>, </em><em>'median'}</em>) – <p>Indicate which norm to compute. For each row of the form <span class="math notranslate nohighlight">\(x = [x_1, x_2, ..., x_n]\)</span> :</p>
+<p>Options:</p>
+<ul>
+<li><p>’L1’ : <span class="math notranslate nohighlight">\(\sum_{i=1}^n abs(x_i)\)</span></p></li>
+<li><p>’L2’ : <span class="math notranslate nohighlight">\(\sqrt{\sum_{i=1}^n (x_i)^2}\)</span></p></li>
+<li><p>’inf’ : <span class="math notranslate nohighlight">\(max_i abs(x_i)\)</span></p></li>
+<li><p>’mean’ : Mean of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+<li><p>’median’ : Median of <span class="math notranslate nohighlight">\(x\)</span></p></li>
+</ul>
+</p></li>
+<li><p><strong>is_distance</strong> (<cite>bool</cite>) – Indicate if the multi-feature pairwise-observations are distances or similarities.
+If <cite>True</cite>, they are treated as distances. If <cite>False</cite>, they are treated as similarities.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.metrics.optimal_transportation_distance">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.metrics.</span></span><span class="sig-name descname"><span class="pre">optimal_transportation_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/metrics.html#optimal_transportation_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.metrics.optimal_transportation_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the optimal transportation distance (OTD) of the given density distributions by CVXPY.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<cite>numpy.ndarray</cite>, (m,)) – Source’s density distributions, includes source and source’s neighbors.</p></li>
+<li><p><strong>y</strong> (<cite>numpy.ndarray</cite>, (n,)) – Target’s density distributions, includes source and source’s neighbors.</p></li>
+<li><p><strong>d</strong> (<cite>numpy.ndarray</cite>, (m, n)) – Shortest path matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>m</strong> – Optimal transportation distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.metrics.pairwise_observation_euc_distances">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.metrics.</span></span><span class="sig-name descname"><span class="pre">pairwise_observation_euc_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/metrics.html#pairwise_observation_euc_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.metrics.pairwise_observation_euc_distances" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute observation-pairwise Euclidean distances between the profiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profiles</strong> (<cite>pandas.DataFrame</cite>, (n_features, n_observations)) – Profiles that Euclidean distance is computed between.</p></li>
+<li><p><strong>metrics</strong> (<cite>str</cite> or callable, optional) – The distance metric to use passed to <cite>scipy.spatial.distance.cdist</cite>.</p></li>
+<li><p><strong>**kwargs</strong> (<cite>dict</cite>, optional) – Extra arguments to metric, passed to <cite>scipy.spatial.distance.cdist</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ed</strong> – Euclidean distances between pairwise observations</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.metrics.pairwise_observation_wass_distances">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.metrics.</span></span><span class="sig-name descname"><span class="pre">pairwise_observation_wass_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_distances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairwise_obs_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/metrics.html#pairwise_observation_wass_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.metrics.pairwise_observation_wass_distances" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute observation-pairwise Wasserstein distances between the profiles on a fixed weighted graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profiles</strong> (<cite>pandas.DataFrame</cite>, (n_features, n_observations)) – Profiles that are normalized and treated as probability distributions for computing
+Wasserstein distance.</p></li>
+<li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the n nodes (ordered from 0, 1, …, n-1).</p></li>
+<li><p><strong>measure_cutoff</strong> (<cite>float</cite>) – Threshold for treating values in profiles as zero, default = 1e-6.</p></li>
+<li><p><strong>proc</strong> (<cite>int</cite>) – Number of processor used for multiprocessing. (Default value = cpu_count()).</p></li>
+<li><p><strong>pairwise_obs_list</strong> (<cite>list</cite> [2-<cite>tuple</cite>]) – (Optional) Provide restricted list of pairwise observations that the Wasserstein distance should be
+computed between. Observations are expected to be the columns of <code class="docutils literal notranslate"><span class="pre">profiles</span></code>.
+If not provided, the pairwise Wasserstein distance is computed between every two observations
+in <code class="docutils literal notranslate"><span class="pre">profiles</span></code>.</p></li>
+<li><p><strong>chunksize</strong> (<cite>int</cite>) – Chunksize to allocate for multiprocessing.</p></li>
+<li><p><strong>solvr</strong> (<cite>str</cite>) – Solver to pass to POT library for computing Wasserstein distance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>wd</strong> – Wasserstein distances between pairwise observations</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.metrics.wass_distance">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.metrics.</span></span><span class="sig-name descname"><span class="pre">wass_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_distances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/metrics.html#wass_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.metrics.wass_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute Wasserstein distance between profiles of two observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>observations</strong> (<em>2-tuple</em>) – Profile columns names referring to the two observations that the Wasserstein distance should be computed between.</p></li>
+<li><p><strong>profiles</strong> (<cite>pandas.DataFrame</cite>) – Observation profiles with features as rows and observations as columns.</p></li>
+<li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n’, n’)) – A matrix of node-pairwise graph distances between the <span class="math notranslate nohighlight">\(n'\)</span> nodes ordered by the rows in <code class="docutils literal notranslate"><span class="pre">profiles</span></code>.</p></li>
+<li><p><strong>measure_cutoff</strong> (<cite>float</cite>) – Threshold for treating values in profiles as zero, default = 1e-6.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>wasserstein_distance</strong> – The Wasserstein distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="netflow.methods.classes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">netflow.methods.classes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="netflow.methods.stats.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">netflow.methods.stats</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="current visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html#modules">Modules</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.keepers.html">netflow.keepers</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.html">netflow.probe</a></li>
+<li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l6 current toc-h6 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.methods.metrics</a><ul class="nav section-nav flex-column">
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.metrics.OTD"><code class="docutils literal notranslate"><span class="pre">OTD()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.metrics.norm_features"><code class="docutils literal notranslate"><span class="pre">norm_features()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.metrics.norm_features_"><code class="docutils literal notranslate"><span class="pre">norm_features_()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.metrics.norm_features_as_sym_dist"><code class="docutils literal notranslate"><span class="pre">norm_features_as_sym_dist()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.metrics.optimal_transportation_distance"><code class="docutils literal notranslate"><span class="pre">optimal_transportation_distance()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.metrics.pairwise_observation_euc_distances"><code class="docutils literal notranslate"><span class="pre">pairwise_observation_euc_distances()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.metrics.pairwise_observation_wass_distances"><code class="docutils literal notranslate"><span class="pre">pairwise_observation_wass_distances()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.metrics.wass_distance"><code class="docutils literal notranslate"><span class="pre">wass_distance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.stats.html">netflow.methods.stats</a></li>
+</ul>
+</li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/reference/generated/netflow.methods.metrics.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023-2025, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

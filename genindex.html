@@ -1,0 +1,1427 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.dev" />
+    <meta name="docbuild:last-update" content="Jul 24, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/NF_logo3.png" class="logo__image only-light" alt="netflow v0.0.dev Manual - Home"/>
+    <img src="_static/NF_logo3.png" class="logo__image only-dark pst-js-only" alt="netflow v0.0.dev Manual - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorial/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="reference/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorial/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="reference/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items" aria-labelledby="pst-indices-navigation-heading-2">
+  <p id="pst-indices-navigation-heading-2" class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="#"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__contains__">__contains__() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__contains__">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__contains__">(netflow.keepers.keeper.GraphKeeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.__detect_branching_haghverdi16">__detect_branching_haghverdi16() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__getitem__">__getitem__() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__getitem__">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__getitem__">(netflow.keepers.keeper.GraphKeeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__init__">__init__() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.__init__">(netflow.keepers.keeper.DataView method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__init__">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.__init__">(netflow.keepers.keeper.DistanceView method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__init__">(netflow.keepers.keeper.GraphKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.__init__">(netflow.keepers.keeper.Keeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.__init__">(netflow.methods.classes.InfoNet method)</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.__init__">(netflow.pose.organization.POSER method)</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.__init__">(netflow.pose.organization.Tree method)</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.__init__">(netflow.pose.organization.TreeNode method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__iter__">__iter__() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__iter__">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__iter__">(netflow.keepers.keeper.GraphKeeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.__module__">__module__ (netflow.keepers.keeper.DataKeeper attribute)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.__module__">(netflow.keepers.keeper.DataView attribute)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.__module__">(netflow.keepers.keeper.DistanceKeeper attribute)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.__module__">(netflow.keepers.keeper.DistanceView attribute)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.__module__">(netflow.keepers.keeper.GraphKeeper attribute)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.__module__">(netflow.keepers.keeper.Keeper attribute)</a>
+</li>
+        <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.__module__">(netflow.methods.classes.InfoNet attribute)</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.__module__">(netflow.pose.organization.POSER attribute)</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.__module__">(netflow.pose.organization.Tree attribute)</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.__module__">(netflow.pose.organization.TreeNode attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.__repr__">__repr__() (netflow.pose.organization.TreeNode method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._branch_member_indices">_branch_member_indices() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._branch_member_labels">_branch_member_labels() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._branch_order">_branch_order() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper._check_num_observations">_check_num_observations() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper._check_observation_labels">_check_observation_labels() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization._compute_transitions">_compute_transitions() (in module netflow.pose.organization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._construct_mst_topology">_construct_mst_topology() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._construct_topology">_construct_topology() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._curve_sin">_curve_sin() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._curve_trace">_curve_trace() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._detect_branch">_detect_branch() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._detect_branching_single_haghverdi16">_detect_branching_single_haghverdi16() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._detect_branching_single_wolf17_bi">_detect_branching_single_wolf17_bi() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._detect_branching_single_wolf17_tri">_detect_branching_single_wolf17_tri() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity._distance_to_similarity">_distance_to_similarity() (in module netflow.pose.similarity)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization._dpt_from_augmented_sym_transitions">_dpt_from_augmented_sym_transitions() (in module netflow.pose.organization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree._get_node_from_counter">_get_node_from_counter() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._interbranch_edges">_interbranch_edges() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._kendall_tau_add">_kendall_tau_add() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._kendall_tau_diff">_kendall_tau_diff() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._kendall_tau_subtract">_kendall_tau_subtract() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._largest_branch">_largest_branch() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._neighboring_branches">_neighboring_branches() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree._search_counter">_search_counter() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER._set_pseudo_dist">_set_pseudo_dist() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._sorted_members">_sorted_members() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._trace_sin">_trace_sin() (in module netflow.probe.visualization)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.add_child">add_child() (netflow.pose.organization.TreeNode method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.add_data">add_data() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.add_data">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_data">(netflow.keepers.keeper.Keeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_distance">add_distance() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.add_graph">add_graph() (netflow.keepers.keeper.GraphKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_graph">(netflow.keepers.keeper.Keeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_misc">add_misc() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_similarity">add_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.add_stacked_data">add_stacked_data() (netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_stacked_distance">add_stacked_distance() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.add_stacked_similarity">add_stacked_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.all_data">all_data() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.alpha_numeric_sorted">alpha_numeric_sorted() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.anisotropic_laplacian_matrix">anisotropic_laplacian_matrix() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.avg_cluster_edges">avg_cluster_edges() (in module netflow.probe.clustering)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.branch_clustering">branch_clustering() (in module netflow.probe.clustering)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.branchings_segments">branchings_segments() (netflow.pose.organization.POSER method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.checks.html#netflow.checks.check_connected_graph">check_connected_graph() (in module netflow.checks)</a>
+</li>
+      <li><a href="reference/generated/netflow.checks.html#netflow.checks.check_distance_matrix">check_distance_matrix() (in module netflow.checks)</a>
+</li>
+      <li><a href="reference/generated/netflow.checks.html#netflow.checks.check_edges_in_graph">check_edges_in_graph() (in module netflow.checks)</a>
+</li>
+      <li><a href="reference/generated/netflow.checks.html#netflow.checks.check_graph_no_self_loops">check_graph_no_self_loops() (in module netflow.checks)</a>
+</li>
+      <li><a href="reference/generated/netflow.checks.html#netflow.checks.check_graph_weights">check_graph_weights() (in module netflow.checks)</a>
+</li>
+      <li><a href="reference/generated/netflow.checks.html#netflow.checks.check_matrix_no_nan">check_matrix_no_nan() (in module netflow.checks)</a>
+</li>
+      <li><a href="reference/generated/netflow.checks.html#netflow.checks.check_matrix_nonnegative">check_matrix_nonnegative() (in module netflow.checks)</a>
+</li>
+      <li><a href="reference/generated/netflow.checks.html#netflow.checks.check_symmetric">check_symmetric() (in module netflow.checks)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.clustermap">clustermap() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.co_branch_indicator">co_branch_indicator() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_augmented_sym_transitions">compute_dpt_from_augmented_sym_transitions() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_dpt_from_similarity">compute_dpt_from_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.compute_edge_weights">compute_edge_weights() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.compute_eigen">compute_eigen() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.compute_graph_distances">compute_graph_distances() (in module netflow.utils)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.compute_graph_distances">(netflow.methods.classes.InfoNet method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_multiscale_VNE_transition_from_similarity">compute_multiscale_VNE_transition_from_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.compute_multiscale_VNE_transitions_from_similarity">compute_multiscale_VNE_transitions_from_similarity() (in module netflow.pose.organization)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.compute_pearson">compute_pearson() (in module netflow.methods.stats)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.compute_pearson_parallel">compute_pearson_parallel() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.compute_rw_transitions">compute_rw_transitions() (in module netflow.pose.organization)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_rw_transitions_from_similarity">compute_rw_transitions_from_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_sigmas">compute_sigmas() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_similarity_from_distance">compute_similarity_from_distance() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.compute_spearman">compute_spearman() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.compute_spearman_parallel">compute_spearman_parallel() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.compute_sym_diffusion_affinity_transitions">compute_sym_diffusion_affinity_transitions() (in module netflow.pose.organization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.compute_transitions">compute_transitions() (in module netflow.pose.organization)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.compute_transitions_from_similarity">compute_transitions_from_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.construct_anisotropic_laplacian_matrix">construct_anisotropic_laplacian_matrix() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.construct_pose">construct_pose() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.construct_pose_mst_nn_topology">construct_pose_mst_nn_topology() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.construct_pose_mst_topology">construct_pose_mst_topology() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.construct_pose_nn_topology">construct_pose_nn_topology() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.contains">contains() (netflow.pose.organization.TreeNode method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.convert_similarity_to_distance">convert_similarity_to_distance() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.create_colorbar">create_colorbar() (in module netflow.probe.jupyter_app)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.create_legend">create_legend() (in module netflow.probe.jupyter_app)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.data">data (netflow.keepers.keeper.DataKeeper property)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.data">(netflow.keepers.keeper.DataView property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.data">(netflow.keepers.keeper.DistanceKeeper property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.data">(netflow.keepers.keeper.DistanceView property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.data">(netflow.keepers.keeper.Keeper property)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper">DataKeeper (class in netflow.keepers.keeper)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView">DataView (class in netflow.keepers.keeper)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.dbscan_clustering">dbscan_clustering() (in module netflow.probe.clustering)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.density">density() (netflow.keepers.keeper.DistanceView method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.depth">depth() (netflow.pose.organization.TreeNode method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.detect_branches">detect_branches() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.detect_branching">detect_branching() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.diffuse_multiple_profiles">diffuse_multiple_profiles() (netflow.methods.classes.InfoNet method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.diffuse_profile">diffuse_profile() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.disp">disp() (netflow.pose.organization.Tree method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.disp">(netflow.pose.organization.TreeNode method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.dispersion">dispersion() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.dispersion_">dispersion_() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.distance_density">distance_density() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.distance_density_argmax">distance_density_argmax() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.distance_density_argmin">distance_density_argmin() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.distance_to_similarity">distance_to_similarity() (in module netflow.pose.similarity)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper">DistanceKeeper (class in netflow.keepers.keeper)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.distances">distances (netflow.keepers.keeper.Keeper property)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView">DistanceView (class in netflow.keepers.keeper)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.dotplot">dotplot() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.dpt_from_augmented_sym_transitions">dpt_from_augmented_sym_transitions() (in module netflow.pose.organization)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.edges_from_mutual_knn_indices">edges_from_mutual_knn_indices() (in module netflow.pose.similarity)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_feature_nbhd">euc_distance_pairwise_observation_feature_nbhd() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_profile">euc_distance_pairwise_observation_profile() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.extract_branchings">extract_branchings() (netflow.pose.organization.POSER method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.feature_index">feature_index() (netflow.keepers.keeper.DataView method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.feature_labels">feature_labels (netflow.keepers.keeper.DataView property)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.features_labels">features_labels (netflow.keepers.keeper.DataKeeper property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.find_knee_point">find_knee_point() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.forceatlas2_layout">forceatlas2_layout() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.fuse_similarities">fuse_similarities() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.gauss_conv">gauss_conv() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.gauss_window">gauss_window() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.get_edge_colors">get_edge_colors() (in module netflow.probe.jupyter_app)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.get_knn_indices_distances">get_knn_indices_distances() (in module netflow.pose.similarity)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_leaves">get_leaves() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_leaves_indices">get_leaves_indices() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_node">get_node() (netflow.pose.organization.Tree method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.get_node_colors">get_node_colors() (in module netflow.probe.jupyter_app)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_node_from_name">get_node_from_name() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.get_pose">get_pose() (in module netflow.pose.organization)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.get_times">get_times() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper">GraphKeeper (class in netflow.keepers.keeper)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.graphs">graphs (netflow.keepers.keeper.GraphKeeper property)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.graphs">(netflow.keepers.keeper.Keeper property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.heat_kernel">heat_kernel() (in module netflow.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.high_res_branch_graph">high_res_branch_graph() (in module netflow.probe.clustering)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.high_res_clustered_branch_graph">high_res_clustered_branch_graph() (in module netflow.probe.clustering)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.identify_local_tips">identify_local_tips() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet">InfoNet (class in netflow.methods.classes)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.insert">insert() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.integrate_multiscale_VNE_transitions_from_similarities">integrate_multiscale_VNE_transitions_from_similarities() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.integrate_transitions">integrate_transitions() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.integrate_transitions_from_similarity">integrate_transitions_from_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.interaction_iterator">interaction_iterator() (in module netflow.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.invariant_measure">invariant_measure() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.invariant_measures">invariant_measures() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.is_leaf">is_leaf() (netflow.pose.organization.TreeNode method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.is_root">is_root() (netflow.pose.organization.TreeNode method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.items">items() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.items">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.items">(netflow.keepers.keeper.GraphKeeper method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper">Keeper (class in netflow.keepers.keeper)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.kendall_tau">kendall_tau() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.kendall_tau_">kendall_tau_() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.kendall_tau_split">kendall_tau_split() (netflow.pose.organization.POSER method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.keys">keys() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.keys">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.GraphKeeper.keys">(netflow.keepers.keeper.GraphKeeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.KM_between_groups">KM_between_groups() (in module netflow.probe.visualization)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.label">label (netflow.keepers.keeper.DataView property)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.label">(netflow.keepers.keeper.DistanceView property)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_data">load_data() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.load_diffused_profile">load_diffused_profile() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.load_diffused_timepoint_profile">load_diffused_timepoint_profile() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_distance">load_distance() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_graph">load_graph() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_similarity">load_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_stacked_distance">load_stacked_distance() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.load_stacked_similarity">load_stacked_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.log1p">log1p() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain">louvain() (in module netflow.probe.clustering)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain_paritioned">louvain_paritioned() (in module netflow.probe.clustering)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.mann_whitney_u_test">mann_whitney_u_test() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.matplotlib_to_plotly_cmap">matplotlib_to_plotly_cmap() (in module netflow.probe.jupyter_app)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.max_depth">max_depth() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.misc">misc (netflow.keepers.keeper.Keeper property)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="index.html#module-netflow">netflow</a>
+</li>
+        <li><a href="reference/generated/netflow.checks.html#module-netflow.checks">netflow.checks</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.html#module-netflow.keepers">netflow.keepers</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#module-netflow.keepers.keeper">netflow.keepers.keeper</a>
+</li>
+        <li><a href="reference/generated/netflow.methods.html#module-netflow.methods">netflow.methods</a>
+</li>
+        <li><a href="reference/generated/netflow.methods.classes.html#module-netflow.methods.classes">netflow.methods.classes</a>
+</li>
+        <li><a href="reference/generated/netflow.methods.metrics.html#module-netflow.methods.metrics">netflow.methods.metrics</a>
+</li>
+        <li><a href="reference/generated/netflow.methods.stats.html#module-netflow.methods.stats">netflow.methods.stats</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.html#module-netflow.pose">netflow.pose</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.organization.html#module-netflow.pose.organization">netflow.pose.organization</a>
+</li>
+        <li><a href="reference/generated/netflow.pose.similarity.html#module-netflow.pose.similarity">netflow.pose.similarity</a>
+</li>
+        <li><a href="reference/generated/netflow.probe.html#module-netflow.probe">netflow.probe</a>
+</li>
+        <li><a href="reference/generated/netflow.probe.clustering.html#module-netflow.probe.clustering">netflow.probe.clustering</a>
+</li>
+        <li><a href="reference/generated/netflow.probe.jupyter_app.html#module-netflow.probe.jupyter_app">netflow.probe.jupyter_app</a>
+</li>
+        <li><a href="reference/generated/netflow.probe.visualization.html#module-netflow.probe.visualization">netflow.probe.visualization</a>
+</li>
+        <li><a href="reference/generated/netflow.utils.html#module-netflow.utils">netflow.utils</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.multiple_pairwise_observation_neighborhood_euc_distance">multiple_pairwise_observation_neighborhood_euc_distance() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.multiple_pairwise_observation_neighborhood_wass_distance">multiple_pairwise_observation_neighborhood_wass_distance() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.mutual_knn_edges">mutual_knn_edges() (in module netflow.pose.similarity)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.mutual_knn_indices">mutual_knn_indices() (in module netflow.pose.similarity)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.neighborhood">neighborhood() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.neighborhood_profiles">neighborhood_profiles() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li>
+    netflow
+
+      <ul>
+        <li><a href="index.html#module-netflow">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.checks
+
+      <ul>
+        <li><a href="reference/generated/netflow.checks.html#module-netflow.checks">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.keepers
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.html#module-netflow.keepers">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.keepers.keeper
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#module-netflow.keepers.keeper">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.methods
+
+      <ul>
+        <li><a href="reference/generated/netflow.methods.html#module-netflow.methods">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.methods.classes
+
+      <ul>
+        <li><a href="reference/generated/netflow.methods.classes.html#module-netflow.methods.classes">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.methods.metrics
+
+      <ul>
+        <li><a href="reference/generated/netflow.methods.metrics.html#module-netflow.methods.metrics">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.methods.stats
+
+      <ul>
+        <li><a href="reference/generated/netflow.methods.stats.html#module-netflow.methods.stats">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.pose
+
+      <ul>
+        <li><a href="reference/generated/netflow.pose.html#module-netflow.pose">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.pose.organization
+
+      <ul>
+        <li><a href="reference/generated/netflow.pose.organization.html#module-netflow.pose.organization">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    netflow.pose.similarity
+
+      <ul>
+        <li><a href="reference/generated/netflow.pose.similarity.html#module-netflow.pose.similarity">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.probe
+
+      <ul>
+        <li><a href="reference/generated/netflow.probe.html#module-netflow.probe">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.probe.clustering
+
+      <ul>
+        <li><a href="reference/generated/netflow.probe.clustering.html#module-netflow.probe.clustering">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.probe.jupyter_app
+
+      <ul>
+        <li><a href="reference/generated/netflow.probe.jupyter_app.html#module-netflow.probe.jupyter_app">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.probe.visualization
+
+      <ul>
+        <li><a href="reference/generated/netflow.probe.visualization.html#module-netflow.probe.visualization">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.utils
+
+      <ul>
+        <li><a href="reference/generated/netflow.utils.html#module-netflow.utils">module</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.norm_features">norm_features() (in module netflow.methods.metrics)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.norm_features_">norm_features_() (in module netflow.methods.metrics)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.norm_features_as_sym_dist">norm_features_as_sym_dist() (in module netflow.methods.metrics)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.num_features">num_features (netflow.keepers.keeper.DataKeeper property)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.num_features">(netflow.keepers.keeper.DataView property)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.num_observations">num_observations (netflow.keepers.keeper.DataKeeper property)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.num_observations">(netflow.keepers.keeper.DataView property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.num_observations">(netflow.keepers.keeper.DistanceKeeper property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.num_observations">(netflow.keepers.keeper.DistanceView property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.num_observations">(netflow.keepers.keeper.Keeper property)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.nx_to_cytoscape">nx_to_cytoscape() (in module netflow.probe.jupyter_app)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.observation_index">observation_index() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.observation_index">(netflow.keepers.keeper.DataView method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.observation_index">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.observation_index">(netflow.keepers.keeper.DistanceView method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.observation_index">(netflow.keepers.keeper.Keeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.observation_labels">observation_labels (netflow.keepers.keeper.DataKeeper property)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.observation_labels">(netflow.keepers.keeper.DataView property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.observation_labels">(netflow.keepers.keeper.DistanceKeeper property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.observation_labels">(netflow.keepers.keeper.DistanceView property)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.observation_labels">(netflow.keepers.keeper.Keeper property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.optimal_transportation_distance">optimal_transportation_distance() (in module netflow.methods.metrics)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.OTD">OTD() (in module netflow.methods.metrics)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.pairwise_observation_euc_distances">pairwise_observation_euc_distances() (in module netflow.methods.metrics)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.pairwise_observation_neighborhood_euc_distance">pairwise_observation_neighborhood_euc_distance() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.pairwise_observation_neighborhood_wass_distance">pairwise_observation_neighborhood_wass_distance() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.pairwise_observation_profile_euc_distance">pairwise_observation_profile_euc_distance() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.pairwise_observation_profile_wass_distance">pairwise_observation_profile_wass_distance() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.pairwise_observation_wass_distances">pairwise_observation_wass_distances() (in module netflow.methods.metrics)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.PCA">PCA() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.perform_stat_test">perform_stat_test() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.pij">pij() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.plot_profiles">plot_profiles() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.plot_topology">plot_topology() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.plot_topology2">plot_topology2() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER">POSER (class in netflow.pose.organization)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.render_pose">render_pose() (in module netflow.probe.jupyter_app)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.renderer">renderer() (in module netflow.probe.jupyter_app)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.root">root() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.root_max_ratio">root_max_ratio() (in module netflow.pose.organization)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.save_data">save_data() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.save_distance">save_distance() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.save_misc">save_misc() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.save_similarity">save_similarity() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.search">search() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.search_data">search_data() (netflow.pose.organization.Tree method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.select_segment">select_segment() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.sigma_knn">sigma_knn() (in module netflow.pose.similarity)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.sigma_knn_">sigma_knn_() (in module netflow.pose.similarity)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.similarities">similarities (netflow.keepers.keeper.Keeper property)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.similarity_density">similarity_density() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.similarity_density_argmax">similarity_density_argmax() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.sin_layout">sin_layout() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.single_branch">single_branch() (netflow.pose.organization.POSER method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.spearmanr">spearmanr() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.spearmanr_">spearmanr_() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.stack_triu">stack_triu() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.stack_triu_">stack_triu_() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.stack_triu_where">stack_triu_where() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.stack_triu_where_">stack_triu_where_() (in module netflow.utils)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.standardize">standardize() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.standardize">(netflow.keepers.keeper.DataView method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.standardize">(netflow.keepers.keeper.Keeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.stat_test">stat_test() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.subset">subset() (netflow.keepers.keeper.DataKeeper method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.subset">(netflow.keepers.keeper.DataView method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper.subset">(netflow.keepers.keeper.DistanceKeeper method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.subset">(netflow.keepers.keeper.DistanceView method)</a>
+</li>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.subset">(netflow.keepers.keeper.Keeper method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.t_test">t_test() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.to_frame">to_frame() (netflow.keepers.keeper.DataView method)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceView.to_frame">(netflow.keepers.keeper.DistanceView method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree">Tree (class in netflow.pose.organization)</a>
+</li>
+      <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode">TreeNode (class in netflow.pose.organization)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.unstack_triu_">unstack_triu_() (in module netflow.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.value_counter">value_counter() (netflow.methods.classes.InfoNet method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.utils.html#netflow.utils.von_neumann_entropy">von_neumann_entropy() (in module netflow.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.wass_distance">wass_distance() (in module netflow.methods.metrics)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.wass_distance_pairwise_observation_feature_nbhd">wass_distance_pairwise_observation_feature_nbhd() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.wass_distance_pairwise_observation_profile">wass_distance_pairwise_observation_profile() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.wavy_curve_layout">wavy_curve_layout() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.weighted_observation_network">weighted_observation_network() (netflow.methods.classes.InfoNet method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.wilcoxon_signed_rank_test">wilcoxon_signed_rank_test() (in module netflow.methods.stats)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023-2025, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
