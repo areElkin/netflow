@@ -55,11 +55,11 @@ Tutorials
 	walks through the POSE pipeline performed on single-modality
 	RNA data of MM samples from COMPASS as described in the
 	origianl manuscript, with additional descriptions of alternative
-	computational options. (MM_example)
+	computational options.
 
         +++
 
-        .. button-ref:: notebooks/MM_paper_example
+        .. button-ref:: notebooks/MM_example
             :expand:
             :color: secondary
 	    :outline:
@@ -96,11 +96,11 @@ Tutorials
 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	This tutorial walks through the POSE pipeline for a multi-omic dataset.
-	The pipeline is demonstrated on GBM data from TCGA. (GBM_multimodal_example)
+	The pipeline is demonstrated on GBM data from TCGA.
 
         +++
 
-        .. button-ref:: notebooks/MM_paper_example
+        .. button-ref:: notebooks/GBM_multimodal_example
             :expand:
             :color: secondary
 	    :outline:
@@ -114,4 +114,6 @@ Tutorials
 .. toctree::
    :hidden:
 
-   notebooks/MM_paper_example                                                                                                                                                                            
+   notebooks/MM_paper_example
+   notebooks/MM_example
+   notebooks/GBM_multimodal_example
