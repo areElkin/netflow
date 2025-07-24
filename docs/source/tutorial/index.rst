@@ -12,11 +12,11 @@ Tutorials
         Keeper tutorial
 	^^^^^^^^^^^^^^^
 
-	This tutorial walks through the Keeper data structure.
+	This tutorial walks through the Keeper data structure. (keeper_tutorial)
 
         +++
 
-        .. button-ref:: notebooks/keeper_tutorial
+        .. button-ref:: notebooks/MM_paper_example
             :expand:
             :color: secondary
             :outline:
@@ -55,11 +55,11 @@ Tutorials
 	walks through the POSE pipeline performed on single-modality
 	RNA data of MM samples from COMPASS as described in the
 	origianl manuscript, with additional descriptions of alternative
-	computational options.
+	computational options. (MM_example)
 
         +++
 
-        .. button-ref:: notebooks/MM_example
+        .. button-ref:: notebooks/MM_paper_example
             :expand:
             :color: secondary
 	    :outline:
@@ -76,11 +76,11 @@ Tutorials
 
 	This tutorial walks through the POSE pipeline for a single modality,
 	and touches on the multi-omic fused analysis.
-	The pipeline is demonstrated on BC rna data from TCGA.
+	The pipeline is demonstrated on BC rna data from TCGA. (BC_example)
 
         +++
 
-        .. button-ref:: notebooks/BC_example
+        .. button-ref:: notebooks/MM_paper_example
             :expand:
             :color: secondary
 	    :outline:
@@ -96,11 +96,11 @@ Tutorials
 	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	This tutorial walks through the POSE pipeline for a multi-omic dataset.
-	The pipeline is demonstrated on GBM data from TCGA. 
+	The pipeline is demonstrated on GBM data from TCGA. (GBM_multimodal_example)
 
         +++
 
-        .. button-ref:: notebooks/GBM_multimodal_example
+        .. button-ref:: notebooks/MM_paper_example
             :expand:
             :color: secondary
 	    :outline:
@@ -114,10 +114,4 @@ Tutorials
 .. toctree::
    :hidden:
 
-   notebooks/keeper_tutorial
-   notebooks/MM_paper_example
-   notebooks/MM_example
-   notebooks/BC_example
-   notebooks/GBM_multimodal_example
-
-      
+   notebooks/MM_paper_example                                                                                                                                                                            
