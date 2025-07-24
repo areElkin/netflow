@@ -87,7 +87,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['.DS_Store']
+exclude_patterns = ['.DS_Store', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif']
 
 
 # -- Additional options -----------------------------------------
@@ -111,7 +111,7 @@ source_suffix = {'.rst': 'restructuredtext',   # The file extensions of source f
 
 master_doc = 'index'  # document with the root toctree directive.
 
-exclude_patterns = []  # glob
+# exclude_patterns = []  # glob
 
 # A boolean that decides whether parentheses are appended to function and method role
 # text (e.g. the content of :func:`input`) to signify that the name is callable.
