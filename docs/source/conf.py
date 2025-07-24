@@ -188,8 +188,6 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_extra_path = ['tutorial/notebooks']
-
 # -- Custamize HTML side bar - alabaster -------------------------------------
 # The default html sidebar consists of 4 templates:
 # ['localtoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html']
