@@ -1,4 +1,4 @@
-netflow.probe.visualization
+﻿netflow.probe.visualization
 ===========================
 
 .. automodule:: netflow.probe.visualization
@@ -18,6 +18,7 @@ netflow.probe.visualization
       dotplot
       forceatlas2_layout
       plot_topology
+      plot_topology2
       sin_layout
       wavy_curve_layout
    
