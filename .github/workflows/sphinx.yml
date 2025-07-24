@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main  # or your default branch
+    paths:
+      - 'docs/**'
+      - '.github/workflows/sphinx.yml'
+      - 'requirements_sphinx.txt'
 
 jobs:
   build-deploy:
