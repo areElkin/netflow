@@ -9,6 +9,10 @@ on:
       - '.github/workflows/sphinx.yml'
       - 'requirements_sphinx.txt'
 
+
+permissions:
+  contents: write
+  
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
