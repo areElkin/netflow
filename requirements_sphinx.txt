@@ -4,6 +4,7 @@ cycler==0.11.0
 dash==2.12.0
 dash-bootstrap-components==1.4.2
 dash_cytoscape==0.2.0
+dash-extensions==1.0.18
 dash-table==5.0.0
 dash-html-components==2.0.0
 fastcluster==1.2.6
@@ -13,6 +14,7 @@ json5==0.9.6
 jupyter_contrib_nbextensions==0.7.0
 jupyter-cache==0.6.1
 jupyter-dash==0.4.2
+jupyterlab==3.5.1
 jupyterlab_pygments==0.1.2
 jupyterlab_widgets==3.0.5
 jupyter_nbextensions_configurator==0.4.1
@@ -24,6 +26,7 @@ nbclient==0.5.13
 nbsphinx==0.9.3
 nbformat==5.7.0
 networkx==2.8.4
+notebook==6.5.2
 numpy==1.21.2
 openpyxl==3.0.9
 pandas==1.4.1

@@ -24,19 +24,6 @@ print(os.path.abspath('../..'))
 from datetime import date
 import re
 import netflow
-
-
-import nbformat
-# Debug all files ending in .ipynb to catch broken ones
-for root, dirs, files in os.walk(os.path.abspath(".")):
-    for fname in files:
-        if fname.endswith(".ipynb"):
-            fpath = os.path.join(root, fname)
-            try:
-                with open(fpath, encoding="utf8") as f:
-                    nbformat.read(f, as_version=4)
-            except Exception as e:
-                print(f"[conf.py] BAD NOTEBOOK: {fpath}\n    {e}")
                 
 # -- Project information -----------------------------------------------------
 
