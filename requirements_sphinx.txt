@@ -48,8 +48,9 @@ tqdm==4.64.1
 multiprocess==0.70.14
 pot==0.8.2
 widgetsnbextension==4.0.5
-
-
-
+python-louvain
+pygraphviz
+dtreeviz
+git
 
 
