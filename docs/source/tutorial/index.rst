@@ -114,7 +114,8 @@ Tutorials
 .. toctree::
    :hidden:
 
-   notebooks/keeper_tutorial   
+   notebooks/keeper_tutorial
+   notebooks/MM_paper_example
    notebooks/MM_example
    notebooks/BC_example
    notebooks/GBM_multimodal_example
