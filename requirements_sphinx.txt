@@ -8,13 +8,19 @@ dash-table==5.0.0
 dash-html-components==2.0.0
 fastcluster==1.2.6
 ipykernel==6.15.2
+ipywidgets==8.0.4
 json5==0.9.6
 jupyter_contrib_nbextensions==0.7.0
+jupyter-cache==0.6.1
 jupyter-dash==0.4.2
+jupyterlab_pygments==0.1.2
+jupyterlab_widgets==3.0.5
+jupyter_nbextensions_configurator==0.4.1
 lifelines==0.27.4
 matplotlib
 more-itertools==9.1.0
 myst-nb
+nbclient==0.5.13
 nbsphinx==0.9.3
 nbformat==5.7.0
 networkx==2.8.4
@@ -38,6 +44,7 @@ typing-extensions==4.7.1
 tqdm==4.64.1
 multiprocess==0.70.14
 pot==0.8.2
+widgetsnbextension==4.0.5
 
 
 
