@@ -7,6 +7,34 @@
    "source": [
     "Keeper tutorial"
    ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "539af752-a16b-43a1-8215-c39c17e216bd",
+   "metadata": {},
+   "source": [
+    "The primary data structure used in `netflow` is called a `Keeper`. It is used to load, store, manipulate and save data for a set of observations. In particular, there are several specific types of keepers:\n",
+    "\n",
+    "- `DataKeeper` : handles feature data\n",
+    "- `DistanceKeeper` : handles pairwise-observation distances (also used to handle pairwise observation similarities)\n",
+    "- `GraphKeeper` : handles graphs (networks)\n",
+    "\n",
+    "Interacting with `netflow` will primarily entail making use of the predomenent `Keeper`, which implicitly makes use of the aforementioned specific keeper classes. This tutorial therefore focuses on the `Keeper` class, please see the documentation for more detail on the other Keeper classes. \n",
+    "\n",
+    "Data is organized in the `Keeper` class via the following attributes:\n",
+    "\n",
+    "- `self.oudir` : (directory path) : Path to directory where results will be saved.\n",
+    "    - If not provided, no results can be saved.\n",
+    "- `self.observation_labels` : (`list`) Observation labels are kept consistent across all feature data, distances and similarities.\n",
+    "- `self.data` : (`DataKeeper`) Used to handle all feature data.\n",
+    "- `self.distances` : (`DistanceKeeper`) Used to handle all observation-pairwise distances.\n",
+    "- `self.similarities` : (`DistanceKeeper`) Used to handle all observation-pairwise similarities.\n",
+    "- `self.graphs` : (`GraphKeeper`) Used to handle all graphs.\n",
+    "- `self.misc` : (`dict`) Used to handle any miscellaneous data. \n",
+    "    - Caution should be taken as observation labels and/or ordering of data stored in `self.misc` may not be consistent with the observations as tracked by the `Keeper`.\n",
+    "\n",
+    "We will now walk through some use-cases of how to make use of the `Keeper` class."
+   ]
   }
  ],
  "metadata": {

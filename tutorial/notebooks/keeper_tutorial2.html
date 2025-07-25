@@ -411,6 +411,32 @@
                 <article class="bd-article">
                   
   <p>Keeper tutorial</p>
+<p>The primary data structure used in <code class="docutils literal notranslate"><span class="pre">netflow</span></code> is called a <code class="docutils literal notranslate"><span class="pre">Keeper</span></code>. It is used to load, store, manipulate and save data for a set of observations. In particular, there are several specific types of keepers:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DataKeeper</span></code> : handles feature data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DistanceKeeper</span></code> : handles pairwise-observation distances (also used to handle pairwise observation similarities)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GraphKeeper</span></code> : handles graphs (networks)</p></li>
+</ul>
+<p>Interacting with <code class="docutils literal notranslate"><span class="pre">netflow</span></code> will primarily entail making use of the predomenent <code class="docutils literal notranslate"><span class="pre">Keeper</span></code>, which implicitly makes use of the aforementioned specific keeper classes. This tutorial therefore focuses on the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> class, please see the documentation for more detail on the other Keeper classes.</p>
+<p>Data is organized in the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> class via the following attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">self.oudir</span></code> : (directory path) : Path to directory where results will be saved.</p>
+<ul>
+<li><p>If not provided, no results can be saved.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.observation_labels</span></code> : (<code class="docutils literal notranslate"><span class="pre">list</span></code>) Observation labels are kept consistent across all feature data, distances and similarities.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.data</span></code> : (<code class="docutils literal notranslate"><span class="pre">DataKeeper</span></code>) Used to handle all feature data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.distances</span></code> : (<code class="docutils literal notranslate"><span class="pre">DistanceKeeper</span></code>) Used to handle all observation-pairwise distances.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.similarities</span></code> : (<code class="docutils literal notranslate"><span class="pre">DistanceKeeper</span></code>) Used to handle all observation-pairwise similarities.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.graphs</span></code> : (<code class="docutils literal notranslate"><span class="pre">GraphKeeper</span></code>) Used to handle all graphs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.misc</span></code> : (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) Used to handle any miscellaneous data.</p>
+<ul>
+<li><p>Caution should be taken as observation labels and/or ordering of data stored in <code class="docutils literal notranslate"><span class="pre">self.misc</span></code> may not be consistent with the observations as tracked by the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<p>We will now walk through some use-cases of how to make use of the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> class.</p>
 
 
                 </article>
