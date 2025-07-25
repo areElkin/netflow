@@ -16,7 +16,7 @@ Tutorials
 
         +++
 
-        .. button-ref:: notebooks/keeper_tutorial2
+        .. button-ref:: notebooks/keeper_tutorial
             :expand:
             :color: secondary
             :outline:
@@ -114,7 +114,7 @@ Tutorials
 .. toctree::
    :hidden:
 
-   notebooks/keeper_tutorial2
+   notebooks/keeper_tutorial
    notebooks/MM_paper_example
    notebooks/MM_example
    notebooks/BC_example
