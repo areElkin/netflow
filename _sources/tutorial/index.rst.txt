@@ -76,11 +76,11 @@ Tutorials
 
 	This tutorial walks through the POSE pipeline for a single modality,
 	and touches on the multi-omic fused analysis.
-	The pipeline is demonstrated on BC rna data from TCGA. (BC_example)
+	The pipeline is demonstrated on BC rna data from TCGA.
 
         +++
 
-        .. button-ref:: notebooks/MM_paper_example
+        .. button-ref:: notebooks/BC_example
             :expand:
             :color: secondary
 	    :outline:
@@ -116,4 +116,5 @@ Tutorials
 
    notebooks/MM_paper_example
    notebooks/MM_example
+   notebooks/BC_example
    notebooks/GBM_multimodal_example
