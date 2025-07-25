@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>&lt;no title&gt; &#8212; netflow v0.0.dev Manual</title>
+    <title>Load libraries &#8212; netflow v0.0.dev Manual</title>
   
   
   
@@ -308,7 +308,10 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Load libraries</a></li>
+
+
 <li class="toctree-l1"><a class="reference internal" href="MM_paper_example.html">Multiple myeloma example</a></li>
 
 
@@ -393,7 +396,7 @@
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Tutorials</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Load libraries</span></li>
   </ul>
 </nav>
 </div>
@@ -437,6 +440,90 @@
 </li>
 </ul>
 <p>We will now walk through some use-cases of how to make use of the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> class.</p>
+<p>First, import the necessary packages:</p>
+<section id="load-libraries">
+<h1>Load libraries<a class="headerlink" href="#load-libraries" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span> <span class="k">as</span> <span class="n">ddict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc_sparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">netflow</span></code> has not been installed, add the path to the library:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+<span class="c1"># sys.path.insert(0, pathlib.Path(pathlib.Path(&#39;.&#39;).absolute()).parents[0].resolve().as_posix())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>From the <code class="docutils literal notranslate"><span class="pre">netflow</span></code> package, we load the following modules:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">InfoNet</span></code> class is used to compute 1-hop neighborhood distances</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> class is used to store and manipulate data/results</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">netflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nf</span>
+
+<span class="c1"># from netflow.keepers import keeper </span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="set-up-directories">
+<h1>Set up directories<a class="headerlink" href="#set-up-directories" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MAIN_DIR</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Paths to where data is stored:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">MAIN_DIR</span> <span class="o">/</span> <span class="s1">&#39;example_data&#39;</span> <span class="o">/</span> <span class="s1">&#39;breast_tcga&#39;</span>
+
+<span class="n">RNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;rna_606.txt&#39;</span>
+<span class="n">E_RNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_rna_606.txt&#39;</span>
+
+<span class="n">CNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;cna_606.txt&#39;</span>
+<span class="n">E_CNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_cna_606.txt&#39;</span>
+
+<span class="n">METH_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;methylation_606.txt&#39;</span>
+<span class="n">E_METH_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_methylation_606.txt&#39;</span>
+
+<span class="n">CLIN_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;clin_606.txt&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Directory where output should be saved:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">OUT_DIR</span> <span class="o">=</span> <span class="n">MAIN_DIR</span> <span class="o">/</span> <span class="s1">&#39;example_data&#39;</span> <span class="o">/</span> <span class="s1">&#39;results_netflow_breast_tcga&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-data">
+<h1>Load data<a class="headerlink" href="#load-data" title="Permalink to this heading">#</a></h1>
+</section>
 
 
                 </article>
@@ -484,10 +571,43 @@
     <i class="fa-solid fa-list"></i> On this page
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="current visible nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
-<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a></li>
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="current reference internal nav-link" href="#">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-directories">Set up directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-data">Load data</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_paper_example.html">Multiple myeloma example</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_paper_example.html#pose-pipeline-overview">POSE pipeline overview</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_paper_example.html#load-libraries">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_paper_example.html#directories">Directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_paper_example.html#netflow-pipeline">NetFlow pipeline</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_example.html">Multiple myeloma example</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_example.html#pose-pipeline-overview">POSE pipeline overview</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_example.html#load-libraries">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_example.html#directories">Directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="MM_example.html#netflow-pipeline">NetFlow pipeline</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html">Breast cancer example</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#pose-pipeline-overview">Pose pipeline overview</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#load-libraries">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#set-up-directories">Set up directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#load-clinical-data">Load clinical data</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#initialize-the-keeper">Initialize the Keeper</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#compute-observation-pairwise-distances">Compute observation-pairwise distances</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#compute-similarities-from-distances">Compute similarities from distances</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#fused-similarities">Fused similarities</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#compute-diffusion-distances">Compute diffusion distances</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="BC_example.html#compute-the-pose">Compute the POSE</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html">Glioblastoma multiforme multi-omics example</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#load-libraries">Load libraries</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#colors">Colors</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#directories">Directories</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#initialize-the-keeper">Initialize the keeper</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#netflow-pipeline">NetFlow pipeline</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="GBM_multimodal_example.html#references">References</a></li>
+</ul>
+</li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
 </ul>
