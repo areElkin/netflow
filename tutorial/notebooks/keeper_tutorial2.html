@@ -533,6 +533,57 @@
 </section>
 <section id="load-data">
 <h1>Load data<a class="headerlink" href="#load-data" title="Permalink to this heading">#</a></h1>
+<p>We first load example TCGA breast cancer data that will be used to demonstrate how data can be loaded into the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code>.</p>
+<p>Sample inclusion criteria (n=606):</p>
+<ul class="simple">
+<li><p>Restricted to</p>
+<ul>
+<li><p>Primary samples</p></li>
+<li><p>Cancer type: Breast Cancer</p></li>
+<li><p>Detailed cancer type: Breast Invasive Ductal Carcinoma (IDC) or Breast Invasive Lobular Carcinoma (ILC)</p></li>
+</ul>
+</li>
+<li><p>Has reported overall survival status</p></li>
+<li><p>Overall survival &gt; 3.5 months</p>
+<ul>
+<li><p>Note: distribution of age of patients excluded is similar to distribution of the age of all samples</p></li>
+</ul>
+</li>
+<li><p>Has reported PAM50 subtype</p></li>
+<li><p>Has RNA, CNA and methylation data</p></li>
+<li><p>Feature data:</p>
+<ul>
+<li><p>RNA (7,148 genes)</p>
+<ul>
+<li><p>Remove genes that have zero expression in at least 20% (=121) of samples</p></li>
+<li><p>When multiple Entrez IDs map to the same gene, use the sum</p></li>
+<li><p>Restrict to largest connected component of genes in HPRD</p></li>
+</ul>
+</li>
+<li><p>CNA (8,763 genes)</p>
+<ul>
+<li><p>When multiple Entrez IDs map to the same gene, select the more extreme value (i.e., in absolute value). If the absolute values are the same, select the loss.</p></li>
+<li><p>Restrict to largest connected component of genes in HPRD</p></li>
+<li><p>Translate from [-2, 2] -&gt; [0, 4]</p></li>
+</ul>
+</li>
+<li><p>methylation (7,969 genes)</p>
+<ul>
+<li><p>Missing rate is at most 5.12% - used nearest-neighbor imputation computed in Python using the scikit-learn <code class="docutils literal notranslate"><span class="pre">KNNImputer</span></code> with default parameters except <code class="docutils literal notranslate"><span class="pre">weights=“distance”</span></code>.</p></li>
+<li><p>When multiple Entrez IDs map to the same gene, select the max.</p></li>
+<li><p>Restrict to largest connected component of genes in HPRD</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Network edgelists (derived from HPRD):</p>
+<ul>
+<li><p>RNA edgelist (7,148 nodes and 27,498 edges)</p></li>
+<li><p>CNA edgelist (8,763 nodes and 34,906 edges)</p></li>
+<li><p>methylation edgelist (7,969 nodes and 31,112 edges)</p></li>
+</ul>
+</li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rna</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RNA_FNAME</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
