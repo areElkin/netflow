@@ -188,7 +188,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "3e1ded4b-2b00-4d43-b647-28dcd3bb7d90",
+   "id": "4793b893-a186-492e-b985-6b07ec163ef1",
    "metadata": {},
    "source": [
     "We first load example TCGA breast cancer data that will be used to demonstrate how data can be loaded into the `Keeper`.\n",
@@ -199,8 +199,16 @@
     "    - Cancer type: Breast Cancer\n",
     "    - Detailed cancer type: Breast Invasive Ductal Carcinoma (IDC) or Breast Invasive Lobular Carcinoma (ILC)\n",
     "- Has reported overall survival status\n",
-    "- Overall survival > 3.5 months \n",
-    "    - Note: distribution of age of patients excluded is similar to distribution of the age of all samples\n",
+    "- Overall survival > 3.5 months (Figure 1)    \n",
+    "    <!-- - <img src=\"attachment:6fc3253c-59fc-4cd5-b9d3-e407edd6a484.png\" alt=\"OS histogram\" width=\"200\"/> -->\n",
+    "    <!-- - <img src=\"BC_overall_survival_hist.png\" alt=\"OS historgram\" width=\"200\"/> -->\n",
+    "    ![OS histogram](BC_overall_survival_hist.png)\n",
+    "\n",
+    "    - distribution of age of patients excluded is similar to distribution of the age of all samples (Figure 2)\n",
+    "    \n",
+    "    ![age_histogram](BC_age_histogram.png)\n",
+    "    <!-- <img src=\"BC_age_histogram.png\" alt=\"age histogram\" width=\"200\"/> -->\n",
+    "    <!-- <img src=\"attachment:822ef528-aa96-48a6-80c5-12710e35b110.png\" alt=\"age histogram\" width=\"200\"/> -->\n",
     "- Has reported PAM50 subtype\n",
     "- Has RNA, CNA and methylation data\n",
     "\n",
@@ -220,7 +228,7 @@
     "- Network edgelists (derived from HPRD):\n",
     "    - RNA edgelist (7,148 nodes and 27,498 edges)\n",
     "    - CNA edgelist (8,763 nodes and 34,906 edges)\n",
-    "    - methylation edgelist (7,969 nodes and 31,112 edges)"
+    "    - methylation edgelist (7,969 nodes and 31,112 edges)\n"
    ]
   },
   {
