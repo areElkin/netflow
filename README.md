@@ -4,7 +4,7 @@
 
 ## Documentation
 
-Full user documentation, including installation, tutorials, and API reference, is available at:
+Full documentation, including installation instructions, tutorials, and API reference, is available at:
 [https://areElkin.github.io/netflow](https://areElkin.github.io/netflow)
 
 ## Installation
