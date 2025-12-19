@@ -59,7 +59,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 25, 2025"/>
+    <meta name="docbuild:last-update" content="Dec 19, 2025"/>
   </head>
   
   
@@ -717,7 +717,7 @@ shape as <code class="docutils literal notranslate"><span class="pre">R</span></
 <li><p><strong>nodes</strong> ({<cite>None</cite>, <cite>list</cite>, [<cite>int</cite>]}) – List of nodes to compute neighborhood distances on. If <cite>None</cite>, all nodes with at least 2 neighbors are used.</p></li>
 <li><p><strong>include_self</strong> (<cite>bool</cite>) – If <cite>True</cite>, add node in neighborhood which will result in computing normalized profile over the neighborhood.
 If <cite>False</cite>, node is not included in neighborhood which results in computing the transition distribution over the neighborhood.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Label that resulting Euclidean distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Label that resulting Euclidean distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>.</p></li>
 <li><p><strong>desc</strong> (<cite>str</cite>) – Description for progress bar.</p></li>
 <li><p><strong>profiles_desc</strong> (<cite>str</cite>, default = “t0”) – Description of profiles used in name of file to store results.</p></li>
 <li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
@@ -752,9 +752,9 @@ the previously computed and saved results before saving and returning the combin
 If <cite>False</cite>, node is not included in neighborhood which results in computing the transition distribution over the neighborhood.</p></li>
 <li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the <span class="math notranslate nohighlight">\(n\)</span> nodes (ordered from <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span>).
 If <cite>None</cite>, use hop distance.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>.</p></li>
 <li><p><strong>desc</strong> (<cite>str</cite>) – Description for progress bar.</p></li>
-<li><p><strong>profiles_desc</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>default = 't0'</em>) – Description of profiles used in name of file to store results.</p></li>
+<li><p><strong>profiles_desc</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default = 't0'</em>) – Description of profiles used in name of file to store results.</p></li>
 <li><p><strong>measure_cutoff</strong> (<cite>float</cite>) – Threshold for treating values in profiles as zero, default = 1e-6.</p></li>
 <li><p><strong>proc</strong> (<cite>int</cite>) – Number of processor used for multiprocessing. (Default value = cpu_count()).</p></li>
 <li><p><strong>chunksize</strong> (<cite>int</cite>) – Chunksize to allocate for multiprocessing.</p></li>
@@ -881,7 +881,7 @@ If <cite>None</cite>, use hop distance.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite>, [<cite>int</cite>]}) – List of features to compute profile distances on. If <cite>None</cite>, all features are used.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Label that resulting Euclidean distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Label that resulting Euclidean distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
 name of file to store stacked results.</p></li>
 <li><p><strong>desc</strong> (<cite>str</cite>) – Description for progress bar.</p></li>
 <li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
@@ -915,7 +915,7 @@ the previously computed and saved results before saving and returning the combin
 <li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features to compute profile distances on. If <cite>None</cite>, all features are used.</p></li>
 <li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the <span class="math notranslate nohighlight">\(n\)</span> nodes (ordered from <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span>).
 If <cite>None</cite>, use hop distance.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
 name of file to store stacked results.</p></li>
 <li><p><strong>desc</strong> (<cite>str</cite>) – Description for progress bar.</p></li>
 <li><p><strong>measure_cutoff</strong> (<cite>float</cite>) – Threshold for treating values in profiles as zero, default = 1e-6.</p></li>
@@ -984,7 +984,7 @@ shape as <code class="docutils literal notranslate"><span class="pre">R</span></
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pandas DataFrame</em>) – Dataframe to stack.
 Note, upper triangular entries are taken from <code class="docutils literal notranslate"><span class="pre">df</span></code> as provided, with no check that the rows and columns are symmetric.</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Optional name of pandas Series output <code class="docutils literal notranslate"><span class="pre">df_stacked</span></code>.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Optional name of pandas Series output <code class="docutils literal notranslate"><span class="pre">df_stacked</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

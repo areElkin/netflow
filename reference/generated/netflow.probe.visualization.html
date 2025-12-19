@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 25, 2025"/>
+    <meta name="docbuild:last-update" content="Dec 19, 2025"/>
   </head>
   
   
@@ -594,24 +594,24 @@ resulting in a more readable layout.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>G</strong> (<em>nx.Graph</em>) – A NetworkX graph to be laid out.</p></li>
-<li><p><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Initial positions of the nodes. If None, random initial positions are used.</p></li>
-<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> (</em><em>default: 100</em><em>)</em>) – Number of iterations for the layout optimization.</p></li>
-<li><p><strong>jitter_tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> (</em><em>default: 1.0</em><em>)</em>) – Controls the tolerance for adjusting the speed of layout generation.</p></li>
-<li><p><strong>scaling_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> (</em><em>default: 2.0</em><em>)</em>) – Determines the scaling of attraction and repulsion forces.</p></li>
-<li><p><strong>distributed_attraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default: False</em><em>)</em>) – Distributes the attraction force evenly among nodes.</p></li>
-<li><p><strong>strong_gravity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default: False</em><em>)</em>) – Applies a strong gravitational pull towards the center.</p></li>
-<li><p><strong>node_mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maps nodes to their masses, influencing the attraction to other nodes.</p></li>
-<li><p><strong>node_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maps nodes to their sizes, preventing crowding by creating a halo effect.</p></li>
-<li><p><strong>dissuade_hubs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default: False</em><em>)</em>) – Prevents the clustering of hub nodes.</p></li>
-<li><p><strong>linlog</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default: False</em><em>)</em>) – Uses logarithmic attraction instead of linear.</p></li>
-<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><em>None  optional</em><em> (</em><em>default=None</em><em>)</em>) – Used only for the initial positions in the algorithm.
+<li><p><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Initial positions of the nodes. If None, random initial positions are used.</p></li>
+<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> (</em><em>default: 100</em><em>)</em>) – Number of iterations for the layout optimization.</p></li>
+<li><p><strong>jitter_tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> (</em><em>default: 1.0</em><em>)</em>) – Controls the tolerance for adjusting the speed of layout generation.</p></li>
+<li><p><strong>scaling_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> (</em><em>default: 2.0</em><em>)</em>) – Determines the scaling of attraction and repulsion forces.</p></li>
+<li><p><strong>distributed_attraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default: False</em><em>)</em>) – Distributes the attraction force evenly among nodes.</p></li>
+<li><p><strong>strong_gravity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default: False</em><em>)</em>) – Applies a strong gravitational pull towards the center.</p></li>
+<li><p><strong>node_mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maps nodes to their masses, influencing the attraction to other nodes.</p></li>
+<li><p><strong>node_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maps nodes to their sizes, preventing crowding by creating a halo effect.</p></li>
+<li><p><strong>dissuade_hubs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default: False</em><em>)</em>) – Prevents the clustering of hub nodes.</p></li>
+<li><p><strong>linlog</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default: False</em><em>)</em>) – Uses logarithmic attraction instead of linear.</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><em>None  optional</em><em> (</em><em>default=None</em><em>)</em>) – Used only for the initial positions in the algorithm.
 Set the random state for deterministic node layouts.
 If int, <cite>seed</cite> is the seed used by the random number generator,
 if numpy.random.RandomState instance, <cite>seed</cite> is the random
 number generator,
 if None, the random number generator is the RandomState instance used
 by numpy.random.</p></li>
-<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> (</em><em>default: 2</em><em>)</em>) – Sets the dimensions for the layout. Ignored if <cite>pos</cite> is provided.</p></li>
+<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> (</em><em>default: 2</em><em>)</em>) – Sets the dimensions for the layout. Ignored if <cite>pos</cite> is provided.</p></li>
 </ul>
 </dd>
 </dl>
@@ -648,11 +648,11 @@ multiple node shapes.</p>
 If not specified a kamada kawai layout positioning will be computed.
 See <code class="xref py py-mod docutils literal notranslate"><span class="pre">networkx.drawing.layout</span></code> for functions that
 compute node positions.</p></li>
-<li><p><strong>with_{node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – Set to True to draw labels on the nodes and edges.</p></li>
-<li><p><strong>edge}_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – Set to True to draw labels on the nodes and edges.</p></li>
+<li><p><strong>with_{node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – Set to True to draw labels on the nodes and edges.</p></li>
+<li><p><strong>edge}_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – Set to True to draw labels on the nodes and edges.</p></li>
 <li><p><strong>ax</strong> (<em>Matplotlib Axes object</em><em>, </em><em>optional</em>) – Draw the graph in the specified Matplotlib axes.</p></li>
-<li><p><strong>nodelist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> (</em><em>default=list</em><em>(</em><em>G</em><em>)</em><em>)</em>) – Draw only specified nodes.</p></li>
-<li><p><strong>edgelist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> (</em><em>default=list</em><em>(</em><em>G.edges</em><em>(</em><em>)</em><em>)</em><em>)</em>) – Draw only specified edges.</p></li>
+<li><p><strong>nodelist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> (</em><em>default=list</em><em>(</em><em>G</em><em>)</em><em>)</em>) – Draw only specified nodes.</p></li>
+<li><p><strong>edgelist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> (</em><em>default=list</em><em>(</em><em>G.edges</em><em>(</em><em>)</em><em>)</em><em>)</em>) – Draw only specified edges.</p></li>
 <li><p><strong>node_size</strong> (<em>scalar</em><em> or </em><em>array</em><em> (</em><em>default=300</em><em>)</em>) – Size of nodes.  If an array is specified it must be the
 same length as nodelist.</p></li>
 <li><p><strong>node_color</strong> (<em>color</em><em> or </em><em>array</em><em> of </em><em>colors</em><em> (</em><em>default='#1f78b4'</em><em>)</em>) – Node color. Can be a single color or a sequence of colors with the same
@@ -664,13 +664,13 @@ matplotlib.scatter for more details.</p></li>
 length as edgelist. Color can be string or rgb (or rgba) tuple of
 floats from 0-1. If numeric values are specified they will be
 mapped to colors using the edge_cmap and edge_vmin,edge_vmax parameters.</p></li>
-<li><p><strong>{node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default=True</em><em>)</em>) – If <cite>True</cite>, show color bar for node and edge colors.
+<li><p><strong>{node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default=True</em><em>)</em>) – If <cite>True</cite>, show color bar for node and edge colors.
 This is ignored if {node,edge}_color is a str.</p></li>
-<li><p><strong>edge}_cbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default = False</em><em>)</em>) – If <cite>True</cite>, show color bar for node and edge colors.
+<li><p><strong>edge}_cbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default = False</em><em>)</em>) – If <cite>True</cite>, show color bar for node and edge colors.
 This is ignored if {node,edge}_color is a str.</p></li>
 <li><p><strong>{node</strong> – Optional keyword arguments passed to <cite>matplotlib.pyplot.colorbar</cite> for
 the node and edge colorbars.</p></li>
-<li><p><strong>edge}_cbar_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Optional keyword arguments passed to <cite>matplotlib.pyplot.colorbar</cite> for
+<li><p><strong>edge}_cbar_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Optional keyword arguments passed to <cite>matplotlib.pyplot.colorbar</cite> for
 the node and edge colorbars.</p></li>
 <li><p><strong>{node</strong> – Keyword arguments passed to <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.colorbar.set_ticklabels()</span></code></p></li>
 <li><p><strong>edge}_cbar_ticks_kws</strong> ({<cite>None</cite>, <cite>dict</cite>}) – Keyword arguments passed to <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.colorbar.set_ticklabels()</span></code></p></li>
@@ -691,24 +691,24 @@ sequence of node class labels with the same length as nodelist. If
 shape speficiations are not one of ‘os^&gt;v&lt;dph8’, they are treated as
 node class labels and are added to the legend. Use <code class="docutils literal notranslate"><span class="pre">node_shape_mapper</span></code>
 to manually specify the shape for each class.</p></li>
-<li><p><strong>node_shape_mapper</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> (</em><em>default=None</em><em>)</em>) – A dictionary to map node class labels to shapes, keyed by node class labels
+<li><p><strong>node_shape_mapper</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> (</em><em>default=None</em><em>)</em>) – A dictionary to map node class labels to shapes, keyed by node class labels
 that is expected to have a key for all unique node class labels in <code class="docutils literal notranslate"><span class="pre">node_shape</span></code>.
 The default is to cycle through the possible shapes ‘os^&gt;v&lt;dph8’, which may
 not be unique if there are more classes than unique markers. This is ignored
 if <code class="docutils literal notranslate"><span class="pre">node_shape</span></code> contains the shapes directly.</p></li>
-<li><p><strong>node_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>array</em><em> of </em><em>floats</em><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The node transparency.  This can be a single alpha value,
+<li><p><strong>node_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>array</em><em> of </em><em>floats</em><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The node transparency.  This can be a single alpha value,
 in which case it will be applied to all the nodes of color. Otherwise,
 if it is an array, the elements of alpha will be applied to the colors
 in order (cycling through alpha multiple times if necessary).</p></li>
-<li><p><strong>edge_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The edge transparency.</p></li>
-<li><p><strong>node_label_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The node label text transparency</p></li>
-<li><p><strong>edge_label_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The text transparency</p></li>
+<li><p><strong>edge_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The edge transparency.</p></li>
+<li><p><strong>node_label_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The node label text transparency</p></li>
+<li><p><strong>edge_label_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The text transparency</p></li>
 <li><p><strong>{node</strong> – Colormap for mapping intensities of nodes and edges</p></li>
 <li><p><strong>edge}_cmap</strong> (<em>Matplotlib colormap</em><em>, </em><em>optional</em>) – Colormap for mapping intensities of nodes and edges</p></li>
 <li><p><strong>{node</strong> – Minimum and maximum for node and edge colormap scaling</p></li>
-<li><p><strong>edge}_vmin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum and maximum for node and edge colormap scaling</p></li>
+<li><p><strong>edge}_vmin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum and maximum for node and edge colormap scaling</p></li>
 <li><p><strong>{node</strong> – Minimum and maximum for node and edge colormap scaling</p></li>
-<li><p><strong>edge}_vmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum and maximum for node and edge colormap scaling</p></li>
+<li><p><strong>edge}_vmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum and maximum for node and edge colormap scaling</p></li>
 <li><p><strong>{node</strong> – Whether to draw lines at color boundries on node,edge colorbar.
 This is ignored if no colorbar is being shown.
 Default behavior is to draw edges for a discrete colormap and
@@ -719,7 +719,7 @@ Default behavior is to draw edges for a discrete colormap and
 not for continuous colormaps.</p></li>
 <li><p><strong>border_linewidths</strong> (<em>scalar</em><em> or </em><em>sequence</em><em> (</em><em>default=1.0</em><em>)</em>) – Line width of symbol border.</p></li>
 <li><p><strong>bordercolors</strong> (<em>[</em><em>None</em><em> | </em><em>scalar</em><em> | </em><em>sequence</em><em>] </em><em>(</em><em>default = node_color</em><em>)</em>) – Colors of node borders.</p></li>
-<li><p><strong>edge_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>array</em><em> of </em><em>floats</em><em> (</em><em>default=1.0</em><em>)</em>) – Line width of edges</p></li>
+<li><p><strong>edge_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>array</em><em> of </em><em>floats</em><em> (</em><em>default=1.0</em><em>)</em>) – Line width of edges</p></li>
 <li><p><strong>edge_style</strong> (<em>string</em><em> or </em><em>array</em><em> of </em><em>strings</em><em> (</em><em>default=solid line</em><em>)</em>) – Edge line style. Can be a single style or a sequence of styles
 with the same length as edgelist. Styles can be any of
 ‘-’, ‘–’, ‘-.’, ‘:’ or words like ‘solid’ or ‘dashed’.
@@ -731,7 +731,7 @@ style speficiations are not one of
 [‘-’, ‘–’, ‘-.’, ‘:’, ‘solid’, ‘dashed’, ‘dotted’, ‘dashdot’], they are treated
 as edge  class labels and are added to the legend. Use <code class="docutils literal notranslate"><span class="pre">edge_style_mapper</span></code>
 to manually specify the style for each class.</p></li>
-<li><p><strong>edge_style_mapper</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> (</em><em>default=None</em><em>)</em>) – A dictionary to map  edge class labels to styles, keyed by edge class
+<li><p><strong>edge_style_mapper</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> (</em><em>default=None</em><em>)</em>) – A dictionary to map  edge class labels to styles, keyed by edge class
 and is expected to have a key for all include all unique edge class labels in
 <code class="docutils literal notranslate"><span class="pre">edge_style</span></code>.
 The default is to cycle through the possible edge styles [‘-’, ‘–’, ‘-.’, ‘:’],
@@ -748,7 +748,7 @@ Default is <cite>True</cite>, but this is ignored if <code class="docutils liter
 <code class="docutils literal notranslate"><span class="pre">edge_style</span></code> is not provided.</p></li>
 <li><p><strong>legend_kws</strong> ({<cite>None</cite>, <cite>dict</cite>} (default=None)) – Keyword arguments passed to <code class="docutils literal notranslate"><span class="pre">ax.legend</span></code>.</p></li>
 <li><p><strong>{node</strong> – Font size for text labels</p></li>
-<li><p><strong>edge}_font_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> (</em><em>default=12 for nodes</em><em>, </em><em>10 for edges</em><em>)</em>) – Font size for text labels</p></li>
+<li><p><strong>edge}_font_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> (</em><em>default=12 for nodes</em><em>, </em><em>10 for edges</em><em>)</em>) – Font size for text labels</p></li>
 <li><p><strong>{node</strong> – Font color string</p></li>
 <li><p><strong>edge}_font_color</strong> (<em>string</em><em> (</em><em>default='k' black</em><em>)</em>) – Font color string</p></li>
 <li><p><strong>{node</strong> – Font weight</p></li>
@@ -767,15 +767,15 @@ Default is {boxstyle=’round’, ec=(1.0, 1.0, 1.0), fc=(1.0, 1.0, 1.0)}.</p></
 <li><p><strong>{node</strong> – Vertical alignment {‘center’, ‘top’, ‘bottom’, ‘baseline’, ‘center_baseline’}</p></li>
 <li><p><strong>edge}_verticalalignment</strong> (<em>string</em><em> (</em><em>default='center'</em><em>)</em>) – Vertical alignment {‘center’, ‘top’, ‘bottom’, ‘baseline’, ‘center_baseline’}</p></li>
 <li><p><strong>{node</strong> – Turn on clipping of node labels at axis boundaries</p></li>
-<li><p><strong>edge}_clip_on</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default=True</em><em>)</em>) – Turn on clipping of node labels at axis boundaries</p></li>
-<li><p><strong>margins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>2-tuple</em><em>, </em><em>optional</em>) – Sets the padding for axis autoscaling. Increase margin to prevent
+<li><p><strong>edge}_clip_on</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default=True</em><em>)</em>) – Turn on clipping of node labels at axis boundaries</p></li>
+<li><p><strong>margins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>2-tuple</em><em>, </em><em>optional</em>) – Sets the padding for axis autoscaling. Increase margin to prevent
 clipping for nodes that are near the edges of an image. Values should
 be in the range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. See <code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.margins()</span></code>
 for details. The default is <cite>None</cite>, which uses the Matplotlib default.</p></li>
-<li><p><strong>min_source_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> (</em><em>default=0</em><em>)</em>) – The minimum margin (gap) at the begining of the edge at the source.</p></li>
-<li><p><strong>min_target_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> (</em><em>default=0</em><em>)</em>) – The minimum margin (gap) at the end of the edge at the target.</p></li>
-<li><p><strong>edge_label_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> (</em><em>default=0.5</em><em>)</em>) – Position of edge label along edge (0=head, 0.5=center, 1=tail)</p></li>
-<li><p><strong>rotate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>deafult=True</em><em>)</em>) – Rotate edge labels to lie parallel to edges</p></li>
+<li><p><strong>min_source_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> (</em><em>default=0</em><em>)</em>) – The minimum margin (gap) at the begining of the edge at the source.</p></li>
+<li><p><strong>min_target_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> (</em><em>default=0</em><em>)</em>) – The minimum margin (gap) at the end of the edge at the target.</p></li>
+<li><p><strong>edge_label_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> (</em><em>default=0.5</em><em>)</em>) – Position of edge label along edge (0=head, 0.5=center, 1=tail)</p></li>
+<li><p><strong>rotate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>deafult=True</em><em>)</em>) – Rotate edge labels to lie parallel to edges</p></li>
 </ul>
 </dd>
 </dl>
@@ -805,11 +805,11 @@ multiple node shapes.</p>
 If not specified a kamada kawai layout positioning will be computed.
 See <code class="xref py py-mod docutils literal notranslate"><span class="pre">networkx.drawing.layout</span></code> for functions that
 compute node positions.</p></li>
-<li><p><strong>with_{node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – Set to True to draw labels on the nodes and edges.</p></li>
-<li><p><strong>edge}_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – Set to True to draw labels on the nodes and edges.</p></li>
+<li><p><strong>with_{node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – Set to True to draw labels on the nodes and edges.</p></li>
+<li><p><strong>edge}_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default=False</em><em>)</em>) – Set to True to draw labels on the nodes and edges.</p></li>
 <li><p><strong>ax</strong> (<em>Matplotlib Axes object</em><em>, </em><em>optional</em>) – Draw the graph in the specified Matplotlib axes.</p></li>
-<li><p><strong>nodelist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> (</em><em>default=list</em><em>(</em><em>G</em><em>)</em><em>)</em>) – Draw only specified nodes.</p></li>
-<li><p><strong>edgelist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> (</em><em>default=list</em><em>(</em><em>G.edges</em><em>(</em><em>)</em><em>)</em><em>)</em>) – Draw only specified edges.</p></li>
+<li><p><strong>nodelist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> (</em><em>default=list</em><em>(</em><em>G</em><em>)</em><em>)</em>) – Draw only specified nodes.</p></li>
+<li><p><strong>edgelist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> (</em><em>default=list</em><em>(</em><em>G.edges</em><em>(</em><em>)</em><em>)</em><em>)</em>) – Draw only specified edges.</p></li>
 <li><p><strong>node_size</strong> (<em>scalar</em><em> or </em><em>array</em><em> (</em><em>default=300</em><em>)</em>) – Size of nodes.  If an array is specified it must be the
 same length as nodelist.</p></li>
 <li><p><strong>node_color</strong> (<em>color</em><em> or </em><em>array</em><em> of </em><em>colors</em><em> (</em><em>default='#1f78b4'</em><em>)</em>) – Node color. Can be a single color or a sequence of colors with the same
@@ -821,13 +821,13 @@ matplotlib.scatter for more details.</p></li>
 length as edgelist. Color can be string or rgb (or rgba) tuple of
 floats from 0-1. If numeric values are specified they will be
 mapped to colors using the edge_cmap and edge_vmin,edge_vmax parameters.</p></li>
-<li><p><strong>{node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default=True</em><em>)</em>) – If <cite>True</cite>, show color bar for node and edge colors.
+<li><p><strong>{node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default=True</em><em>)</em>) – If <cite>True</cite>, show color bar for node and edge colors.
 This is ignored if {node,edge}_color is a str.</p></li>
-<li><p><strong>edge}_cbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default = False</em><em>)</em>) – If <cite>True</cite>, show color bar for node and edge colors.
+<li><p><strong>edge}_cbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default = False</em><em>)</em>) – If <cite>True</cite>, show color bar for node and edge colors.
 This is ignored if {node,edge}_color is a str.</p></li>
 <li><p><strong>{node</strong> – Optional keyword arguments passed to <cite>matplotlib.pyplot.colorbar</cite> for
 the node and edge colorbars.</p></li>
-<li><p><strong>edge}_cbar_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Optional keyword arguments passed to <cite>matplotlib.pyplot.colorbar</cite> for
+<li><p><strong>edge}_cbar_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Optional keyword arguments passed to <cite>matplotlib.pyplot.colorbar</cite> for
 the node and edge colorbars.</p></li>
 <li><p><strong>{node</strong> – Keyword arguments passed to <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.colorbar.set_ticklabels()</span></code></p></li>
 <li><p><strong>edge}_cbar_ticks_kws</strong> ({<cite>None</cite>, <cite>dict</cite>}) – Keyword arguments passed to <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.colorbar.set_ticklabels()</span></code></p></li>
@@ -848,24 +848,24 @@ sequence of node class labels with the same length as nodelist. If
 shape speficiations are not one of ‘os^&gt;v&lt;dph8’, they are treated as
 node class labels and are added to the legend. Use <code class="docutils literal notranslate"><span class="pre">node_shape_mapper</span></code>
 to manually specify the shape for each class.</p></li>
-<li><p><strong>node_shape_mapper</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> (</em><em>default=None</em><em>)</em>) – A dictionary to map node class labels to shapes, keyed by node class labels
+<li><p><strong>node_shape_mapper</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> (</em><em>default=None</em><em>)</em>) – A dictionary to map node class labels to shapes, keyed by node class labels
 that is expected to have a key for all unique node class labels in <code class="docutils literal notranslate"><span class="pre">node_shape</span></code>.
 The default is to cycle through the possible shapes ‘os^&gt;v&lt;dph8’, which may
 not be unique if there are more classes than unique markers. This is ignored
 if <code class="docutils literal notranslate"><span class="pre">node_shape</span></code> contains the shapes directly.</p></li>
-<li><p><strong>node_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>array</em><em> of </em><em>floats</em><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The node transparency.  This can be a single alpha value,
+<li><p><strong>node_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>array</em><em> of </em><em>floats</em><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The node transparency.  This can be a single alpha value,
 in which case it will be applied to all the nodes of color. Otherwise,
 if it is an array, the elements of alpha will be applied to the colors
 in order (cycling through alpha multiple times if necessary).</p></li>
-<li><p><strong>edge_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The edge transparency.</p></li>
-<li><p><strong>node_label_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The node label text transparency</p></li>
-<li><p><strong>edge_label_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The text transparency</p></li>
+<li><p><strong>edge_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The edge transparency.</p></li>
+<li><p><strong>node_label_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The node label text transparency</p></li>
+<li><p><strong>edge_label_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>None</em><em> (</em><em>default=None</em><em>)</em>) – The text transparency</p></li>
 <li><p><strong>{node</strong> – Colormap for mapping intensities of nodes and edges</p></li>
 <li><p><strong>edge}_cmap</strong> (<em>Matplotlib colormap</em><em>, </em><em>optional</em>) – Colormap for mapping intensities of nodes and edges</p></li>
 <li><p><strong>{node</strong> – Minimum and maximum for node and edge colormap scaling</p></li>
-<li><p><strong>edge}_vmin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum and maximum for node and edge colormap scaling</p></li>
+<li><p><strong>edge}_vmin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum and maximum for node and edge colormap scaling</p></li>
 <li><p><strong>{node</strong> – Minimum and maximum for node and edge colormap scaling</p></li>
-<li><p><strong>edge}_vmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum and maximum for node and edge colormap scaling</p></li>
+<li><p><strong>edge}_vmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Minimum and maximum for node and edge colormap scaling</p></li>
 <li><p><strong>{node</strong> – Whether to draw lines at color boundries on node,edge colorbar.
 This is ignored if no colorbar is being shown.
 Default behavior is to draw edges for a discrete colormap and
@@ -876,7 +876,7 @@ Default behavior is to draw edges for a discrete colormap and
 not for continuous colormaps.</p></li>
 <li><p><strong>border_linewidths</strong> (<em>scalar</em><em> or </em><em>sequence</em><em> (</em><em>default=1.0</em><em>)</em>) – Line width of symbol border.</p></li>
 <li><p><strong>bordercolors</strong> (<em>[</em><em>None</em><em> | </em><em>scalar</em><em> | </em><em>sequence</em><em>] </em><em>(</em><em>default = node_color</em><em>)</em>) – Colors of node borders.</p></li>
-<li><p><strong>edge_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>array</em><em> of </em><em>floats</em><em> (</em><em>default=1.0</em><em>)</em>) – Line width of edges</p></li>
+<li><p><strong>edge_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>array</em><em> of </em><em>floats</em><em> (</em><em>default=1.0</em><em>)</em>) – Line width of edges</p></li>
 <li><p><strong>edge_style</strong> (<em>string</em><em> or </em><em>array</em><em> of </em><em>strings</em><em> (</em><em>default=solid line</em><em>)</em>) – Edge line style. Can be a single style or a sequence of styles
 with the same length as edgelist. Styles can be any of
 ‘-’, ‘–’, ‘-.’, ‘:’ or words like ‘solid’ or ‘dashed’.
@@ -888,7 +888,7 @@ style speficiations are not one of
 [‘-’, ‘–’, ‘-.’, ‘:’, ‘solid’, ‘dashed’, ‘dotted’, ‘dashdot’], they are treated
 as edge  class labels and are added to the legend. Use <code class="docutils literal notranslate"><span class="pre">edge_style_mapper</span></code>
 to manually specify the style for each class.</p></li>
-<li><p><strong>edge_style_mapper</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> (</em><em>default=None</em><em>)</em>) – A dictionary to map  edge class labels to styles, keyed by edge class
+<li><p><strong>edge_style_mapper</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> (</em><em>default=None</em><em>)</em>) – A dictionary to map  edge class labels to styles, keyed by edge class
 and is expected to have a key for all include all unique edge class labels in
 <code class="docutils literal notranslate"><span class="pre">edge_style</span></code>.
 The default is to cycle through the possible edge styles [‘-’, ‘–’, ‘-.’, ‘:’],
@@ -905,7 +905,7 @@ Default is <cite>True</cite>, but this is ignored if <code class="docutils liter
 <code class="docutils literal notranslate"><span class="pre">edge_style</span></code> is not provided.</p></li>
 <li><p><strong>legend_kws</strong> ({<cite>None</cite>, <cite>dict</cite>} (default=None)) – Keyword arguments passed to <code class="docutils literal notranslate"><span class="pre">ax.legend</span></code>.</p></li>
 <li><p><strong>{node</strong> – Font size for text labels</p></li>
-<li><p><strong>edge}_font_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> (</em><em>default=12 for nodes</em><em>, </em><em>10 for edges</em><em>)</em>) – Font size for text labels</p></li>
+<li><p><strong>edge}_font_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> (</em><em>default=12 for nodes</em><em>, </em><em>10 for edges</em><em>)</em>) – Font size for text labels</p></li>
 <li><p><strong>{node</strong> – Font color string</p></li>
 <li><p><strong>edge}_font_color</strong> (<em>string</em><em> (</em><em>default='k' black</em><em>)</em>) – Font color string</p></li>
 <li><p><strong>{node</strong> – Font weight</p></li>
@@ -924,15 +924,15 @@ Default is {boxstyle=’round’, ec=(1.0, 1.0, 1.0), fc=(1.0, 1.0, 1.0)}.</p></
 <li><p><strong>{node</strong> – Vertical alignment {‘center’, ‘top’, ‘bottom’, ‘baseline’, ‘center_baseline’}</p></li>
 <li><p><strong>edge}_verticalalignment</strong> (<em>string</em><em> (</em><em>default='center'</em><em>)</em>) – Vertical alignment {‘center’, ‘top’, ‘bottom’, ‘baseline’, ‘center_baseline’}</p></li>
 <li><p><strong>{node</strong> – Turn on clipping of node labels at axis boundaries</p></li>
-<li><p><strong>edge}_clip_on</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>default=True</em><em>)</em>) – Turn on clipping of node labels at axis boundaries</p></li>
-<li><p><strong>margins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>2-tuple</em><em>, </em><em>optional</em>) – Sets the padding for axis autoscaling. Increase margin to prevent
+<li><p><strong>edge}_clip_on</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>default=True</em><em>)</em>) – Turn on clipping of node labels at axis boundaries</p></li>
+<li><p><strong>margins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> or </em><em>2-tuple</em><em>, </em><em>optional</em>) – Sets the padding for axis autoscaling. Increase margin to prevent
 clipping for nodes that are near the edges of an image. Values should
 be in the range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. See <code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.margins()</span></code>
 for details. The default is <cite>None</cite>, which uses the Matplotlib default.</p></li>
-<li><p><strong>min_source_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> (</em><em>default=0</em><em>)</em>) – The minimum margin (gap) at the begining of the edge at the source.</p></li>
-<li><p><strong>min_target_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> (</em><em>default=0</em><em>)</em>) – The minimum margin (gap) at the end of the edge at the target.</p></li>
-<li><p><strong>edge_label_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> (</em><em>default=0.5</em><em>)</em>) – Position of edge label along edge (0=head, 0.5=center, 1=tail)</p></li>
-<li><p><strong>rotate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> (</em><em>deafult=True</em><em>)</em>) – Rotate edge labels to lie parallel to edges</p></li>
+<li><p><strong>min_source_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> (</em><em>default=0</em><em>)</em>) – The minimum margin (gap) at the begining of the edge at the source.</p></li>
+<li><p><strong>min_target_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> (</em><em>default=0</em><em>)</em>) – The minimum margin (gap) at the end of the edge at the target.</p></li>
+<li><p><strong>edge_label_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> (</em><em>default=0.5</em><em>)</em>) – Position of edge label along edge (0=head, 0.5=center, 1=tail)</p></li>
+<li><p><strong>rotate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em> (</em><em>deafult=True</em><em>)</em>) – Rotate edge labels to lie parallel to edges</p></li>
 </ul>
 </dd>
 </dl>

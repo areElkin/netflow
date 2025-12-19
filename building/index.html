@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Installation &#8212; netflow v0.0.dev Manual</title>
+    <title>Installation (Linux/MacOS/Windows) &#8212; netflow v0.0.dev Manual</title>
   
   
   
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 25, 2025"/>
+    <meta name="docbuild:last-update" content="Dec 19, 2025"/>
   </head>
   
   
@@ -364,7 +364,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation (Linux/MacOS/Windows)</span></li>
   </ul>
 </nav>
 </div>
@@ -381,85 +381,41 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="installation">
-<span id="building-install"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
-<p>Currently, only installed via conda.</p>
+  <section id="installation-linux-macos-windows">
+<span id="building-install"></span><h1>Installation (Linux/MacOS/Windows)<a class="headerlink" href="#installation-linux-macos-windows" title="Permalink to this heading">#</a></h1>
+<section id="via-conda-recommended">
+<h2>Via conda (recommended)<a class="headerlink" href="#via-conda-recommended" title="Permalink to this heading">#</a></h2>
+<p>Requirements: <a class="reference external" href="https://www.anaconda.com/docs/getting-started/miniconda/main">Miniconda</a>.</p>
+<p>Conda provides pre-built binaries for Graphviz, which Netflow depends on, eliminating the need to compile from source.</p>
 <p>TODO: UPDATE WITH IMPROVED INSTALL INSTRUCTIONS AND NOT JUST FOR CONDA</p>
-<p>TODO: upload to PYPI for easy installation</p>
 <section id="create-conda-environment">
-<h2>Create conda environment<a class="headerlink" href="#create-conda-environment" title="Permalink to this heading">#</a></h2>
-<p>Note: conda environment creation was tested on MacOS.
-TODO: provide instructions for other operating systems</p>
-<section id="via-env-yml">
-<h3>via env.yml<a class="headerlink" href="#via-env-yml" title="Permalink to this heading">#</a></h3>
-<p>First, optionally set the environment name. The default environment name is <cite>nf_env</cite>.
-To rename it:</p>
-<p>Option 1: Manually rename the environment:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Open env.yml and replace <cite>nf_env</cite> with the new environment name <cite>&lt;env&gt;</cite>
-on the first and last line</p></li>
-</ul>
-</div></blockquote>
-<p>Option 2: Edit the file from the terminal:</p>
-<blockquote>
-<div><ul>
-<li><p>If on macOS (or using BSD):</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;1s/nf_env/&lt;env&gt;/&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;$s/nf_env/&lt;env&gt;/&#39;</span><span class="w"> </span>env.yml
+<h3>Create Conda environment<a class="headerlink" href="#create-conda-environment" title="Permalink to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;env&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
 </pre></div>
 </div>
-</li>
-<li><p>If on Linux (or GNU):</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;1s/nf_env/&lt;env&gt;/&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;$s/nf_env/&lt;env&gt;/&#39;</span><span class="w"> </span>env.yml
-</pre></div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<p>where <cite>&lt;env&gt;</cite> should be replaced with the desired environment name.</p>
-<p>Second, set the prefix to the location where environments are stored on your system.
-The prefix is specified on the last line of env.yml. To set the prefix:</p>
-<p>Option 1: Manually set the prefix:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Open env.yml and replace the prefix on the last line.</p></li>
-</ul>
-</div></blockquote>
-<p>Option 2: Edit the file from the terminal:</p>
-<blockquote>
-<div><p>On MacOS, environments are typically stored to <cite>/Users/&lt;user-name&gt;/opt/anaconda3/envs/&lt;env&gt;</cite>.
-If this is the case, replace <cite>&lt;user-name&gt;</cite> accordingly. (Note, <cite>&lt;env&gt;</cite> will have been updated
-in step 1, if you renamed the environemnt. Otherwise, it is <cite>nf_env</cite>.)</p>
-<p>For example, considering the default environment <cite>nf_env</cite>, replacing <cite>&lt;user-name&gt;</cite> to
-<cite>my_user_name</cite> can be done as follows:</p>
-<ul>
-<li><p>If on macOS (or using BSD):</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;$s/&lt;user-name&gt;/my_user_name/&#39;</span><span class="w"> </span>env.yml
-</pre></div>
-</div>
-</li>
-<li><p>If on Linux (or GNU):</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;$s/&lt;user-name&gt;/my_user_name/&#39;</span><span class="w"> </span>env.yml
-</pre></div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<p>Lastly, create the conda environment as follows:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>env.yml
-</pre></div>
-</div>
+<p>Specify desired environment name &lt;env&gt;.</p>
 </section>
-</section>
-<section id="activate-the-conda-environment">
-<h2>Activate the conda environment<a class="headerlink" href="#activate-the-conda-environment" title="Permalink to this heading">#</a></h2>
+<section id="activate-conda-environment">
+<h3>Activate Conda environment<a class="headerlink" href="#activate-conda-environment" title="Permalink to this heading">#</a></h3>
 <p>After creating the environment, it can be activated by:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>&lt;env&gt;
 </pre></div>
 </div>
 </section>
+<section id="install-graphviz">
+<h3>Install Graphviz<a class="headerlink" href="#install-graphviz" title="Permalink to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>graphviz<span class="w"> </span>pygraphviz
+</pre></div>
+</div>
+</section>
+<section id="install-netflow-via-pip">
+<h3>Install Netflow via PIP<a class="headerlink" href="#install-netflow-via-pip" title="Permalink to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/areElkin/netflow.git
+</pre></div>
+</div>
+</section>
 <section id="add-conda-environment-to-jupyter-notebook">
-<h2>Add conda environment to Jupyter notebook<a class="headerlink" href="#add-conda-environment-to-jupyter-notebook" title="Permalink to this heading">#</a></h2>
+<h3>Add Conda environment to Jupyter notebook<a class="headerlink" href="#add-conda-environment-to-jupyter-notebook" title="Permalink to this heading">#</a></h3>
 <p>After activating the environment, type the following:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>&lt;env&gt;
 </pre></div>
@@ -467,14 +423,14 @@ in step 1, if you renamed the environemnt. Otherwise, it is <cite>nf_env</cite>.
 <p>After using the above command, the conda environment &lt;env&gt; should appear in Jupyter notebooks.</p>
 </section>
 <section id="future-installation-options">
-<h2>Future installation options<a class="headerlink" href="#future-installation-options" title="Permalink to this heading">#</a></h2>
-<p>Note: pip install has not yet been tested.</p>
+<h3>Future installation options<a class="headerlink" href="#future-installation-options" title="Permalink to this heading">#</a></h3>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">1. usage</a></li>
 </ul>
 </div>
+</section>
 </section>
 </section>
 
@@ -526,14 +482,16 @@ in step 1, if you renamed the environemnt. Otherwise, it is <cite>nf_env</cite>.
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="current visible nav section-nav flex-column">
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="current reference internal nav-link" href="#">Installation</a><ul class="visible nav section-nav flex-column">
-<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-conda-environment">Create conda environment</a><ul class="nav section-nav flex-column">
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#via-env-yml">via env.yml</a></li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#via-conda-recommended">Via conda (recommended)</a><ul class="nav section-nav flex-column">
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-conda-environment">Create Conda environment</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-conda-environment">Activate Conda environment</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-graphviz">Install Graphviz</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-netflow-via-pip">Install Netflow via PIP</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-conda-environment-to-jupyter-notebook">Add Conda environment to Jupyter notebook</a></li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#future-installation-options">Future installation options</a><ul class="nav section-nav flex-column">
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="usage.html">1. usage</a></li>
 </ul>
 </li>
-<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-the-conda-environment">Activate the conda environment</a></li>
-<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-conda-environment-to-jupyter-notebook">Add conda environment to Jupyter notebook</a></li>
-<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#future-installation-options">Future installation options</a><ul class="nav section-nav flex-column">
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="usage.html">1. usage</a></li>
 </ul>
 </li>
 </ul>
