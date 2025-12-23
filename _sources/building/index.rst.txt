@@ -1,27 +1,77 @@
 .. _building-install:
 
 #####################################
-Installation (Linux/MacOS/Windows)
+Installation 
 #####################################
+Requires Python 3.10.x
 
 ****************************
-Via conda (recommended)
+Via venv/pip (recommended)
 ****************************
+
+Create Python virtual environment
+===========================================
+
+Linux/MacOS
+------------
+
+.. code-block:: console
+
+ $ python3.10 -m venv </path/to/env_name>
+
+Specify desired path and name env_name
+
+
+Windows (CMD)
+-------------
+
+* Install Python_. 3.10.x
+.. _Python: https://www.python.org/downloads/
+
+* Navigate to directory <your_path> where the virtual environment is to be installed.
+
+.. code-block:: console
+   > cd "<your_path>" 
+
+* Run:
+
+.. code-block:: console
+
+ > python3.10 -m venv <env_name>
+
+Activate environment and install dependencies
+=============================================
+
+Linux / MacOS:
+--------------
+
+.. code-block:: console
+
+ $ source </path/to/env_name>/bin/activate
+ $ python -m pip install git+https://github.com/areElkin/netflow.git
+
+
+Windows
+----------
+
+.. code-block:: console
+ > .\<env>\Scripts\activate.bat
+ (env) > python -m pip install git+https://github.com/areElkin/netflow.git
+
+
+*********************************
+Via conda (Liinux/MacOS/Windows)
+*********************************
 Requirements: Miniconda_. 
 
 .. _Miniconda: https://www.anaconda.com/docs/getting-started/miniconda/main 
-
-Conda provides pre-built binaries for Graphviz, which Netflow depends on, eliminating the need to compile from source.  
-
-
-TODO: UPDATE WITH IMPROVED INSTALL INSTRUCTIONS AND NOT JUST FOR CONDA
 
 
 Create Conda environment
 ==========================
 .. code-block:: console
 
-  $ conda create -n <env> python=3.10
+  $ conda create -n <env_name> python=3.10
 
 Specify desired environment name <env>.
 
@@ -33,14 +83,7 @@ After creating the environment, it can be activated by:
 
 .. code-block:: console
 
-   $ conda activate <env>
-
-
-Install Graphviz
-==============================
-.. code-block:: console
-
-   $ conda install -c conda-forge graphviz pygraphviz
+   $ conda activate <env_name>
 
 
 Install Netflow via PIP
@@ -50,20 +93,16 @@ Install Netflow via PIP
    $ python -m pip install git+https://github.com/areElkin/netflow.git
 
 
-Add Conda environment to Jupyter notebook
-=========================================
+Adding Python virtual environment to Jupyter notebook
+=====================================================
 
 After activating the environment, type the following:
 
 .. code-block:: console
 
-   $ python -m ipykernel install --user --name=<env>
+   $ python -m ipykernel install --user --name=<env_name>
 
-After using the above command, the conda environment <env> should appear in Jupyter notebooks.
-
-
-Future installation options
-===========================
+After using the above command, the venv/Conda environment <env_name> should appear in Jupyter notebooks.
 
 
 .. toctree::

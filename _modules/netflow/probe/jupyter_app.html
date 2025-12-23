@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Dec 19, 2025"/>
+    <meta name="docbuild:last-update" content="Dec 23, 2025"/>
   </head>
   
   
@@ -2535,7 +2535,7 @@
     <span class="k">return</span> <span class="n">app</span></div>
 
     
-<div class="viewcode-block" id="render_pose"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.render_pose">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">render_pose</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">distance_key</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8090</span><span class="p">):</span>    
+<div class="viewcode-block" id="render_pose"><a class="viewcode-back" href="../../../reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.render_pose">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">render_pose</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">distance_key</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8090</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">):</span>    
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Render the interactive POSE visualization in a JupyterLab notebook</span>
 
 <span class="sd">    Parameters</span>
@@ -2550,7 +2550,7 @@
 <span class="sd">        (intended to be the distance used to construct the POSE).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">renderer</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">distance_key</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;jupyterlab&#39;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">dev_tools_ui</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># False,</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;jupyterlab&#39;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">dev_tools_ui</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># False,</span>
               <span class="n">dev_tools_hot_reload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">threaded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 </pre></div>
 

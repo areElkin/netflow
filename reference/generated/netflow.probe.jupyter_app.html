@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Dec 19, 2025"/>
+    <meta name="docbuild:last-update" content="Dec 23, 2025"/>
   </head>
   
   
@@ -434,7 +434,7 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.jupyter_app.nx_to_cytoscape" title="netflow.probe.jupyter_app.nx_to_cytoscape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nx_to_cytoscape</span></code></a>(G[, pos, node_color_attr, ...])</p></td>
 <td><p>Convert networkx graph to cytoscape syntax</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.jupyter_app.render_pose" title="netflow.probe.jupyter_app.render_pose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_pose</span></code></a>(keeper, G, distance_key[, port])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.jupyter_app.render_pose" title="netflow.probe.jupyter_app.render_pose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_pose</span></code></a>(keeper, G, distance_key[, port, ...])</p></td>
 <td><p>Render the interactive POSE visualization in a JupyterLab notebook</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.jupyter_app.renderer" title="netflow.probe.jupyter_app.renderer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">renderer</span></code></a>(keeper, pose_key, distance_key)</p></td>
@@ -641,7 +641,7 @@ the corresponding colorbar figure is returned as a <cite>go.Figure</cite>. Other
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.probe.jupyter_app.render_pose">
-<span class="sig-prename descclassname"><span class="pre">netflow.probe.jupyter_app.</span></span><span class="sig-name descname"><span class="pre">render_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8090</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/jupyter_app.html#render_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.jupyter_app.render_pose" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.jupyter_app.</span></span><span class="sig-name descname"><span class="pre">render_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keeper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8090</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/jupyter_app.html#render_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.jupyter_app.render_pose" title="Permalink to this definition">#</a></dt>
 <dd><p>Render the interactive POSE visualization in a JupyterLab notebook</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

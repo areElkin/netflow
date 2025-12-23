@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Installation (Linux/MacOS/Windows) &#8212; netflow v0.0.dev Manual</title>
+    <title>Installation &#8212; netflow v0.0.dev Manual</title>
   
   
   
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Dec 19, 2025"/>
+    <meta name="docbuild:last-update" content="Dec 23, 2025"/>
   </head>
   
   
@@ -364,7 +364,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation (Linux/MacOS/Windows)</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation</span></li>
   </ul>
 </nav>
 </div>
@@ -381,16 +381,56 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="installation-linux-macos-windows">
-<span id="building-install"></span><h1>Installation (Linux/MacOS/Windows)<a class="headerlink" href="#installation-linux-macos-windows" title="Permalink to this heading">#</a></h1>
-<section id="via-conda-recommended">
-<h2>Via conda (recommended)<a class="headerlink" href="#via-conda-recommended" title="Permalink to this heading">#</a></h2>
+  <section id="installation">
+<span id="building-install"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
+<p>Requires Python 3.10.x</p>
+<section id="via-venv-pip-recommended">
+<h2>Via venv/pip (recommended)<a class="headerlink" href="#via-venv-pip-recommended" title="Permalink to this heading">#</a></h2>
+<section id="create-python-virtual-environment">
+<h3>Create Python virtual environment<a class="headerlink" href="#create-python-virtual-environment" title="Permalink to this heading">#</a></h3>
+<section id="linux-macos">
+<h4>Linux/MacOS<a class="headerlink" href="#linux-macos" title="Permalink to this heading">#</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3.10<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>&lt;/path/to/env_name&gt;
+</pre></div>
+</div>
+<p>Specify desired path and name env_name</p>
+</section>
+<section id="windows-cmd">
+<h4>Windows (CMD)<a class="headerlink" href="#windows-cmd" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Install <a class="reference external" href="https://www.python.org/downloads/">Python</a>. 3.10.x</p></li>
+</ul>
+<ul class="simple">
+<li><p>Navigate to directory &lt;your_path&gt; where the virtual environment is to be installed.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Run:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt; python3.10 -m venv &lt;env_name&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="activate-environment-and-install-dependencies">
+<h3>Activate environment and install dependencies<a class="headerlink" href="#activate-environment-and-install-dependencies" title="Permalink to this heading">#</a></h3>
+<section id="id1">
+<h4>Linux / MacOS:<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">source</span><span class="w"> </span>&lt;/path/to/env_name&gt;/bin/activate
+<span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/areElkin/netflow.git
+</pre></div>
+</div>
+</section>
+<section id="windows">
+<h4>Windows<a class="headerlink" href="#windows" title="Permalink to this heading">#</a></h4>
+</section>
+</section>
+</section>
+<section id="via-conda-liinux-macos-windows">
+<h2>Via conda (Liinux/MacOS/Windows)<a class="headerlink" href="#via-conda-liinux-macos-windows" title="Permalink to this heading">#</a></h2>
 <p>Requirements: <a class="reference external" href="https://www.anaconda.com/docs/getting-started/miniconda/main">Miniconda</a>.</p>
-<p>Conda provides pre-built binaries for Graphviz, which Netflow depends on, eliminating the need to compile from source.</p>
-<p>TODO: UPDATE WITH IMPROVED INSTALL INSTRUCTIONS AND NOT JUST FOR CONDA</p>
 <section id="create-conda-environment">
 <h3>Create Conda environment<a class="headerlink" href="#create-conda-environment" title="Permalink to this heading">#</a></h3>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;env&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>&lt;env_name&gt;<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
 </pre></div>
 </div>
 <p>Specify desired environment name &lt;env&gt;.</p>
@@ -398,13 +438,7 @@
 <section id="activate-conda-environment">
 <h3>Activate Conda environment<a class="headerlink" href="#activate-conda-environment" title="Permalink to this heading">#</a></h3>
 <p>After creating the environment, it can be activated by:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>&lt;env&gt;
-</pre></div>
-</div>
-</section>
-<section id="install-graphviz">
-<h3>Install Graphviz<a class="headerlink" href="#install-graphviz" title="Permalink to this heading">#</a></h3>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>graphviz<span class="w"> </span>pygraphviz
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>&lt;env_name&gt;
 </pre></div>
 </div>
 </section>
@@ -414,16 +448,13 @@
 </pre></div>
 </div>
 </section>
-<section id="add-conda-environment-to-jupyter-notebook">
-<h3>Add Conda environment to Jupyter notebook<a class="headerlink" href="#add-conda-environment-to-jupyter-notebook" title="Permalink to this heading">#</a></h3>
+<section id="adding-python-virtual-environment-to-jupyter-notebook">
+<h3>Adding Python virtual environment to Jupyter notebook<a class="headerlink" href="#adding-python-virtual-environment-to-jupyter-notebook" title="Permalink to this heading">#</a></h3>
 <p>After activating the environment, type the following:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>&lt;env&gt;
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>&lt;env_name&gt;
 </pre></div>
 </div>
-<p>After using the above command, the conda environment &lt;env&gt; should appear in Jupyter notebooks.</p>
-</section>
-<section id="future-installation-options">
-<h3>Future installation options<a class="headerlink" href="#future-installation-options" title="Permalink to this heading">#</a></h3>
+<p>After using the above command, the venv/Conda environment &lt;env_name&gt; should appear in Jupyter notebooks.</p>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -482,13 +513,24 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="current visible nav section-nav flex-column">
 <li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="current reference internal nav-link" href="#">Installation</a><ul class="visible nav section-nav flex-column">
-<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#via-conda-recommended">Via conda (recommended)</a><ul class="nav section-nav flex-column">
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#via-venv-pip-recommended">Via venv/pip (recommended)</a><ul class="nav section-nav flex-column">
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-python-virtual-environment">Create Python virtual environment</a><ul class="nav section-nav flex-column">
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-macos">Linux/MacOS</a></li>
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-cmd">Windows (CMD)</a></li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-environment-and-install-dependencies">Activate environment and install dependencies</a><ul class="nav section-nav flex-column">
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Linux / MacOS:</a></li>
+<li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#windows">Windows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#via-conda-liinux-macos-windows">Via conda (Liinux/MacOS/Windows)</a><ul class="nav section-nav flex-column">
 <li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-conda-environment">Create Conda environment</a></li>
 <li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activate-conda-environment">Activate Conda environment</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-graphviz">Install Graphviz</a></li>
 <li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-netflow-via-pip">Install Netflow via PIP</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-conda-environment-to-jupyter-notebook">Add Conda environment to Jupyter notebook</a></li>
-<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#future-installation-options">Future installation options</a><ul class="nav section-nav flex-column">
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-python-virtual-environment-to-jupyter-notebook">Adding Python virtual environment to Jupyter notebook</a><ul class="nav section-nav flex-column">
 <li class="toctree-l4 toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="usage.html">1. usage</a></li>
 </ul>
 </li>
