@@ -2162,7 +2162,7 @@ def renderer(keeper, pose_key, distance_key):
     return app
 
     
-def render_pose(keeper, G, distance_key, port=8090):    
+def render_pose(keeper, G, distance_key, port=8090, host="127.0.0.1"):    
     """ Render the interactive POSE visualization in a JupyterLab notebook
 
     Parameters
@@ -2177,5 +2177,5 @@ def render_pose(keeper, G, distance_key, port=8090):
         (intended to be the distance used to construct the POSE).
     """
     app = renderer(keeper, G, distance_key)
-    app.run_server(mode='jupyterlab', host="127.0.0.1", port=port, dev_tools_ui=True, debug=True, # False,
+    app.run_server(mode='jupyterlab', host=host, port=port, dev_tools_ui=True, debug=True, # False,
               dev_tools_hot_reload=True, threaded=True)

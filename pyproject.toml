@@ -8,7 +8,7 @@ authors = [{name = "Rena Elkin"}]
 version = "0.0.1"
 description="Toolbox to compute information flow on a network and correlations between network modules"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = "~=3.10" 
 license = {file = "LICENSE.txt"}
 dependencies = [
         'pandas==1.4.1',
@@ -28,8 +28,6 @@ dependencies = [
         'scikit-learn',
         'fastcluster',
         'multiprocess',
-        'graphviz',
-        'pygraphviz',
         'dtreeviz',
         'plotly==5.9.0',
         'colorlog==6.7.0',

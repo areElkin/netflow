@@ -9,26 +9,14 @@ Full documentation, including installation instructions, tutorials, and API refe
 
 ## Installation
 
-### 1. Create Python virtual environment    
-`conda create -n env_name python=3.10`
+Installation instructions can be found in:
 
-### 2. Install graphviz  
-**Using Conda**    
- (Avoids compilation-- Conda provides pre-built binaries)    
-`conda activate env_name`  
-`conda install -c conda-forge graphviz pygraphviz`   
-  
-**Alt: Build from source**  
-`wget https://gitlab.com/graphviz/graphviz/-/archive/14.0.5/graphviz-14.0.5.tar.gz`  
-`tar -xzf graphviz-14.0.5.tar.gz`  
-`cd graphviz-14.0.5/`  
-`mkdir build && cd build`    
-`cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/graphviz -DBUILD_SHARED_LIBS=ON`  
-`make -j$(nproc)`  
-`make install`  
-  
-### 3. Install netflow using PIP
-`python -m pip install git+https://github.com/areElkin/netflow.git`
+
+- Documentation: [Installation](https://areElkin.github.io/netflow/building/index.html),
+
+
+- Local source file: [`docs/source/building/index.rst`](docs/source/building/index.rst)  
+
 
 ## Tutorials
 
