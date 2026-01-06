@@ -4,6 +4,7 @@ import numpy as np
 import scipy.sparse.csgraph as scg
 import time
 
+
 def check_connected_graph(G):
     """ Raises an AssertionError if the graph is not connected"""
     assert nx.is_connected(G), "The graph must be connected."

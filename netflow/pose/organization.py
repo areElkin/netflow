@@ -31,6 +31,7 @@ Some noted differences made in scanpy implementation :
 
   - Add smoothing when computing maximal correlation cutoff
   - Include points not identified with any branch after split in the trunk (nonunique).
+  - Uses Tree and TreeNode class to represent the branching
 
 To do:
 
@@ -71,6 +72,7 @@ logger = _gen_logger(__name__)
 # RE: TODO: IF MAX CORR < THRESH, MAYBE DON"T INCLUDE BRANCH?
 # RE: TODO: ADD OPTION TO CHANGE ROOT AND UPDATE PSEUDOTIME, SEGS, AND ORDERING? -- this should be for earlier step in pipeline
 # RE: TODO: SHOULD -1 be included in segs_names_unique?
+
 
 def get_pose(keeper, key, label, n_branches, until_branched=False, 
              root=None, min_branch_size=5, choose_largest_segment=False,
@@ -237,25 +239,21 @@ class TreeNode:
         # used to indicate the order in which nodes are inserted and as unique identifier
         self._counter = None         
 
-
     def __repr__(self):
         return self.name_string
 
-    
     def is_root(self):
         if self.parent is None:
             return True
         else:
             return False
 
-        
     def is_leaf(self):
         if len(self.children) == 0:
             return True
         else:
             return False
 
-        
     def depth(self):
         """ Depth of current node. """
         if self.is_root():
@@ -263,7 +261,6 @@ class TreeNode:
         else:
             return 1 + self.parent.depth()
 
-        
     def add_child(self, node):
         """ Add child to node.
 
@@ -272,18 +269,15 @@ class TreeNode:
         node : `TreeNode`
             The child node.
         """
-        node.parent = self
-        if isinstance(node, TreeNode):
-            self.children.append(node)
-        else:
+        if not isinstance(node, TreeNode):
             raise TypeError("Unrecognized type, node must be a TreeNode.")
-
-
+        node.parent = self
+        self.children.append(node)
+        
     def contains(self, value):
         """ Check if value is in data. """
         found = value in self.data
         return found
-
 
     def disp(self):
         cur_name = self.name
@@ -306,10 +300,8 @@ class Tree:
         # self.node_adjacency = ddict(list)
         self.node_connection = [] # ddict(list)
 
-
     def disp(self):
-        print(self.tree.root.disp())
-        
+        print(self.root.disp())  # print(self.tree.root.disp())
 
     def insert(self, node, index=None, parent=None):
         """ Insert a node into the Tree.
@@ -344,7 +336,6 @@ class Tree:
         node._counter = self._counter
         self._counter += 1
 
-
     def get_node_from_name(self, name, bottom_up=True):
         """ Search and return node in Tree by its name.
 
@@ -373,9 +364,11 @@ class Tree:
             Node in the tree. If node is not found, returns `None`.
         """
         index = self.search(name, bottom_up=bottom_up)
-        node = self.nodes[index]
+        if index == -1:
+            node = None
+        else:
+            node = self.nodes[index]
         return node
-            
 
     def search(self, name, bottom_up=True):
         """ Search and return index of node in Tree by its name.
@@ -423,7 +416,6 @@ class Tree:
         
         return index
 
-
     def search_data(self, value, bottom_up=True):
         """ Search and return index of node in Tree with value in node data.
 
@@ -469,12 +461,10 @@ class Tree:
         
         return index
 
-    
     def get_node(self, index):
         """ Return node by its index. """
         node = self.nodes[index]
         return node
-
 
     def _get_node_from_counter(self, counter):
         """ Search and return node in Tree by its counter ID.
@@ -497,7 +487,6 @@ class Tree:
         index = self._search_counter(counter)
         node = self.nodes[index]
         return node
-
 
     def _search_counter(self, counter):
         """ Search and return index of node in Tree by its counter ID.
@@ -526,16 +515,13 @@ class Tree:
             index = nodes[0]
         
         return index
-    
-    
+
     def root(self):
         return self.root
-
 
     def max_depth(self):
         """ Return max depth of the tree. """
         return max([node.depth() for node in self.nodes])
-
 
     def all_data(self):
         """ Return sorted set of all data points in all nodes in the tree. """
@@ -546,18 +532,15 @@ class Tree:
         data = sorted(data)
         return data
 
-
     def get_leaves_indices(self):
         """ Return indices of leaf nodes in the tree. """
         indices = [ix for ix, node in enumerate(self.nodes) if node.is_leaf()]
         return indices
-    
 
     def get_leaves(self):
         """ Return leaf nodes in the tree. """
         leaves = [node for node in self.nodes if node.is_leaf()]
         return leaves
-
 
     def co_branch_indicator(self):
         """ Return binary symmetric `pandas.DataFrame` of size (num_data_points, num_data_points)
@@ -700,7 +683,7 @@ def compute_transitions(keeper, similarity_key, density_normalize: bool = True):
     keeper.add_misc(transitions_sym, sym_label)
 
 
-def compute_rw_transitions(keeper, similarity_key, do_save=True):
+def compute_rw_transitions(keeper, similarity_key, allow_lazy_rw=True, do_save=True):
     """ Compute the row-stochastic transition matrix.
 
     Parameters
@@ -711,26 +694,44 @@ def compute_rw_transitions(keeper, similarity_key, do_save=True):
         Reference key to the `numpy.ndarray`, (n_observations, n_observations)
         symmetric similarity measure (with 1s on the diagonal) stored in the similarities
         in the keeper.
+    allow_lazy_rw : `bool`
+        Specify if transition probabilities should allow lazy walk. If `True`,
+        transition probabilities are computed from similarity matrix with 1s on the diagonal and
+        results in non-zero transition probability on the diagonal. If `False`, consider adjacency matrix instead of
+        the similarity matrix, which has 0s on the diagonal, resulting in all zero diagonal
+        transition probabilities with self (corresponding to a non-lazy walk).
+        Default (``allow_lazy_rw=True``) behavior allows lazy walk, following graphtools formulation.
     do_save : `bool`
         If `True`, save to ``keeper``.
 
     Returns
     -------
     P : `numpy.ndarray` (n_observations, n_observations)
-        The row-stochastic transition matrix (with 0s on the diagonals).
-        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key ``'transitions_rw_{similarity_key}'``
+        The row-stochastic transition matrix (does not currently require with 0s on the diagonals).
+        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key
+        ``'transitions_rw_{similarity_key}'`` if ``allow_lazy_rw=True`` (does not ensure 0s on the diagonal),
+        otherwise, ``'transitions_rw_nonlazyrw_{similarity_key}'`` (ensures 0s on the diagonal)
     """
     similarity = keeper.similarities[similarity_key].data
+    if not allow_lazy_rw:
+        # set diagonal to zero:
+        similarity = similarity.copy()
+        np.fill_diagonal(similarity, 0.)
+
     P = normalize(similarity, "l1", axis=1)
 
     if do_save:
-        P_label = f"transitions_rw_{similarity_key}"
+        if allow_lazy_rw:
+            P_label = f"transitions_rw_{similarity_key}"
+        else:
+            P_label = f"transitions_rw_nonlazyrw_{similarity_key}"
         keeper.add_misc(P, P_label)
 
     return P
 
 
-def compute_sym_diffusion_affinity_transitions(keeper, similarity_key, do_save=True):
+def compute_sym_diffusion_affinity_transitions(keeper, similarity_key,
+                                               allow_lazy_rw=True, do_save=True):
     """ Compute the symmetric diffusion affinity transition matrix from
     https://github.com/KrishnaswamyLab/graphtools/blob/master/graphtools/base.py.
 
@@ -746,32 +747,49 @@ def compute_sym_diffusion_affinity_transitions(keeper, similarity_key, do_save=T
         Reference key to the `numpy.ndarray`, (n_observations, n_observations)
         symmetric similarity measure (with 1s on the diagonal) stored in the similarities
         in the keeper.
+    allow_lazy_rw : `bool`
+        Specify if transition probabilities should allow lazy walk. If `True`,
+        transition probabilities are computed from similarity matrix with 1s on the diagonal and
+        results in non-zero transition probability on the diagonal. If `False`, consider adjacency matrix instead of
+        the similarity matrix, which has 0s on the diagonal, resulting in all zero diagonal
+        transition probabilities with self (corresponding to a non-lazy walk).
+        Default (``allow_lazy_rw=True``) behavior allows lazy walk, following graphtools formulation.
     do_save : `bool`
         If `True`, save to ``keeper``.
 
     Returns
     -------
     P : `numpy.ndarray` (n_observations, n_observations)
-        The symmetric diffusion affinity transition matrix (with 0s on the diagonals).
-        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key ``'transitions_sym_diff_aff_{similarity_key}'``
+        The symmetric diffusion affinity transition matrix
+        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key
+        ``'transitions_sym_diff_aff_{similarity_key}'`` if ``allow_lazy_rw=True`` (does not ensure 0s on diagonals),
+        otherwise, ``'transitions_sym_diff_aff_nonlazyrw_{similarity_key}'`` (with 0s on the diagonals).
     """
     similarity = keeper.similarities[similarity_key].data
+
+    if not allow_lazy_rw:
+        # set diagonal to zero:
+        similarity = similarity.copy()
+        np.fill_diagonal(similarity, 0.)
+
     row_degrees = similarity.sum(axis=1)[:, None]
     col_degrees = similarity.sum(axis=0)[None,:]
     
     P = (similarity / np.sqrt(row_degrees)) / np.sqrt(col_degrees)
 
     if do_save:
-        P_label = f"transitions_sym_diff_aff_{similarity_key}"
+        if allow_lazy_rw:
+            P_label = f"transitions_sym_diff_aff_{similarity_key}"
+        else:
+            P_label = f"transitions_sym_diff_aff_nonlazyrw_{similarity_key}"
         keeper.add_misc(P, P_label)
 
     return P
 
 
-
-def compute_multiscale_VNE_transitions_from_similarity(keeper, similarity_key,
+def compute_multiscale_VNE_transitions_from_similarity(keeper, similarity_key, allow_lazy_rw=True,
                                                        tau_max=None, do_save=True):
-    """ Compute the multi-scale transition matrix based on the elbow of the Von Neumann Entropy (VNE)
+    f""" Compute the multi-scale transition matrix based on the elbow of the Von Neumann Entropy (VNE)
     as described in GSPA and PHATE https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py,
     https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf.
 
@@ -782,7 +800,14 @@ def compute_multiscale_VNE_transitions_from_similarity(keeper, similarity_key,
     similarity_key : `str`
         Reference key to the `numpy.ndarray`, (n_observations, n_observations)
         symmetric similarity measure (with 1s on the diagonal) stored in the similarities
-        in the keeper.
+        in the keeper.    
+    allow_lazy_rw : `bool`
+        Specify if transition probabilities should allow lazy walk. If `True`,
+        transition probabilities are computed from similarity matrix with 1s on the diagonal and 
+        results in non-zero transition probability on the diagonal. If `False`, consider adjacency matrix instead of
+        the similarity matrix, which has 0s on the diagonal, resulting in all zero diagonal
+        transition probabilities with self (corresponding to a non-lazy walk).   
+        Default (``allow_lazy_rw=True``) behavior allows lazy walk, following graphtools formulation. 
     tau_max : `int`
         Max scale ``tau`` tested for VNE (default is 100).
     do_save : `bool`
@@ -791,35 +816,53 @@ def compute_multiscale_VNE_transitions_from_similarity(keeper, similarity_key,
     Returns
     -------
     P : `numpy.ndarray` (n_observations, n_observations)
-        The symmetric VNE multi-scale transition matrix (with 0s on the diagonals).
-        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key ``'transitions_sym_multiscaleVNE_{similarity_key}'``
+        The symmetric VNE multi-scale transition matrix 
+        If ``do_save`` is `True`, ``P`` is added to the ``keeper.misc`` with the key 
+        ``'transitions_sym_multiscaleVNE_{similarity_key}'`` if ``allow_lazy_rw=True``
+        (not necessarily with 0s on the diagonal), otherwise,
+        ``'transitions_sym_multiscaleVNE_nonlazyrw_{similarity_key}'`` (with 0s on the diagonals)
     P_asym : `numpy.ndarray` (n_observations, n_observations)
-        The random-walk VNE multi-scale transition matrix (with 0s on the diagonals).
-        If ``do_save`` is `True`, ``P_asym`` is added to the ``keeper.misc`` with the key ``'transitions_multiscaleVNE_{similarity_key}'``
+        The random-walk VNE multi-scale transition matrix 
+        If ``do_save`` is `True`, ``P_asym`` is added to the ``keeper.misc`` with the key 
+        ``'transitions_multiscaleVNE_{similarity_key}'`` if ``allow_lazy_rw=True``
+        (not necessarily with 0s on the diagonal), otherwise,
+        ``'transitions_multiscaleVNE_nonlazyrw_{similarity_key}'`` (with 0s on the diagonals)
     """
-    P_sym_label = f"transitions_sym_multiscaleVNE_{similarity_key}"
-    P_asym_label = f"transitions_multiscaleVNE_{similarity_key}"
+    if allow_lazy_rw:
+        P_sym_label = f"transitions_sym_multiscaleVNE_{similarity_key}"
+        P_asym_label = f"transitions_multiscaleVNE_{similarity_key}"
+    else:
+        P_sym_label = f"transitions_sym_multiscaleVNE_nonlazyrw_{similarity_key}"
+        P_asym_label = f"transitions_multiscaleVNE_nonlazyrw_{similarity_key}"
 
     if P_sym_label in keeper.misc and P_asym_label in keeper.misc:
         P = keeper.misc[P_sym_label]
         P_asym = keeper.misc[P_asym_label]
     else:
-        P_label = f"transitions_sym_diff_aff_{similarity_key}"
+        if allow_lazy_rw:
+            P_label = f"transitions_sym_diff_aff_{similarity_key}"
+        else:
+            P_label = f"transitions_sym_diff_aff_nonlazyrw_{similarity_key}"
         if P_label in keeper.misc:
             P = keeper.misc[P_label]
         else:
-            P = compute_sym_diffusion_affinity_transitions(keeper, similarity_key, do_save=False)
+            P = compute_sym_diffusion_affinity_transitions(keeper, similarity_key,
+                                                           allow_lazy_rw=allow_lazy_rw, do_save=False)
         vne = utl.von_neumann_entropy(P, tau_max=tau_max)
         tau = utl.find_knee_point(vne)
 
         # if not use_affinity_diffusion_matrix:
         #    P = compute_rw_transitions(keeper, similarity_key, do_save=False)    
 
-        P_rw_label = f"transitions_rw_{similarity_key}"
+        if allow_lazy_rw:
+            P_rw_label = f"transitions_rw_{similarity_key}"
+        else:
+            P_rw_label = f"transitions_rw_nonlazyrw_{similarity_key}"
         if P_rw_label in keeper.misc:
             P_asym = keeper.misc[P_rw_label]
         else:
-            P_asym = compute_rw_transitions(keeper, similarity_key, do_save=False)
+            P_asym = compute_rw_transitions(keeper, similarity_key,
+                                            allow_lazy_rw=allow_lazy_rw, do_save=False)
 
         P = np.linalg.matrix_power(P, tau)
         P_asym = np.linalg.matrix_power(P_asym, tau)
@@ -833,7 +876,7 @@ def compute_multiscale_VNE_transitions_from_similarity(keeper, similarity_key,
             try:
                 keeper.add_misc(P, P_sym_label)
             except Exception as e:
-                P = keeer.misc[P_sym_label]
+                P = keeper.misc[P_sym_label]
                 logger.warning(f"Returning pre-computed {P_sym_label}")
             try:
                 keeper.add_misc(P_asym, P_asym_label)
@@ -1095,7 +1138,6 @@ class POSER:
         
         self.unidentified_points = set()
 
-        
     def _set_pseudo_dist(self):
         """ Return pseudo-distance with respect to root point. """
         self.pseudo_dist = self.distances[self.root].copy()
@@ -1206,7 +1248,6 @@ class POSER:
             selected_seg = None
         return selected_seg
 
-
     def _kendall_tau_add(self, len_old: int, diff_pos: int, tau_old: float):
         """ Compute Kendall tau delta.
 
@@ -1223,7 +1264,6 @@ class POSER:
         """
         return 2.0 / (len_old + 1) * (float(diff_pos) / len_old - tau_old)
 
-
     def _kendall_tau_subtract(self, len_old: int, diff_neg: int, tau_old: float):
         """Compute Kendall tau delta.
 
@@ -1239,7 +1279,6 @@ class POSER:
             Kendall rank correlation of the old sequence.
         """
         return 2.0 / (len_old - 2) * (-float(diff_neg) / (len_old - 1) + tau_old)
-
 
     def _kendall_tau_diff(self, a: np.ndarray, b: np.ndarray, i) -> Tuple[int, int]:
         """Compute difference in concordance of pairs in split sequences.
@@ -1282,7 +1321,6 @@ class POSER:
 
         return diff_pos, diff_neg
 
-    
     def kendall_tau_split(self, a, b,  min_length=5) -> int:
         """Return splitting index that maximizes correlation in the sequences.
 
@@ -1374,7 +1412,6 @@ class POSER:
             logger.info('    is root itself, never obtain significant correlation')
         return imax
 
-
     def __detect_branching_haghverdi16(self, Dseg: np.ndarray, tips: np.ndarray) -> np.ndarray:
         """
         Detect branching on given segment.
@@ -1435,11 +1472,9 @@ class POSER:
             # otherwise, a more conservative choice is the following
             ibranch = imax + 1
 
-            
         branch = idcs[:ibranch]
         return branch
-        
-        
+
     def _detect_branching_single_haghverdi16(self, Dseg: np.ndarray, tips: np.ndarray):
         """Detect branching on given segment.
 
@@ -1472,13 +1507,11 @@ class POSER:
             # logger.warning(f"*iterating p: i = {i}")
             ssegs.append(self.__detect_branching_haghverdi16(Dseg, tips[p]))
 
-        
         # if not self.split:
         #     # add main portion of branch
         #     ssegs.append(list(set(range(Dseg.shape[0])) - set(ssegs[0])))
             
         return ssegs
-
 
     def _detect_branching_single_wolf17_tri(self, Dseg, tips):
         # all pairwise distances
@@ -1503,14 +1536,12 @@ class POSER:
         ssegs = [segment_0, segment_1, segment_2]
         return ssegs
 
-
     def _detect_branching_single_wolf17_bi(self, Dseg, tips):
         dist_from_0 = Dseg[tips[0]]
         dist_from_1 = Dseg[tips[1]]
         closer_to_0_than_to_1 = dist_from_0 < dist_from_1
         ssegs = [closer_to_0_than_to_1, ~closer_to_0_than_to_1]
         return ssegs
-    
 
     def _detect_branch(self, Dseg: np.ndarray, tips: np.ndarray): # , connect_closest=False):
         """ Detect branching on given segment.
@@ -1564,7 +1595,7 @@ class POSER:
         elif self.flavor == 'wolf17_tri':
             ssegs = self._detect_branching_single_wolf17_tri(Dseg, tips)  # closer in distance to tip than other two tips
         elif self.flavor == 'wolf17_bi' or self.flavor == 'wolf17_bi_un': 
-            ssegs = self._detect_branching_single_wolf17_bi(seg, Dseg)
+            ssegs = self._detect_branching_single_wolf17_bi(Dseg, tips)
         else:
             raise ValueError(
                 '`flavor` needs to be in {"haghverdi16", "wolf17_tri", "wolf17_bi, "wolf17_bi_un""}.'
@@ -1630,7 +1661,6 @@ class POSER:
             unidentified_points = np.arange(Dseg.shape[0], dtype=int)[unidentified]
             # RE END MODIFIED
 
-            
             if len(undecided_cells) > 0:
                 ssegs.append(undecided_cells)
                 trunk = len(ssegs) - 1
@@ -1793,7 +1823,6 @@ class POSER:
                     # ssegs_connects = [[closest_point_in_0], [closest_point_in_1]]
                     ssegs_connects = [[[1, 0], [closest_point_in_0, closest_point_in_1]]]
                     # RE END MODIFIED
-                                      
 
         else:
             if len(ssegs) < 1:
@@ -1856,7 +1885,6 @@ class POSER:
         # return ssegs, ssegs_tips, ssegs_adjacency, ssegs_connects, \
         return ssegs, ssegs_tips, ssegs_connects, \
             trunk, trunk_undecided, unidentified_points
-            
 
     def identify_local_tips(self, Dseg, newseg, tip):
         """ Identify new tips within the new segments
@@ -1895,7 +1923,6 @@ class POSER:
 
         return tips
 
-    
     def detect_branching(self, node): # , connect_closest=False):
         """ Detect branching on a given segment and update TreeNode parameters in place.
 
@@ -1991,7 +2018,6 @@ class POSER:
 
         return updated
 
-
     def single_branch(self, until_branched=False): # , connect_closest=False):
         """ Perform single branching in place.
 
@@ -2028,7 +2054,6 @@ class POSER:
                 break
 
         return branched_flag
-                
 
     def detect_branches(self, n_branches, until_branched=False): # , connect_closest=False):
         """ Detect up to ``n_branches`` branchings and update tree in place.
@@ -2059,8 +2084,7 @@ class POSER:
                     logger.info("No further branching occured at this iteration.")
         else:
             logger.warning(f"`n_branches` branchings have already occurred. No further branching is performed.")
-                
-            
+
     def extract_branchings(self, n_branches):
         """ Extract POSE from up to `n_branches` branchings
 
@@ -2088,7 +2112,7 @@ class POSER:
                                 nonunique=node.nonunique, unidentified=node.unidentified,
                                 branchable=node.branchable, is_trunk=node.is_trunk)
             tree.insert(new_node)
-            for ix, node in enumerate(self.branched_orderings[:n_branches]):
+            for ix, node in enumerate(self.branched_ordering[:n_branches]):
                 parent = tree.get_node_from_name(node.name, bottom_up=True)
                 for child in sorted(node.children, key=lambda x: x._counter):
                     new_node = TreeNode(name=child.name, data=child.data, parent=parent,
@@ -2103,8 +2127,7 @@ class POSER:
             # tree.node_connection = self.tree.node_connection
 
         return tree            
-            
-            
+
     def branchings_segments(self, n_branches, until_branched=False, annotate=True): # , connect_closest=False):
         """ Detect up to `n_branches` branches and partition the data into corresponding segments.
         
@@ -2156,8 +2179,6 @@ class POSER:
         
         return G
 
-        
-    
     def _construct_topology(self, segs, annotate=True):
         """ Construct POSE connections between data points.
 
@@ -2215,7 +2236,6 @@ class POSER:
         nx.set_node_attributes(G, dict(zip(range(self.distances.shape[0]),
                                            self.observation_labels)), name='name')
 
-
         # add if node was ever an unidentified point:
         if annotate:
             nx.set_node_attributes(G, {v: 1 if v in self.unidentified_points else 0 for v in G},
@@ -2228,7 +2248,6 @@ class POSER:
                                    name="inverted_distance")
 
         return G
-
 
     def construct_pose_nn_topology(self, G, mutual=False, k_mnn=3, annotate=True):
         """ Add nearest neighbor (nn) edges to POSE topology.
@@ -2306,7 +2325,6 @@ class POSER:
 
         return Gnn
 
-
     def construct_pose_mst_topology(self, G):
         """ Construct pose topology with minimum spanning tree (MST) edges. 
 
@@ -2358,7 +2376,6 @@ class POSER:
 
         return G
 
-
     def _construct_mst_topology(self, annotate=True):
         """ Construct MST backbone topology graph.
 
@@ -2383,7 +2400,6 @@ class POSER:
             nx.set_node_attributes(Gmst, dict(zip(range(self.distances.shape[0]),
                                                   self.observation_labels)), name='name')
         return Gmst
-
 
     def construct_pose_mst_nn_topology(self, G, mutual=False, k_mnn=1, annotate=True):
         """ Add nearest neighbor (nn) edges to MST POSE topology.
@@ -2427,8 +2443,7 @@ class POSER:
             nn = np.argpartition(d, 1, axis=1)[:, 1]            
             nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
             nn_edges = list(set(nn_edges))
-            
-        
+
         if annotate:
             # nn_edges = [tuple(sorted([i,j])) for i, j in zip(range(d.shape[0]), nn)]
             # nn_edges = list(set(nn_edges))
@@ -2449,7 +2464,6 @@ class POSER:
                                          **{ee: "POSE" for ee in pose_unique_edges}},
                                    name="edge_origin")
 
-            
             nx.set_edge_attributes(Gnn, {ee: self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="distance")
             nx.set_edge_attributes(Gnn, {ee: np.max(self.distances) + 1e-6 - self.distances[ee[0], ee[1]] for ee in Gnn.edges()}, name="inverted_distance")
 
