@@ -226,6 +226,7 @@ def sigma_knn(keeper, key, label=None, n_neighbors=None, method='mean', return_n
             keeper.add_misc(distances, 'nn_distances'+label)
         return None
 
+
 # this used to be def similarity_measure_()
 def _distance_to_similarity(d, n_neighbors, method, sigmas=None, knn=False, indices=None):
     """

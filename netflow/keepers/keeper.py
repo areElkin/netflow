@@ -21,7 +21,8 @@ from ..utils import unstack_triu_
 from ..methods.classes import InfoNet
 from ..pose import similarity as nfs
 from ..pose import organization as nfo
-# from ..pose.organization import compute_transitions, dpt_from_augmented_sym_transitions, POSER, compute_rw_transitions, 
+# from ..pose.organization import compute_transitions, dpt_from_augmented_sym_transitions, \
+#     POSER, compute_rw_transitions,
 # import netflow.InfoNet as InfoNet
 from .._logging import _gen_logger, set_verbose
 
@@ -92,7 +93,7 @@ class DataKeeper:
     All data sets are assumed to contain the same set of data points in the same order.
     """
 
-    def __init__(self, data=None, observation_labels=None):        
+    def __init__(self, data=None, observation_labels=None):
         self._data = {}
         if observation_labels is not None:
             if len(observation_labels) != len(set(observation_labels)):
@@ -112,41 +113,32 @@ class DataKeeper:
         else:
             raise TypeError("Unrecognized type for data, must be one of [pandas.DataFrame, numpy.ndarray, dict].")            
 
-
     def __getitem__(self, key):
         # return self._data[key]
         return DataView(dkeeper=self, label=key)
 
-
     def __contains__(self, key):
         return key in self._data
-
 
     def __iter__(self):
         for key in self._data.keys():
             yield DataView(dkeeper=self, label=key)
 
-
     def keys(self):
         return self.data.keys()
 
-
     def items(self):
         return self.data.items()
-        
-
 
     @property
     def data(self):
         """ A dictionary of all data sets. """
         return self._data
 
-
     @property
     def observation_labels(self):
         """ Labels for each observation. """
         return self._observation_labels
-
 
     def observation_index(self, observation_label):
         """ Return index of observation.
@@ -175,24 +167,20 @@ class DataKeeper:
             
     #     self._observation_labels = labels.copy()
 
-
     @property
     def num_observations(self):
         """ Number of observations. """
         return self._num_observations
-
 
     @property
     def features_labels(self):
         """ A dictionary of feature labels for each data set. """
         return self._features_labels
 
-
     @property
     def num_features(self):
         """ A dictionary with the number of features in each data set. """
         return self._num_features 
-
 
     def add_data(self, data, label):
         """ Add a feature data set to the keeper.
@@ -259,7 +247,6 @@ class DataKeeper:
 
         logger.debug(f"Data {label} with {data.shape[0]} features added to keeper.")
 
-
     def subset(self, observations):
         """ Return a new instance of DataKeeper restricted to subset of observations
 
@@ -282,11 +269,10 @@ class DataKeeper:
         data_subset : `DataKeeper`
             A DataKeeper object restricted to the selected observations.
         """
-        data_subset = DataKeeper(data=None, observation_labels=observations)
+        data_subset = DataKeeper(observation_labels=observations)
         for data in self:
             data_subset.add_data(data.subset(observations=observations), data.label)
         return data_subset
-
 
     def standardize(self, key, **kwargs):
         """ Standardize features by removing the mean and scaling to unit variance
@@ -304,7 +290,7 @@ class DataKeeper:
         data_z : `pandas.DataFrame`
             The standardized data.
         """
-        data_z = self.data[key].standardize(**kwargs)
+        data_z = self[key].standardize(**kwargs)
         return data_z
             
 
@@ -331,44 +317,36 @@ class DataView:
         self._num_observations = dkeeper.num_observations
         self._feature_labels = dkeeper.features_labels[label]
         self._num_features = dkeeper.num_features[label]
-        
 
     @property
     def label(self):
         """ The data label. """
         return self._label
-
     
     @property
     def data(self):
         """ The data set. """
         return self._data
 
-
     @property
     def observation_labels(self):
         """ Labels for each observation. """
         return self._observation_labels
-
 
     @property
     def num_observations(self):
         """ Number of observations. """
         return self._num_observations
 
-
     @property
     def feature_labels(self):
         """ Feature labels. """
         return self._feature_labels
 
-
     @property
     def num_features(self):
         """ The number of features in the data set. """
         return self._num_features 
-
-
 
     def subset(self, observations=None, features=None):
         """ Return data for specified subset of observations and/or features.
@@ -428,7 +406,6 @@ class DataView:
 
         return pd.DataFrame(data=data, columns=observations, index=features)
 
-
     def observation_index(self, observation_label):
         """ Return index of observation.
 
@@ -444,7 +421,6 @@ class DataView:
         """
         observation_index = self._observation_labels.index(observation_label)
         return observation_index
-
 
     def feature_index(self, feature_label):
         """ Return index of feature.
@@ -462,14 +438,12 @@ class DataView:
         feature_index = self._feature_labels.index(feature_label)
         return feature_index
 
-
     def to_frame(self):
         """ Return data as a pandas DataFrame """
         df = pd.DataFrame(data=self.data,
                           columns=self.observation_labels,
                           index=self.feature_labels)
         return df
-
 
     def standardize(self, **kwargs):
         """ Standardize features by removing the mean and scaling to unit variance
@@ -489,9 +463,7 @@ class DataView:
         data_z = pd.DataFrame(data=data_z, columns=data.columns, index=data.index)
         return data_z
         
-    
 
-        
 class DistanceKeeper:
     """ A class to store and handle multiple distances.
 
@@ -571,46 +543,37 @@ class DistanceKeeper:
         else:
             raise TypeError("Unrecognized type for data, must be one of [pandas.DataFrame, numpy.ndarray, dict].")
 
-
     def __getitem__(self, key):
         # return self._data[key]
         return DistanceView(dkeeper=self, label=key)
 
-
     def __contains__(self, key):
         return key in self._data
-
 
     def __iter__(self):
         for key in self._data.keys():
             yield DistanceView(dkeeper=self, label=key)
 
-
     def keys(self):
         return self.data.keys()
 
-
     def items(self):
         return self.data.items()
-
     
     @property
     def data(self):
-        """\ A dictionary of all distances. """
+        """ A dictionary of all distances. """
         return self._data
-
 
     @property
     def observation_labels(self):
         """ Labels for each observation. """
         return self._observation_labels
 
-
     @property
     def num_observations(self):
         """ Number of observations. """
         return self._num_observations
-
 
     @_docstring_parameter(desc=_desc_distance, desc_data=_desc_data_distance)
     def add_data(self, data, label):
@@ -677,7 +640,6 @@ class DistanceKeeper:
         data = unstack_triu_(data, diag=diag, index=self.observation_labels)
 
         self.add_data(data, label)
-        
 
     def observation_index(self, observation_label):
         """ Return index of observation.
@@ -694,7 +656,6 @@ class DistanceKeeper:
         """
         observation_index = self._observation_labels.index(observation_label)
         return observation_index
-
 
     def subset(self, observations):
         """ Return a new instance of DistanceKeeper restricted to subset of observations
@@ -718,11 +679,10 @@ class DistanceKeeper:
         distance_subset : `DistanceKeeper`
             A DistnaceKeeper object restricted to the selected observations.
         """
-        distance_subset = DistanceKeeper(data=None, observation_labels=observations)
+        distance_subset = DistanceKeeper(observation_labels=observations)
         for data in self:
             distance_subset.add_data(data.subset(observations_a=observations), data.label)
         return distance_subset
-
 
 
 class DistanceView:
@@ -748,30 +708,25 @@ class DistanceView:
         self._observation_labels = dkeeper.observation_labels        
         self._num_observations = dkeeper.num_observations
 
-
     @property
     def label(self):
         """ The distance label. """
         return self._label
 
-    
     @property
     def data(self):
         """ The distance matrix. """
         return self._data
-
 
     @property
     def observation_labels(self):
         """ Labels for each observation. """
         return self._observation_labels
 
-
     @property
     def num_observations(self):
         """ Number of observations. """
         return self._num_observations
-
 
     def subset(self, observations_a, observations_b=None):
         """ Return subset of distances between ``observations_a`` and ``observations_b``.
@@ -824,7 +779,6 @@ class DistanceView:
         distance = distance[np.ix_(observations_a_ix, observations_b_ix)]
         return pd.DataFrame(data=distance, index=observations_a, columns=observations_b)
 
-
     def observation_index(self, observation_label):
         """ Return index of observation.
 
@@ -841,14 +795,12 @@ class DistanceView:
         observation_index = self._observation_labels.index(observation_label)
         return observation_index
 
-
     def to_frame(self):
         """ Return data as a pandas DataFrame """
         df = pd.DataFrame(data=self.data,
                           columns=self.observation_labels,
                           index=self.observation_labels)
         return df
-
 
     def density(self):
         """ Return density of each observation
@@ -864,10 +816,7 @@ class DistanceView:
         """
         d = self.to_frame().sum(axis=0)
         return d
-            
-            
-        
-        
+
 
 class GraphKeeper:
     """ A class to store and handle multiple netowrks.
@@ -909,33 +858,26 @@ class GraphKeeper:
         else:
             raise TypeError("Unrecognized type for graphs, must be one of [networkx.Graph or dict].")
 
-
     def __getitem__(self, key):
         return self._graphs[key]
 
-
     def __contains__(self, key):
         return key in self._graphs
-
 
     def __iter__(self):
         for key, graph in self._graphs.items():
             yield graph
 
-            
     def keys(self):
         return self.graphs.keys()
 
-
     def items(self):
         return self.graphs.items()
-
 
     @property
     def graphs(self):
         """ A dictionary of all the graphs. """
         return self._graphs
-
 
     def add_graph(self, graph, label):
         """ Add a network to the keeper.
@@ -1107,22 +1049,19 @@ class Keeper:
                 num_observations = tmp.num_observations
             # if observation_labels are still None, try distances:
             if observation_labels is None:
-                tmp = DistanceKeeper(data=distances,
-                                     observation_labels=observation_labels)
+                tmp = DistanceKeeper(data=distances, observation_labels=observation_labels)
                 observation_labels = tmp.observation_labels
                 if (num_observations is None) and (tmp.num_observations is not None):
                     num_observations = tmp.num_observations
                 # if observation_labels are still None, try similarities:
                 if observation_labels is None:
-                    tmp = DistanceKeeper(data=similarities,
-                                         observation_labels=observation_labels)
+                    tmp = DistanceKeeper(data=similarities, observation_labels=observation_labels)
                     observation_labels = tmp.observation_labels
                     if (num_observations is None) and (tmp.num_observations is not None):
                         num_observations = tmp.num_observations
 
         else:
             num_observations = len(observation_labels)
-                    
                     
         # if no observation labels have been found at this point, set to default
         if (observation_labels is None) and (num_observations is not None):
@@ -1156,7 +1095,6 @@ class Keeper:
             self.outdir.mkdir()
             logger.msg(f"Created directory {self.outdir}.")
 
-
     def _check_num_observations(self):
         """ Check that num_observation are consistent (or None) across keepers. """
         num_cur = self._num_observations
@@ -1176,7 +1114,6 @@ class Keeper:
             for dl2 in record:
                 if dl != dl2:
                     raise ValueError("Missmatched number of observation detected between keepers.")
-                
 
     def _check_observation_labels(self):
         """ Check that observation_labels are consistent (or None) across keepers. """
@@ -1198,7 +1135,6 @@ class Keeper:
                 if dl != dl2:
                     raise ValueError("Missmatched observation labels detected between keepers.")
 
-                
     # def _update_observation_labels(self):
     #     """ Update observation labels (and number of observations) if changed in keeper. """
     #     # first check that num_observations and observation labels match (or are None) across sub-keepers:
@@ -1216,7 +1152,6 @@ class Keeper:
     #     # num_labels = num_labels[-1]
 
     #     if self._observation_labels is not None and labels is not None:
-            
 
     #     if self._observation_labels is None:
     #         if labels is not None:
@@ -1229,46 +1164,38 @@ class Keeper:
     #     else:
     #         if (labels is not None) and (self._observation_labels != labels):
     #             raise ValueError("Inconsisstent observation labels detected between keepers.")
-            
-            
-                  
+
     @property
     def observation_labels(self):
         """ Labels for each observation. """
         self._check_observation_labels()
         return self._observation_labels
-    
 
     @property
     def data(self):
         """ The feature data sets. """
         return self._data
 
-
     @property
     def distances(self):
         """ The distances. """
         return self._distances
-
 
     @property
     def similarities(self):
         """ The similarities. """
         return self._similarities
 
-
     @property
     def graphs(self):
         """ The networks. """
         return self._graphs
-    
 
     @property
     def misc(self):
         """ The misc data. """
         return self._misc
 
-    
     @property
     def num_observations(self):
         """ The number of observations. """
@@ -1288,8 +1215,7 @@ class Keeper:
 
         # return None
         return self._num_observations
-        
-        
+
     def add_data(self, data, label):
         """ Add a feature data set to the data keeper.
 
@@ -1318,7 +1244,6 @@ class Keeper:
         self._check_observation_labels()
         self._check_num_observations()
 
-
     def add_distance(self, data, label):
         """ Add a distance array to the distance keeper.
 
@@ -1336,8 +1261,9 @@ class Keeper:
         if self._num_observations is None:
             self._num_observations = self._distances[label].num_observations
             self._observation_labels = self._distances[label].observation_labels            
-            if self._distances[label]._observation_labels is None:
-                self._observation_labels = [f"X{i}" for i in range(self._num_observations)]
+            # if self._distances[label]._observation_labels is None:
+            if self._distances._observation_labels is None:
+                self._observation_labels = self._distances._observation_labels = [f"X{i}" for i in range(self._num_observations)]
 
             # initialize data and similarities
             self._data = DataKeeper(observation_labels=self._observation_labels)
@@ -1345,7 +1271,6 @@ class Keeper:
 
         self._check_observation_labels()
         self._check_num_observations()
-
 
     def add_stacked_distance(self, data, label):
         """ Add a stacked distance array to the distance keeper.
@@ -1375,7 +1300,6 @@ class Keeper:
         self._check_observation_labels()
         self._check_num_observations()
 
-
     def add_similarity(self, data, label):
         """ Add a similarity array to the similarity keeper.
 
@@ -1393,8 +1317,9 @@ class Keeper:
         if self._num_observations is None:
             self._num_observations = self._similarities[label].num_observations
             self._observation_labels = self._similarities[label].observation_labels            
-            if self._similarities[label]._observation_labels is None:
-                self._observation_labels = [f"X{i}" for i in range(self._num_observations)]
+            # if self._similarities[label]._observation_labels is None:
+            if self._similarities._observation_labels is None:
+                self._observation_labels = self._similarities._observation_labels = [f"X{i}" for i in range(self._num_observations)]
 
             # initialize data and distances
             self._data = DataKeeper(observation_labels=self._observation_labels)
@@ -1402,8 +1327,7 @@ class Keeper:
 
         self._check_observation_labels()
         self._check_num_observations()
-    
-        
+
     def add_stacked_similarity(self, data, label, diag=1.):
         """ Add a stacked similarity array to the similarity keeper.
 
@@ -1434,7 +1358,6 @@ class Keeper:
         self._check_observation_labels()
         self._check_num_observations()
 
-
     def add_graph(self, graph, label):
         """ Add a network to the graph keeper.
 
@@ -1448,7 +1371,6 @@ class Keeper:
         self._graphs.add_graph(graph, label)
         logger.info(f"Added graph input {label} to the keeper.")
 
-        
     def add_misc(self, data, label):
         """ Add misc information to be stored.
 
@@ -1465,7 +1387,6 @@ class Keeper:
         self._misc[label] = data
 
         logger.info(f"Added misc input {label} to the keeper.")
-    
 
     def load_data(self, file_name, label='data', file_path=None, file_format=None,                  
                   delimiter=',', dtype=None, cols_as_obs=True, **kwargs):
@@ -1509,7 +1430,6 @@ class Keeper:
             data = data.astype(dtype)
         self.add_data(data, label)
 
-
     def load_distance(self, file_name, label='distance', file_path=None, file_format=None,
                       delimiter=',', **kwargs):
         """ Load distance from file into the keeper. 
@@ -1544,7 +1464,6 @@ class Keeper:
                               delimiter=delimiter, header=0, index_col=0, **kwargs)
         self.add_distance(data, label)
 
-        
     def load_stacked_distance(self, file_name, label='distance', file_path=None, file_format=None,
                               delimiter=',', **kwargs):
         """ Load distance in stacked form from file, convert to unstacked form and store in the keeper. 
@@ -1579,7 +1498,6 @@ class Keeper:
                               delimiter=delimiter, header=0, index_col=(0, 1), **kwargs)
         self._distances.add_stacked_data(data, label)
 
-
     def load_similarity(self, file_name, label='similarity', file_path=None, file_format=None,
                         delimiter=',', **kwargs):
         """ Load similarity from file into the keeper. 
@@ -1613,7 +1531,6 @@ class Keeper:
         data = load_from_file(file_name, file_path=file_path, file_format=file_format,
                               delimiter=delimiter, header=0, index_col=0, **kwargs)
         self.add_similarity(data, label)
-
 
     def load_stacked_similarity(self, file_name, label='similarity', diag=1.,
                                 file_path=None, file_format=None,
@@ -1651,7 +1568,6 @@ class Keeper:
         data = load_from_file(file_name, file_path=file_path, file_format=file_format,
                               delimiter=delimiter, header=0, index_col=(0, 1), **kwargs)
         self._similarities.add_stacked_data(data, label)
-
 
     def load_graph(self, file_name, label='graph', file_path=None,
                    file_format=None, delimiter=',',
@@ -1698,7 +1614,6 @@ class Keeper:
         G = nx.from_pandas_edgelist(E, source=source, target=target)
         self.add_graph(G, label)
 
-
     def save_data(self, label, file_format='txt', delimiter=',', **kwargs):
         """ Save data to file. 
 
@@ -1730,7 +1645,6 @@ class Keeper:
         df = self.data[label].to_frame()
         df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
         logger.msg(f"Data set saved to {df}.")
-
 
     def save_distance(self, label, file_format='txt', delimiter=',', **kwargs):
         """ Save distance to file. 
@@ -1764,7 +1678,6 @@ class Keeper:
         df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
         logger.msg(f"Distance set saved to {_fp}.")
 
-
     def save_similarity(self, label, file_format='txt', delimiter=',', **kwargs):
         """ Save similarity to file. 
 
@@ -1796,7 +1709,6 @@ class Keeper:
         df = self.similarities[label].to_frame()
         df.to_csv(_fp, header=True, index=True, sep=delimiter, **kwargs)
         logger.msg(f"Similarities set saved to {_fp}.")
-
 
     def save_misc(self, label, file_format='txt', delimiter=',', **kwargs):
         """ Save misc data to file. 
@@ -1830,7 +1742,6 @@ class Keeper:
         df.to_csv(_fp, sep=delimiter, **kwargs)
         logger.msg(f"Misc data set saved to {_fp}.")
 
-
     def observation_index(self, observation_label):
         """ Return index of observation.
 
@@ -1846,7 +1757,6 @@ class Keeper:
         """
         observation_index = self._observation_labels.index(observation_label)
         return observation_index
-
 
     def subset(self, observations, keep_misc=False, keep_graphs=False, outdir=None):
         """ Return a new instance of Keeper restricted to subset of observations.
@@ -1898,7 +1808,6 @@ class Keeper:
 
         return keeper_subset
 
-
     def distance_density(self, label):
         """ Compute each observation's density from a distance.
 
@@ -1916,7 +1825,6 @@ class Keeper:
         """
         density = self.distances[label].density()
         return density
-
 
     def distance_density_argmin(self, label):
         """ Find the observation with the smallest density from a distance.
@@ -1938,7 +1846,6 @@ class Keeper:
         obs = self.observation_labels.index(obs)
         return obs
 
-
     def distance_density_argmax(self, label):
         """ Find the observation with the largest density from a distance.
 
@@ -1959,7 +1866,6 @@ class Keeper:
         obs = self.observation_labels.index(obs)
         return obs
 
-
     def similarity_density(self, label):
         """ Compute each observation's density from a similarity.
 
@@ -1977,7 +1883,6 @@ class Keeper:
         """
         density = self.similarities[label].density()
         return density
-
 
     def similarity_density_argmax(self, label):
         """ Find the observation with the largest density from a similarity.
@@ -1998,7 +1903,6 @@ class Keeper:
         obs = density.idxmax(axis=0)
         obs = self.observation_labels.index(obs)
         return obs
-
 
     def wass_distance_pairwise_observation_profile(self, data_key, graph_key,
                                                    features=None, label=None,
@@ -2069,7 +1973,6 @@ class Keeper:
                                                         proc=proc, chunksize=chunksize,
                                                         measure_cutoff=measure_cutoff, solvr=solvr)
 
-        
     def euc_distance_pairwise_observation_profile(self, data_key, features=None, label=None,
                                                   metric='euclidean', normalize=False, **kwargs):
         """ Compute Euclidean distances between feature profiles of every two observations
@@ -2121,7 +2024,6 @@ class Keeper:
                                                        label=label, 
                                                        desc='Computing pairwise profile Euclidean distances',
                                                        metric=metric, normalize=normalize, **kwargs)
-
 
     def wass_distance_pairwise_observation_feature_nbhd(self, data_key, graph_key,
                                                         features=None, include_self=False, label=None,
@@ -2201,7 +2103,6 @@ class Keeper:
                                                                       proc=proc, chunksize=chunksize,
                                                                       measure_cutoff=measure_cutoff, solvr=solvr)
 
-
     def euc_distance_pairwise_observation_feature_nbhd(self, data_key, graph_key,
                                                         features=None, include_self=False, label=None,
                                                         metric='euclidean', normalize=False, **kwargs):
@@ -2264,9 +2165,8 @@ class Keeper:
             
         inet.multiple_pairwise_observation_neighborhood_euc_distance(nodes=features, include_self=include_self,
                                                                      label=label,
-                                                                     desc='Computing pairwise 1-hop nbhd Euclidean distances',
+                                                                     desc='Computing 1-hop nbhd Euclidean distances',
                                                                      metric=metric, normalize=normalize, **kwargs)
-
 
     def compute_sigmas(self, distance_key, label=None, n_neighbors=None,
                        method='max', return_nn=False):
@@ -2321,7 +2221,6 @@ class Keeper:
         
         nfs.sigma_knn(self, distance_key, label=tag, n_neighbors=n_neighbors,
                       method=method, return_nn=return_nn)
-
 
     def compute_similarity_from_distance(self, distance_key, n_neighbors, method, precomputed_method=None,
                                          label=None, knn=False):
@@ -2378,8 +2277,6 @@ class Keeper:
                                    label=f"similarity_{tag}", sigmas=f"sigmas_{tag}",
                                    knn=knn, indices=None)
 
-
-
     def convert_similarity_to_distance(self, similarity_key):
         """ Convert a similarity to a distance.
 
@@ -2400,8 +2297,7 @@ class Keeper:
         """
         sim = self.similarities[similarity_key]
         self.add_distance(1.-sim.data, f"distance_from_{similarity_key}")
-        
-        
+
     def fuse_similarities(self, similarity_keys, weights=None, fused_key=None):
         """ Fuse similarities in the keeper
 
@@ -2446,8 +2342,7 @@ class Keeper:
             fused_sim = fused_sim / n
 
         self.add_similarity(fused_sim, fused_key)
-        
-        
+
     def compute_transitions_from_similarity(self, similarity_key, density_normalize: bool = True):
         """ Compute symmetric and asymmetric transition matrices and store in keeper.
 
@@ -2473,7 +2368,6 @@ class Keeper:
         
         """
         nfo.compute_transitions(self, similarity_key, density_normalize=density_normalize)
-
 
     def compute_dpt_from_augmented_sym_transitions(self, key, n_comps: int = 0, save_eig=False):
         """ Compute the diffusion pseudotime metric between observations,
@@ -2521,8 +2415,6 @@ class Keeper:
                 Asymmetric random walk transition matrix.
         """
         _ = nfo.compute_rw_transitions(self, similarity_key)
-
-
 
     def compute_dpt_from_similarity(self, similarity_key, density_normalize: bool = True,
                                     n_comps: int = 0, save_eig=False):
@@ -2574,7 +2466,6 @@ class Keeper:
 
         self.compute_dpt_from_augmented_sym_transitions(T_sym_key, n_comps=n_comps, save_eig=save_eig)
 
-
     def integrate_transitions(self, transition_keys, integrated_key=None):
         """ Integrate transitions
 
@@ -2605,7 +2496,6 @@ class Keeper:
         p = (p + p.T) / 2
         self.add_misc(p, integrated_key)
 
-    
     def integrate_transitions_from_similarity(self,
                                               similarity_keys, integrated_key=None,
                                               density_normalize: bool = True,
@@ -2655,9 +2545,7 @@ class Keeper:
                                                          density_normalize)
             transition_keys.append(T_sym_key)
 
-
         self.integrate_transitions(transition_keys, integrated_key=integrated_key)
-        
 
     def compute_multiscale_VNE_transition_from_similarity(self, similarity_key,
                                                           tau_max=None,
@@ -2699,8 +2587,7 @@ class Keeper:
                                                                                tau_max=tau_max,
                                                                                do_save=do_save)
         return P, P_asym
-    
-    
+
     def integrate_multiscale_VNE_transitions_from_similarities(self, similarity_keys,
                                                                tau_max=None,
                                                                integrated_key=None):
@@ -2738,7 +2625,6 @@ class Keeper:
             logger.warning(f"Already computed {P_sym_integrated_label} and {P_asym_integrated_label}")
 
         else:
-        
 
             p, p_asym = self.compute_multiscale_VNE_transition_from_similarity(similarity_keys[0],
                                                                                tau_max=tau_max,
@@ -2766,8 +2652,6 @@ class Keeper:
                 self.add_misc(p_asym, P_asym_integrated_label)
             except Exception as e:
                 logger.warning(f"Encountered error when adding {P_asym_integrated_label}: \n .. {e}")
-
-        
 
     def construct_pose(self, key, root=None, root_as_tip=False,
                        min_branch_size=5, choose_largest_segment=False,
@@ -2923,7 +2807,6 @@ class Keeper:
                                 index=[f"PC{k}" for k in range(data_pca.shape[1])],
                                 columns=self.observation_labels)
         self.add_data(data_pca, f"{key}_PCA")
-        
 
     def log1p(self, key, base=None):
         """ Logarithmic data transformation.
@@ -2954,7 +2837,6 @@ class Keeper:
 
         data = pd.DataFrame(data=data, index=features, columns=obs)
         self.add_data(data, f"{key}_log1p")
-
 
     def standardize(self, key, label=None, **kwargs):
         """ Standardize features in DataKeeper by removing the mean and scaling to unit variance

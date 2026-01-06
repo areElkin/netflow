@@ -26,6 +26,7 @@ data : {`numpy.ndarray`, `pandas.DataFrame`}
     The distance matrix of size (num_observations, num_observations).
 """
 
+
 def load_from_file(file_name, file_path=None, file_format=None,
                   delimiter=',', **kwargs):
     
