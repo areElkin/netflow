@@ -671,22 +671,32 @@ def invariant_measure(profiles, G=None, adj=None):
     -------
     IM : `numpy.ndarray` (n_features, n_observations)
         The invariant measures whose features and observations are in the same order as ``profiles``.
+        Columns with zero normalizer are returned as all-zeros (no NaNs).
     """
     if isinstance(profiles, pd.DataFrame):
         nodelist = profiles.index.tolist()
+        P = profiles.to_numpy()
     else:
         nodelist = list(range(profiles.shape[0]))
+        P = np.asarray(profiles)
 
     if adj is None:
         if G is None:
             raise AssertionError("Either the graph or the adjacency matrix must be provided.")
-        else:
-            adj = nx.adjacency_matrix(G, nodelist=nodelist, weight=None)
+        adj = nx.adjacency_matrix(G, nodelist=nodelist, weight=None)
 
-    W = adj.dot(profiles) 
-    W = np.multiply(W, profiles) 
-    Z = W.sum(axis=0)
-    IM = W / Z
+    W = adj.dot(P)
+    # W = np.multiply(W, P)
+    W = np.asarray(W)  # handles sparse.dot returning a matrix-like type
+    W = W * P
+
+    # Z = W.sum(axis=0)
+    Z = np.asarray(W.sum(axis=0)).ravel()  # (n_observations,)
+
+    # IM = W / Z
+    # Safe column-wise normalization: if Z[j] == 0, that entire column stays 0.
+    IM = np.divide(W, Z, out=np.zeros_like(W, dtype=float), where=(Z != 0))
+
     return IM
     
 

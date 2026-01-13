@@ -39,6 +39,7 @@ import netflow.utils as utl
 
 logger = _gen_logger(__name__)
 
+
 class InfoNet:
     """ A class to compute information flow on a network and correlation between network modules
 
@@ -108,7 +109,6 @@ class InfoNet:
                 self.outdir.mkdir()
                 self.filenames = []
 
-
     def invariant_measures(self, label='IM'):
         """ Compute the invariant measure for each observation using data as node weights.
 
@@ -124,13 +124,9 @@ class InfoNet:
         """
         check_matrix_nonnegative(self.data.data)
         IM = utl.invariant_measure(self.data.data, G=self.G)
+        IM = pd.DataFrame(data=IM, index=self.data.feature_labels, columns=self.data.observation_labels)
         self.keeper.add_data(IM, label)
-        
 
-        raise NotImplementedError("Not yet implemented")
-        
-
-            
     def spearmanr(self, data, **kwargs):
         """ Calculate a Spearman correlation coefficient with associated p-value using scipy.stats.spearmanr.
 
@@ -182,7 +178,6 @@ class InfoNet:
         R, p = utl.kendall_tau_(data, **kwargs)
         return R, p
 
-
     def stack_triu(self, df, name=None):
         """ Stack the upper triangular entries of the dataframe above the diagonal
 
@@ -205,7 +200,6 @@ class InfoNet:
         # df_stacked.name = name
         df_stacked = utl.stack_triu_(df, name=name)
         return df_stacked
-
     
     def stack_triu_where(self, df, condition, name=None):
         """ Stack the upper triangular entries of the dataframe above the diagonal where the condition is `True`
@@ -232,7 +226,6 @@ class InfoNet:
         df_stacked = utl.stack_triu_where_(df, condition, name=name)
         return df_stacked
 
-
     def dispersion(self, data, axis=0):
         """ Data dispersion computed as the absolute value of the variance-to-mean ratio where the variance and mean is computed on
         the values over the requested axis.
@@ -254,12 +247,11 @@ class InfoNet:
         vmr : `pandas.Series`
             Variance-to-mean ratio (vmr) quantifying the disperion.
         """
-        raise NotImplementedError
-    
+        raise NotImplementedError("Not yet implemented")
+
         # vmr = np.abs(data.var(axis=axis) / data.mean(axis=axis))
         vmr = utl.dispersion_(data, axis=axis)
         return vmr
-
 
     def value_counter(self, values):
         """ returns dictionary with the number of times each value appears.
@@ -279,7 +271,6 @@ class InfoNet:
             counter[k] += 1
         return counter
 
-        
     def weighted_observation_network(self, observation, weight='weight', data=None, **kwargs):
         """ return weighted graph by observation feature.
 
@@ -308,8 +299,8 @@ class InfoNet:
         G : networkx graph
             The observation-specific node-weighted graph.
         """
-        raise NotImplementedError
-    
+        raise NotImplementedError("Not yet implemented")
+
         G = self.G.copy()
         if data is None:
             s_data = self.data[observation].to_dict()
@@ -322,7 +313,6 @@ class InfoNet:
         utl.compute_edge_weights(G, n_weight=weight, e_weight=weight, **kwargs)
         return G
 
-    
     def compute_graph_distances(self, G=None, weight='weight'):
         """ compute graph distances
 
@@ -344,7 +334,6 @@ class InfoNet:
         dist = utl.compute_graph_distances(G, weight=weight)
         return dist
 
-
     def neighborhood(self, node, include_self=False):
         """ return neighborhood of the node.
 
@@ -364,8 +353,7 @@ class InfoNet:
         if include_self:
             neighborhood = neighborhood + [node]
         return neighborhood
-        
-        
+
     def neighborhood_profiles(self, node, include_self=False):
         """ return profiles on the neighborhood of the node.
 
@@ -400,7 +388,6 @@ class InfoNet:
         # sub_profiles = s_data.loc[neighborhood].copy()
         sub_profiles = self.data.data[neighborhood, :].copy()
         return neighborhood, sub_profiles
-
 
     def pairwise_observation_neighborhood_wass_distance(self, node, include_self=False,
                                                         graph_distances=None,
@@ -447,7 +434,6 @@ class InfoNet:
 
         return wd
 
-    
     def pairwise_observation_neighborhood_euc_distance(self, node, include_self=False, metric='euclidean',
                                                   normalize=False, **kwargs):
         """ Compute observation-pairwise Euclidean distances between the profiles over node neighborhood.
@@ -479,7 +465,6 @@ class InfoNet:
         ed = pairwise_observation_euc_distances(pd.DataFrame(data=profiles, columns=self.observations),
                                                 metric=metric, **kwargs)
         return ed
-
 
     def anisotropic_laplacian_matrix(self, observation=None, use_spectral_gap=False, data=None):
         """ returns transpose of the  anisotropic random-walk  Laplacian matrix
@@ -516,8 +501,7 @@ class InfoNet:
             G = self.weighted_observation_network(observation, weight='weight', data=data)
         laplacian = utl.construct_anisotropic_laplacian_matrix(G, 'weight', use_spectral_gap=use_spectral_gap)
         return laplacian
-    
-    
+
     def diffuse_profile(self, observation, times=None, t_min=-1.5, t_max=2.5, n_t=10,
                         log_time=True, # graph_distances=None,
                         laplacian=None, do_save=True):
@@ -595,7 +579,6 @@ class InfoNet:
                             header=True, index=True)
         return profiles
 
-    
     def diffuse_multiple_profiles(self, observations=None, times=None, t_min=-1.5, t_max=2.5, n_t=10,
                                   log_time=True, # graph_distances=None,
                                   laplacian=None, use_spectral_gap=False, do_plot=False, **plot_kwargs):
@@ -643,7 +626,6 @@ class InfoNet:
             If `True`, plot diffused profiles for each observation.
         **plot_kwargs : `dict`
             Key-word arguments passed to ``plot_profiles`` (should not include ``title``).
-        
 
         Notes
         -----
@@ -669,7 +651,6 @@ class InfoNet:
             if do_plot:
                 ax = self.plot_profiles(profiles, title=observation+": diffused profile", **plot_kwargs)
 
-
     def load_diffused_profile(self, observation):
         """ loads observation diffused profile
 
@@ -687,7 +668,6 @@ class InfoNet:
                                         header=0, index_col=0)
 
         return diffused_profiles
-
 
     def load_diffused_timepoint_profile(self, time, observations=None):
         """ loads observation diffused profile.
@@ -716,7 +696,6 @@ class InfoNet:
 
         diffused_profiles = pd.concat(diffused_profiles, axis=1)
         return diffused_profiles            
-        
 
     def plot_profiles(self, profiles, ylog=False, ax=None, figsize=(5.3, 4), title="", lw=1.3, marker_size=2, **plot_kwargs):
         """ plot profiles, with rows as times and columns as features """
@@ -744,7 +723,6 @@ class InfoNet:
         ax.set_title(title)
 
         return ax
-
 
     def multiple_pairwise_observation_neighborhood_wass_distance(self, nodes=None, include_self=False,
                                                                  graph_distances=None, label='pw_obs_nbhd_wass_dist',
@@ -867,7 +845,6 @@ class InfoNet:
         # return wds
         return None
 
-
     def multiple_pairwise_observation_neighborhood_euc_distance(self, nodes=None, include_self=False, label='pw_obs_nbhd_euc_dist',
                                                                 desc='Computing pairwise 1-hop distances', profiles_desc='t0',
                                                                 metric='euclidean', normalize=False, **kwargs):
@@ -963,7 +940,6 @@ class InfoNet:
         self.keeper.add_misc(eds, label)
         # return eds
         return None
-
 
     def pairwise_observation_profile_wass_distance(self, features=None,
                                                    graph_distances=None, label='wass_dist_observation_pairwise_profiles_t0',
@@ -1102,7 +1078,6 @@ class InfoNet:
         # return wds
         return None
 
-
     def pairwise_observation_profile_euc_distance(self, features=None, label='euc_dist_observation_pairwise_profiles_t0',
                                                   desc='Computing pairwise profile Euclidean distances',
                                                   metric='euclidean', normalize=False, **kwargs):
@@ -1200,7 +1175,6 @@ class InfoNet:
         #     eds.to_csv(self.outdir / fname, header=True, index=True)
         #     logger.msg(f"Observation pairwise profile Euclidean distances saved to {str(fname)}.")
 
-
         # ensure wds is a Series and not a DataFrame
         if isinstance(eds, pd.DataFrame):
             eds = eds[eds.columns[0]]
@@ -1211,12 +1185,6 @@ class InfoNet:
         self.keeper.add_stacked_distance(eds, label)        
         # return eds
         return None
-
-
-
-            
-
-
 
 
     

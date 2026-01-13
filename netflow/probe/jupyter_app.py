@@ -1329,10 +1329,9 @@ def renderer(keeper, pose_key, distance_key):
                                   event_observed_B=surv_df.loc[unselected_obs, surv_e_label])
                 label_output = "Selected nodes' labels " + f"(n={len(selected_obs)}; log-rank p = {lr.p_value:2.2e}): " + ", ".join(selected_obs)
 
-        
-        if (not data) or (keeper_data_label is None): # BBB == 'None') :
+        if (not data) or (keeper_data_label is None):  # BBB == 'None') :
             # return "", {'display': 'none'}, 'Selected nodes' # [] # "No nodes selected."
-            return "", {'display': 'none'}, label_output # mlti
+            return "", {'display': 'none'}, label_output  # mlti
         
         df = keeper.data[keeper_data_label].to_frame()
         # select columns that are floats or integers:
