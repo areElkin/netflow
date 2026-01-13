@@ -75,7 +75,7 @@ logger = _gen_logger(__name__)
 
 
 def get_pose(keeper, key, label, n_branches, until_branched=False, 
-             root=None, min_branch_size=5, choose_largest_segment=False,
+             root=None, min_branch_size=5, legacy_mbs=False, choose_largest_segment=False,
              flavor='haghverdi16', allow_kendall_tau_shift=False,
              smooth_corr=False, brute=True, split=True,
              connect_closest=False, connect_trunk='classic',
@@ -114,6 +114,10 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
         ``min_branch_size > 2`` data points.
         If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
         (``0 < min_branch_size < 1``).
+    legacy_mbs : `bool`, default=False
+        Indicator to allow legacy performance. If `True`, legacy behavior using ``min_branch_size`` to determine
+        which branches are suitable for splitting is performed. If `False`, additional usage of ``min_branch_size``
+        for determining Haghverdi style split is performed.
     choose_largest_segment : `bool`
         If `True`, select largest segment for branching.
     flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
@@ -171,7 +175,8 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
           ``keeper.graphs['pose_nn_{label}]``.
     """
     poser = POSER(keeper, key, root=root,
-                  min_branch_size=min_branch_size, choose_largest_segment=choose_largest_segment,
+                  min_branch_size=min_branch_size, legacy_mbs=legacy_mbs,
+                  choose_largest_segment=choose_largest_segment,
                   connect_closest=connect_closest, connect_trunk=connect_trunk,
                   flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
                   smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)

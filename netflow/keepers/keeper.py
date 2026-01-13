@@ -2654,7 +2654,7 @@ class Keeper:
                 logger.warning(f"Encountered error when adding {P_asym_integrated_label}: \n .. {e}")
 
     def construct_pose(self, key, root=None, root_as_tip=False,
-                       min_branch_size=5, choose_largest_segment=False,
+                       min_branch_size=5, legacy_mbs=False, choose_largest_segment=False,
                        flavor='haghverdi16', allow_kendall_tau_shift=False,
                        smooth_corr=True, brute=True, split=True, verbose=None,
                        n_branches=2, until_branched=False, mutual=False, k_mnn=3,
@@ -2685,6 +2685,10 @@ class Keeper:
             ``min_branch_size > 2`` data points.
             If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
             (``0 < min_branch_size < 1``).
+        legacy_mbs : `bool`, default=False
+            Indicator to allow legacy performance. If `True`, legacy behavior using ``min_branch_size`` to determine
+            which branches are suitable for splitting is performed. If `False`, additional usage of ``min_branch_size``
+            for determining Haghverdi style split is performed.
         choose_largest_segment : `bool`
             If `True`, select largest segment for branching.
         flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
@@ -2751,7 +2755,7 @@ class Keeper:
             - "POSE + NN" : for edges in the original graph that are also nearest neighbor edges
         """                
         poser = nfo.POSER(self, key, root=root, root_as_tip=root_as_tip, min_branch_size=min_branch_size,
-                          choose_largest_segment=choose_largest_segment,
+                          legacy_mbs=legacy_mbs, choose_largest_segment=choose_largest_segment,
                           connect_closest=connect_closest, connect_trunk=connect_trunk,
                           flavor=flavor, allow_kendall_tau_shift=allow_kendall_tau_shift,
                           smooth_corr=smooth_corr, brute=brute, split=split, verbose=verbose)
