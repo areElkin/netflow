@@ -288,7 +288,7 @@ class TreeNode:
 
 class Tree:
     """
-    Tree implemenation as a collection of TreeNode objects.
+    Tree implementation as a collection of TreeNode objects.
 
     Intended to represent the hierarchical branching.
     """
@@ -298,7 +298,7 @@ class Tree:
         self.nodes = []
         self._counter = 0
         # self.node_adjacency = ddict(list)
-        self.node_connection = [] # ddict(list)
+        self.node_connection = []  # ddict(list)
 
     def disp(self):
         print(self.root.disp())  # print(self.tree.root.disp())
@@ -380,7 +380,7 @@ class Tree:
         shallowest (closest to root) node.
 
         If no such node is found with the specified name, the
-        value -1 is returned.
+        value None is returned.
         
         Parameters
         ----------
@@ -395,11 +395,11 @@ class Tree:
         Returns
         -------
         index : `int`
-            Index of node in the tree. If node is not found, returns -1.
+            Index of node in the tree. If node is not found, returns None.
         """
         nodes = [(ix, node.depth()) for ix, node in enumerate(self.nodes) if node.name == name]
         if len(nodes) == 0:
-            index = -1
+            index = None  # -1
         else:
             nodes = sorted(nodes, key=itemgetter(1))
             if bottom_up:
@@ -425,7 +425,7 @@ class Tree:
         (closest to root) node.
 
         If no such node is found with the specified value in its data, the
-        value -1 is returned.
+        value None is returned.
         
         Parameters
         ----------
@@ -440,11 +440,11 @@ class Tree:
         Returns
         -------
         index : `int`
-            Index of node in the tree. If node is not found, returns -1.
+            Index of node in the tree. If node is not found, returns None.
         """
         nodes = [(ix, node.depth()) for ix, node in enumerate(self.nodes) if node.contains(value)]
         if len(nodes) == 0:
-            index = -1
+            index = None  # -1
         else:
             nodes = sorted(nodes, key=itemgetter(1))
             if bottom_up:
@@ -1190,7 +1190,7 @@ class POSER:
                 # map the global position to the position within the segment
                 allindices = np.arange(self.distances.shape[0], dtype=int)
                 # find the third point on the seg that has maximal added distance from the two tip points:
-                tips = [np.where(allindices[seg.data] == tip)[0][0] for tip in seg.tips] # local index of tips in the seg
+                tips = [np.where(allindices[seg.data] == tip)[0][0] for tip in seg.tips]  # local index of tips in the seg
                 # find the third point on the seg that has maximal added distance from the two tip points:
                 dseg = Dseg[tips[0]] + Dseg[tips[1]]
                 
@@ -1240,7 +1240,6 @@ class POSER:
                 seg.branchable = False
             else:
                 selected_segs.append(seg)
-
 
         if len(selected_segs) > 0:
             selected_seg = max(selected_segs, key=lambda x: x.score)
@@ -1443,6 +1442,7 @@ class POSER:
             imax = self.kendall_tau_split(
                 Dseg[tips[1]][idcs],
                 Dseg[tips[2]][idcs],
+                min_length=self.min_branch_size,  
             )
         if False:
             # if we were in euclidian space, the following should work
@@ -1562,7 +1562,6 @@ class POSER:
           In practice, this has only occurred in small segments. If finer resolution partitioning
           is desired, this may be changed in a future release to account for an offshoot resulting
           in two branches (and possibly a trunk with undecided points). 
-
 
         Parameters
         ----------
@@ -1894,7 +1893,7 @@ class POSER:
         newseg : `list`
             New segment (local with respect to original segment).
         tip : `int`
-            Local index of the first tip, with respect to the original segment that determinned
+            Local index of the first tip, with respect to the original segment that determined
             ``Dseg`` before the split.
 
         Returns
@@ -1923,7 +1922,7 @@ class POSER:
 
         return tips
 
-    def detect_branching(self, node): # , connect_closest=False):
+    def detect_branching(self, node):  # , connect_closest=False):
         """ Detect branching on a given segment and update TreeNode parameters in place.
 
         Parameters
@@ -1939,7 +1938,7 @@ class POSER:
         # seg_node = self.tree.get_node(self.tree.search(iseg, bottom_up=True))
         allindices = np.arange(self.distances.shape[0], dtype=int)
         Dseg = self.distances[np.ix_(node.data, node.data)]        
-        tips3 = [np.where(allindices[node.data] == tip)[0][0] for tip in node.tips] # local index of tips in the seg
+        tips3 = [np.where(allindices[node.data] == tip)[0][0] for tip in node.tips]  # local index of tips in the seg
         tips3 = np.array(tips3).astype(int)
         
         # given the three tip points and the distance matrix detect the
@@ -2037,8 +2036,7 @@ class POSER:
         branched_flag = False # not until_branched # stop when true
 
         while not branched_flag:
-            
-                
+
             node = self.select_segment()
             logger.info(f"* selected node = {node}")
 
@@ -2047,7 +2045,7 @@ class POSER:
                 # branched_flag = True
                 break                
             else:
-                branched_flag = self.detect_branching(node) # , connect_closest=connect_closest)
+                branched_flag = self.detect_branching(node)  # , connect_closest=connect_closest)
 
             if not until_branched:
                 # branched_flag = True
