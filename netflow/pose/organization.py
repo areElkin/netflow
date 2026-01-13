@@ -1030,6 +1030,10 @@ class POSER:
         ``min_branch_size > 2`` data points.
         If a `float`, ``min_branch_size`` refers to the fraction of the total number of data points
         (``0 < min_branch_size < 1``).
+    legacy_mbs : `bool`, default=False
+        Indicator to allow legacy performance. If `True`, legacy behavior using ``min_branch_size`` to determine
+        which branches are suitable for splitting is performed. If `False`, additional usage of ``min_branch_size``
+        for determining Haghverdi style split is performed.
     choose_largest_segment : `bool`
         If `True`, select largest segment for branching.
     flavor : {'haghverdi16', 'wolf17_tri', 'wolf17_bi', 'wolf17_bi_un'}
@@ -1065,7 +1069,7 @@ class POSER:
         - `dual` : point identified in trunk is connected to both points determined by `classic` and `endpoint`
     """
     def __init__(self, keeper, key, root=None, root_as_tip=False,
-                 min_branch_size=5, choose_largest_segment=False,
+                 min_branch_size=5, legacy_mbs=False, choose_largest_segment=False,
                  flavor='haghverdi16', allow_kendall_tau_shift=False,
                  smooth_corr=True, brute=True, split=True,
                  connect_closest=False, connect_trunk='classic',
@@ -1087,6 +1091,7 @@ class POSER:
         else:
             raise TypeError("Unrecognized type for `min_branch_size`, must be an int or float.")
         self.min_branch_size = min_branch_size
+        self.legacy_mbs = legacy_mbs
         self.choose_largest_segment = choose_largest_segment
         self.flavor = flavor
         self.allow_kendall_tau_shift = allow_kendall_tau_shift
@@ -1442,7 +1447,7 @@ class POSER:
             imax = self.kendall_tau_split(
                 Dseg[tips[1]][idcs],
                 Dseg[tips[2]][idcs],
-                min_length=self.min_branch_size,  
+                min_length=5 if self.legacy_mbs else self.min_branch_size,
             )
         if False:
             # if we were in euclidian space, the following should work
