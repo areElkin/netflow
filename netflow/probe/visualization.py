@@ -359,6 +359,9 @@ def plot_topology(G,
             
             # discrete cmap:
             if isinstance(node_cmap, ListedColormap) or (node_cmap in qualitative_cmaps.keys()):
+                # set of values should be integer range between min and max:
+                nc_set = list(range(node_vmin, node_vmax+1))
+                
                 # if number of unique values are larger than number of discrete values - return error                
                 Nvalues = len(nc_set)
                     
@@ -400,7 +403,7 @@ def plot_topology(G,
                     if node_ticklabels_mapper is None:
                         node_ticklabels = [str(k) for k in nc_set]
                     else:
-                        node_ticklabels = [node_ticklabels_mapper[k] for k in nc_set]
+                        node_ticklabels = [str(k) if k not in node_ticklabels_mapper else node_ticklabels_mapper[k] for k in nc_set]
                     if not node_cmap_drawedges:
                         node_boundaries=None
 
