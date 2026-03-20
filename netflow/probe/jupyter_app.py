@@ -377,7 +377,7 @@ def create_legend(values, title, color_scale=None):
             mode='markers',
             marker=dict(color=cc, symbol='square'),
             # visible='legendonly',
-            name=label,
+            name=str(label),
         ))
         traces.append(go.Heatmap(z=np.zeros_like(np.array([[0, 0.]])), # ensure there are enough points to cover the whole image
                                  colorscale="Picnic_r",  # any colorscale that has white at 0
