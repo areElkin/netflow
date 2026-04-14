@@ -2867,4 +2867,39 @@ class Keeper:
         data_z = self.data[key].standardize(**kwargs)
         self.add_data(data_z, label)
         
+    def rand_offset(self, key, scale, center=0., rand_seed=None):
+        """ Add random noise to the data.
 
+        Parameters
+        ----------
+        key : `str`
+            The reference key of the data in the data-keeper that will be
+            standardized.
+        scale : `float` (non-negative)
+             Standard deviation of the Gaussian distribution used to add random noise.
+        center: `float`
+             Mean of the Gaussian distribution used to add random noise.
+             If unspecified, the default center is 0.
+        rand_seed : {`None`, `int`}
+            Seed (`int`) for reproducible results.
+
+
+        Returns
+        -------
+        Random noise is added to the data and stored in the data keeper with the label "{key}_jitter".
+
+        """
+        data = self.data[key]
+        features = data.feature_labels[:]
+        obs = data.observation_labels[:]
+        data = data.data.copy()
+
+        if rand_seed is not None:
+            rng = np.random.default_rng(seed=rand_seed)
+            noise = rng.normal(center, scale, data.shape)
+        else:
+            noise = np.random.normal(center, scale, data.shape)
+
+        data = data + noise
+        data = pd.DataFrame(data=data, index=features, columns=obs)
+        self.add_data(data, f"{key}_jitter")

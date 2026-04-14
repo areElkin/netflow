@@ -5,8 +5,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Literal, Union
 import gseapy as gp
+import networkx as nx
 import numpy as np
 import pandas as pd
+from scipy.stats import spearmanr
 
 
 def unique_significant_features_by_group(
@@ -404,4 +406,227 @@ def gsea_group_summary(records_full: Union[Dict[Any, pd.DataFrame], pd.DataFrame
     return summary
 
 
+def get_graph_distances(G_pose_nn, weights=None):
+    """ Compute distances between all node pairs on a graph.
+
+    Parameters:
+    ----------
+        G_pose_nn: `networkx.Graph`
+            Input POSE topology.
+        weights: {`None`, `pandas.DataFrame`, (n, n)}
+            Dataframe of pairwise distances between observations extracted from the keeper.
+
+    Returns:
+    ----------
+        graph_dist: `numpy.ndarray`, (n, n)
+        Matrix of pairwise graph distances between nodes ordered 0,1,...,n-1.
+        Returns weighted distance if provided. Otherwise, returns hop distance if `weights` is `None`
+    """
+
+    graph = G_pose_nn.copy()
+
+    if weights is None:
+        dist_dict = dict(nx.all_pairs_shortest_path_length(graph))
+    else:
+        observation_labels = weights.columns.to_list()
+        for u, v, d in graph.edges(data=True):
+            d['distance'] = weights.at[observation_labels[u], observation_labels[v]]
+        dist_dict = dict(nx.all_pairs_dijkstra_path_length(graph, weight='distance'))
+
+    node_list = sorted(graph.nodes())
+    num_nodes = len(node_list)
+    graph_dist = np.zeros((num_nodes, num_nodes))
+
+    for i in node_list:
+        for j in node_list:
+            graph_dist[i, j] = dist_dict[i].get(j, np.inf)
+    return graph_dist
+
+
+def get_global_node_order(poser, G_pose_nn, weights=None):
+    """ Order nodes by (weighted) graph distance from the root.
+
+    Parameters:
+    ----------
+        poser: `netflow.pose.POSER`
+            The object used to construct the POSE.
+        G_pose_nn: `networkx.Graph`
+            Input POSE topology.
+        weights: {`None`, `pandas.DataFrame`, (n, n)}
+            Dataframe of pairwise distances between observations extracted from the keeper.
+
+    Returns:
+    ----------
+        node_ord_dict: `dict`
+        Dictionary mapping node indices to ordering in terms of graph distance from the root.
+        Ordering is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
+    """
+
+    src_node = poser.root
+    node_ids = list(poser.nodes)
+    node_dists = get_graph_distances(G_pose_nn, weights)
+    node_ord = np.argsort(node_dists[src_node, node_ids])
+    node_ord_dict = dict(zip(node_ids, node_ord))
+
+    return node_ord_dict
+
+
+def get_branch_node_order(poser, G_pose_nn, weights=None, min_branch_size=3):
+    """  Order observations on each branch by distance from the branch tip nearest to the root.
+
+    Parameters:
+    ----------
+
+        poser: `netflow.pose.POSER`
+            The object used to construct the POSE.
+        G_poser_nn : `networkx.Graph`
+            The POSE graph.
+        weights: {`None`, `pandas.DataFrame`, (n, n)}
+            Dataframe of pairwise distances between observations extracted from the keeper.
+        min_branch_size: {`None`, `int`}
+            Skip branches with <= ``min_branch_size`` observations.
+
+    Returns:
+    ----------
+        branch_ord_dict: `dict`
+        Dictionary mapping branch node indices to ordering in terms of graph distance from branch tip nearest root.
+        Uses weighted distance if provided. Otherwise, uses hop distance if `weights` is `None`
+    """
+
+    root_node = poser.root
+    branches = poser.tree.get_leaves()
+
+    node_dists = get_graph_distances(G_pose_nn, weights)
+    branch_ord_dict = {}
+    for branch in branches:
+
+        if len(branch.data) < min_branch_size:
+            continue
+
+        branch_id = branch.name
+        branch_tips = list(branch.tips)
+        branch_node_ids = list(branch.data)
+
+        tip_ord = np.argsort(node_dists[root_node, branch_tips])
+        src_node = branch_tips[tip_ord[0]]
+        branch_node_dists = node_dists[src_node, branch_node_ids]
+        branch_node_ord = np.argsort(branch_node_dists)
+        branch_ord_dict[branch_id] = dict(zip(branch_node_ids, branch_node_ord))
+
+    return branch_ord_dict
+
+
+def feature_graph_order_correlation(keeper, poser, data_label, graph_label, weights=None):
+    """ Compute correlation between features and global node ordering.
+
+    Parameters:
+    ----------
+        keeper: `netflow.Keeper`
+            The keeper object that stores the (n_features, n_observations) data matrix.
+        poser: `netflow.pose.POSER`
+            The object used to construct the POSE.
+        data_label: `str`
+            The reference label for the data.
+        graph_label: `str`
+            The reference label for the graph.
+        weights: {`None`, `pandas.DataFrame`, (n, n)}
+            Dataframe of pairwise distances between observations extracted from the keeper.
+
+    Returns:
+    ----------
+        corr_arr: `np.ndarray` (n_features, 1)
+            Array of correlations between features and global ordering of nodes.
+            Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
+    """
+
+    G_pose_nn = keeper.pose.graphs[graph_label]
+    data_df = keeper.data[data_label].to_frame()
+
+    node_ord_dict = get_global_node_order(poser, G_pose_nn, weights)
+    node_ids = list(node_ord_dict.keys())
+    observations_subset = keeper.observation_labels[node_ids]
+    feat_arr = np.array(data_df.loc[:, observations_subset])
+    node_ord_arr = np.array(list(node_ord_dict.values()))
+    result = spearmanr(feat_arr, node_ord_arr, axis=1)
+    corr_arr = result.correlation
+
+    return corr_arr
+
+
+def ordered_features_correlation_global(keeper, poser, data_label, graph_label, weights=None):
+    """ Compute correlation between feature pairs, sorted by global node order.
+
+    Parameters:
+    ----------
+
+        keeper: `netflow.Keeper`
+            The keeper object that stores the (n_features, n_observations) data matrix.
+        poser: `netflow.pose.POSER`
+            The object used to construct the POSE.
+        data_label: `str`
+            The reference label for the data
+        graph_label: `str`
+            The reference label for the graph.
+        weights: {`None`, `pandas.DataFrame`, (n, n)}
+            Dataframe of pairwise distances between observations extracted from the keeper.
+
+    Returns:
+    ----------
+        corr_arr: `np.ndarray` (n_features, n_features)
+            Array of correlations between every pair of features sorted by the global ordering of nodes.
+            Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
+    """
+
+    G_pose_nn = keeper.pose.graphs[graph_label]
+    data_df = keeper.data[data_label].to_frame()
+
+    node_ord_dict = get_global_node_order(poser, G_pose_nn, weights)
+    node_ids = list(node_ord_dict.keys())
+    observation_ord_labels = keeper.observation_labels[node_ids]
+    feat_arr = np.array(data_df.loc[:, observation_ord_labels])
+    result = spearmanr(feat_arr, axis=1)
+    corr_arr = result.correlation[:-1, -1:]
+
+    return corr_arr
+
+
+def ordered_features_correlation_branch(keeper, poser, data_label, graph_label, weights=None, min_branch_size=3):
+    """ Compute correlations between pairs of features on each branch.
+
+    Parameters:
+    ----------
+        keeper: `netflow.Keeper`
+            The keeper object that stores the (n_features, n_observations) data matrix.
+        poser: `netflow.pose.POSER`
+            The object used to construct the POSE.
+        data_label: `str`
+            The reference label for the data.
+        graph_label: `str`
+            The reference label for the graph.
+        weights: {`None`, `pandas.DataFrame`, (n, n)}
+            Dataframe of pairwise distances between observations extracted from the keeper.
+        min_branch_size: {`None`, `int`}
+            Skip branches with <= ``min_branch_size`` observations.
+
+    Returns:
+    ----------
+        corr_dict: `dict`
+            Dictionary of correlations between feature pairs sorted by node order on each branch.
+            Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
+    """
+
+    G_pose_nn = keeper.pose.graphs[graph_label]
+    data_df = keeper.data[data_label].to_frame()
+
+    branch_ord_dict = get_branch_node_order(poser, G_pose_nn, weights, min_branch_size)
+    corr_dict = {}
+    for branch_id, ord_dict in branch_ord_dict.items():
+
+        branch_ord_node_ids = list(ord_dict.keys())
+        observation_subset = keeper.observation_labels[branch_ord_node_ids]
+        feat_arr = np.array(data_df.loc[:, observation_subset])
+        result = spearmanr(feat_arr, axis=1)
+        corr_dict[branch_id] = result.correlation
+
+    return corr_dict
 
