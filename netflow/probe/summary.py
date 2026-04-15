@@ -463,7 +463,7 @@ def get_global_node_order(poser, G_pose_nn, weights=None):
     """
 
     src_node = poser.root
-    node_ids = list(poser.nodes)
+    node_ids = list(G_pose_nn.nodes)
     node_dists = get_graph_distances(G_pose_nn, weights)
     node_ord = np.argsort(node_dists[src_node, node_ids])
     node_ord_dict = dict(zip(node_ids, node_ord))
@@ -539,12 +539,12 @@ def feature_graph_order_correlation(keeper, poser, data_label, graph_label, weig
             Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
     """
 
-    G_pose_nn = keeper.pose.graphs[graph_label]
+    G_pose_nn = keeper.graphs[graph_label]
     data_df = keeper.data[data_label].to_frame()
 
     node_ord_dict = get_global_node_order(poser, G_pose_nn, weights)
     node_ids = list(node_ord_dict.keys())
-    observations_subset = keeper.observation_labels[node_ids]
+    observations_subset = [keeper.observation_labels[node_id] for node_id in node_ids]
     feat_arr = np.array(data_df.loc[:, observations_subset])
     node_ord_arr = np.array(list(node_ord_dict.values()))
     result = spearmanr(feat_arr, node_ord_arr, axis=1)
@@ -577,12 +577,12 @@ def ordered_features_correlation_global(keeper, poser, data_label, graph_label, 
             Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
     """
 
-    G_pose_nn = keeper.pose.graphs[graph_label]
+    G_pose_nn = keeper.graphs[graph_label]
     data_df = keeper.data[data_label].to_frame()
 
     node_ord_dict = get_global_node_order(poser, G_pose_nn, weights)
     node_ids = list(node_ord_dict.keys())
-    observation_ord_labels = keeper.observation_labels[node_ids]
+    observation_ord_labels = [keeper.observation_labels[node_id] for node_id in node_ids]
     feat_arr = np.array(data_df.loc[:, observation_ord_labels])
     result = spearmanr(feat_arr, axis=1)
     corr_arr = result.correlation[:-1, -1:]
@@ -615,7 +615,7 @@ def ordered_features_correlation_branch(keeper, poser, data_label, graph_label, 
             Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
     """
 
-    G_pose_nn = keeper.pose.graphs[graph_label]
+    G_pose_nn = keeper.graphs[graph_label]
     data_df = keeper.data[data_label].to_frame()
 
     branch_ord_dict = get_branch_node_order(poser, G_pose_nn, weights, min_branch_size)
@@ -623,7 +623,7 @@ def ordered_features_correlation_branch(keeper, poser, data_label, graph_label, 
     for branch_id, ord_dict in branch_ord_dict.items():
 
         branch_ord_node_ids = list(ord_dict.keys())
-        observation_subset = keeper.observation_labels[branch_ord_node_ids]
+        observation_subset = [keeper.observation_labels[node_id] for node_id in branch_ord_node_ids]
         feat_arr = np.array(data_df.loc[:, observation_subset])
         result = spearmanr(feat_arr, axis=1)
         corr_dict[branch_id] = result.correlation
