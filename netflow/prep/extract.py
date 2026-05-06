@@ -9,7 +9,7 @@ class CBioPortalClient:
     url : `str`
         cBioPortal API specification URL (Currently: 'https://www.self.cbioportal.org/api/v3/api-docs').
     """
-    def __init__(self, url='https://www.self.cbioportal.org/api/v3/api-docs'):
+    def __init__(self, url='https://www.cbioportal.org/api/v3/api-docs'):
         self.cbioportal = SwaggerClient.from_url(url,
                                                  config={'validate_requests': False,
                                                          'validate_responses': False,
@@ -135,12 +135,12 @@ class CBioPortalClient:
         """
         target_study_id = self.get_study_id(target_name)
         if attribute == 'data_types':
-            resp = self.cbioportal.Molecular_Profiles.getAllMolecularProfilesInStudyUsingGET(studyId=targetStudyId)
+            resp = self.cbioportal.Molecular_Profiles.getAllMolecularProfilesInStudyUsingGET(studyId=target_study_id)
             molec_profile_info = self._read_response(resp)
             molec_profile_list = molec_profile_info['name'].to_list()
             molec_profile_ids = molec_profile_info.loc[molec_profile_info['name'].isin(molec_profile_list),'molecularProfileId']
             dtypes_dict = dict(zip(molec_profile_list, molec_profile_ids))
-            molec_profile_df = pd.DataFrame(list(dtypes_dict.items()), columns=['Name', 'ID'])
+            molec_profile_df = pd.DataFrame(list(dtypes_dict.items()), columns=['name', 'id'])
             ans = molec_profile_df
         elif attribute == 'cancer_types':
             resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(
@@ -148,11 +148,11 @@ class CBioPortalClient:
                             attributeId="CANCER_TYPE")
             cancer_type_info = self._read_response(resp)
             cancer_type_df = cancer_type_info['value'].value_counts().reset_index()
-            cancer_type_df.columns = ['Type', 'SampleCount']
-            cancer_type_df = cancer_type_df.sort_values(by='Samples', ascending=False)
+            cancer_type_df.columns = ['type', 'sample_count']
+            cancer_type_df = cancer_type_df.sort_values(by='sample_count', ascending=False)
             ans = cancer_type_df.reset_index(drop=True)
         else:
-            raise ValueError('Invalid input Attribute {attribute} requested.')
+            raise ValueError(f'Invalid input Attribute {attribute} requested.')
         return ans
     
     
@@ -168,8 +168,8 @@ class CBioPortalClient:
             Options (to be expanded)
             -------
             - 'patient_id' : cBioPortal patient identifiers.
-            - 'OSmonths' : Overall survival duration in months (float).
-            - 'OSgroup' : Overall survival status (e.g., "LIVING" or "DECEASED").
+            - 'os_months' : Overall survival duration in months (float).
+            - 'os_group' : Overall survival status (e.g., "LIVING" or "DECEASED").
         Returns
         -------
         attr : `list`
@@ -182,14 +182,14 @@ class CBioPortalClient:
             pt_info = self._read_response(resp)
             attr = pt_info['patientId'].to_list()
             pts = attr
-        elif attribute == 'OSmonths':
+        elif attribute == 'os_months':
             resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
                                                                                 attributeId='OS_MONTHS',
                                                                                 clinicalDataType='PATIENT')
             pt_info = self._read_response(resp)
             attr = pt_info['value'].astype(float).to_list()
             pts = pt_info['patientId'].to_list()
-        elif attribute == 'OSgroup':
+        elif attribute == 'os_group':
             resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
                                                                                 attributeId='OS_STATUS',
                                                                                 clinicalDataType='PATIENT')
@@ -197,7 +197,7 @@ class CBioPortalClient:
             attr = pt_info['value'].to_list()
             pts = pt_info['patientId'].to_list()
         else:
-            raise ValueError('Invalid input Attribute {attribute} requested.')
+            raise ValueError(f'Invalid input Attribute {attribute} requested.')
         return attr, pts
     
     
@@ -213,15 +213,15 @@ class CBioPortalClient:
         Returns
         -------
         pt_df : `pandas.DataFrame`
-            DataFrame indexed by 'patientId' with columns holding requested attributes (NaN if missing).
+            DataFrame indexed by 'patient_id' with columns holding requested attributes (NaN if missing).
         """
         target_study_id = self.get_study_id(target_name)
         pt_id_list, __ = self.get_pt_attribute(target_study_id, 'patient_id')
-        pt_df = pd.DataFrame(pt_id_list, columns=['patientId'])
+        pt_df = pd.DataFrame(pt_id_list, columns=['patient_id'])
         for attr in attribute_list:
             vals, pts = self.get_pt_attribute(target_study_id, attr)
-            temp = pd.DataFrame({'patientId': pts, attr: vals})
-            pt_df = pt_df.merge(temp, on='patientId', how='left')
+            temp = pd.DataFrame({'patient_id': pts, attr: vals})
+            pt_df = pt_df.merge(temp, on='patient_id', how='left')
         return pt_df
     
     
@@ -247,34 +247,34 @@ class CBioPortalClient:
         if attr == 'sample_id':
             resp = self.cbioportal.Samples.getAllSamplesInStudyUsingGET(studyId=target_study_id)
             sample_info = self._read_response(resp)
-            attr = sample_info['sampleId'].to_list()
-            samples = attr
+            vals = sample_info['sampleId'].to_list()
+            samples = vals
         elif attr == 'patient_id':
             resp = self.cbioportal.Samples.getAllSamplesInStudyUsingGET(studyId=target_study_id)
             sample_info = self._read_response(resp)
-            attr = sample_info['patientId'].to_list()
+            vals = sample_info['patientId'].to_list()
             samples = sample_info['sampleId'].to_list()
         elif attr == 'primary_site':
             resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
                                                                               attributeId='PRIMARY_SITE')
             sample_info = self._read_response(resp)
-            attr = sample_info['value'].to_list()
+            vals = sample_info['value'].to_list()
             samples = sample_info['sampleId'].to_list()
         elif attr == 'sample_type':
             resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
                                                                               attributeId='SAMPLE_TYPE')
             sample_info = self._read_response(resp)
-            attr = sample_info['value'].to_list()
+            vals = sample_info['value'].to_list()
             samples = sample_info['sampleId'].to_list()
         elif attr == 'tumor_purity':
             resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
                                                                               attributeId='TUMOR_PURITY')
             sample_info = self._read_response(resp)
-            attr = sample_info['value'].to_list()
+            vals = sample_info['value'].to_list()
             samples = sample_info['sampleId'].to_list()
         else:
             raise ValueError (f'No attribute {attr}.')
-        return attr, samples
+        return vals, samples
     
     
     def get_sample_info(self, target_name, attr_list):
@@ -289,17 +289,17 @@ class CBioPortalClient:
         Returns
         -------
         sample_df : `pandas.DataFrame`
-            DataFrame indexed by 'sampleId' with columns holding requested attributes (NaN if missing).
+            DataFrame indexed by 'sample_id' with columns holding requested attributes (NaN if missing).
         """
         target_study_id = self.get_study_id(target_name)
         sample_id_list, __ = self.get_sample_attribute(target_study_id, 'sample_id')
-        sample_df = pd.DataFrame(sample_id_list, columns=['sampleId'])
+        sample_df = pd.DataFrame(sample_id_list, columns=['sample_id'])
         if 'patient_id' not in attr_list:
             attr_list.insert(0, 'patient_id')
         for attr in attr_list:
             vals, samples = self.get_sample_attribute(target_study_id, attr)
-            temp = pd.DataFrame({'sampleId': samples, attr: vals})
-            sample_df = sample_df.merge(temp, on='sampleId', how='left')
+            temp = pd.DataFrame({'sample_id': samples, attr: vals})
+            sample_df = sample_df.merge(temp, on='sample_id', how='left')
         return sample_df
     
     
@@ -310,13 +310,18 @@ class CBioPortalClient:
         sample_df : `pandas.DataFrame`
             Sample-level metadata as returned by `get_sample_info`.
         pt_df : `pandas.DataFrame`
-            Patient-level metadata as returned by :func:`get_pt_info`. Must include 'patientId' column.
+            Patient-level metadata as returned by :func:`get_pt_info`. Must include 'patient_id' column.
     
         Returns
         -------
         summary_df : `pandas.DataFrame`
             Merged DataFrame with sample rows associated with patient ids.
         """
-        summary_df = pd.merge(sample_df, pt_df, on='patientId', how='left')
-        #summary_df = summary_df.set_index('sampleId')
+        summary_df = pd.merge(sample_df, pt_df, on='patient_id', how='left')
+        #summary_df = summary_df.set_index('sample_id')
         return summary_df
+    
+    
+
+
+
