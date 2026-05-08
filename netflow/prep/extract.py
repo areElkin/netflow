@@ -33,7 +33,6 @@ class CBioPortalClient:
         return result_df
     
     
-    # Study metadata
     def list_studies(self):
         """ Return names of all studies on cBioPortal.
         Returns
@@ -46,8 +45,9 @@ class CBioPortalClient:
         study_list = self._read_response(resp)
         study_names = study_list['name']
         return study_names
-    
-    
+
+
+    # Study metadata
     def get_study_id(self, target_name, verbose=False):
         """ Return cBioPortal study ID given the study name.
         Parameters
@@ -94,8 +94,8 @@ class CBioPortalClient:
         return study_info
     
     
-    def list_attributes(self, target_name):
-        """ List available clinical attributes (names) for a given study.
+    def list_study_attributes(self, target_name):
+        """ List clinical attributes available in a given study.
         Parameters
         ----------
         target_name : `str`
@@ -112,7 +112,29 @@ class CBioPortalClient:
         attr_list = clinical_attributes['clinicalAttributeId'].to_list()
         return attr_list
     
-    
+
+    def list_study_data(self, target_name):
+        """ List molecular data types available in a given study.
+        Parameters
+        ----------
+        target_name : `str`
+            Name of a study exactly as displayed on cBioPortal.
+        Returns
+        -------
+        data_list : `list` of `str`
+            List of molecular data types (names) available in the study (e.g., ["COPY_NUMBER_ALTERATION", "MRNA_EXPRESSION", ...]).
+        id_list : `list` of `str`
+            List of molecular data IDs is returned.
+        """
+        target_study_id = self.get_study_id(target_name)
+        resp = self.cbioportal.Molecular_Profiles.getAllMolecularProfilesInStudyUsingGET(studyId=target_study_id)
+        mp_info = self._read_response(resp)
+
+        data_list = mp_info['molecularAlterationType'].to_list()
+        id_list = mp_info['molecularProfileId'].to_list()
+        return data_list, id_list
+
+
     def get_study_attribute(self, target_name, attribute):
         """ Get specified study-level attribute.
         Parameters
@@ -148,8 +170,8 @@ class CBioPortalClient:
                             attributeId="CANCER_TYPE")
             cancer_type_info = self._read_response(resp)
             cancer_type_df = cancer_type_info['value'].value_counts().reset_index()
-            cancer_type_df.columns = ['type', 'sample_count']
-            cancer_type_df = cancer_type_df.sort_values(by='sample_count', ascending=False)
+            cancer_type_df.columns = ['type', 'sampleCount']
+            cancer_type_df = cancer_type_df.sort_values(by='sampleCount', ascending=False)
             ans = cancer_type_df.reset_index(drop=True)
         else:
             raise ValueError(f'Invalid input Attribute {attribute} requested.')
@@ -217,11 +239,12 @@ class CBioPortalClient:
         """
         target_study_id = self.get_study_id(target_name)
         pt_id_list, __ = self.get_pt_attribute(target_study_id, 'patient_id')
-        pt_df = pd.DataFrame(pt_id_list, columns=['patient_id'])
+        pt_df = pd.DataFrame(pt_id_list, columns=['patientId'])
         for attr in attribute_list:
             vals, pts = self.get_pt_attribute(target_study_id, attr)
-            temp = pd.DataFrame({'patient_id': pts, attr: vals})
-            pt_df = pt_df.merge(temp, on='patient_id', how='left')
+            temp = pd.DataFrame({'patientId': pts, attr: vals})
+            pt_df = pt_df.merge(temp, on='patientId', how='left')
+        pt_df = pt_df.rename(columns={'os_months': 'osMonths','os_group': 'osGroup'})
         return pt_df
     
     
@@ -293,17 +316,21 @@ class CBioPortalClient:
         """
         target_study_id = self.get_study_id(target_name)
         sample_id_list, __ = self.get_sample_attribute(target_study_id, 'sample_id')
-        sample_df = pd.DataFrame(sample_id_list, columns=['sample_id'])
+        sample_df = pd.DataFrame(sample_id_list, columns=['sampleId'])
         if 'patient_id' not in attr_list:
-            attr_list.insert(0, 'patient_id')
+            attr_list = ['patient_id'] + attr_list
         for attr in attr_list:
             vals, samples = self.get_sample_attribute(target_study_id, attr)
-            temp = pd.DataFrame({'sample_id': samples, attr: vals})
-            sample_df = sample_df.merge(temp, on='sample_id', how='left')
+            temp = pd.DataFrame({'sampleId': samples, attr: vals})
+            sample_df = sample_df.merge(temp, on='sampleId', how='left')
+            sample_df = sample_df.rename(columns={'patient_id': 'patientId'})
+        sample_df = sample_df.rename(columns={'primary_site': 'primarySite',
+                    'sample_type': 'sampleType','tumor_purity': 'tumorPurity'})
         return sample_df
-    
-    
-    def map_samples_to_pts(self, sample_df, pt_df):
+
+
+    @staticmethod
+    def map_samples_to_pts(sample_df, pt_df):
         """ Associate sample-level metadata with a patient ids.
         Parameters
         ----------
@@ -317,11 +344,154 @@ class CBioPortalClient:
         summary_df : `pandas.DataFrame`
             Merged DataFrame with sample rows associated with patient ids.
         """
-        summary_df = pd.merge(sample_df, pt_df, on='patient_id', how='left')
+        summary_df = pd.merge(sample_df, pt_df, on='patientId', how='left')
         #summary_df = summary_df.set_index('sample_id')
         return summary_df
-    
-    
+
+
+    def map_entrezid_to_hugosymbol(self, input_df):
+        """ Map gene IDs to HUGO nomenclature.
+        Parameters
+        ----------
+        input_df : `pandas.DataFrame`
+            Input dataframe containing `entrezGeneId` column.
+
+        Returns
+        -------
+        input_df : `pandas.DataFrame`
+            DataFrame with column `hugoGeneSymbol` corresponding to entrezGeneIds.
+        """
+
+        input_df = input_df.copy()
+        resp = self.cbioportal.Genes.getAllGenesUsingGET()
+        gene_info = self._read_response(resp)
+        gene_map = gene_info.set_index('entrezGeneId')['hugoGeneSymbol'].to_dict()
+        input_df['hugoGeneSymbol'] = input_df['entrezGeneId'].map(gene_map).fillna("Unknown")
+        return input_df
+
+
+    def get_clinical_data(self, target_name):
+        """ Extract patient clincal data for a given study.
+        Parameters
+        ----------
+        target_name : `str`
+            Name of a study exactly as displayed on cBioPortal.
+
+        Returns
+        -------
+        clin_df : `pandas.DataFrame`
+            DataFrame containing available clinical data for all patients in the study.
+        """
+        sample_df = self.get_sample_info(target_name, ['primary_site', 'sample_type', 'tumor_purity'])
+        pt_df = self.get_pt_info(target_name, ['os_months', 'os_group'])
+        clin_df = CBioPortalClient.map_samples_to_pts(sample_df, pt_df)
+        clin_df = clin_df.set_index('sampleId')
+        clin_df['osStatus'] = clin_df['osGroup'].str.contains('DECEASED', na=False).astype(float)
+        return clin_df
+
+
+    def get_cna_data(self, target_name):
+        """ Extract copy number alterations in a given study.
+        Parameters
+        ----------
+        target_name : `str`
+            Name of a study exactly as displayed on cBioPortal.
+
+        Returns
+        -------
+        cna_df : `pandas.DataFrame`
+            DataFrame containing available CNA data for all samples in the study.
+        """
+
+        target_study_id = self.get_study_id(target_name)
+
+        # Check if available
+        sel_type = 'COPY_NUMBER_ALTERATION'
+        cna_types, cna_ids = self.list_study_data(target_name)
+        if sel_type not in cna_types:
+            raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
+        else:
+            match_idx = cna_types.index(sel_type)
+            mpid = cna_ids[match_idx] #TBD: Check if multiple IDs can have the same study data type
+
+        # Get CNA data
+        resp = self.cbioportal.Discrete_Copy_Number_Alterations.getDiscreteCopyNumbersInMolecularProfileUsingGET(
+            molecularProfileId=mpid, sampleListId=target_study_id+'_all')
+        cna_df = self._read_response(resp)
+
+        # Map entrezGeneIds to hugoGeneSymbols
+        cna_df = self.map_entrezid_to_hugosymbol(cna_df)
+        return cna_df
+
+
+    def get_mutation_data(self, target_name):
+        """ Get mutation data for all samples in a study from the MUTATION_EXTENDED molecular profile.
+
+        Parameters
+        ----------
+        target_name : `str`
+            Name of a study exactly as displayed on cBioPortal.
+
+        Returns
+        -------
+        mut_df : `pandas.DataFrame`
+            DataFrame containing available mutation data for all samples in the study.
+        """
+
+        target_study_id = self.get_study_id(target_name)
+
+        # Check if available
+        sel_type = 'MUTATION_EXTENDED'
+        mut_types, mut_ids = self.list_study_data(target_name)
+        if sel_type not in mut_types:
+            raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
+        else:
+            match_idx = mut_types.index(sel_type)
+            mpid = mut_ids[match_idx]
+
+        # Fetch mutations
+        resp = self.cbioportal.Mutations.fetchMutationsInMolecularProfileUsingPOST(
+            molecularProfileId=mpid, body={'sampleListId': target_study_id + '_all'}, projection='SUMMARY')
+        mut_df = self._read_response(resp)
+        mut_df = self.map_entrezid_to_hugosymbol(mut_df)
+
+        return mut_df
+
+    def get_methylation_data(self, target_name):
+        """ Get DNA methylation (beta values) for all samples in a study from the METHYLATION molecular profile.
+
+        Parameters
+        ----------
+        target_name : `str`
+            Name of a study exactly as displayed on cBioPortal.
+
+        Returns
+        -------
+        methyl_df : `pandas.DataFrame`
+            Beta-value dataframe (n_genes, n_samples).
+            Values are floats in [0, 1] where 0 = unmethylated, 1 = fully methylated). NaNs indicate missing data.
+        """
+
+        target_study_id = self.get_study_id(target_name)
+
+        # Check if available
+        sel_type = 'METHYLATION'
+        methyl_types, methyl_ids = self.list_study_data(target_name)
+        if sel_type not in methyl_types:
+            raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
+        else:
+            match_idx = methyl_types.index(sel_type)
+            mpid = methyl_ids[match_idx]
+
+        # Fetch methylation values
+        resp = self.cbioportal.Molecular_Data.getAllMolecularDataInMolecularProfileUsingGET(
+            molecularProfileId=mpid, sampleListId=target_study_id + '_all', projection='SUMMARY')
+        methyl_df = self._read_response(resp)
+        methyl_df = self.map_entrezid_to_hugosymbol(methyl_df)
+        methyl_df['value'] = pd.to_numeric(methyl_df['value'], errors='coerce')
+        return methyl_df
+
+    #TBD: get_rna_seq_data, get_structural_variants_data,
 
 
 
