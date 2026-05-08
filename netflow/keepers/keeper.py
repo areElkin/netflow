@@ -25,6 +25,7 @@ from ..pose import organization as nfo
 #     POSER, compute_rw_transitions,
 # import netflow.InfoNet as InfoNet
 from .._logging import _gen_logger, set_verbose
+from ..prep.preprocessing import PCA_tx, log1p_tx, rand_offset_tx
 
 # from importlib import reload
 # reload(nfo)
@@ -2804,8 +2805,7 @@ class Keeper:
         -------
         PCA data with label "{key}_PCA" is added to the data keeper.
         """
-        pca_obj = sklearn.decomposition.PCA(n_components=n_components, random_state=random_state)
-        data_pca = pca_obj.fit_transform(self.data[key].data.T)
+        data_pca = PCA_tx(self.data[key].data.T, n_components=None, random_state=None)
 
         data_pca = pd.DataFrame(data=data_pca.T,
                                 index=[f"PC{k}" for k in range(data_pca.shape[1])],
@@ -2833,14 +2833,10 @@ class Keeper:
         features = data.feature_labels[:]
         obs = data.observation_labels[:]
         data = data.data.copy()
-        if not (np.issubdtype(data.dtype, np.floating) or np.issubdtype(data.dtype, complex)):
-            data = data.astype(float)
-        data = np.log1p(data, out=data)
-        if base is not None:
-            np.divide(data, np.log(base), out=data)
+        data_log = log1p_tx(data, key=key)
 
-        data = pd.DataFrame(data=data, index=features, columns=obs)
-        self.add_data(data, f"{key}_log1p")
+        data_log = pd.DataFrame(data=data_log, index=features, columns=obs)
+        self.add_data(data_log, f"{key}_log1p")
 
     def standardize(self, key, label=None, **kwargs):
         """ Standardize features in DataKeeper by removing the mean and scaling to unit variance
@@ -2894,12 +2890,6 @@ class Keeper:
         obs = data.observation_labels[:]
         data = data.data.copy()
 
-        if rand_seed is not None:
-            rng = np.random.default_rng(seed=rand_seed)
-            noise = rng.normal(center, scale, data.shape)
-        else:
-            noise = np.random.normal(center, scale, data.shape)
-
-        data = data + noise
+        data = rand_offset_tx(data, scale=scale, center=center, rand_seed=rand_seed)
         data = pd.DataFrame(data=data, index=features, columns=obs)
         self.add_data(data, f"{key}_jitter")
