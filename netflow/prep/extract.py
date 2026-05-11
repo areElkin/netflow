@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import requests
 from bravado.client import SwaggerClient
 
 class CBioPortalClient:
@@ -9,11 +10,97 @@ class CBioPortalClient:
     url : `str`
         cBioPortal API specification URL (Currently: 'https://www.self.cbioportal.org/api/v3/api-docs').
     """
+    BODY_PARAM_PATCHES = {
+    '/api/molecular-profiles/{molecularProfileId}/mutations/fetch': {
+        'post': {
+            'name': 'mutationFilter',
+            'in': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'sampleListId':  {'type': 'string'},
+                    'sampleIds':     {'type': 'array', 'items': {'type': 'string'}},
+                    'entrezGeneIds': {'type': 'array', 'items': {'type': 'integer'}},
+                }
+            }
+        }
+    },
+    '/api/molecular-profiles/{molecularProfileId}/molecular-data/fetch': {
+        'post': {
+            'name': 'molecularDataFilter',
+            'in': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'sampleListId':  {'type': 'string'},
+                    'sampleIds':     {'type': 'array', 'items': {'type': 'string'}},
+                    'entrezGeneIds': {'type': 'array', 'items': {'type': 'integer'}},
+                }
+            }
+        }
+    },
+    }
+
+    SAMPLE_ATTR_MAP = {
+        'patient_id': 'patientId',
+        'sample_collection_source': 'sampleCollectionSource',
+        'specimen_preservation_type': 'specimenPreservationType',
+        'specimen_type': 'specimenType',
+        'dna_input': 'dnaInput',
+        'sample_coverage': 'sampleCoverage',
+        'tumor_purity': 'tumorPurity',
+        'matched_status': 'matchedStatus',
+        'sample_type': 'sampleType',
+        'primary_site': 'primaryTumorSite',
+        'metastatic_site': 'metastaticSite',
+        'sample_class': 'sampleClass',
+        'oncotree_code': 'oncotreeCode',
+        'cancer_type': 'cancerType',
+        'cancer_type_detailed': 'cancerTypeDetailed',
+        'somatic_status': 'somaticStatus',
+        'tmb_nonsynonymous': 'tmbNonsynonymous',
+        'sequenced': 'sequenced',
+        'copy_number': 'copyNumber',
+        'mrna_data': 'mrnaData',
+        'msi_status': 'msiStatus',
+        'methylation_status': 'methylationStatus',
+        'methylation_subtype': 'methylationSubtype',
+        'icluster': 'icluster',
+        'mlh1_silencing': 'mlh1Silencing',
+        'gene_expression_subtype': 'geneExpressionSubtype',
+        'hyper_mutated': 'hyperMutated'
+    }
+
+    PT_ATTR_MAP = {
+        'sex': 'sex',
+        'smoking_history': 'smokingHistory',
+        'os_months': 'osMonths',
+        'os_status': 'osStatus',
+        'tumor_histologic_subtype': 'tumorHistologicSubtype',
+        'primary_tumor_pathologic_spread': 'primaryTumorPathologicSpread'
+    }
+
     def __init__(self, url='https://www.cbioportal.org/api/v3/api-docs'):
-        self.cbioportal = SwaggerClient.from_url(url,
-                                                 config={'validate_requests': False,
+        raw_spec = requests.get(url).json()
+        patched_spec = self._patch_spec(raw_spec)
+
+        self.cbioportal = SwaggerClient.from_spec(patched_spec,
+                                                  origin_url=url,
+                                                  config={'validate_requests': False,
                                                          'validate_responses': False,
                                                          'validate_swagger_spec': False})
+
+    def _patch_spec(self, spec):
+        """Patch to pass requestBody end-points as Swagger req. body params (passed through Bravado)"""
+        for path, methods in self.BODY_PARAM_PATCHES.items():
+            for method, body_param in methods.items():
+                if path in spec.get('paths', {}):
+                    params = spec['paths'][path][method].setdefault('parameters', [])
+                    spec['paths'][path][method].pop('requestBody', None)
+                    params.append(body_param)
+        return spec
 
 
     def _read_response(self, response_wrapper):
@@ -179,7 +266,7 @@ class CBioPortalClient:
     
     
     # Patient metadata
-    def get_pt_attribute(self, target_study_id, attribute):
+    def get_pt_attribute(self, target_study_id, attr):
         """ Get requested patient-level attribute for all patients in a study.
         Parameters
         ----------
@@ -187,40 +274,37 @@ class CBioPortalClient:
             The cBioPortal study ID.
         attribute : `str`
             The patient-level attribute to retrieve.
-            Options (to be expanded)
-            -------
-            - 'patient_id' : cBioPortal patient identifiers.
-            - 'os_months' : Overall survival duration in months (float).
-            - 'os_group' : Overall survival status (e.g., "LIVING" or "DECEASED").
+            For valid options, see PT_ATTR_MAP.
+            
         Returns
         -------
         attr : `list`
-            Attribute values for all patients in study. Type varies by attribute (str or float):
+            Attribute values for all patients in study. Type varies by attribute (str or float).
         pts : `list` of `str`
             Corresponding patient IDs.
         """
-        if attribute == 'patient_id':
+        valid_attrs = list(self.PT_ATTR_MAP.keys())
+
+        if attr == 'patient_id':
             resp = self.cbioportal.Patients.getAllPatientsInStudyUsingGET(studyId=target_study_id)
             pt_info = self._read_response(resp)
-            attr = pt_info['patientId'].to_list()
-            pts = attr
-        elif attribute == 'os_months':
-            resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
-                                                                                attributeId='OS_MONTHS',
-                                                                                clinicalDataType='PATIENT')
-            pt_info = self._read_response(resp)
-            attr = pt_info['value'].astype(float).to_list()
-            pts = pt_info['patientId'].to_list()
-        elif attribute == 'os_group':
-            resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
-                                                                                attributeId='OS_STATUS',
-                                                                                clinicalDataType='PATIENT')
-            pt_info = self._read_response(resp)
-            attr = pt_info['value'].to_list()
-            pts = pt_info['patientId'].to_list()
+            vals = pt_info['patientId'].to_list()
+            pts = vals
         else:
-            raise ValueError(f'Invalid input Attribute {attribute} requested.')
-        return attr, pts
+            if attr not in valid_attrs:
+                raise ValueError(f"No patient attribute '{attr}'. Valid options:\n  {valid_attrs}")
+
+            resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
+                                                                                attributeId=attr.upper(),
+                                                                                clinicalDataType='PATIENT')
+            pt_info = self._read_response(resp)
+            vals = pt_info['value']
+            if attr == 'os_months':
+                vals = vals.astype(float)
+            vals = vals.to_list()
+            pts = pt_info['patientId'].to_list()
+
+        return vals, pts
     
     
     def get_pt_info(self, target_name, attribute_list):
@@ -235,16 +319,19 @@ class CBioPortalClient:
         Returns
         -------
         pt_df : `pandas.DataFrame`
-            DataFrame indexed by 'patient_id' with columns holding requested attributes (NaN if missing).
+            DataFrame indexed by 'patientId' with columns holding requested attributes (NaN if missing).
         """
+        attr_dict = self.PT_ATTR_MAP
         target_study_id = self.get_study_id(target_name)
         pt_id_list, __ = self.get_pt_attribute(target_study_id, 'patient_id')
         pt_df = pd.DataFrame(pt_id_list, columns=['patientId'])
         for attr in attribute_list:
-            vals, pts = self.get_pt_attribute(target_study_id, attr)
-            temp = pd.DataFrame({'patientId': pts, attr: vals})
+            try:
+                vals, pts = self.get_pt_attribute(target_study_id, attr)
+                temp = pd.DataFrame({'patientId': pts, attr_dict[attr]: vals})
+            except Exception:
+                temp = pd.DataFrame({'patientId': pt_id_list, attr_dict[attr]: pd.NA})
             pt_df = pt_df.merge(temp, on='patientId', how='left')
-        pt_df = pt_df.rename(columns={'os_months': 'osMonths','os_group': 'osGroup'})
         return pt_df
     
     
@@ -257,9 +344,7 @@ class CBioPortalClient:
             The cBioPortal study ID.
         attr : `str`
             The sample-level attribute to retrieve.
-            Options
-            -------
-            'sample_id','patient_id','primary_site','sample_type', 'tumor_purity'
+            For valid options, see SAMPLE_ATTR_MAP.
         Returns
         -------
         attr : `list`
@@ -267,6 +352,8 @@ class CBioPortalClient:
         samples : `list` of `str`
             Corresponding sample IDs.
         """
+
+        valid_attrs = list(self.SAMPLE_ATTR_MAP.keys())
         if attr == 'sample_id':
             resp = self.cbioportal.Samples.getAllSamplesInStudyUsingGET(studyId=target_study_id)
             sample_info = self._read_response(resp)
@@ -277,26 +364,14 @@ class CBioPortalClient:
             sample_info = self._read_response(resp)
             vals = sample_info['patientId'].to_list()
             samples = sample_info['sampleId'].to_list()
-        elif attr == 'primary_site':
-            resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
-                                                                              attributeId='PRIMARY_SITE')
-            sample_info = self._read_response(resp)
-            vals = sample_info['value'].to_list()
-            samples = sample_info['sampleId'].to_list()
-        elif attr == 'sample_type':
-            resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
-                                                                              attributeId='SAMPLE_TYPE')
-            sample_info = self._read_response(resp)
-            vals = sample_info['value'].to_list()
-            samples = sample_info['sampleId'].to_list()
-        elif attr == 'tumor_purity':
-            resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(studyId=target_study_id,
-                                                                              attributeId='TUMOR_PURITY')
-            sample_info = self._read_response(resp)
-            vals = sample_info['value'].to_list()
-            samples = sample_info['sampleId'].to_list()
         else:
-            raise ValueError (f'No attribute {attr}.')
+            if attr not in valid_attrs:
+                raise ValueError(f"No attribute '{attr}'. Valid options: {sorted(valid_attrs)}")
+            resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(
+                studyId=target_study_id, attributeId=attr.upper())
+            sample_info = self._read_response(resp)
+            vals = sample_info['value'].to_list()
+            samples = sample_info['sampleId'].to_list()
         return vals, samples
     
     
@@ -314,18 +389,21 @@ class CBioPortalClient:
         sample_df : `pandas.DataFrame`
             DataFrame indexed by 'sample_id' with columns holding requested attributes (NaN if missing).
         """
+        attr_dict = self.SAMPLE_ATTR_MAP
         target_study_id = self.get_study_id(target_name)
         sample_id_list, __ = self.get_sample_attribute(target_study_id, 'sample_id')
+
         sample_df = pd.DataFrame(sample_id_list, columns=['sampleId'])
         if 'patient_id' not in attr_list:
             attr_list = ['patient_id'] + attr_list
         for attr in attr_list:
-            vals, samples = self.get_sample_attribute(target_study_id, attr)
-            temp = pd.DataFrame({'sampleId': samples, attr: vals})
+            try:
+                vals, samples = self.get_sample_attribute(target_study_id, attr)
+                temp = pd.DataFrame({'sampleId':samples, attr_dict[attr]:vals})
+            except Exception:
+                temp = pd.DataFrame({'sampleId':sample_id_list, attr_dict[attr]:pd.NA})
             sample_df = sample_df.merge(temp, on='sampleId', how='left')
             sample_df = sample_df.rename(columns={'patient_id': 'patientId'})
-        sample_df = sample_df.rename(columns={'primary_site': 'primarySite',
-                    'sample_type': 'sampleType','tumor_purity': 'tumorPurity'})
         return sample_df
 
 
@@ -383,10 +461,10 @@ class CBioPortalClient:
             DataFrame containing available clinical data for all patients in the study.
         """
         sample_df = self.get_sample_info(target_name, ['primary_site', 'sample_type', 'tumor_purity'])
-        pt_df = self.get_pt_info(target_name, ['os_months', 'os_group'])
+        pt_df = self.get_pt_info(target_name, ['os_months', 'os_status'])
         clin_df = CBioPortalClient.map_samples_to_pts(sample_df, pt_df)
         clin_df = clin_df.set_index('sampleId')
-        clin_df['osStatus'] = clin_df['osGroup'].str.contains('DECEASED', na=False).astype(float)
+        clin_df['osGroup'] = clin_df['osStatus'].str.contains('DECEASED', na=False).astype(float)
         return clin_df
 
 
@@ -451,7 +529,9 @@ class CBioPortalClient:
 
         # Fetch mutations
         resp = self.cbioportal.Mutations.fetchMutationsInMolecularProfileUsingPOST(
-            molecularProfileId=mpid, body={'sampleListId': target_study_id + '_all'}, projection='SUMMARY')
+                molecularProfileId=mpid,
+                mutationFilter={'sampleListId': target_study_id + '_all'},
+                projection='SUMMARY')
         mut_df = self._read_response(resp)
         mut_df = self.map_entrezid_to_hugosymbol(mut_df)
 
@@ -484,14 +564,74 @@ class CBioPortalClient:
             mpid = methyl_ids[match_idx]
 
         # Fetch methylation values
-        resp = self.cbioportal.Molecular_Data.getAllMolecularDataInMolecularProfileUsingGET(
-            molecularProfileId=mpid, sampleListId=target_study_id + '_all', projection='SUMMARY')
+        resp = self.cbioportal.Molecular_Data.fetchAllMolecularDataInMolecularProfileUsingPOST(
+            molecularProfileId=mpid,
+            molecularDataFilter={'sampleListId': target_study_id + '_all'},
+            projection='SUMMARY')
         methyl_df = self._read_response(resp)
         methyl_df = self.map_entrezid_to_hugosymbol(methyl_df)
-        methyl_df['value'] = pd.to_numeric(methyl_df['value'], errors='coerce')
         return methyl_df
 
-    #TBD: get_rna_seq_data, get_structural_variants_data,
+
+def get_rna_seq_data(self, target_name):
+    """Get RNA-seq expression data for all samples in a study.
+
+    Parameters
+    ----------
+    target_name : `str`
+        Name of a study exactly as displayed on cBioPortal.
+
+    Returns
+    -------
+    rna_df : `pandas.DataFrame`
+        DataFrame containing RNA-seq expression values for all samples in the study.
+    """
+    target_study_id = self.get_study_id(target_name)
+
+    sel_type = 'MRNA_EXPRESSION'
+    rna_types, rna_ids = self.list_study_data(target_name)
+    if sel_type not in rna_types:
+        raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
+    else:
+        match_idx = rna_types.index(sel_type)
+        mpid = rna_ids[match_idx] #TBD: Check if multiple IDs can have the same study data type
+
+    resp = self.cbioportal.Molecular_Data.fetchAllMolecularDataInMolecularProfileUsingPOST(
+        molecularProfileId=mpid,
+        molecularDataFilter={'sampleListId': target_study_id + '_all'},
+        projection='SUMMARY')
+    rna_df = self._read_response(resp)
+    rna_df = self.map_entrezid_to_hugosymbol(rna_df)
+    return rna_df
 
 
+def get_structural_variant_data(self, target_name):
+    """Get structural variant (fusion) data for all samples in a study.
+
+    Parameters
+    ----------
+    target_name : `str`
+        Name of a study exactly as displayed on cBioPortal.
+
+    Returns
+    -------
+    sv_df : `pandas.DataFrame`
+        DataFrame containing structural variant data for all samples in the study.
+    """
+    target_study_id = self.get_study_id(target_name)
+
+    sel_type = 'STRUCTURAL_VARIANT'
+    sv_types, sv_ids = self.list_study_data(target_name)
+    if sel_type not in sv_types:
+        raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
+    else:
+        match_idx = sv_types.index(sel_type)
+        mpid = sv_ids[match_idx]
+
+    resp = self.cbioportal.Structural_Variants.fetchStructuralVariantsUsingPOST(
+        molecularProfileId=mpid,
+        structuralVariantFilter={'sampleListId': target_study_id + '_all'})
+    sv_df = self._read_response(resp)
+    sv_df = self.map_entrezid_to_hugosymbol(sv_df)
+    return sv_df
 

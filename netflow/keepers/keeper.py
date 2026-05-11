@@ -2833,7 +2833,7 @@ class Keeper:
         features = data.feature_labels[:]
         obs = data.observation_labels[:]
         data = data.data.copy()
-        data_log = log1p_tx(data, key=key)
+        data_log = log1p_tx(data, base=base)
 
         data_log = pd.DataFrame(data=data_log, index=features, columns=obs)
         self.add_data(data_log, f"{key}_log1p")
