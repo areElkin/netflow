@@ -26,6 +26,7 @@ from ..pose import organization as nfo
 # import netflow.InfoNet as InfoNet
 from .._logging import _gen_logger, set_verbose
 from ..prep.preprocessing import PCA_tx, log1p_tx, rand_offset_tx
+from ..probe import summary
 
 # from importlib import reload
 # reload(nfo)
@@ -2893,3 +2894,113 @@ class Keeper:
         data = rand_offset_tx(data, scale=scale, center=center, rand_seed=rand_seed)
         data = pd.DataFrame(data=data, index=features, columns=obs)
         self.add_data(data, f"{key}_jitter")
+
+    def feature_graph_order_correlation(self, poser, data_label, graph_label, graph_nw=None, weights=None):
+        """ Compute correlation between features and global node ordering.
+
+        Parameters:
+        ----------
+            poser: `netflow.pose.POSER`
+                The object used to construct the POSE.
+            data_label: `str`
+                The reference label for the data.
+            graph_label: {`None`, `str`}
+                Reference label for a graph stored in the Keeper. Set to `None` to input graph directly via `graph_nw`.
+            graph_nw: {`None`,`networkx.Graph`}
+                Set to `None` if `graph_label` is specified. Otherwise, pass POSE graph.
+            weights: {`None`, `pandas.DataFrame`, (n, n)}
+                Dataframe of edge weights between nodes (observations).
+
+        Returns:
+        ----------
+            corr_arr: `np.ndarray` (n_features, 1)
+                Array of correlations between features and global ordering of nodes.
+                Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
+        """
+
+        data_df = self.data[data_label].to_frame()
+        if graph_label is not None:
+            G_pose_nn = self.graphs[graph_label]
+        else:
+            G_pose_nn = graph_nw
+
+        observation_labels = self.observation_labels
+
+        corr_arr = summary.feature_graph_order_correlation(poser, G_pose_nn, data_df, observation_labels,
+                                                           weights=weights)
+        return corr_arr
+
+    def ordered_features_correlation_global(self, poser, data_label, graph_label, graph_nw=None, weights=None):
+        """ Compute correlation between feature pairs, sorted by global node order.
+
+        Parameters:
+        ----------
+            poser: `netflow.pose.POSER`
+                The object used to construct the POSE.
+            data_label: `str`
+                The reference label for the data
+            graph_label: {`None`, `str`}
+                The reference label for the graph.
+            graph_nw: {`None`,`networkx.Graph`}
+                Set to `None` if `graph_label` is specified. Otherwise, pass POSE graph.
+            weights: {`None`, `pandas.DataFrame`, (n, n)}
+                Dataframe of edge weights between nodes (observations).
+
+            weights: {`None`, `pandas.DataFrame`, (n, n)}
+                Dataframe of pairwise distances between observations extracted from the keeper.
+
+        Returns:
+        ----------
+            corr_arr: `np.ndarray` (n_features, n_features)
+                Array of correlations between every pair of features sorted by the global ordering of nodes.
+                Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
+        """
+
+        data_df = self.data[data_label].to_frame()
+        if graph_label is not None:
+            G_pose_nn = self.graphs[graph_label]
+        else:
+            G_pose_nn = graph_nw
+
+        observation_ord_labels = self.observation_labels
+        corr_arr = summary.ordered_features_correlation_global(poser, G_pose_nn, data_df, observation_ord_labels,
+                                                               weights=weights)
+        return corr_arr
+
+    def ordered_features_correlation_branch(self, poser, data_label, graph_label, graph_nw=None, weights=None,
+                                            min_branch_size=3):
+        """ Compute correlations between pairs of features on each branch.
+
+        Parameters:
+        ----------
+            poser: `netflow.pose.POSER`
+                The object used to construct the POSE.
+            data_label: `str`
+                The reference label for the data.
+            graph_label: {`None`, `str`}
+                Reference label for a graph stored in the Keeper. Set to `None` to input graph directly via `graph_nw`.
+            graph_nw: {`None`,`networkx.Graph`}
+                Set to `None` if `graph_label` is specified. Otherwise, pass POSE graph.
+            weights: {`None`, `pandas.DataFrame`, (n, n)}
+                Dataframe of edge weights between nodes (observations).
+            min_branch_size: {`None`, `int`}
+                Skip branches with <= ``min_branch_size`` observations.
+
+        Returns:
+        ----------
+            corr_dict: `dict`
+                Dictionary of correlations between feature pairs sorted by node order on each branch.
+                Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
+        """
+
+        data_df = self.data[data_label].to_frame()
+        if graph_label is not None:
+            G_pose_nn = self.graphs[graph_label]
+        else:
+            G_pose_nn = graph_nw
+
+        obs_labels = self.observation_labels
+        corr_dict = summary.ordered_features_correlation_branch(poser, G_pose_nn, data_df, obs_labels,
+                                                                weights=weights, min_branch_size=min_branch_size)
+        return corr_dict
+
