@@ -24,6 +24,7 @@ dependencies = [
         'seaborn',
         'tqdm',
         'lifelines',
+	'gseapy',
         'openpyxl',
         'scikit-learn',
         'fastcluster',
@@ -40,7 +41,8 @@ dependencies = [
         'pptree',
         'jupyter-dash==0.4.2',
         'dash-extensions',
-        'dash-table==5.0.0']
+        'dash-table==5.0.0',
+	'bravado==12.0.1']
 
 [project.urls]
 "Homepage" = "https://github.com/areElkin/netflow/"
