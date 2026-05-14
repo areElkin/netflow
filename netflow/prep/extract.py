@@ -41,6 +41,21 @@ class CBioPortalClient:
             }
         }
     },
+    '/api/molecular-profiles/{molecularProfileId}/discrete-copy-number/fetch': {
+        'post': {
+            'name': 'discreteCopyNumberFilter',
+            'in': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'sampleListId': {'type': 'string'},
+                    'sampleIds': {'type': 'array', 'items': {'type': 'string'}},
+                    'entrezGeneIds': {'type': 'array', 'items': {'type': 'integer'}},
+                }
+            }
+        }
+    },
     }
 
     SAMPLE_ATTR_MAP = {
@@ -275,7 +290,7 @@ class CBioPortalClient:
         attribute : `str`
             The patient-level attribute to retrieve.
             For valid options, see PT_ATTR_MAP.
-            
+
         Returns
         -------
         attr : `list`
@@ -477,8 +492,11 @@ class CBioPortalClient:
 
         Returns
         -------
-        cna_df : `pandas.DataFrame`
+        cna_raw : `pandas.DataFrame`
             DataFrame containing available CNA data for all samples in the study.
+
+        cna_df : `pandas.DataFrame`
+            cna_raw re-organized for loading into the keeper.
         """
 
         target_study_id = self.get_study_id(target_name)
@@ -493,13 +511,23 @@ class CBioPortalClient:
             mpid = cna_ids[match_idx] #TBD: Check if multiple IDs can have the same study data type
 
         # Get CNA data
-        resp = self.cbioportal.Discrete_Copy_Number_Alterations.getDiscreteCopyNumbersInMolecularProfileUsingGET(
-            molecularProfileId=mpid, sampleListId=target_study_id+'_all')
-        cna_df = self._read_response(resp)
+        resp = self.cbioportal.Discrete_Copy_Number_Alterations.fetchDiscreteCopyNumbersInMolecularProfileUsingPOST(
+                molecularProfileId=mpid,
+                discreteCopyNumberFilter={'sampleListId': target_study_id + '_all'},
+                discreteCopyNumberEventType='ALL',
+                projection='SUMMARY')
+        cna_raw = self._read_response(resp)
 
         # Map entrezGeneIds to hugoGeneSymbols
-        cna_df = self.map_entrezid_to_hugosymbol(cna_df)
-        return cna_df
+        cna_raw = self.map_entrezid_to_hugosymbol(cna_raw)
+
+        # Reshape to (n_feats, n_obs)
+        cna_df = cna_raw.pivot(index='hugoGeneSymbol', columns='sampleId', values='alteration')
+        cna_df = cna_df.apply(pd.to_numeric, errors='coerce')
+        cna_df.index.name = 'hugoGeneSymbol'
+        cna_df.columns.name = None
+        cna_df = cna_df.fillna(0).astype(int)
+        return cna_raw, cna_df
 
 
     def get_mutation_data(self, target_name):
@@ -512,8 +540,10 @@ class CBioPortalClient:
 
         Returns
         -------
-        mut_df : `pandas.DataFrame`
+        mut_raw : `pandas.DataFrame`
             DataFrame containing available mutation data for all samples in the study.
+        mut_df : `pandas.DataFrame`
+            mut_raw re-organized for loading into the keeper.
         """
 
         target_study_id = self.get_study_id(target_name)
@@ -532,10 +562,18 @@ class CBioPortalClient:
                 molecularProfileId=mpid,
                 mutationFilter={'sampleListId': target_study_id + '_all'},
                 projection='SUMMARY')
-        mut_df = self._read_response(resp)
-        mut_df = self.map_entrezid_to_hugosymbol(mut_df)
+        mut_raw = self._read_response(resp)
+        mut_raw = self.map_entrezid_to_hugosymbol(mut_raw)
 
-        return mut_df
+        # Reshape to (n_feats, n_obs)
+        mut_df = (mut_raw.groupby(['hugoGeneSymbol', 'sampleId'])
+            .size()
+            .unstack(fill_value=0)
+            .clip(upper=1))
+        mut_df.index.name = 'hugoGeneSymbol'
+        mut_df.columns.name = None
+        return mut_raw, mut_df
+
 
     def get_methylation_data(self, target_name):
         """ Get DNA methylation (beta values) for all samples in a study from the METHYLATION molecular profile.
@@ -547,9 +585,11 @@ class CBioPortalClient:
 
         Returns
         -------
-        methyl_df : `pandas.DataFrame`
+        methyl_raw : `pandas.DataFrame`
             Beta-value dataframe (n_genes, n_samples).
             Values are floats in [0, 1] where 0 = unmethylated, 1 = fully methylated). NaNs indicate missing data.
+        methyl_df : `pandas.DataFrame`
+            methyl_raw processed for loading into the keeper.
         """
 
         target_study_id = self.get_study_id(target_name)
@@ -568,9 +608,21 @@ class CBioPortalClient:
             molecularProfileId=mpid,
             molecularDataFilter={'sampleListId': target_study_id + '_all'},
             projection='SUMMARY')
-        methyl_df = self._read_response(resp)
-        methyl_df = self.map_entrezid_to_hugosymbol(methyl_df)
-        return methyl_df
+        methyl_raw = self._read_response(resp)
+        methyl_raw = self.map_entrezid_to_hugosymbol(methyl_raw)
+
+        methyl_df = methyl_raw.copy()
+        methyl_df['value'] = pd.to_numeric(methyl_raw['value'], errors='coerce')
+
+        # Aggregate methylation by mean & reshape to (n_feats, n_obs)
+        methyl_df = (
+            methyl_df.groupby(['hugoGeneSymbol', 'sampleId'])['value']
+            .mean()
+            .unstack(level='sampleId')
+        )
+        methyl_df.index.name = 'hugoGeneSymbol'
+        methyl_df.columns.name = None
+        return methyl_raw, methyl_df
 
 
 def get_rna_seq_data(self, target_name):
@@ -583,8 +635,11 @@ def get_rna_seq_data(self, target_name):
 
     Returns
     -------
-    rna_df : `pandas.DataFrame`
+    rna_raw : `pandas.DataFrame`
         DataFrame containing RNA-seq expression values for all samples in the study.
+    rna_df : `pandas.DataFrame`
+        rna_raw processed for loading into the keeper.
+
     """
     target_study_id = self.get_study_id(target_name)
 
@@ -600,9 +655,22 @@ def get_rna_seq_data(self, target_name):
         molecularProfileId=mpid,
         molecularDataFilter={'sampleListId': target_study_id + '_all'},
         projection='SUMMARY')
-    rna_df = self._read_response(resp)
-    rna_df = self.map_entrezid_to_hugosymbol(rna_df)
-    return rna_df
+    rna_raw = self._read_response(resp)
+    rna_raw = self.map_entrezid_to_hugosymbol(rna_raw)
+
+    rna_df = rna_raw.copy()
+    rna_df['value'] = pd.to_numeric(rna_df['value'], errors='coerce')
+
+    # Aggregate by mean, reshape to (n_feats, n_obs)
+    rna_df = (
+        rna_df.groupby(['hugoGeneSymbol', 'sampleId'])['value']
+        .mean()
+        .unstack(level='sampleId')
+    )
+    rna_df.index.name = 'hugoGeneSymbol'
+    rna_df.columns.name = None
+
+    return rna_raw, rna_df
 
 
 def get_structural_variant_data(self, target_name):
