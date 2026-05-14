@@ -23,7 +23,7 @@ from netflow.probe.jupyter_app import render_pose
 from netflow.probe import visualization
 # from netflow import pose
 
-import netflow.preprocessing as pp
+import netflow.prep as prep
 
 
 
