@@ -21,10 +21,10 @@ dependencies = [
         'jupyterlab',
         'notebook==6.5.2',
         'jupyter_contrib_nbextensions',
+        'gseapy>=1.0.4',
         'seaborn',
         'tqdm',
         'lifelines',
-	'gseapy',
         'openpyxl',
         'scikit-learn',
         'fastcluster',
@@ -43,6 +43,18 @@ dependencies = [
         'dash-extensions',
         'dash-table==5.0.0',
 	'bravado==12.0.1']
+
+[project.optional-dependencies]
+docs = [
+    "sphinx>=7.0",
+    "pydata-sphinx-theme>=0.15",
+    "sphinx-design>=0.5",
+    "sphinx-copybutton>=0.5",
+    "sphinxcontrib-fulltoc>=1.2",
+    "sphinxcontrib-bibtex>=2.6",
+    "myst-nb>=1.0",
+    "matplotlib>=3.5",         # needed by matplotlib.sphinxext.plot_directive
+]
 
 [project.urls]
 "Homepage" = "https://github.com/areElkin/netflow/"
