@@ -1,0 +1,1205 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>netflow.probe.summary &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=8e5d96d1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+    <script src="../../_static/documentation_options.js?v=856df6fb"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.probe.summary';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="netflow.probe.visualization" href="netflow.probe.visualization.html" />
+    <link rel="prev" title="netflow.probe.jupyter_app" href="netflow.probe.jupyter_app.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.dev" />
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/NF_logo3.png" class="logo__image only-light" alt="netflow v0.0.dev Manual - Home"/>
+    <img src="../../_static/NF_logo3.png" class="logo__image only-dark pst-js-only" alt="netflow v0.0.dev Manual - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorial/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorial/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../main_namespace.html">netflow</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.keepers.html">netflow.keepers</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.keepers.keeper.html">netflow.keepers.keeper</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.pose.html">netflow.pose</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.organization.html">netflow.pose.organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.pose.similarity.html">netflow.pose.similarity</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">netflow.probe.summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.network_propagation.html">netflow.methods.network_propagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.stats.html">netflow.methods.stats</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items" aria-labelledby="pst-indices-navigation-heading-2">
+  <p id="pst-indices-navigation-heading-2" class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../overview/index.html" class="nav-link">netflow User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="netflow.probe.html" class="nav-link">netflow.probe</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">netflow.probe.summary</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-netflow.probe.summary">
+<span id="netflow-probe-summary"></span><h1>netflow.probe.summary<a class="headerlink" href="#module-netflow.probe.summary" title="Link to this heading">#</a></h1>
+<p>This script includes methods for describing resulting branches / clusters / co-localization on the POSE.</p>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.summary.enrichr" title="netflow.probe.summary.enrichr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enrichr</span></code></a>(**kwargs)</p></td>
+<td><p>Performs gene set enrichment via gseapy.enrichr with detailed feature sizes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.summary.extract_features" title="netflow.probe.summary.extract_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_features</span></code></a>(df, metric, threshold[, ...])</p></td>
+<td><p>Extract subset of samples (i.e., rows) based on threshold.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.summary.feature_graph_order_correlation_global" title="netflow.probe.summary.feature_graph_order_correlation_global"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_graph_order_correlation_global</span></code></a>(...)</p></td>
+<td><p>Compute correlation between features and global node ordering.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.summary.feature_graph_order_correlation_local" title="netflow.probe.summary.feature_graph_order_correlation_local"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_graph_order_correlation_local</span></code></a>(poser, ...)</p></td>
+<td><p>Compute correlation between features and branch node ordering.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.summary.get_branch_node_order" title="netflow.probe.summary.get_branch_node_order"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branch_node_order</span></code></a>(poser, graph_nw[, ...])</p></td>
+<td><p>Order observations on each branch by distance from the branch tip nearest to the root.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.summary.get_global_node_order" title="netflow.probe.summary.get_global_node_order"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_global_node_order</span></code></a>(poser, graph_nw[, weights])</p></td>
+<td><p>Order nodes by (weighted) graph distance from the root.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.summary.get_graph_distances" title="netflow.probe.summary.get_graph_distances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_graph_distances</span></code></a>(graph_nw[, weights])</p></td>
+<td><p>Compute distances between all node pairs on a graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.summary.get_gsea_library_names" title="netflow.probe.summary.get_gsea_library_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gsea_library_names</span></code></a>([organism])</p></td>
+<td><p>Get list of gene libraries for GSEA analysis using gseapy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.summary.gsea_group_summary" title="netflow.probe.summary.gsea_group_summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gsea_group_summary</span></code></a>(records_full[, metric, ...])</p></td>
+<td><p>Perform GSEA summary of significant genes for each group</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.summary.ordered_features_correlation_branch" title="netflow.probe.summary.ordered_features_correlation_branch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ordered_features_correlation_branch</span></code></a>(poser, ...)</p></td>
+<td><p>Compute correlations between pairs of features on each branch.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.probe.summary.ordered_features_correlation_global" title="netflow.probe.summary.ordered_features_correlation_global"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ordered_features_correlation_global</span></code></a>(poser, ...)</p></td>
+<td><p>Compute correlation between feature pairs, sorted by global node order.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.probe.summary.unique_significant_features_by_group" title="netflow.probe.summary.unique_significant_features_by_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unique_significant_features_by_group</span></code></a>(...[, ...])</p></td>
+<td><p>Identify features that are significant in exactly one group and not significant in any other group.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.enrichr">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">enrichr</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#enrichr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.enrichr" title="Link to this definition">#</a></dt>
+<dd><p>Performs gene set enrichment via gseapy.enrichr with detailed feature sizes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<cite>dict</cite>) – Keyword arguments passed to <a href="#id1"><span class="problematic" id="id2">`</span></a>gseapy.enrichr.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>results</strong> – Dataframe with results returned from gseapy.enrichr analysis, with
+additional “Overlap” information columns:</p>
+<ul class="simple">
+<li><p>”n” : The number of genes in the provided gene list that overlap with the library.</p></li>
+<li><p>”N” : The library size (number of genes in the library).</p></li>
+<li><p>”n/N” : The ratio of overlap of provided genes that are in the library to the library size.</p></li>
+</ul>
+<p>The following columns returned by gseapy.enrichr are dropped:</p>
+<ul class="simple">
+<li><p>”Old P-value”</p></li>
+<li><p>”Old Adjusted P-value”</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>pd.DataFrame</cite></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">libraries</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GO_Biological_Process_2025&#39;</span><span class="p">,</span> <span class="s1">&#39;GO_Cellular_Component_2025&#39;</span><span class="p">,</span> <span class="s1">&#39;GO_Molecular_Function_2025&#39;</span><span class="p">,</span>
+<span class="go">                 &#39;Human_Phenotype_Ontology&#39;, &#39;MSigDB_Hallmark_2020&#39;, &#39;MSigDB_Oncogenic_Signatures&#39;,</span>
+<span class="go">                 &#39;Reactome_Pathways_2024&#39;,</span>
+<span class="go">                ]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">networkx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">HPRD</span><span class="p">)</span>  <span class="c1"># A gene-gene interaction graph based on HPRD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gl</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TOP2A&#39;</span><span class="p">,</span> <span class="s1">&#39;FEN1&#39;</span><span class="p">,</span> <span class="s1">&#39;BLM&#39;</span><span class="p">,</span> <span class="s1">&#39;MCM7&#39;</span><span class="p">,</span> <span class="s1">&#39;MCM8&#39;</span><span class="p">,</span> <span class="s1">&#39;XPC&#39;</span><span class="p">,</span> <span class="s1">&#39;MCM10&#39;</span><span class="p">,</span> <span class="s1">&#39;BRCA1&#39;</span><span class="p">,</span> <span class="s1">&#39;TTF2&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enrichr</span><span class="p">(</span><span class="n">gene_list</span><span class="o">=</span><span class="n">gl</span><span class="p">,</span> <span class="c1"># gene_list, # or &quot;./tests/data/gene_list.txt&quot;,</span>
+<span class="go">            gene_sets=libraries, # [&#39;MSigDB_Hallmark_2020&#39;,&#39;KEGG_2021_Human&#39;],</span>
+<span class="go">            organism=&#39;human&#39;,</span>
+<span class="go">            background=list(G),  # or &quot;hsapiens_gene_ensembl&quot;, or int, or text file, or a list of genes</span>
+<span class="go">            outdir=None, # if None, don&#39;t write to disk</span>
+<span class="go">           )</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.extract_features">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">apply_lt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#extract_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.extract_features" title="Link to this definition">#</a></dt>
+<dd><p>Extract subset of samples (i.e., rows) based on threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<cite>pd.DataFrame</cite>) – The data, expected to have rows as samples with columns as features on which to threshold.</p></li>
+<li><p><strong>metric</strong> (<cite>str</cite>) – The column header to use as metric for determining samples to keep.</p></li>
+<li><p><strong>threshold</strong> ({<cite>float</cite>, <cite>str</cite>}) – <p>Threshold applied to <cite>metric</cite>, depends on type:</p>
+<ul>
+<li><dl>
+<dt><cite>float</cite><span class="classifier">If <code class="docutils literal notranslate"><span class="pre">apply_lt</span> <span class="pre">=</span> <span class="pre">True</span></code>, a sample is kept if <cite>metric_value &lt;= threshold</cite>.</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">apply_lt</span> <span class="pre">=</span> <span class="pre">False</span></code>, a sample is kept if <cite>metric_value &gt;= threshold</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><p><cite>str</cite> : A sample is kept if <cite>metric_value = threshold</cite>.</p></li>
+</ul>
+</p></li>
+<li><p><strong>apply_lt</strong> (<cite>bool</cite>, default = True) – Indicate how to compare numeric metric values to the threshold. If <cite>True</cite>, retain metric values
+that are less than (lt) <code class="docutils literal notranslate"><span class="pre">threshold</span></code>. Otherwise, retain values greater than <code class="docutils literal notranslate"><span class="pre">threshold</span></code>.
+Ignored if <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is a <cite>str</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>selected</strong> – The list of sample index labels that match the threshold</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.feature_graph_order_correlation_global">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">feature_graph_order_correlation_global</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">poser</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">graph_nw</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">data_df</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">obs_labels</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#feature_graph_order_correlation_global"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.feature_graph_order_correlation_global" title="Link to this definition">#</a></dt>
+<dd><p>Compute correlation between features and global node ordering.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>poser: <cite>netflow.pose.POSER</cite></dt><dd><p>The object used to construct the POSE.</p>
+</dd>
+<dt>graph_nw: <cite>networkx.Graph</cite></dt><dd><p>The POSE graph.</p>
+</dd>
+<dt>data_df: <cite>pandas.DataFrame</cite> (n_features, n_observations)</dt><dd><p>Feature matrix.</p>
+</dd>
+<dt>obs_labels: <cite>list</cite> of <cite>str</cite></dt><dd><p>List of observation labels corresponding to node IDs.</p>
+</dd>
+<dt>weights: {<cite>None</cite>, <cite>pandas.DataFrame</cite>}</dt><dd><p>Dataframe of edge weights between nodes (observations) used to compute weighted hop distance if provided.
+Unweighted hop count is used if <cite>None</cite>.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>corr_df: <cite>pandas.DataFrame</cite></dt><dd><p>Dataframe containing spearman correlation between features and global ordering of nodes, and associated p-values.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.feature_graph_order_correlation_local">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">feature_graph_order_correlation_local</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">poser</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">graph_nw</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">data_df</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">obs_labels</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#feature_graph_order_correlation_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.feature_graph_order_correlation_local" title="Link to this definition">#</a></dt>
+<dd><p>Compute correlation between features and branch node ordering.</p>
+<section id="id3">
+<h2>Parameters:<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>poser: <cite>netflow.pose.POSER</cite></dt><dd><p>The object used to construct the POSE.</p>
+</dd>
+<dt>graph_nw: <cite>networkx.Graph</cite></dt><dd><p>The POSE graph.</p>
+</dd>
+<dt>data_df: <cite>pandas.DataFrame</cite> (n_features, n_observations)</dt><dd><p>Feature matrix.</p>
+</dd>
+<dt>obs_labels: <cite>list</cite> of <cite>str</cite></dt><dd><p>List of observation labels corresponding to node IDs.</p>
+</dd>
+<dt>weights: {<cite>None</cite>, <cite>pandas.DataFrame</cite>, (n, n)}</dt><dd><p>Dataframe of edge weights between nodes (observations) used to compute weighted hop distance if provided.
+Unweighted hop count is used if <cite>None</cite>.</p>
+</dd>
+<dt>min_branch_size: {<cite>None</cite>, <cite>int</cite>}</dt><dd><p>Skip branches with &lt;= <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> observations.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2>Returns:<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>corr_dict: <cite>dict</cite> of <cite>pandas.DataFrame</cite>.</dt><dd><p>Dictionary mapping branch IDs to a <cite>pd.DataFrame</cite>. Each dataframe contains spearman correlation between features
+and global ordering of nodes, and associated p-values.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.get_branch_node_order">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">get_branch_node_order</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">poser</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">graph_nw</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#get_branch_node_order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.get_branch_node_order" title="Link to this definition">#</a></dt>
+<dd><p>Order observations on each branch by distance from the branch tip nearest to the root.</p>
+<section id="id5">
+<h2>Parameters:<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl>
+<dt>poser: <cite>netflow.pose.POSER</cite></dt><dd><p>The object used to construct the POSE.</p>
+</dd>
+<dt>graph_nw<span class="classifier"><cite>networkx.Graph</cite></span></dt><dd><p>The POSE graph.</p>
+</dd>
+<dt>weights: {<cite>None</cite>, <cite>pandas.DataFrame</cite>, (n, n)}</dt><dd><p>Dataframe of edge weights between nodes (observations). If <cite>None</cite> unweighted hop count is used.</p>
+</dd>
+<dt>min_branch_size: {<cite>None</cite>, <cite>int</cite>}</dt><dd><p>Skip branches with &lt;= <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> observations.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id6">
+<h2>Returns:<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>branch_ord_dict: <cite>dict</cite>
+Dictionary mapping branch node indices to ordering in terms of graph distance from branch tip nearest root.
+Uses weighted distance if provided. Otherwise, uses hop distance if <cite>weights</cite> is <cite>None</cite></p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.get_global_node_order">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">get_global_node_order</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">poser</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">graph_nw</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#get_global_node_order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.get_global_node_order" title="Link to this definition">#</a></dt>
+<dd><p>Order nodes by (weighted) graph distance from the root.</p>
+<section id="id7">
+<h2>Parameters:<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>poser: <cite>netflow.pose.POSER</cite></dt><dd><p>The object used to construct the POSE, containing the root node ID.</p>
+</dd>
+<dt>graph_nw: <cite>networkx.Graph</cite></dt><dd><p>Input POSE topology.</p>
+</dd>
+<dt>weights: {<cite>None</cite>, <cite>pandas.DataFrame</cite>, (n, n)}</dt><dd><p>Dataframe of edge weights between nodes (observations). If <cite>None</cite> unweighted hop count is used.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id8">
+<h2>Returns:<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>node_ord_dict: <cite>dict</cite>
+Dictionary mapping node indices to ordering in terms of graph distance from the root.
+Ordering is based on weighted distance if provided. Otherwise, based on hop distance if <cite>weights</cite> is <cite>None</cite></p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.get_graph_distances">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">get_graph_distances</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">graph_nw</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#get_graph_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.get_graph_distances" title="Link to this definition">#</a></dt>
+<dd><p>Compute distances between all node pairs on a graph.</p>
+<section id="id9">
+<h2>Parameters:<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>graph_nw: <cite>networkx.Graph</cite></dt><dd><p>Input graph.</p>
+</dd>
+<dt>weights: {<cite>None</cite>, <cite>pandas.DataFrame</cite>, (n, n)}</dt><dd><p>Dataframe of edge weights between nodes (observations). If <cite>None</cite> unweighted hop count is used.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id10">
+<h2>Returns:<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>graph_dist: <cite>numpy.ndarray</cite>, (n, n)
+Matrix of pairwise graph distances between nodes ordered 0,1,…,n-1.
+Returns weighted distance if provided. Otherwise, returns hop distance if <cite>weights</cite> is <cite>None</cite></p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.get_gsea_library_names">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">get_gsea_library_names</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">organism</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Human'</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#get_gsea_library_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.get_gsea_library_names" title="Link to this definition">#</a></dt>
+<dd><p>Get list of gene libraries for GSEA analysis using gseapy.</p>
+<p>This returns active enrichr library names that can be found at: <a class="reference external" href="https://maayanlab.cloud/modEnrichr/">https://maayanlab.cloud/modEnrichr/</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>organism</strong> (<em>{'Human'</em><em>, </em><em>'Mouse'</em><em>, </em><em>'Yeast'</em><em>, </em><em>'Fly'</em><em>, </em><em>'Fish'</em><em>, </em><em>'Worm'}</em><em>, </em><em>default='Human'</em>) – The database to pull libraries from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>libraries</strong> – The list of library names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>list</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.gsea_group_summary">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">gsea_group_summary</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">records_full</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'pval'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'qval'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'qval'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">dropna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#gsea_group_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.gsea_group_summary" title="Link to this definition">#</a></dt>
+<dd><p>Perform GSEA summary of significant genes for each group</p>
+<p>This function consumes the output of <cite>netflow.methods.stats.sig_feats_by_group()</cite>
+in either of its supported formats:</p>
+<ol class="arabic simple">
+<li><p>Dictionary format:
+<code class="docutils literal notranslate"><span class="pre">records_full[group]</span> <span class="pre">-&gt;</span> <span class="pre">DataFrame(index=features,</span> <span class="pre">columns</span> <span class="pre">include</span> <span class="pre">metric)</span></code>
+where <cite>metric</cite> is either “pval” (p-value) or “qval” (corrected p-value).</p></li>
+<li><p>Wide DataFrame format:
+A DataFrame indexed by features with MultiIndex columns of the form
+<code class="docutils literal notranslate"><span class="pre">(group,</span> <span class="pre">metric_name)</span></code>, where <cite>metric_name</cite> includes “pval” and/or
+“qval”.</p></li>
+</ol>
+<p>The output is a dictionary mapping each group to a pd.DataFrame with the gsea output
+of its significant genes provided by enrichr()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>records_full</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>pandas.DataFrame</em>) – <p>Results returned by <cite>sig_feats_by_group()</cite>.</p>
+<ul>
+<li><p>If dict: keys are group labels; values are per-group DataFrames.</p></li>
+<li><p>If DataFrame: must have MultiIndex columns with level 0 = group and level 1 = metric.</p></li>
+</ul>
+</p></li>
+<li><p><strong>metric</strong> (<em>{&quot;pval&quot;</em><em>, </em><em>&quot;qval&quot;}</em><em>, </em><em>default=&quot;qval&quot;</em>) – <p>Which significance column to use when deciding whether a feature is significant.</p>
+<ul>
+<li><p>”pval”: raw p-values</p></li>
+<li><p>”qval”: multiple-testing corrected p-values (q-values)</p></li>
+</ul>
+</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.05</em>) – Significance threshold applied to <cite>metric</cite>. A feature is considered significant for a
+given group if <cite>metric_value &lt;= threshold</cite>.</p></li>
+<li><p><strong>dropna</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, treat NaN metric values as “not significant”.
+If False, NaNs propagate only through comparisons (NaN &lt;= threshold is False anyway),
+so behavior is effectively the same for the significance mask; this mainly affects
+internal bookkeeping.</p></li>
+<li><p><strong>kwargs</strong> (<cite>dict</cite>) – Optional keyword arguments passed to enrichr().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>summary</strong> – Dictionary keyed by group label, where values are dataframes of gsea results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If you ran <cite>netflow.methods.stats.sig_feats_by_group(…, top_n=…)</cite>, then <cite>records_full</cite> may
+only include a subset of features per group. In that case, “unique” is evaluated relative to what
+is present in <cite>records_full</cite> (missing features are treated as not significant for that group).
+For strict uniqueness across all tested features, generate results without <cite>top_n</cite>.
+It is therefore recommended and expected that results were generated without <cite>top_n</cite>.</p></li>
+<li><p>If <cite>netflow.methods.stats.sig_feats_by_group()</cite> used the two-category optimization
+(compute only one direction), then <cite>records_full</cite> may not contain both groups; uniqueness can
+only be assessed across the groups that are present in <cite>records_full</cite>.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.ordered_features_correlation_branch">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">ordered_features_correlation_branch</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">poser</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">graph_nw</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">data_df</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">obs_labels</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#ordered_features_correlation_branch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.ordered_features_correlation_branch" title="Link to this definition">#</a></dt>
+<dd><p>Compute correlations between pairs of features on each branch.</p>
+<section id="id11">
+<h2>Parameters:<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>poser: <cite>netflow.pose.POSER</cite></dt><dd><p>The object used to construct the POSE.</p>
+</dd>
+<dt>graph_nw: <cite>networkx.Graph</cite></dt><dd><p>The POSE graph.</p>
+</dd>
+<dt>data_df: <cite>pandas.DataFrame</cite> (n_features, n_observations)</dt><dd><p>Feature matrix.</p>
+</dd>
+<dt>obs_labels: <cite>list</cite> of <cite>str</cite></dt><dd><p>List of observation labels corresponding to node IDs.</p>
+</dd>
+<dt>weights: {<cite>None</cite>, <cite>pandas.DataFrame</cite>, (n, n)}</dt><dd><p>Dataframe of edge weights between nodes (observations). If <cite>None</cite> unweighted hop count is used.</p>
+</dd>
+<dt>min_branch_size: {<cite>None</cite>, <cite>int</cite>}</dt><dd><p>Skip branches with &lt;= <code class="docutils literal notranslate"><span class="pre">min_branch_size</span></code> observations.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id12">
+<h2>Returns:<a class="headerlink" href="#id12" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>corr_dict: <cite>dict</cite></dt><dd><p>Dictionary of correlations between feature pairs sorted by node order on each branch.
+Node order is based on weighted distance if provided. Otherwise, based on hop distance if <cite>weights</cite> is <cite>None</cite></p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.ordered_features_correlation_global">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">ordered_features_correlation_global</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">poser</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">graph_nw</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">data_df</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">obs_labels</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#ordered_features_correlation_global"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.ordered_features_correlation_global" title="Link to this definition">#</a></dt>
+<dd><p>Compute correlation between feature pairs, sorted by global node order.</p>
+<section id="id13">
+<h2>Parameters:<a class="headerlink" href="#id13" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>poser: <cite>netflow.pose.POSER</cite></dt><dd><p>The object used to construct the POSE.</p>
+</dd>
+<dt>graph_nw: <cite>networkx.Graph</cite></dt><dd><p>The POSE graph.</p>
+</dd>
+<dt>data_df: <cite>pandas.DataFrame</cite> (n_features, n_observations)</dt><dd><p>Feature matrix.</p>
+</dd>
+<dt>obs_labels: <cite>list</cite> of <cite>str</cite></dt><dd><p>List of observation labels corresponding to node IDs.</p>
+</dd>
+<dt>weights: {<cite>None</cite>, <cite>pandas.DataFrame</cite>, (n, n)}</dt><dd><p>Dataframe of edge weights between nodes (observations). If <cite>None</cite> unweighted hop count is used.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id14">
+<h2>Returns:<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>corr_arr: <cite>np.ndarray</cite> (n_features, n_features)</dt><dd><p>Array of correlations between every pair of features sorted by the global ordering of nodes.
+Node order is based on weighted distance if provided. Otherwise, based on hop distance if <cite>weights</cite> is <cite>None</cite></p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.probe.summary.unique_significant_features_by_group">
+<span class="sig-prename descclassname"><span class="pre">netflow.probe.summary.</span></span><span class="sig-name descname"><span class="pre">unique_significant_features_by_group</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">records_full</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'pval'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'qval'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'qval'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">dropna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">sort_within_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#unique_significant_features_by_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.unique_significant_features_by_group" title="Link to this definition">#</a></dt>
+<dd><p>Identify features that are significant in exactly one group and not significant in any other group.</p>
+<p>This function consumes the output of <cite>netflow.methods.stats.sig_feats_by_group()</cite>
+in either of its supported formats:</p>
+<ol class="arabic simple">
+<li><p>Dictionary format:
+<code class="docutils literal notranslate"><span class="pre">records_full[group]</span> <span class="pre">-&gt;</span> <span class="pre">DataFrame(index=features,</span> <span class="pre">columns</span> <span class="pre">include</span> <span class="pre">metric)</span></code>
+where <cite>metric</cite> is either “pval” (p-value) or “qval” (corrected p-value).</p></li>
+<li><p>Wide DataFrame format:
+A DataFrame indexed by features with MultiIndex columns of the form
+<code class="docutils literal notranslate"><span class="pre">(group,</span> <span class="pre">metric_name)</span></code>, where <cite>metric_name</cite> includes “pval” and/or
+“qval”.</p></li>
+</ol>
+<p>The output is a dictionary mapping each group to a list of features that satisfy:</p>
+<ul class="simple">
+<li><p>feature is significant for that group according to the chosen <cite>metric</cite> and <cite>threshold</cite>, and</p></li>
+<li><p>feature is NOT significant for every other group in <cite>records_full</cite>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>records_full</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>pandas.DataFrame</em>) – <p>Results returned by <cite>sig_feats_by_group()</cite>.</p>
+<ul>
+<li><p>If dict: keys are group labels; values are per-group DataFrames.</p></li>
+<li><p>If DataFrame: must have MultiIndex columns with level 0 = group and level 1 = metric.</p></li>
+</ul>
+</p></li>
+<li><p><strong>metric</strong> (<em>{&quot;pval&quot;</em><em>, </em><em>&quot;qval&quot;}</em><em>, </em><em>default=&quot;qval&quot;</em>) – <p>Which significance column to use when deciding whether a feature is significant.</p>
+<ul>
+<li><p>”pval”: raw p-values</p></li>
+<li><p>”qval”: multiple-testing corrected p-values (q-values)</p></li>
+</ul>
+</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.05</em>) – Significance threshold applied to <cite>metric</cite>. A feature is considered significant for a
+given group if <cite>metric_value &lt;= threshold</cite>.</p></li>
+<li><p><strong>dropna</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, treat NaN metric values as “not significant”.
+If False, NaNs propagate only through comparisons (NaN &lt;= threshold is False anyway),
+so behavior is effectively the same for the significance mask; this mainly affects
+internal bookkeeping.</p></li>
+<li><p><strong>sort_within_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, features returned per group are sorted by the chosen <cite>metric</cite> ascending
+(most significant first). If False, features follow the underlying feature index order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>unique_feats</strong> – Dictionary keyed by group label, where values are lists of feature names that are
+significant only for that group and for no other group.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If <cite>records_full</cite> is neither a dict nor a DataFrame.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <cite>metric</cite> is not present in the provided results, or if a wide DataFrame does not
+    have the expected MultiIndex column structure.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If you ran <cite>netflow.methods.stats.sig_feats_by_group(…, top_n=…)</cite>, then <cite>records_full</cite> may
+only include a subset of features per group. In that case, “unique” is evaluated relative to what
+is present in <cite>records_full</cite> (missing features are treated as not significant for that group).
+For strict uniqueness across all tested features, generate results without <cite>top_n</cite>.
+It is therefore recommended and expected that results were generated without <cite>top_n</cite>.</p></li>
+<li><p>If <cite>netflow.methods.stats.sig_feats_by_group()</cite> used the two-category optimization
+(compute only one direction), then <cite>records_full</cite> may not contain both groups; uniqueness can
+only be assessed across the groups that are present in <cite>records_full</cite>.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="netflow.probe.jupyter_app.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">netflow.probe.jupyter_app</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="netflow.probe.visualization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">netflow.probe.visualization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="current pst-show_toc_level nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current pst-show_toc_level nav section-nav flex-column">
+<li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html#modules">Modules</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.keepers.html">netflow.keepers</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.pose.html">netflow.pose</a></li>
+<li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.html">netflow.probe</a><ul class="current nav section-nav flex-column">
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
+<li class="toctree-l6 current toc-h6 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.probe.summary</a><ul class="nav section-nav flex-column">
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.enrichr"><code class="docutils literal notranslate"><span class="pre">enrichr()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.extract_features"><code class="docutils literal notranslate"><span class="pre">extract_features()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.feature_graph_order_correlation_global"><code class="docutils literal notranslate"><span class="pre">feature_graph_order_correlation_global()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.feature_graph_order_correlation_local"><code class="docutils literal notranslate"><span class="pre">feature_graph_order_correlation_local()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.get_branch_node_order"><code class="docutils literal notranslate"><span class="pre">get_branch_node_order()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.get_global_node_order"><code class="docutils literal notranslate"><span class="pre">get_global_node_order()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.get_graph_distances"><code class="docutils literal notranslate"><span class="pre">get_graph_distances()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.get_gsea_library_names"><code class="docutils literal notranslate"><span class="pre">get_gsea_library_names()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.gsea_group_summary"><code class="docutils literal notranslate"><span class="pre">gsea_group_summary()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.ordered_features_correlation_branch"><code class="docutils literal notranslate"><span class="pre">ordered_features_correlation_branch()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.ordered_features_correlation_global"><code class="docutils literal notranslate"><span class="pre">ordered_features_correlation_global()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.probe.summary.unique_significant_features_by_group"><code class="docutils literal notranslate"><span class="pre">unique_significant_features_by_group()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.checks.html">netflow.checks</a></li>
+<li class="toctree-l5 toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.utils.html">netflow.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3 toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/reference/generated/netflow.probe.summary.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023-2026, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>netflow.utils &#8212; netflow v0.0.dev Manual</title>
   
@@ -28,30 +27,31 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=8e5d96d1" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=856df6fb"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.utils';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="References" href="../../references.html" />
@@ -59,21 +59,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Dec 23, 2025"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -99,7 +105,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -196,11 +202,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -294,18 +307,32 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
         <div class="sidebar-primary-item">
+
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
@@ -323,12 +350,14 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.summary.html">netflow.probe.summary</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.network_propagation.html">netflow.methods.network_propagation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.stats.html">netflow.methods.stats</a></li>
 </ul>
 </details></li>
@@ -413,17 +442,12 @@
                 <article class="bd-article">
                   
   <section id="module-netflow.utils">
-<span id="netflow-utils"></span><h1>netflow.utils<a class="headerlink" href="#module-netflow.utils" title="Permalink to this heading">#</a></h1>
+<span id="netflow-utils"></span><h1>netflow.utils<a class="headerlink" href="#module-netflow.utils" title="Link to this heading">#</a></h1>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#netflow.utils.clustermap" title="netflow.utils.clustermap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clustermap</span></code></a>(data[, observations, features, ...])</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">param data<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dataframe with <span class="math notranslate nohighlight">\(m\)</span> observations that are <span class="math notranslate nohighlight">\(n\)</span> dimensional.</p>
-</dd>
-</dl>
-</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#netflow.utils.compute_edge_weights" title="netflow.utils.compute_edge_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_edge_weights</span></code></a>(G[, n_weight, ...])</p></td>
 <td><p>compute edge weights from given nodal weights e_normalized = True AND e_sqrt = True : w_ij = 1/sqrt([(p_ij + p_ji)/2]) e_normalized = True AND e_sqrt = False : w_ij = 1/[(p_ij + p_ji)/2] e_normalized = False AND e_sqrt = True : w_ij = 1/sqrt(w_i * w_j) e_normalized = False AND e_sqrt = False : w_ij = (1/w_i)*(1/w_j) NOTE: w_ij = INF if w_i=0 or w_j=0 e_wprob = True (then e_normalizezd and e_sqrt are ignored) : w_ij = 1 / (p_ij + p_ji - (p_ij * p_ji))</p></td>
@@ -456,12 +480,7 @@
 <td><p>Compute the action of the matrix exponential of <span class="math notranslate nohighlight">\(-timestep * laplacian\)</span> on the profile, a.k.a., the result of the action .math::<cite>exp(-tL)*profile</cite>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#netflow.utils.interaction_iterator" title="netflow.utils.interaction_iterator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interaction_iterator</span></code></a>(G[, interactions])</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">param G<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The graph.</p>
-</dd>
-</dl>
-</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#netflow.utils.invariant_measure" title="netflow.utils.invariant_measure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">invariant_measure</span></code></a>(profiles[, G, adj])</p></td>
 <td><p>Compute the invariant measure of the profile (node weights) on the network.</p></td>
@@ -470,7 +489,7 @@
 <td><p>Calculate a Kendall's tau correlation coefficient with associated p-value using <code class="docutils literal notranslate"><span class="pre">scipy.stats.kendalltau</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#netflow.utils.pij" title="netflow.utils.pij"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pij</span></code></a>(G, source, target[, n_weight, EPS])</p></td>
-<td><p>Compute the 1-step Markov transition probability of going from source to target node in G Note: not a lazy walk (i.e.</p></td>
+<td><p>Compute the 1-step Markov transition probability of going from source to target node in G Note: not a lazy walk (i.e. alpha=0).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#netflow.utils.spearmanr_" title="netflow.utils.spearmanr_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spearmanr_</span></code></a>(data, **kwargs)</p></td>
 <td><p>Calculate a Spearman correlation coefficient with associated p-value using scipy.stats.spearmanr.</p></td>
@@ -492,7 +511,21 @@
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.clustermap">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">clustermap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_symmetric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_nodes_ordering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linkage_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'method':</span> <span class="pre">'ward',</span> <span class="pre">'metric':</span> <span class="pre">'euclidean'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vis_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'cbar_pos':</span> <span class="pre">(-0.02,</span> <span class="pre">0.84,</span> <span class="pre">0.02,</span> <span class="pre">0.16),</span> <span class="pre">'center':</span> <span class="pre">0,</span> <span class="pre">'cmap':</span> <span class="pre">'RdBu',</span> <span class="pre">'dendrogram_ratio':</span> <span class="pre">0.07,</span> <span class="pre">'figsize':</span> <span class="pre">(7,</span> <span class="pre">7)}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#clustermap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.clustermap" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">clustermap</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">observations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">is_symmetric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">optimal_nodes_ordering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">linkage_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'method':</span> <span class="pre">'ward',</span> <span class="pre">'metric':</span> <span class="pre">'euclidean'}</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">vis_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'cbar_pos':</span> <span class="pre">(-0.02,</span> <span class="pre">0.84,</span> <span class="pre">0.02,</span> <span class="pre">0.16),</span> <span class="pre">'center':</span> <span class="pre">0,</span> <span class="pre">'cmap':</span> <span class="pre">'RdBu',</span> <span class="pre">'dendrogram_ratio':</span> <span class="pre">0.07,</span> <span class="pre">'figsize':</span> <span class="pre">(7,</span> <span class="pre">7)}</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#clustermap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.clustermap" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -520,7 +553,18 @@ Otherwise, if <cite>False</cite>, perform independent clustering and ordering on
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.compute_edge_weights">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">compute_edge_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_sqrt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_wprob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#compute_edge_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.compute_edge_weights" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">compute_edge_weights</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">e_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">e_normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">e_sqrt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">e_wprob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#compute_edge_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.compute_edge_weights" title="Link to this definition">#</a></dt>
 <dd><p>compute edge weights from given nodal weights
 e_normalized = True AND e_sqrt = True : w_ij = 1/sqrt([(p_ij + p_ji)/2])
 e_normalized = True AND e_sqrt = False : w_ij = 1/[(p_ij + p_ji)/2]
@@ -532,7 +576,16 @@ e_wprob = True (then e_normalizezd and e_sqrt are ignored) : w_ij = 1 / (p_ij + 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.compute_eigen">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">compute_eigen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'decrease'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'increase'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'decrease'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">RandomState</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#compute_eigen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.compute_eigen" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">compute_eigen</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'decrease'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'increase'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'decrease'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">RandomState</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#compute_eigen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.compute_eigen" title="Link to this definition">#</a></dt>
 <dd><p>Compute eigen decomposition of (transition) matrix.</p>
 <p>Code taken from <code class="docutils literal notranslate"><span class="pre">scanpy.neighbors.__init__.py</span></code></p>
 <dl class="field-list simple">
@@ -561,7 +614,14 @@ plotting.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.compute_graph_distances">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">compute_graph_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#compute_graph_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.compute_graph_distances" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">compute_graph_distances</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#compute_graph_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.compute_graph_distances" title="Link to this definition">#</a></dt>
 <dd><p>Returns the weighted hop distance matrix for graph with nodes indexed from
 <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the number of nodes..</p>
 <dl class="field-list simple">
@@ -585,7 +645,15 @@ all paths between every two nodes, minimize the number of edges.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.construct_anisotropic_laplacian_matrix">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">construct_anisotropic_laplacian_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_spectral_gap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#construct_anisotropic_laplacian_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.construct_anisotropic_laplacian_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">construct_anisotropic_laplacian_matrix</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">use_spectral_gap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#construct_anisotropic_laplacian_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.construct_anisotropic_laplacian_matrix" title="Link to this definition">#</a></dt>
 <dd><p>Returns transpose of random walk (rw) Laplacian matrix from Transition matrix
 constructed from node attribute ‘weight’ for anisotropic diffusion.</p>
 <div class="admonition note">
@@ -612,7 +680,14 @@ transitioning from node <span class="math notranslate nohighlight">\(i\)</span> 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.dispersion_">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">dispersion_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#dispersion_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.dispersion_" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">dispersion_</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#dispersion_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.dispersion_" title="Link to this definition">#</a></dt>
 <dd><p>Data dispersion computed as the absolute value of the variance-to-mean ratio where the
 variance and mean is computed on the values over the requested axis.</p>
 <dl class="field-list simple">
@@ -639,7 +714,14 @@ variance and mean is computed on the values over the requested axis.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.find_knee_point">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">find_knee_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#find_knee_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.find_knee_point" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">find_knee_point</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#find_knee_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.find_knee_point" title="Link to this definition">#</a></dt>
 <dd><p>Returns the x-location of a (single) knee of curve y=f(x).</p>
 <p>Taken from <a class="github reference external" href="https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py">KrishnaswamyLab/spARC</a>.</p>
 <dl class="field-list simple">
@@ -670,7 +752,15 @@ if these are not in order and evenly spaced</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.gauss_conv">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">gauss_conv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#gauss_conv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.gauss_conv" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">gauss_conv</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">smoothness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.5</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#gauss_conv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.gauss_conv" title="Link to this definition">#</a></dt>
 <dd><p>Smooth an array using Gaussian kernel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -691,7 +781,14 @@ if these are not in order and evenly spaced</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.gauss_window">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">gauss_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#gauss_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.gauss_window" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">gauss_window</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">smoothness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.5</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#gauss_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.gauss_window" title="Link to this definition">#</a></dt>
 <dd><p>Gaussian window of width <code class="docutils literal notranslate"><span class="pre">window_size</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -711,7 +808,17 @@ if these are not in order and evenly spaced</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.get_times">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">get_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#get_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.get_times" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">get_times</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">t_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.5</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">log_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#get_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.get_times" title="Link to this definition">#</a></dt>
 <dd><p>get array of simulation time-points</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -740,7 +847,15 @@ For example, <code class="docutils literal notranslate"><span class="pre">_get_t
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.heat_kernel">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">heat_kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">laplacian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#heat_kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.heat_kernel" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">heat_kernel</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">laplacian</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">timestep</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#heat_kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.heat_kernel" title="Link to this definition">#</a></dt>
 <dd><p>Compute the action of the matrix exponential of <span class="math notranslate nohighlight">\(-timestep * laplacian\)</span> on the
 profile, a.k.a., the result of the action .math::<cite>exp(-tL)*profile</cite>.</p>
 <dl class="field-list simple">
@@ -752,12 +867,19 @@ profile, a.k.a., the result of the action .math::<cite>exp(-tL)*profile</cite>.<
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.interaction_iterator">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">interaction_iterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><span class="pre">object</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#interaction_iterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.interaction_iterator" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">interaction_iterator</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">interactions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><span class="pre">object</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#interaction_iterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.interaction_iterator" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>G</strong> (<em>networkx graph</em>) – The graph.</p></li>
-<li><p><strong>interactions</strong> (<em>{None</em><em>, </em><em>iterable</em><em>, </em><em>'all'}</em>) – </p></li>
+<li><p><strong>interactions</strong> (<em>{None</em><em>, </em><em>iterable</em><em>, </em><em>'all'}</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -765,7 +887,15 @@ profile, a.k.a., the result of the action .math::<cite>exp(-tL)*profile</cite>.<
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.invariant_measure">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">invariant_measure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#invariant_measure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.invariant_measure" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">invariant_measure</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">profiles</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">adj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#invariant_measure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.invariant_measure" title="Link to this definition">#</a></dt>
 <dd><p>Compute the invariant measure of the profile (node weights) on the network.</p>
 <p>..Note:: Either the graph <code class="docutils literal notranslate"><span class="pre">G</span></code> or the adjacency matrix <code class="docutils literal notranslate"><span class="pre">adj</span></code> must be provided.</p>
 <dl class="field-list simple">
@@ -781,7 +911,8 @@ order as in <code class="docutils literal notranslate"><span class="pre">profile
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>IM</strong> – The invariant measures whose features and observations are in the same order as <code class="docutils literal notranslate"><span class="pre">profiles</span></code>.</p>
+<dd class="field-even"><p><strong>IM</strong> – The invariant measures whose features and observations are in the same order as <code class="docutils literal notranslate"><span class="pre">profiles</span></code>.
+Columns with zero normalizer are returned as all-zeros (no NaNs).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>numpy.ndarray</cite> (n_features, n_observations)</p>
@@ -791,7 +922,14 @@ order as in <code class="docutils literal notranslate"><span class="pre">profile
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.kendall_tau_">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">kendall_tau_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#kendall_tau_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.kendall_tau_" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">kendall_tau_</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#kendall_tau_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.kendall_tau_" title="Link to this definition">#</a></dt>
 <dd><p>Calculate a Kendall’s tau correlation coefficient with associated p-value using <code class="docutils literal notranslate"><span class="pre">scipy.stats.kendalltau</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -817,14 +955,31 @@ shape as <code class="docutils literal notranslate"><span class="pre">R</span></
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.pij">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">pij</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EPS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#pij"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.pij" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">pij</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">EPS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#pij"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.pij" title="Link to this definition">#</a></dt>
 <dd><p>Compute the 1-step Markov transition probability of going from source to target node in G
 Note: not a lazy walk (i.e. alpha=0)</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.spearmanr_">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">spearmanr_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#spearmanr_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.spearmanr_" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">spearmanr_</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#spearmanr_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.spearmanr_" title="Link to this definition">#</a></dt>
 <dd><p>Calculate a Spearman correlation coefficient with associated p-value using scipy.stats.spearmanr.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -850,7 +1005,14 @@ shape as <code class="docutils literal notranslate"><span class="pre">R</span></
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.stack_triu_">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">stack_triu_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#stack_triu_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.stack_triu_" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">stack_triu_</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#stack_triu_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.stack_triu_" title="Link to this definition">#</a></dt>
 <dd><p>Stack the upper triangular entries of the dataframe above the diagonal
 .. note:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Useful</span> <span class="k">for</span> <span class="n">symmetric</span> <span class="n">dataframes</span> <span class="n">like</span> <span class="n">correlations</span> <span class="ow">or</span> <span class="n">distances</span><span class="o">.</span>
@@ -876,7 +1038,15 @@ with no check that the rows and columns are symmetric.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.stack_triu_where_">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">stack_triu_where_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#stack_triu_where_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.stack_triu_where_" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">stack_triu_where_</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">condition</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#stack_triu_where_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.stack_triu_where_" title="Link to this definition">#</a></dt>
 <dd><p>Stack the upper triangular entries of the dataframe above the diagonal where the condition is True
 .. note:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Useful</span> <span class="k">for</span> <span class="n">symmetric</span> <span class="n">dataframes</span> <span class="n">like</span> <span class="n">correlations</span> <span class="ow">or</span> <span class="n">distances</span><span class="o">.</span>
@@ -905,7 +1075,15 @@ where <code class="docutils literal notranslate"><span class="pre">condition</sp
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.unstack_triu_">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">unstack_triu_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#unstack_triu_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.unstack_triu_" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">unstack_triu_</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">diag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#unstack_triu_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.unstack_triu_" title="Link to this definition">#</a></dt>
 <dd><p>Unstack pandas Series with upper triangular entries to symmetric matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -927,7 +1105,14 @@ If <cite>None</cite>, rows and columns are alphebetically sorted.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.utils.von_neumann_entropy">
-<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">von_neumann_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#von_neumann_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.von_neumann_entropy" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.utils.</span></span><span class="sig-name descname"><span class="pre">von_neumann_entropy</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">tau_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/utils.html#von_neumann_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.utils.von_neumann_entropy" title="Link to this definition">#</a></dt>
 <dd><p>Compute Von Neumann Entropy (VNE) of the data at increasing scales.</p>
 <p>As described in GSPA and PHATE <a class="github reference external" href="https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py">KrishnaswamyLab/spARC</a>, <a class="reference external" href="https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf">https://pdfs.semanticscholar.org/16ab/e92b7630d5b84b904bde97dad9b9fbce406c.pdf</a>.</p>
 <p>Taken from <a class="github reference external" href="https://github.com/KrishnaswamyLab/spARC/blob/main/SPARC/vne.py">KrishnaswamyLab/spARC</a>.</p>
@@ -994,12 +1179,12 @@ If <cite>None</cite>, rows and columns are alphebetically sorted.</p></li>
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="current visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="current pst-show_toc_level nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
-<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current pst-show_toc_level nav section-nav flex-column">
 <li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html#modules">Modules</a><ul class="current nav section-nav flex-column">
@@ -1046,13 +1231,13 @@ If <cite>None</cite>, rows and columns are alphebetically sorted.</p></li>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/reference/generated/netflow.utils.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/reference/generated/netflow.utils.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
 
 </div></div>
               
@@ -1067,8 +1252,8 @@ If <cite>None</cite>, rows and columns are alphebetically sorted.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1079,7 +1264,7 @@ If <cite>None</cite>, rows and columns are alphebetically sorted.</p></li>
 
   <p class="copyright">
     
-      © Copyright 2023-2025, The netflow community.
+      © Copyright 2023-2026, The netflow community.
       <br/>
     
   </p>
@@ -1088,7 +1273,7 @@ If <cite>None</cite>, rows and columns are alphebetically sorted.</p></li>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1102,7 +1287,7 @@ If <cite>None</cite>, rows and columns are alphebetically sorted.</p></li>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
     </div>

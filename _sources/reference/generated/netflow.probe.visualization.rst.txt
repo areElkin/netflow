@@ -1,13 +1,8 @@
-﻿netflow.probe.visualization
+netflow.probe.visualization
 ===========================
 
 .. automodule:: netflow.probe.visualization
 
-   
-   
-   
-
-   
    
    .. rubric:: Functions
 
@@ -22,15 +17,3 @@
       sin_layout
       wavy_curve_layout
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

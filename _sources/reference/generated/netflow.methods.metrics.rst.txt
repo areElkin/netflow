@@ -4,11 +4,6 @@ netflow.methods.metrics
 .. automodule:: netflow.methods.metrics
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -22,15 +17,3 @@ netflow.methods.metrics
       pairwise_observation_wass_distances
       wass_distance
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

@@ -1,0 +1,1164 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cBioPortal data extraction tutorial &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=8e5d96d1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+    <script src="../../_static/documentation_options.js?v=856df6fb"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorial/notebooks/cbioportal_keeper_demo';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.dev" />
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/NF_logo3.png" class="logo__image only-light" alt="netflow v0.0.dev Manual - Home"/>
+    <img src="../../_static/NF_logo3.png" class="logo__image only-dark pst-js-only" alt="netflow v0.0.dev Manual - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items" aria-labelledby="pst-indices-navigation-heading-2">
+  <p id="pst-indices-navigation-heading-2" class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">cBioPortal data extraction tutorial</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="cbioportal-data-extraction-tutorial">
+<h1>cBioPortal data extraction tutorial<a class="headerlink" href="#cbioportal-data-extraction-tutorial" title="Link to this heading">#</a></h1>
+<p>This notebook demonstrates how to:</p>
+<ol class="arabic simple">
+<li><p>Connect to the <a class="reference external" href="https://www.cbioportal.org/">cBioPortal</a> repository for cancer genomics data sets.</p></li>
+<li><p>List and explore cBioPortal studies.</p></li>
+<li><p>View attribute and data type summaries for a selected study.</p></li>
+<li><p>Extract molecular data (mutations, CNA, RNA-seq) and load each into netflow’s <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> for further analysis.</p></li>
+</ol>
+<section id="requires">
+<h2>Requires<a class="headerlink" href="#requires" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Python 3.10</p></li>
+<li><p>The <a class="reference external" href="https://github.com/areElkin/netflow.git">Netflow</a> package</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="import-required-libraries">
+<h2>Import required libraries<a class="headerlink" href="#import-required-libraries" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">netflow.prep.extract</span><span class="w"> </span><span class="kn">import</span> <span class="n">CBioPortalClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netflow.keepers.keeper</span><span class="w"> </span><span class="kn">import</span> <span class="n">Keeper</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="connect-to-cbioportal">
+<h2>Connect to cBioPortal<a class="headerlink" href="#connect-to-cbioportal" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cbio</span> <span class="o">=</span> <span class="n">CBioPortalClient</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Connected to cBioPortal.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Connected to cBioPortal.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="view-all-available-studies">
+<h2>View all available studies<a class="headerlink" href="#view-all-available-studies" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_studies</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">list_studies</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_studies</span><span class="p">)</span><span class="si">}</span><span class="s1"> studies available on cBioPortal.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;First 20 studies:&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_studies</span><span class="p">)[:</span><span class="mi">20</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; * </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>535 studies available on cBioPortal.
+
+First 20 studies:
+ * Breast Cancer (CPTAC GDC, 2025)
+ * Glioma (MSK, Clin Cancer Res 2019)
+ * Osteosarcoma (TARGET GDC, 2025)
+ * Prostate Cancer MDA PCa PDX (MD Anderson, Clin Cancer Res 2024)
+ * Uterine Endometrioid Carcinoma (CPTAC GDC, 2025)
+ * Urothelial Carcinoma (Cornell/Trento, Nat Gen 2016)
+ * Basal Cell Carcinoma (UNIGE, Nat Genet 2016)
+ * Endometrial Carcinoma (TCGA GDC, 2025)
+ * Kidney Renal Clear Cell Carcinoma (TCGA, PanCancer Atlas)
+ * Adenoid Cystic Carcinoma (JHU, Cancer Prev Res 2016)
+ * Uterine Corpus Endometrial Carcinoma (TCGA, PanCancer Atlas)
+ * Colorectal Adenocarcinoma (TCGA, Firehose Legacy)
+ * Lung Adenocarcinoma (CPTAC GDC, 2025)
+ * Breast Invasive Carcinoma (Broad, Nature 2012)
+ * Retinoblastoma cfDNA (MSK, Cancer Med 2020)
+ * Appendiceal Cancer (MSK, J Clin Oncol 2022)
+ * Evolution and co-occurrence of PI3K pathway gene mutations in endometrial carcinoma molecular subtypes at the single-cell level
+ * Urothelial Cancer Patient Derived Organoids (MSK, 2025)
+ * Adrenocortical Carcinoma (TCGA, Firehose Legacy)
+ * Ovarian Cancer - MSK SPECTRUM (MSK, Nature 2022)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for studies by keyword</span>
+<span class="n">keyword</span> <span class="o">=</span> <span class="s1">&#39;MSK-IMPACT&#39;</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_studies</span> <span class="k">if</span> <span class="n">keyword</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Studies matching &quot;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s1">&quot;:&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Studies matching &quot;MSK-IMPACT&quot;:
+  MSK-IMPACT 50K Clinical Sequencing Cohort (MSK, Cancer Cell 2026)
+  MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017)
+  MSK-IMPACT and MSK-ACCESS Mixed Cohort (MSK, Nat Commun 2021)
+  Pan-Cancer MSK-IMPACT MET Validation Cohort (MSK 2022)
+  MSK-IMPACT Heme Tumors (MSK, 2022)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inspect-selected-study">
+<h2>Inspect selected study<a class="headerlink" href="#inspect-selected-study" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">STUDY_NAME</span> <span class="o">=</span> <span class="s1">&#39;MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017)&#39;</span>
+
+<span class="c1"># Study ID and description</span>
+<span class="n">study_id</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_id</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Study ID: </span><span class="si">{</span><span class="n">study_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">desc</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_description</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Description:</span><span class="se">\n</span><span class="si">{</span><span class="n">desc</span><span class="p">[[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;description&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sequencedSampleCount&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Study ID: msk_impact_2017
+
+Description:
+                                                     name                                                             description  sequencedSampleCount
+MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017) Targeted sequencing of 10,000 clinical cases using the MSK-IMPACT assay                 10945
+</pre></div>
+</div>
+</div>
+</div>
+<section id="view-all-molecular-data-types-available-in-this-study">
+<h3>&gt; View all molecular data types available in this study<a class="headerlink" href="#view-all-molecular-data-types-available-in-this-study" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># All molecular data types available in this study</span>
+<span class="n">data_types_df</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_attribute</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">,</span> <span class="s1">&#39;data_types&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Molecular data profiles available:&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">data_types_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Molecular data profiles available:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Copy Number Alterations (MSK-IMPACT)</td>
+      <td>msk_impact_2017_cna</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Mutations (MSK-IMPACT)</td>
+      <td>msk_impact_2017_mutations</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Structural variants</td>
+      <td>msk_impact_2017_structural_variants</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="cancer-type-breakdown">
+<h3>&gt; Cancer-type breakdown<a class="headerlink" href="#cancer-type-breakdown" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cancer_types</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_attribute</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">,</span> <span class="s1">&#39;cancer_types&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Top 10 cancer types by sample count:&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">cancer_types</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Top 10 cancer types by sample count:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>type</th>
+      <th>sampleCount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Non-Small Cell Lung Cancer</td>
+      <td>1668</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Breast Cancer</td>
+      <td>1337</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Colorectal Cancer</td>
+      <td>1007</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Prostate Cancer</td>
+      <td>717</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Glioma</td>
+      <td>553</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Pancreatic Cancer</td>
+      <td>502</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Soft Tissue Sarcoma</td>
+      <td>443</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Bladder Cancer</td>
+      <td>423</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Melanoma</td>
+      <td>365</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Renal Cell Carcinoma</td>
+      <td>361</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="clinical-attributes-available">
+<h3>&gt; Clinical attributes available<a class="headerlink" href="#clinical-attributes-available" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clinical_attrs</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">list_study_attributes</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clinical_attrs</span><span class="p">)</span><span class="si">}</span><span class="s1"> clinical attributes available:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clinical_attrs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>24 clinical attributes available:
+[&#39;CANCER_TYPE&#39;, &#39;CANCER_TYPE_DETAILED&#39;, &#39;DNA_INPUT&#39;, &#39;FRACTION_GENOME_ALTERED&#39;, &#39;MATCHED_STATUS&#39;, &#39;METASTATIC_SITE&#39;, &#39;MUTATION_COUNT&#39;, &#39;ONCOTREE_CODE&#39;, &#39;OS_MONTHS&#39;, &#39;OS_STATUS&#39;, &#39;PRIMARY_SITE&#39;, &#39;SAMPLE_CLASS&#39;, &#39;SAMPLE_COLLECTION_SOURCE&#39;, &#39;SAMPLE_COUNT&#39;, &#39;SAMPLE_COVERAGE&#39;, &#39;SAMPLE_TYPE&#39;, &#39;SEX&#39;, &#39;SMOKING_HISTORY&#39;, &#39;SOMATIC_STATUS&#39;, &#39;SPECIMEN_PRESERVATION_TYPE&#39;, &#39;SPECIMEN_TYPE&#39;, &#39;TMB_NONSYNONYMOUS&#39;, &#39;TUMOR_PURITY&#39;, &#39;VITAL_STATUS&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="extract-data">
+<h2>Extract data<a class="headerlink" href="#extract-data" title="Link to this heading">#</a></h2>
+<section id="clinical-data">
+<h3>&gt; Clinical data<a class="headerlink" href="#clinical-data" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clin_df</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_clinical_data</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Clinical data shape: </span><span class="si">{</span><span class="n">clin_df</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (samples × attributes)&#39;</span><span class="p">)</span>
+<span class="c1"># Display clinical data for first 5 samples</span>
+<span class="n">display</span><span class="p">(</span><span class="n">clin_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clinical data shape: (10945, 7)  (samples × attributes)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>patientId</th>
+      <th>primaryTumorSite</th>
+      <th>sampleType</th>
+      <th>tumorPurity</th>
+      <th>osMonths</th>
+      <th>osStatus</th>
+      <th>osGroup</th>
+    </tr>
+    <tr>
+      <th>sampleId</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>P-0000004-T01-IM3</th>
+      <td>P-0000004</td>
+      <td>Breast</td>
+      <td>Primary</td>
+      <td>50</td>
+      <td>NaN</td>
+      <td>0:LIVING</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>P-0000015-T01-IM3</th>
+      <td>P-0000015</td>
+      <td>Breast</td>
+      <td>Metastasis</td>
+      <td>40</td>
+      <td>NaN</td>
+      <td>1:DECEASED</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>P-0000023-T01-IM3</th>
+      <td>P-0000023</td>
+      <td>Peritoneum</td>
+      <td>Primary</td>
+      <td>30</td>
+      <td>8.71</td>
+      <td>1:DECEASED</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>P-0000024-T01-IM3</th>
+      <td>P-0000024</td>
+      <td>Uterus</td>
+      <td>Metastasis</td>
+      <td>40</td>
+      <td>36.75</td>
+      <td>0:LIVING</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>P-0000025-T01-IM3</th>
+      <td>P-0000025</td>
+      <td>Uterus</td>
+      <td>Primary</td>
+      <td>NaN</td>
+      <td>8.81</td>
+      <td>0:LIVING</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="extract-mutation-data-and-load-into-netflow-s-keeper">
+<h3>&gt; Extract mutation data and load into Netflow’s Keeper<a class="headerlink" href="#extract-mutation-data-and-load-into-netflow-s-keeper" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_mutation_data()</span></code> returns a binary <em>(genes, samples)</em> matrix where 1 indicates gene mutations in a sample , 0 otherwise.</p></li>
+</ul>
+<p><em>Note</em>:</p>
+<ul class="simple">
+<li><p>Data pulls may take a few minutes for a large cohort.</p></li>
+<li><p>Data extraction utilities like <code class="docutils literal notranslate"><span class="pre">get_mutation_data()</span></code> return the raw data (<code class="docutils literal notranslate"><span class="pre">mut_raw</span></code>) and a processed version (<code class="docutils literal notranslate"><span class="pre">mut_proc</span></code>), structured for simplified import to the Keeper. <code class="docutils literal notranslate"><span class="pre">mut_proc</span></code> is a (n_features, n_observations) (or) (n_genes, n_samples) dataframe.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fetching mutation data...&#39;</span><span class="p">)</span>
+<span class="n">mut_raw</span><span class="p">,</span> <span class="n">mut_proc</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_mutation_data</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mutation matrix shape: </span><span class="si">{</span><span class="n">mut_proc</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (genes × samples)&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Fraction of gene/sample pairs mutated: </span><span class="si">{</span><span class="n">mut_proc</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">mut_proc</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">5</span><span class="p">,</span> <span class="p">:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fetching mutation data...
+
+Mutation matrix shape: (413, 10129)  (genes × samples)
+Fraction of gene/sample pairs mutated: 0.0165
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>P-0000004-T01-IM3</th>
+      <th>P-0000015-T01-IM3</th>
+      <th>P-0000023-T01-IM3</th>
+      <th>P-0000024-T01-IM3</th>
+      <th>P-0000025-T01-IM3</th>
+    </tr>
+    <tr>
+      <th>hugoGeneSymbol</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ABL1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>ABRAXAS1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>ACVR1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>AKT1</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>AKT2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialise Keeper with sample IDs from the mutation matrix</span>
+<span class="n">sample_ids</span> <span class="o">=</span> <span class="n">mut_proc</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">keeper</span> <span class="o">=</span> <span class="n">Keeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="n">sample_ids</span><span class="p">)</span>
+
+<span class="c1"># Load mutation data </span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">mut_proc</span><span class="p">,</span> <span class="s1">&#39;mutation&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Keeper data keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Keeper data keys: [&#39;mutation&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># View most frequently mutated genes</span>
+<span class="n">mutation_freq</span> <span class="o">=</span> <span class="n">mut_proc</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Top 10 most frequently mutated genes:&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">mutation_freq</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;n_samples_mutated&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Top 10 most frequently mutated genes:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>n_samples_mutated</th>
+    </tr>
+    <tr>
+      <th>hugoGeneSymbol</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>TP53</th>
+      <td>4538</td>
+    </tr>
+    <tr>
+      <th>KRAS</th>
+      <td>1643</td>
+    </tr>
+    <tr>
+      <th>TERT</th>
+      <td>1460</td>
+    </tr>
+    <tr>
+      <th>PIK3CA</th>
+      <td>1355</td>
+    </tr>
+    <tr>
+      <th>APC</th>
+      <td>1121</td>
+    </tr>
+    <tr>
+      <th>ARID1A</th>
+      <td>875</td>
+    </tr>
+    <tr>
+      <th>KMT2D</th>
+      <td>851</td>
+    </tr>
+    <tr>
+      <th>PTEN</th>
+      <td>665</td>
+    </tr>
+    <tr>
+      <th>KMT2C</th>
+      <td>642</td>
+    </tr>
+    <tr>
+      <th>EGFR</th>
+      <td>636</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="extract-cna-data-and-load-it-into-the-keeper">
+<h3>&gt; Extract CNA data and load it into the Keeper<a class="headerlink" href="#extract-cna-data-and-load-it-into-the-keeper" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">get_cna_data()</span></code> returns an integer <em>(genes, samples)</em>  matrix where -2 represents deep deletion, -1 - shallow deletion, 0 - diploid, 1 - shallow gain, 2-amplification.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fetching CNA data...&#39;</span><span class="p">)</span>
+<span class="n">cna_raw</span><span class="p">,</span> <span class="n">cna_proc</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_cna_data</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">CNA matrix shape: </span><span class="si">{</span><span class="n">cna_raw</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (genes × samples)&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">cna_proc</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fetching CNA data...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Align to keeper&#39;s sample order before loading</span>
+<span class="n">cna_aligned</span> <span class="o">=</span> <span class="n">cna_proc</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">sample_ids</span><span class="p">)</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cna_aligned</span><span class="p">,</span> <span class="s1">&#39;cna&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Keeper data keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="keeper-summary">
+<h2>Keeper summary<a class="headerlink" href="#keeper-summary" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Keeper observation count: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Data modalities loaded:   </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">]  shape: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  dtype: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/tutorial/notebooks/cbioportal_keeper_demo.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023-2026, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

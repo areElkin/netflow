@@ -1,9 +1,8 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="./" >
 
   <head>
     <meta charset="utf-8" />
@@ -27,49 +26,56 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8e5d96d1" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="_static/documentation_options.js?v=856df6fb"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Dec 23, 2025"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -95,7 +101,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -192,11 +198,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -292,11 +305,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
@@ -444,9 +464,9 @@
         <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.__module__">(netflow.pose.organization.TreeNode attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.TreeNode.__repr__">__repr__() (netflow.pose.organization.TreeNode method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._apply_multipletests_safe">_apply_multipletests_safe() (in module netflow.methods.stats)</a>
 </li>
       <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._branch_member_indices">_branch_member_indices() (in module netflow.probe.visualization)</a>
 </li>
@@ -454,9 +474,19 @@
 </li>
       <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._branch_order">_branch_order() (in module netflow.probe.visualization)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation._build_operator_W">_build_operator_W() (in module netflow.methods.network_propagation)</a>
+</li>
       <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper._check_num_observations">_check_num_observations() (netflow.keepers.keeper.Keeper method)</a>
 </li>
       <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper._check_observation_labels">_check_observation_labels() (netflow.keepers.keeper.Keeper method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation._closed_form_solve">_closed_form_solve() (in module netflow.methods.network_propagation)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._coerce_samples_x_features">_coerce_samples_x_features() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._coerce_two_dfs_samples_x_features">_coerce_two_dfs_samples_x_features() (in module netflow.methods.stats)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization._compute_transitions">_compute_transitions() (in module netflow.pose.organization)</a>
 </li>
@@ -480,6 +510,10 @@
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization._dpt_from_augmented_sym_transitions">_dpt_from_augmented_sym_transitions() (in module netflow.pose.organization)</a>
 </li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._feature_chunks">_feature_chunks() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation._fixed_point_rwr">_fixed_point_rwr() (in module netflow.methods.network_propagation)</a>
+</li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree._get_node_from_counter">_get_node_from_counter() (netflow.pose.organization.Tree method)</a>
 </li>
       <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._interbranch_edges">_interbranch_edges() (in module netflow.probe.visualization)</a>
@@ -492,7 +526,17 @@
 </li>
       <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._largest_branch">_largest_branch() (in module netflow.probe.visualization)</a>
 </li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._mwu_mask_chunk">_mwu_mask_chunk() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._mwu_mask_init_worker">_mwu_mask_init_worker() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._mwu_pvals_group_vs_rest">_mwu_pvals_group_vs_rest() (in module netflow.methods.stats)</a>
+</li>
       <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization._neighboring_branches">_neighboring_branches() (in module netflow.probe.visualization)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._pair_chunk">_pair_chunk() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats._pair_init_worker">_pair_init_worker() (in module netflow.methods.stats)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree._search_counter">_search_counter() (netflow.pose.organization.Tree method)</a>
 </li>
@@ -678,6 +722,8 @@
 </li>
       <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.diffuse_multiple_profiles">diffuse_multiple_profiles() (netflow.methods.classes.InfoNet method)</a>
 </li>
+      <li><a href="reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation.diffuse_network_mutation_profiles">diffuse_network_mutation_profiles() (in module netflow.methods.network_propagation)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.methods.classes.html#netflow.methods.classes.InfoNet.diffuse_profile">diffuse_profile() (netflow.methods.classes.InfoNet method)</a>
@@ -718,6 +764,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.edges_from_mutual_knn_indices">edges_from_mutual_knn_indices() (in module netflow.pose.similarity)</a>
 </li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.enrichr">enrichr() (in module netflow.probe.summary)</a>
+</li>
       <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.euc_distance_pairwise_observation_feature_nbhd">euc_distance_pairwise_observation_feature_nbhd() (netflow.keepers.keeper.Keeper method)</a>
 </li>
   </ul></td>
@@ -726,20 +774,34 @@
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.extract_branchings">extract_branchings() (netflow.pose.organization.POSER method)</a>
 </li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.extract_features">extract_features() (in module netflow.probe.summary)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.feature_graph_order_correlation_global">feature_graph_order_correlation_global() (in module netflow.probe.summary)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.feature_graph_order_correlation_global">(netflow.keepers.keeper.Keeper method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.feature_graph_order_correlation_local">feature_graph_order_correlation_local() (in module netflow.probe.summary)</a>
+
+      <ul>
+        <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.feature_graph_order_correlation_local">(netflow.keepers.keeper.Keeper method)</a>
+</li>
+      </ul></li>
       <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.feature_index">feature_index() (netflow.keepers.keeper.DataView method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.feature_labels">feature_labels (netflow.keepers.keeper.DataView property)</a>
 </li>
       <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataKeeper.features_labels">features_labels (netflow.keepers.keeper.DataKeeper property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.utils.html#netflow.utils.find_knee_point">find_knee_point() (in module netflow.utils)</a>
 </li>
       <li><a href="reference/generated/netflow.probe.visualization.html#netflow.probe.visualization.forceatlas2_layout">forceatlas2_layout() (in module netflow.probe.visualization)</a>
@@ -756,18 +818,26 @@
 </li>
       <li><a href="reference/generated/netflow.utils.html#netflow.utils.gauss_window">gauss_window() (in module netflow.utils)</a>
 </li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.get_branch_node_order">get_branch_node_order() (in module netflow.probe.summary)</a>
+</li>
       <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.get_edge_colors">get_edge_colors() (in module netflow.probe.jupyter_app)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.get_global_node_order">get_global_node_order() (in module netflow.probe.summary)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.get_graph_distances">get_graph_distances() (in module netflow.probe.summary)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.get_gsea_library_names">get_gsea_library_names() (in module netflow.probe.summary)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.get_knn_indices_distances">get_knn_indices_distances() (in module netflow.pose.similarity)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_leaves">get_leaves() (netflow.pose.organization.Tree method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_leaves_indices">get_leaves_indices() (netflow.pose.organization.Tree method)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_node">get_node() (netflow.pose.organization.Tree method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.get_node_colors">get_node_colors() (in module netflow.probe.jupyter_app)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.get_node_from_name">get_node_from_name() (netflow.pose.organization.Tree method)</a>
@@ -784,6 +854,8 @@
         <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.graphs">(netflow.keepers.keeper.Keeper property)</a>
 </li>
       </ul></li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.gsea_group_summary">gsea_group_summary() (in module netflow.probe.summary)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -930,6 +1002,8 @@
 </li>
         <li><a href="reference/generated/netflow.methods.metrics.html#module-netflow.methods.metrics">netflow.methods.metrics</a>
 </li>
+        <li><a href="reference/generated/netflow.methods.network_propagation.html#module-netflow.methods.network_propagation">netflow.methods.network_propagation</a>
+</li>
         <li><a href="reference/generated/netflow.methods.stats.html#module-netflow.methods.stats">netflow.methods.stats</a>
 </li>
         <li><a href="reference/generated/netflow.pose.html#module-netflow.pose">netflow.pose</a>
@@ -943,6 +1017,8 @@
         <li><a href="reference/generated/netflow.probe.clustering.html#module-netflow.probe.clustering">netflow.probe.clustering</a>
 </li>
         <li><a href="reference/generated/netflow.probe.jupyter_app.html#module-netflow.probe.jupyter_app">netflow.probe.jupyter_app</a>
+</li>
+        <li><a href="reference/generated/netflow.probe.summary.html#module-netflow.probe.summary">netflow.probe.summary</a>
 </li>
         <li><a href="reference/generated/netflow.probe.visualization.html#module-netflow.probe.visualization">netflow.probe.visualization</a>
 </li>
@@ -1019,6 +1095,13 @@
 </li>
       </ul></li>
       <li>
+    netflow.methods.network_propagation
+
+      <ul>
+        <li><a href="reference/generated/netflow.methods.network_propagation.html#module-netflow.methods.network_propagation">module</a>
+</li>
+      </ul></li>
+      <li>
     netflow.methods.stats
 
       <ul>
@@ -1067,6 +1150,13 @@
 
       <ul>
         <li><a href="reference/generated/netflow.probe.jupyter_app.html#module-netflow.probe.jupyter_app">module</a>
+</li>
+      </ul></li>
+      <li>
+    netflow.probe.summary
+
+      <ul>
+        <li><a href="reference/generated/netflow.probe.summary.html#module-netflow.probe.summary">module</a>
 </li>
       </ul></li>
       <li>
@@ -1143,6 +1233,10 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.optimal_transportation_distance">optimal_transportation_distance() (in module netflow.methods.metrics)</a>
 </li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.ordered_features_correlation_branch">ordered_features_correlation_branch() (in module netflow.probe.summary)</a>
+</li>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.ordered_features_correlation_global">ordered_features_correlation_global() (in module netflow.probe.summary)</a>
+</li>
       <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.OTD">OTD() (in module netflow.methods.metrics)</a>
 </li>
   </ul></td>
@@ -1163,11 +1257,13 @@
 </li>
       <li><a href="reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.pairwise_observation_wass_distances">pairwise_observation_wass_distances() (in module netflow.methods.metrics)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.PCA">PCA() (netflow.keepers.keeper.Keeper method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.perform_stat_test">perform_stat_test() (in module netflow.methods.stats)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.perform_stat_test_matrix">perform_stat_test_matrix() (in module netflow.methods.stats)</a>
 </li>
       <li><a href="reference/generated/netflow.utils.html#netflow.utils.pij">pij() (in module netflow.utils)</a>
 </li>
@@ -1185,12 +1281,14 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.render_pose">render_pose() (in module netflow.probe.jupyter_app)</a>
+      <li><a href="reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.Keeper.rand_offset">rand_offset() (netflow.keepers.keeper.Keeper method)</a>
 </li>
-      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.renderer">renderer() (in module netflow.probe.jupyter_app)</a>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.render_pose">render_pose() (in module netflow.probe.jupyter_app)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.probe.jupyter_app.html#netflow.probe.jupyter_app.renderer">renderer() (in module netflow.probe.jupyter_app)</a>
+</li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.root">root() (netflow.pose.organization.Tree method)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.root_max_ratio">root_max_ratio() (in module netflow.pose.organization)</a>
@@ -1214,6 +1312,8 @@
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.Tree.search_data">search_data() (netflow.pose.organization.Tree method)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.organization.html#netflow.pose.organization.POSER.select_segment">select_segment() (netflow.pose.organization.POSER method)</a>
+</li>
+      <li><a href="reference/generated/netflow.methods.stats.html#netflow.methods.stats.sig_feats_by_group">sig_feats_by_group() (in module netflow.methods.stats)</a>
 </li>
       <li><a href="reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.sigma_knn">sigma_knn() (in module netflow.pose.similarity)</a>
 </li>
@@ -1291,6 +1391,10 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/netflow.probe.summary.html#netflow.probe.summary.unique_significant_features_by_group">unique_significant_features_by_group() (in module netflow.probe.summary)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/netflow.utils.html#netflow.utils.unstack_triu_">unstack_triu_() (in module netflow.utils)</a>
 </li>
   </ul></td>
@@ -1356,8 +1460,8 @@
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="tutorial/index.html">Tutorials</a></li>
@@ -1380,8 +1484,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1392,7 +1496,7 @@
 
   <p class="copyright">
     
-      © Copyright 2023-2025, The netflow community.
+      © Copyright 2023-2026, The netflow community.
       <br/>
     
   </p>
@@ -1401,7 +1505,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1415,7 +1519,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
     </div>

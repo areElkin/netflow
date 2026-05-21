@@ -4,15 +4,6 @@ netflow.keepers.keeper
 .. automodule:: netflow.keepers.keeper
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -24,11 +15,3 @@ netflow.keepers.keeper
       GraphKeeper
       Keeper
    
-   
-
-   
-   
-   
-
-
-

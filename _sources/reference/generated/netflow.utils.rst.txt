@@ -4,11 +4,6 @@
 .. automodule:: netflow.utils
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -34,15 +29,3 @@
       unstack_triu_
       von_neumann_entropy
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

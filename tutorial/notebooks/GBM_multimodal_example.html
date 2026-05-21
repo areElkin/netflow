@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Glioblastoma multiforme multi-omics example &#8212; netflow v0.0.dev Manual</title>
   
@@ -28,29 +27,30 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=8e5d96d1" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=856df6fb"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorial/notebooks/GBM_multimodal_example';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="netflow API" href="../../reference/index.html" />
@@ -58,21 +58,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Dec 23, 2025"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -98,7 +104,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -195,11 +201,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -293,18 +306,32 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
         <div class="sidebar-primary-item">
+
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
@@ -425,7 +452,7 @@
                 <article class="bd-article">
                   
   <section id="glioblastoma-multiforme-multi-omics-example">
-<h1>Glioblastoma multiforme multi-omics example<a class="headerlink" href="#glioblastoma-multiforme-multi-omics-example" title="Permalink to this heading">#</a></h1>
+<h1>Glioblastoma multiforme multi-omics example<a class="headerlink" href="#glioblastoma-multiforme-multi-omics-example" title="Link to this heading">#</a></h1>
 <p><strong>Multi-modal GBM example</strong></p>
 <p>In this notebook, we demonstrate the NetFlow multi-modal pipeline on TCGA multi-omic GBM data.</p>
 <p>The data was pre-processed as described in [1], and can be found in the provided supplementary data.</p>
@@ -439,7 +466,7 @@
 <p>Here, we consider mRNA gene expression for the 7,092 genes in the largest connected component of the HPRD network.</p>
 </section>
 <section id="load-libraries">
-<h1>Load libraries<a class="headerlink" href="#load-libraries" title="Permalink to this heading">#</a></h1>
+<h1>Load libraries<a class="headerlink" href="#load-libraries" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
@@ -479,7 +506,7 @@
 </div>
 </section>
 <section id="colors">
-<h1>Colors<a class="headerlink" href="#colors" title="Permalink to this heading">#</a></h1>
+<h1>Colors<a class="headerlink" href="#colors" title="Link to this heading">#</a></h1>
 <p>First, we set a discrete colormap with more than 20 colors for plotting later</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -499,7 +526,7 @@
 </div>
 </section>
 <section id="directories">
-<h1>Directories<a class="headerlink" href="#directories" title="Permalink to this heading">#</a></h1>
+<h1>Directories<a class="headerlink" href="#directories" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MAIN_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;example_data&#39;</span> <span class="o">/</span> <span class="s1">&#39;GBM&#39;</span> 
@@ -530,7 +557,7 @@
 </div>
 </section>
 <section id="initialize-the-keeper">
-<h1>Initialize the keeper<a class="headerlink" href="#initialize-the-keeper" title="Permalink to this heading">#</a></h1>
+<h1>Initialize the keeper<a class="headerlink" href="#initialize-the-keeper" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span> <span class="o">=</span> <span class="n">nf</span><span class="o">.</span><span class="n">Keeper</span><span class="p">(</span><span class="n">outdir</span><span class="o">=</span><span class="n">RESULTS_DIR</span><span class="p">)</span>
@@ -548,9 +575,9 @@
 </div>
 </section>
 <section id="netflow-pipeline">
-<h1>NetFlow pipeline<a class="headerlink" href="#netflow-pipeline" title="Permalink to this heading">#</a></h1>
+<h1>NetFlow pipeline<a class="headerlink" href="#netflow-pipeline" title="Link to this heading">#</a></h1>
 <section id="compute-distances">
-<h2>Compute distances<a class="headerlink" href="#compute-distances" title="Permalink to this heading">#</a></h2>
+<h2>Compute distances<a class="headerlink" href="#compute-distances" title="Link to this heading">#</a></h2>
 <p>We compute sample-pairwise Euclidean distances on each omic dataset:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -562,7 +589,7 @@
 </div>
 </section>
 <section id="compute-similarities">
-<h2>Compute similarities<a class="headerlink" href="#compute-similarities" title="Permalink to this heading">#</a></h2>
+<h2>Compute similarities<a class="headerlink" href="#compute-similarities" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">12</span>
@@ -579,7 +606,7 @@
 </div>
 </section>
 <section id="fuse-similarities">
-<h2>Fuse similarities<a class="headerlink" href="#fuse-similarities" title="Permalink to this heading">#</a></h2>
+<h2>Fuse similarities<a class="headerlink" href="#fuse-similarities" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -612,7 +639,7 @@
 </div>
 </section>
 <section id="compute-diffusion-distances-from-fused-similarities">
-<h2>Compute diffusion distances from (fused) similarities<a class="headerlink" href="#compute-diffusion-distances-from-fused-similarities" title="Permalink to this heading">#</a></h2>
+<h2>Compute diffusion distances from (fused) similarities<a class="headerlink" href="#compute-diffusion-distances-from-fused-similarities" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">sim_label</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">similarities</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -624,7 +651,7 @@
 </div>
 </section>
 <section id="compute-the-pose">
-<h2>Compute the POSE<a class="headerlink" href="#compute-the-pose" title="Permalink to this heading">#</a></h2>
+<h2>Compute the POSE<a class="headerlink" href="#compute-the-pose" title="Link to this heading">#</a></h2>
 <p>We compute the POSE with respect to the diffusion distances for each individual modality as well as the fused multi-modal distances:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -669,9 +696,9 @@
 </div>
 </section>
 <section id="probing-the-pose">
-<h2>Probing the POSE<a class="headerlink" href="#probing-the-pose" title="Permalink to this heading">#</a></h2>
+<h2>Probing the POSE<a class="headerlink" href="#probing-the-pose" title="Link to this heading">#</a></h2>
 <section id="bl-clustering">
-<h3>BL-clustering<a class="headerlink" href="#bl-clustering" title="Permalink to this heading">#</a></h3>
+<h3>BL-clustering<a class="headerlink" href="#bl-clustering" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">gg</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">:</span>
@@ -686,7 +713,7 @@
 </div>
 </section>
 <section id="survival-analysis">
-<h3>Survival analysis<a class="headerlink" href="#survival-analysis" title="Permalink to this heading">#</a></h3>
+<h3>Survival analysis<a class="headerlink" href="#survival-analysis" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clin</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;survival&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
@@ -784,7 +811,7 @@
 </div>
 </section>
 <section id="interactive-visualization">
-<h3>Interactive visualization<a class="headerlink" href="#interactive-visualization" title="Permalink to this heading">#</a></h3>
+<h3>Interactive visualization<a class="headerlink" href="#interactive-visualization" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;dpt_from_transitions_sym_fused_similarity_max12nn_RNA_methy_miRNA_euc_density_normalized&#39;</span>
@@ -853,7 +880,7 @@
 </div>
 </section>
 <section id="panel-visualization">
-<h3>Panel visualization<a class="headerlink" href="#panel-visualization" title="Permalink to this heading">#</a></h3>
+<h3>Panel visualization<a class="headerlink" href="#panel-visualization" title="Link to this heading">#</a></h3>
 <p>To further investigate the fused POSE, we can look at side-by-side panels of the POSE color-coded by its clustering:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1130,7 +1157,7 @@ dtype: int64
 </div>
 </section>
 <section id="inspect-modality-proportion-of-influence">
-<h3>Inspect modality proportion of influence<a class="headerlink" href="#inspect-modality-proportion-of-influence" title="Permalink to this heading">#</a></h3>
+<h3>Inspect modality proportion of influence<a class="headerlink" href="#inspect-modality-proportion-of-influence" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">refs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;RNA&#39;</span><span class="p">:</span> <span class="s1">&#39;transitions_sym_similarity_max12nn_RNA_profile_euc_density_normalized&#39;</span><span class="p">,</span>
@@ -1167,7 +1194,7 @@ dtype: int64
 </div>
 </div>
 <section id="visualization">
-<h4>visualization<a class="headerlink" href="#visualization" title="Permalink to this heading">#</a></h4>
+<h4>visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1234,7 +1261,7 @@ dtype: int64
 </section>
 </section>
 <section id="references">
-<h1>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h1>
+<h1>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h1>
 <p>[1] Wang, B., Mezlini, A.M., Demir, F., Fiume, M., Tu, Z., Brudno, M., Haibe-Kains, B. and Goldenberg, A., 2014. Similarity network fusion for aggregating data types on a genomic scale. Nature methods, 11(3), pp.333-337. https://www.nature.com/articles/nmeth.2810</p>
 </section>
 
@@ -1283,11 +1310,11 @@ dtype: int64
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="current visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="current pst-show_toc_level nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
-<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">Tutorials</a><ul class="current pst-show_toc_level nav section-nav flex-column">
 <li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html">Keeper tutorial</a></li>
 <li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#load-libraries">Load libraries</a></li>
 <li class="toctree-l2 toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="keeper_tutorial.html#set-up-directories">Set up directories</a></li>
@@ -1357,13 +1384,13 @@ dtype: int64
   </nav></div>
 
   <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/tutorial/notebooks/GBM_multimodal_example.ipynb.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/tutorial/notebooks/GBM_multimodal_example.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
 
 </div></div>
               
@@ -1378,8 +1405,8 @@ dtype: int64
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1390,7 +1417,7 @@ dtype: int64
 
   <p class="copyright">
     
-      © Copyright 2023-2025, The netflow community.
+      © Copyright 2023-2026, The netflow community.
       <br/>
     
   </p>
@@ -1399,7 +1426,7 @@ dtype: int64
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1413,7 +1440,7 @@ dtype: int64
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
     </div>

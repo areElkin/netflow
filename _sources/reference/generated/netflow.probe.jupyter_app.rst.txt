@@ -4,11 +4,6 @@ netflow.probe.jupyter\_app
 .. automodule:: netflow.probe.jupyter_app
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -22,15 +17,3 @@ netflow.probe.jupyter\_app
       render_pose
       renderer
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

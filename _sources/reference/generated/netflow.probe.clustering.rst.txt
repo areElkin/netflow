@@ -4,11 +4,6 @@ netflow.probe.clustering
 .. automodule:: netflow.probe.clustering
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -21,15 +16,3 @@ netflow.probe.clustering
       louvain
       louvain_paritioned
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

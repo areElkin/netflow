@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>netflow.methods.stats &#8212; netflow v0.0.dev Manual</title>
   
@@ -28,51 +27,58 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=8e5d96d1" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=856df6fb"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/netflow.methods.stats';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Tutorials" href="../../tutorial/index.html" />
-    <link rel="prev" title="netflow.methods.metrics" href="netflow.methods.metrics.html" />
+    <link rel="prev" title="netflow.methods.network_propagation" href="netflow.methods.network_propagation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Dec 23, 2025"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -98,7 +104,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -195,11 +201,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -293,18 +306,32 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
         <div class="sidebar-primary-item">
+
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
@@ -322,12 +349,14 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="netflow.probe.html">netflow.probe</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.clustering.html">netflow.probe.clustering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.jupyter_app.html">netflow.probe.jupyter_app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.probe.summary.html">netflow.probe.summary</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.probe.visualization.html">netflow.probe.visualization</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="netflow.methods.html">netflow.methods</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="netflow.methods.network_propagation.html">netflow.methods.network_propagation</a></li>
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">netflow.methods.stats</a></li>
 </ul>
 </details></li>
@@ -412,7 +441,7 @@
                 <article class="bd-article">
                   
   <section id="module-netflow.methods.stats">
-<span id="netflow-methods-stats"></span><h1>netflow.methods.stats<a class="headerlink" href="#module-netflow.methods.stats" title="Permalink to this heading">#</a></h1>
+<span id="netflow-methods-stats"></span><h1>netflow.methods.stats<a class="headerlink" href="#module-netflow.methods.stats" title="Link to this heading">#</a></h1>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
@@ -432,12 +461,18 @@
 <td><p>Perform the Mann-Whitney U rank test on two independent samples.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.stats.perform_stat_test" title="netflow.methods.stats.perform_stat_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">perform_stat_test</span></code></a>(values1, values2, ...)</p></td>
-<td><p></p></td>
+<td><p>Choose and perform a statistical test, matching your original dispatch behavior.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.stat_test" title="netflow.methods.stats.stat_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stat_test</span></code></a>(df1, df2[, test, alpha, method])</p></td>
-<td><p>Perform statistical test between datasets with FWER correction.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.perform_stat_test_matrix" title="netflow.methods.stats.perform_stat_test_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">perform_stat_test_matrix</span></code></a>(X1, X2, *[, test, ...])</p></td>
+<td><p>Compute per-feature p-values comparing two groups of samples.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.stats.t_test" title="netflow.methods.stats.t_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_test</span></code></a>(values1, values2[, alternative])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.stats.sig_feats_by_group" title="netflow.methods.stats.sig_feats_by_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sig_feats_by_group</span></code></a>(groups, feats, *[, test, ...])</p></td>
+<td><p>Compute per-group feature significance vs the rest of the cohort.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.stat_test" title="netflow.methods.stats.stat_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stat_test</span></code></a>(df1, df2[, test, alpha, method, ...])</p></td>
+<td><p>Perform statistical test between groups/datasets and apply multiple test correction.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#netflow.methods.stats.t_test" title="netflow.methods.stats.t_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_test</span></code></a>(values1, values2[, alternative, ...])</p></td>
 <td><p>Calculate the T-test for the means of <em>two independent</em> samples of scores.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#netflow.methods.stats.wilcoxon_signed_rank_test" title="netflow.methods.stats.wilcoxon_signed_rank_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wilcoxon_signed_rank_test</span></code></a>(values1[, ...])</p></td>
@@ -447,8 +482,366 @@
 </table>
 </div>
 <dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._apply_multipletests_safe">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_apply_multipletests_safe</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">pvals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_apply_multipletests_safe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._apply_multipletests_safe" title="Link to this definition">#</a></dt>
+<dd><p>Apply multiple testing correction with stable behavior in presence of NaNs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pvals</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_features</em><em>,</em><em>)</em>) – Raw p-values. May include NaNs (e.g., insufficient samples, constant vectors).</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Family-wise error rate / FDR control level passed to statsmodels.</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Multipletests method name. See <cite>_validate_multitest_method</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>qvals</strong> – Corrected p-values. NaN p-values remain NaN in qvals.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray, shape (n_features,)</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p><cite>statsmodels.stats.multitest.multipletests</cite> does not always behave well with NaNs.
+This helper replaces NaNs with 1.0 for correction, then restores NaNs.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._coerce_samples_x_features">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_coerce_samples_x_features</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">feats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">samples_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'auto'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'columns'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_coerce_samples_x_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._coerce_samples_x_features" title="Link to this definition">#</a></dt>
+<dd><p>Coerce and align inputs so feature data <code class="docutils literal notranslate"><span class="pre">feats</span></code> is shaped as (n_samples, n_features).</p>
+<p>This helper ensures all downstream computations can assume:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X_df</span></code> is a DataFrame with <strong>samples as rows</strong> and <strong>features as columns</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X_df.index</span></code> matches <code class="docutils literal notranslate"><span class="pre">groups.index</span></code> exactly (same sample IDs, same order)</p></li>
+</ul>
+<p>It supports two common input conventions:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">feats</span></code> provided as <strong>samples x features</strong> (samples on index)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feats</span></code> provided as <strong>features x samples</strong> (samples on columns), in which case
+it will be transposed.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>groups</strong> (<em>pandas.Series</em>) – Group labels indexed by sample ID. The sample IDs are used to align
+<code class="docutils literal notranslate"><span class="pre">groups</span></code> and <code class="docutils literal notranslate"><span class="pre">feats</span></code>.</p></li>
+<li><p><strong>feats</strong> (<em>pandas.DataFrame</em>) – <p>Feature matrix in one of two orientations:</p>
+<ul>
+<li><p>samples x features (<code class="docutils literal notranslate"><span class="pre">feats.index</span></code> are sample IDs, <code class="docutils literal notranslate"><span class="pre">feats.columns</span></code> feature names)</p></li>
+<li><p>features x samples (<code class="docutils literal notranslate"><span class="pre">feats.columns</span></code> are sample IDs, <code class="docutils literal notranslate"><span class="pre">feats.index</span></code> feature names)</p></li>
+</ul>
+</p></li>
+<li><p><strong>samples_axis</strong> (<em>{&quot;auto&quot;</em><em>, </em><em>&quot;index&quot;</em><em>, </em><em>&quot;columns&quot;}</em><em>, </em><em>default=&quot;auto&quot;</em>) – <p>Controls how alignment/orientation is determined.</p>
+<ul>
+<li><p>”auto”: infer orientation from whether <code class="docutils literal notranslate"><span class="pre">groups.index</span></code> matches
+<code class="docutils literal notranslate"><span class="pre">feats.index</span></code> or <code class="docutils literal notranslate"><span class="pre">feats.columns</span></code>.</p></li>
+<li><p>”index”: enforce that samples are stored on <code class="docutils literal notranslate"><span class="pre">feats.index</span></code>.</p></li>
+<li><p>”columns”: enforce that samples are stored on <code class="docutils literal notranslate"><span class="pre">feats.columns</span></code>.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>groups_aligned</strong> (<em>pandas.Series</em>) – <code class="docutils literal notranslate"><span class="pre">groups</span></code> reindexed to match the sample order of the returned feature matrix.</p></li>
+<li><p><strong>X_df</strong> (<em>pandas.DataFrame</em>) – Feature matrix oriented as samples x features, with:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">X_df.index</span></code> = sample IDs (same order as <code class="docutils literal notranslate"><span class="pre">groups_aligned.index</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X_df.columns</span></code> = feature names</p></li>
+</ul>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">groups</span></code> is not a Series or <code class="docutils literal notranslate"><span class="pre">feats</span></code> is not a DataFrame.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If the function cannot determine a consistent alignment between
+    <code class="docutils literal notranslate"><span class="pre">groups</span></code> and <code class="docutils literal notranslate"><span class="pre">feats</span></code> under the given <code class="docutils literal notranslate"><span class="pre">samples_axis</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function is intentionally strict: it does <strong>not</strong> silently drop samples.
+If indices do not align, it raises with a clear message rather than
+producing a subtly misaligned analysis.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._coerce_two_dfs_samples_x_features">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_coerce_two_dfs_samples_x_features</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">df1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">df2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">samples_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'auto'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'columns'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'MWU'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'t-test'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'wilcoxon'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'MWU'</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_coerce_two_dfs_samples_x_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._coerce_two_dfs_samples_x_features" title="Link to this definition">#</a></dt>
+<dd><p>Coerce and strictly align two DataFrames so both are shaped as (n_samples, n_features).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df1</strong> (<em>pandas.DataFrame</em>) – Two matrices to compare. Each may be either:
+- samples x features (samples on index), or
+- features x samples (samples on columns)</p></li>
+<li><p><strong>df2</strong> (<em>pandas.DataFrame</em>) – Two matrices to compare. Each may be either:
+- samples x features (samples on index), or
+- features x samples (samples on columns)</p></li>
+<li><p><strong>samples_axis</strong> (<em>{&quot;auto&quot;</em><em>,</em><em>&quot;index&quot;</em><em>,</em><em>&quot;columns&quot;}</em><em>, </em><em>default=&quot;auto&quot;</em>) – <ul>
+<li><p>“index”: enforce samples on index (samples x features)</p></li>
+<li><p>”columns”: enforce samples on columns (features x samples), then transpose</p></li>
+<li><dl class="simple">
+<dt>”auto”: infer strictly from label agreement between df1 and df2:</dt><dd><ul>
+<li><p>if df1.columns == df2.columns and df1.index != df2.index  -&gt; samples_axis=”index”</p></li>
+<li><p>if df1.index == df2.index and df1.columns != df2.columns  -&gt; samples_axis=”columns”</p></li>
+<li><p>if both index and columns match -&gt; ambiguous; choose by heuristic
+(smaller dimension treated as samples); if tie, raise.</p></li>
+<li><p>if neither matches -&gt; raise.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>test</strong> (<em>{&quot;MWU&quot;</em><em>,</em><em>&quot;t-test&quot;</em><em>,</em><em>&quot;wilcoxon&quot;}</em><em>, </em><em>default=&quot;MWU&quot;</em>) – If “wilcoxon”, requires paired samples after coercion (same sample index).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>X1, X2</strong> – Coerced matrices as samples x features, strictly aligned on features.
+If test=”wilcoxon”, also strictly aligned on samples.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If strict alignment is not possible under the requested/inferred orientation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._feature_chunks">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_feature_chunks</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_feature_chunks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._feature_chunks" title="Link to this definition">#</a></dt>
+<dd><p>Partition a number of features into contiguous chunks (half-open intervals).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of features.</p></li>
+<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Chunk size (number of features per chunk). Must be positive.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>chunks</strong> – List of (start, end) chunk intervals covering [0, n_features).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">chunk_size</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._mwu_mask_chunk">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_mwu_mask_chunk</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_mwu_mask_chunk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._mwu_mask_chunk" title="Link to this definition">#</a></dt>
+<dd><p>Compute MWU p-values for a chunk of feature columns given group/rest row indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>task</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a>) – (start, end, g_idx, r_idx) where:
+- start/end define feature interval [start, end)
+- g_idx are sample indices in group
+- r_idx are sample indices in rest</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>start</strong> (<em>int</em>) – Start feature index.</p></li>
+<li><p><strong>pvals_chunk</strong> (<em>numpy.ndarray</em>) – MWU p-values for features in [start, end).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This avoids materializing (n_group x n_features) and (n_rest x n_features) matrices.
+It only gathers the 1D vectors needed per feature.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._mwu_mask_init_worker">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_mwu_mask_init_worker</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">mwu_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_mwu_mask_init_worker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._mwu_mask_init_worker" title="Link to this definition">#</a></dt>
+<dd><p>Initializer for MWU group-vs-rest workers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Full matrix.</p></li>
+<li><p><strong>alternative</strong> (<em>{&quot;two-sided&quot;</em><em>,</em><em>&quot;less&quot;</em><em>,</em><em>&quot;greater&quot;}</em>) – Alternative hypothesis passed to SciPy.</p></li>
+<li><p><strong>nan_policy</strong> (<em>{&quot;omit&quot;</em><em>,</em><em>&quot;raise&quot;}</em>) – NaN handling.</p></li>
+<li><p><strong>mwu_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Extra keyword args forwarded to <code class="docutils literal notranslate"><span class="pre">scipy.stats.mannwhitneyu</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._mwu_pvals_group_vs_rest">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_mwu_pvals_group_vs_rest</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">g_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'two-sided'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'less'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'greater'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'two-sided'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'omit'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raise'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'omit'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'processes'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'threads'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'none'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'processes'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">chunk_size_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">mwu_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_mwu_pvals_group_vs_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._mwu_pvals_group_vs_rest" title="Link to this definition">#</a></dt>
+<dd><p>Compute MWU p-values for group vs rest without materializing submatrices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Full matrix (samples x features).</p></li>
+<li><p><strong>g_mask</strong> (<em>numpy.ndarray</em><em>, </em><em>dtype=bool</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Boolean mask selecting group samples.</p></li>
+<li><p><strong>alternative</strong> (<em>{&quot;two-sided&quot;</em><em>,</em><em>&quot;less&quot;</em><em>,</em><em>&quot;greater&quot;}</em><em>, </em><em>default=&quot;two-sided&quot;</em>) – Alternative hypothesis for MWU.</p></li>
+<li><p><strong>nan_policy</strong> (<em>{&quot;omit&quot;</em><em>,</em><em>&quot;raise&quot;}</em><em>, </em><em>default=&quot;omit&quot;</em>) – NaN handling.</p></li>
+<li><p><strong>n_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=1</em>) – Parallel workers for MWU feature loop.</p></li>
+<li><p><strong>parallel_backend</strong> (<em>{&quot;processes&quot;</em><em>,</em><em>&quot;threads&quot;</em><em>,</em><em>&quot;none&quot;}</em><em>, </em><em>default=&quot;processes&quot;</em>) – Backend for parallel execution.</p></li>
+<li><p><strong>chunk_size_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=256</em>) – Feature chunk size.</p></li>
+<li><p><strong>mwu_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>, </em><em>optional</em>) – Extra keyword args forwarded to <code class="docutils literal notranslate"><span class="pre">scipy.stats.mannwhitneyu</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>pvals</strong> – MWU p-values per feature.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray, shape (n_features,)</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>MWU is not vectorized across features in SciPy, so we compute it feature-wise.
+This implementation is memory efficient because it does not allocate X_group/X_rest.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._pair_chunk">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_pair_chunk</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">start_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_pair_chunk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._pair_chunk" title="Link to this definition">#</a></dt>
+<dd><p>Compute p-values for a chunk of feature columns for MWU or Wilcoxon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>start_end</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>)</em>) – Half-open feature interval (start, end).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>start</strong> (<em>int</em>) – Start feature index.</p></li>
+<li><p><strong>pvals_chunk</strong> (<em>numpy.ndarray</em>) – P-values for features in [start, end).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This is used only for tests that SciPy does not vectorize across features:
+MWU and Wilcoxon.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats._pair_init_worker">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">_pair_init_worker</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">X1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">X2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'MWU'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'t-test'</span></span><span class="p"><span class="pre">]</span></span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#_pair_init_worker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats._pair_init_worker" title="Link to this definition">#</a></dt>
+<dd><p>Initializer for parallel pairwise feature-wise workers (MWU/Wilcoxon).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X1</strong> (<em>numpy.ndarray</em>) – Matrices shaped (n_samples1, n_features) and (n_samples2, n_features).</p></li>
+<li><p><strong>X2</strong> (<em>numpy.ndarray</em>) – Matrices shaped (n_samples1, n_features) and (n_samples2, n_features).</p></li>
+<li><p><strong>test</strong> (<em>{&quot;MWU&quot;</em><em>,</em><em>&quot;wilcoxon&quot;}</em>) – Feature-wise tests supported by this worker.</p></li>
+<li><p><strong>alternative</strong> (<em>{&quot;two-sided&quot;</em><em>,</em><em>&quot;less&quot;</em><em>,</em><em>&quot;greater&quot;}</em>) – Alternative hypothesis passed to SciPy.</p></li>
+<li><p><strong>nan_policy</strong> (<em>{&quot;omit&quot;</em><em>,</em><em>&quot;raise&quot;}</em>) – NaN handling.</p></li>
+<li><p><strong>test_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Extra keyword args forwarded to SciPy test functions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.compute_pearson">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_pearson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_pearson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_pearson" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_pearson</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">row_x</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">row_y</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_pearson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_pearson" title="Link to this definition">#</a></dt>
 <dd><p>Compute Pearson correlation with each row in Y for a given row in X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -471,7 +864,16 @@ The correlation is computed between <code class="docutils literal notranslate"><
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.compute_pearson_parallel">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_pearson_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_processors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_pearson_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_pearson_parallel" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_pearson_parallel</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">num_processors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_pearson_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_pearson_parallel" title="Link to this definition">#</a></dt>
 <dd><p>Compute Pearson correlation between each row of X and all rows of Y in parallel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -485,6 +887,7 @@ Each row represents a variable and each column is an observation of each variabl
 <cite>X</cite> and <cite>Y</cite> must have the same number of columns (i.e., the same observations)
 but they need not have the same number of variables.</p></li>
 <li><p><strong>num_processors</strong> (<cite>int</cite>) – Number of processors to use. Defaults to None (uses all available).</p></li>
+<li><p><strong>chunksize</strong></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -499,7 +902,14 @@ but they need not have the same number of variables.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.compute_spearman">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_spearman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_spearman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_spearman" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_spearman</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">row_x</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">row_y</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_spearman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_spearman" title="Link to this definition">#</a></dt>
 <dd><p>Compute Spearman correlation with each row in Y for a given row in X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -522,7 +932,16 @@ The correlation is computed between <code class="docutils literal notranslate"><
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.compute_spearman_parallel">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_spearman_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_processors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_spearman_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_spearman_parallel" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">compute_spearman_parallel</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">num_processors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#compute_spearman_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.compute_spearman_parallel" title="Link to this definition">#</a></dt>
 <dd><p>Compute Spearman correlation between each row of X and all rows of Y in parallel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -536,6 +955,7 @@ Each row represents a variable and each column is an observation of each variabl
 <cite>X</cite> and <cite>Y</cite> must have the same number of columns (i.e., the same observations)
 but they need not have the same number of variables.</p></li>
 <li><p><strong>num_processors</strong> (<cite>int</cite>) – Number of processors to use. Defaults to None (uses all available).</p></li>
+<li><p><strong>chunksize</strong></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -550,7 +970,16 @@ but they need not have the same number of variables.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.mann_whitney_u_test">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">mann_whitney_u_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#mann_whitney_u_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.mann_whitney_u_test" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">mann_whitney_u_test</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#mann_whitney_u_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.mann_whitney_u_test" title="Link to this definition">#</a></dt>
 <dd><p>Perform the Mann-Whitney U rank test on two independent samples.</p>
 <p>The Mann-Whitney U test is a nonparametric test of the null hypothesis
 that the distribution underlying sample <cite>x</cite> is the same as the
@@ -579,7 +1008,7 @@ sample is greater than the mean of the distribution underlying
 the second sample.</p></li>
 </ul>
 </p></li>
-<li><p><strong>kwarags</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.mannwhitneyu</span></code>.</p></li>
+<li><p><strong>kwargs</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.mannwhitneyu</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -593,33 +1022,305 @@ the second sample.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.perform_stat_test">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">perform_stat_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#perform_stat_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.perform_stat_test" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">perform_stat_test</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#perform_stat_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.perform_stat_test" title="Link to this definition">#</a></dt>
+<dd><p>Choose and perform a statistical test, matching your original dispatch behavior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values1</strong> (<em>array-like</em>) – Vectors of measurements. For ‘wilcoxon’, these are paired vectors.</p></li>
+<li><p><strong>values2</strong> (<em>array-like</em>) – Vectors of measurements. For ‘wilcoxon’, these are paired vectors.</p></li>
+<li><p><strong>test_type</strong> (<em>{&quot;t-test&quot;</em><em>,</em><em>&quot;MWU&quot;</em><em>,</em><em>&quot;wilcoxon&quot;}</em>) – <dl class="simple">
+<dt>Which test to apply:</dt><dd><ul>
+<li><p>”t-test”: two-sample independent t-test</p></li>
+<li><p>”MWU”: Mann–Whitney U test</p></li>
+<li><p>”wilcoxon”: Wilcoxon signed-rank test (paired)</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – <dl class="simple">
+<dt>Forwarded to the underlying SciPy test wrapper. In particular:</dt><dd><ul>
+<li><p>You may pass <cite>alternative</cite> in kwargs for all supported tests.</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>p_value</strong> – P-value from the chosen test.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If an invalid test_type is provided.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.perform_stat_test_matrix">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">perform_stat_test_matrix</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">X1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">X2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'MWU'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'t-test'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'MWU'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'two-sided'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'less'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'greater'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'two-sided'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'omit'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raise'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'omit'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">equal_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'processes'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'threads'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'none'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'processes'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">chunk_size_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#perform_stat_test_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.perform_stat_test_matrix" title="Link to this definition">#</a></dt>
+<dd><p>Compute per-feature p-values comparing two groups of samples.</p>
+<p>This function assumes inputs are <strong>samples x features</strong> and returns a vector
+of p-values of length n_features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X1</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Two matrices of shape (n_samples1, n_features) and (n_samples2, n_features).
+If DataFrames are given, they are converted once to NumPy arrays.</p></li>
+<li><p><strong>X2</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Two matrices of shape (n_samples1, n_features) and (n_samples2, n_features).
+If DataFrames are given, they are converted once to NumPy arrays.</p></li>
+<li><p><strong>test</strong> (<em>{&quot;MWU&quot;</em><em>,</em><em>&quot;t-test&quot;</em><em>,</em><em>&quot;wilcoxon&quot;}</em><em>, </em><em>default=&quot;MWU&quot;</em>) – <p>Statistical test to perform:</p>
+<ul>
+<li><p>”t-test”: independent two-sample t-test via <code class="docutils literal notranslate"><span class="pre">scipy.stats.ttest_ind</span></code> with <code class="docutils literal notranslate"><span class="pre">axis=0</span></code></p></li>
+<li><p>”MWU”: Mann–Whitney U via <code class="docutils literal notranslate"><span class="pre">scipy.stats.mannwhitneyu</span></code> (feature-wise loop/parallel)</p></li>
+<li><p>”wilcoxon”: Wilcoxon signed-rank via <code class="docutils literal notranslate"><span class="pre">scipy.stats.wilcoxon</span></code> (paired; requires same n_samples)</p></li>
+</ul>
+</p></li>
+<li><p><strong>alternative</strong> (<em>{&quot;two-sided&quot;</em><em>,</em><em>&quot;less&quot;</em><em>,</em><em>&quot;greater&quot;}</em><em>, </em><em>default=&quot;two-sided&quot;</em>) – Alternative hypothesis passed to SciPy.</p></li>
+<li><p><strong>nan_policy</strong> (<em>{&quot;omit&quot;</em><em>,</em><em>&quot;raise&quot;}</em><em>, </em><em>default=&quot;omit&quot;</em>) – NaN handling:
+- “omit”: omit NaNs feature-wise (t-test uses SciPy nan_policy; MWU/Wilcoxon omit manually)
+- “raise”: raise if NaNs are present (t-test uses SciPy; MWU/Wilcoxon will yield NaNs or raise upstream)</p></li>
+<li><p><strong>equal_var</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Only used for “t-test”. False means Welch’s t-test.</p></li>
+<li><p><strong>n_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=1</em>) – Number of workers for MWU/Wilcoxon feature loops. If 1, runs serially.</p></li>
+<li><p><strong>parallel_backend</strong> (<em>{&quot;processes&quot;</em><em>,</em><em>&quot;threads&quot;</em><em>,</em><em>&quot;none&quot;}</em><em>, </em><em>default=&quot;processes&quot;</em>) – Backend used for MWU/Wilcoxon parallel execution.</p></li>
+<li><p><strong>chunk_size_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=256</em>) – Number of features per parallel chunk for MWU/Wilcoxon.</p></li>
+<li><p><strong>test_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>, </em><em>optional</em>) – Extra keyword args forwarded to the underlying SciPy test.
+- MWU: forwarded to <code class="docutils literal notranslate"><span class="pre">mannwhitneyu</span></code>
+- Wilcoxon: forwarded to <code class="docutils literal notranslate"><span class="pre">wilcoxon</span></code>
+- t-test: forwarded to <code class="docutils literal notranslate"><span class="pre">ttest_ind</span></code> (in addition to alternative/equal_var/nan_policy)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>pvals</strong> – Raw p-values per feature.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray, shape (n_features,)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If feature dimensions mismatch, or if wilcoxon is requested with mismatched sample counts.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Why SciPy t-test is enough here:
+- <code class="docutils literal notranslate"><span class="pre">ttest_ind</span></code> supports vectorization across features with <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>,</p>
+<blockquote>
+<div><p>so there is no Python loop per feature.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Using SciPy directly keeps this implementation simple and robust.</p></li>
+</ul>
+<p>Why MWU/Wilcoxon still loop:
+- SciPy does not vectorize these tests across features, so looping (and optional parallelism)</p>
+<blockquote>
+<div><p>is necessary if you want one p-value per feature.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="netflow.methods.stats.sig_feats_by_group">
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">sig_feats_by_group</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">feats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'MWU'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'t-test'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'MWU'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fdr_bh'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">min_group_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">samples_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'auto'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'columns'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'two-sided'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'less'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'greater'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'two-sided'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'omit'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raise'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'omit'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">equal_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'processes'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'threads'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'none'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'processes'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">chunk_size_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">return_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'dict'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'wide'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'wide'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">add_effect_sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">log2fc_pseudocount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-09</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#sig_feats_by_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.sig_feats_by_group" title="Link to this definition">#</a></dt>
+<dd><p>Compute per-group feature significance vs the rest of the cohort.</p>
+<p>For each group label <cite>g</cite>, compare samples in <cite>g</cite> vs all other samples,
+producing per-feature p-values and multiple-test-corrected p-values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>groups</strong> (<em>pandas.Series</em>) – Group labels indexed by sample ID.</p></li>
+<li><p><strong>feats</strong> (<em>pandas.DataFrame</em>) – <p>Feature matrix in either orientation:
+- samples x features (samples on index) or
+- features x samples (samples on columns)</p>
+<p><cite>samples_axis</cite> controls inference/forcing of orientation.</p>
+</p></li>
+<li><p><strong>test</strong> (<em>{&quot;MWU&quot;</em><em>,</em><em>&quot;t-test&quot;</em><em>,</em><em>&quot;wilcoxon&quot;}</em><em>, </em><em>default=&quot;MWU&quot;</em>) – <p>Statistical test to perform.
+- “MWU”: Mann–Whitney U (unpaired, rank-based)
+- “t-test”: independent two-sample t-test (Welch by default)
+- “wilcoxon”: Wilcoxon signed-rank (paired)</p>
+<p>IMPORTANT: “wilcoxon” is not a generic group-vs-rest test (paired design).
+This function will raise if test=”wilcoxon”.</p>
+</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.05</em>) – Error rate for multiple testing correction.</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default=&quot;fdr_bh&quot;</em>) – <p>Multiple test correction method.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">bonferroni</span></code> : one-step correction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sidak</span></code> : one-step correction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">holm-sidak</span></code> : step down method using Sidak adjustments</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">holm</span></code> : step-down method using Bonferroni adjustments</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">simes-hochberg</span></code> : step-up method  (independent)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hommel</span></code> : closed method based on Simes tests (non-negative)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fdr_bh</span></code> : Benjamini/Hochberg  (non-negative)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fdr_by</span></code> : Benjamini/Yekutieli (negative)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fdr_tsbh</span></code> : two stage fdr correction (non-negative)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fdr_tsbky</span></code> : two stage fdr correction (non-negative)</p></li>
+</ul>
+</p></li>
+<li><p><strong>min_group_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=10</em>) – Minimum number of samples required for a group to be tested.
+Must be &gt;= 3.</p></li>
+<li><p><strong>samples_axis</strong> (<em>{&quot;auto&quot;</em><em>,</em><em>&quot;index&quot;</em><em>,</em><em>&quot;columns&quot;}</em><em>, </em><em>default=&quot;auto&quot;</em>) – Orientation control passed to <cite>_coerce_samples_x_features</cite>.</p></li>
+<li><p><strong>alternative</strong> (<em>{&quot;two-sided&quot;</em><em>,</em><em>&quot;less&quot;</em><em>,</em><em>&quot;greater&quot;}</em><em>, </em><em>default=&quot;two-sided&quot;</em>) – Alternative hypothesis.</p></li>
+<li><p><strong>nan_policy</strong> (<em>{&quot;omit&quot;</em><em>,</em><em>&quot;raise&quot;}</em><em>, </em><em>default=&quot;omit&quot;</em>) – NaN handling.</p></li>
+<li><p><strong>equal_var</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Used for t-test only. False means Welch’s t-test.</p></li>
+<li><p><strong>n_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=1</em>) – Workers for MWU feature-wise computation. If 1, runs serially.</p></li>
+<li><p><strong>parallel_backend</strong> (<em>{&quot;processes&quot;</em><em>,</em><em>&quot;threads&quot;</em><em>,</em><em>&quot;none&quot;}</em><em>, </em><em>default=&quot;processes&quot;</em>) – Backend for MWU parallelism.</p></li>
+<li><p><strong>chunk_size_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=256</em>) – Feature chunk size for MWU parallelism.</p></li>
+<li><p><strong>test_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>, </em><em>optional</em>) – Extra kwargs forwarded to SciPy test functions.</p></li>
+<li><p><strong>top_n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, keep only the top_n features per group after sorting
+by corrected p-value then raw p-value.</p></li>
+<li><p><strong>return_type</strong> (<em>{&quot;wide&quot;</em><em>, </em><em>&quot;dict&quot;}</em><em>, </em><em>default=False</em>) – If “wide” (default), return a wide DataFrame with MultiIndex columns (group, metric).
+If “dict”, return a dict mapping group -&gt; per-group record DataFrame.</p></li>
+<li><p><strong>add_effect_sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – <p>If <cite>True</cite>, include effect size summaries per feature:</p>
+<ul>
+<li><p>n_in: number of samples within group (constant across features)</p></li>
+<li><p>n_out: number of samples outside group (constant across features)</p></li>
+<li><p>mean_in: mean feature value within group</p></li>
+<li><p>mean_out: mean feature value outside group</p></li>
+<li><p>mean_diff: mean_in - mean_out</p></li>
+<li><p>log2fc: log2((mean_in + pseudocount) / (mean_out + pseudocount))</p></li>
+</ul>
+</p></li>
+<li><p><strong>log2fc_pseudocount</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=1e-9</em>) – Pseudocount added to means for log2 fold-change to avoid division by zero
+and log(0). Only used when <cite>add_effect_sizes=True</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>records_full</strong> –</p>
+<dl class="simple">
+<dt>If return_type=”wide”:</dt><dd><p>DataFrame with index=features and columns MultiIndex (group, metric),
+where metric in {“p-value”,”corrected p-value”}.</p>
+</dd>
+<dt>If return_type=”dict”:</dt><dd><p>dict[group_label -&gt; DataFrame(index=features, columns=[“p-value”,”corrected p-value”])]
+Each per-group DataFrame is sorted by corrected p-value then p-value.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a> or pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If min_group_size &lt; 3, method invalid, alignment fails, or test=”wilcoxon”.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>t-test uses SciPy’s vectorized implementation across features via axis=0.</p></li>
+<li><p>MWU is computed feature-wise (SciPy is not vectorized). This implementation
+avoids large submatrix allocations by gathering per-feature vectors via indices.</p></li>
+</ul>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.stat_test">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">stat_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MWU'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fdr_bh'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#stat_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.stat_test" title="Permalink to this definition">#</a></dt>
-<dd><p>Perform statistical test between datasets with FWER correction.</p>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">stat_test</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">df1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">df2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'MWU'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'t-test'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'MWU'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fdr_bh'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">samples_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'auto'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'index'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'columns'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'two-sided'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'less'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'greater'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'two-sided'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">nan_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'omit'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'raise'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'omit'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">equal_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'processes'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'threads'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'none'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'processes'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">chunk_size_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">test_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#stat_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.stat_test" title="Link to this definition">#</a></dt>
+<dd><p>Perform statistical test between groups/datasets and apply multiple test correction.</p>
+<p>This compares <cite>df1</cite> vs <cite>df2</cite> feature-by-feature, returning raw and corrected p-values.</p>
 <p>The statistical tests are Computed via <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df1</strong> (<cite>pandas.DataFrame</cite>) – The measurements, where rows are features and columns are observations.
+<li><p><strong>df1</strong> (<cite>pandas.DataFrame</cite>) – <p>The measurements, where rows are features and columns are observations.
 The dataframes  must have the same number of features (rows).
 If <code class="docutils literal notranslate"><span class="pre">test='wilcoxon'</span></code>, they must also have the same number of
-observationas (columns).</p></li>
-<li><p><strong>df2</strong> (<cite>pandas.DataFrame</cite>) – The measurements, where rows are features and columns are observations.
+observationas (columns).</p>
+<p>Note: Can now handle datasets oriented as:</p>
+<ul>
+<li><p>samples x features  (samples on index, features on columns)</p></li>
+<li><p>features x samples  (features on index, samples on columns)</p></li>
+</ul>
+<p>The <cite>samples_axis</cite> argument controls whether orientation is inferred or enforced.</p>
+<p>If <cite>test=”wilcoxon”</cite> (paired), the sample dimension must match and be aligned
+after coercion.</p>
+</p></li>
+<li><p><strong>df2</strong> (<cite>pandas.DataFrame</cite>) – <p>The measurements, where rows are features and columns are observations.
 The dataframes  must have the same number of features (rows).
 If <code class="docutils literal notranslate"><span class="pre">test='wilcoxon'</span></code>, they must also have the same number of
-observationas (columns).</p></li>
-<li><p><strong>test</strong> (<cite>str</cite>) – <p>The statistical test that should be performed. Options are:</p>
+observationas (columns).</p>
+<p>Note: Can now handle datasets oriented as:</p>
+<ul>
+<li><p>samples x features  (samples on index, features on columns)</p></li>
+<li><p>features x samples  (features on index, samples on columns)</p></li>
+</ul>
+<p>The <cite>samples_axis</cite> argument controls whether orientation is inferred or enforced.</p>
+<p>If <cite>test=”wilcoxon”</cite> (paired), the sample dimension must match and be aligned
+after coercion.</p>
+</p></li>
+<li><p><strong>test</strong> (<em>{&quot;MWU&quot;</em><em>,</em><em>&quot;t-test&quot;</em><em>,</em><em>&quot;wilcoxon&quot;}</em>) – <p>The statistical test that should be performed. Options are:</p>
 <ul>
 <li><p>’MWU’ : Mann Whitney-U Test (default).</p></li>
 <li><p>’t-test’ : T-test</p></li>
 <li><p>’wilcoxon’ : Wilcoxon Signed Rank Test</p></li>
 </ul>
 </p></li>
-<li><p><strong>alpha</strong> (<cite>float</cite>) – The family-wise error rate (FWER), should be between 0 and 1.</p></li>
+<li><p><strong>alpha</strong> (<cite>float</cite>) – The family-wise error rate (FWER) passed to statsmodels <cite>multipletests</cite>, should be between 0 and 1.</p></li>
 <li><p><strong>method</strong> (<cite>str</cite>) – <p>Method for multiple test correction, default=’fdr_bh’.</p>
 <p>Options:</p>
 <ul>
@@ -635,22 +1336,85 @@ observationas (columns).</p></li>
 <li><p><cite>fdr_tsbky</cite> : two stage fdr correction (non-negative)</p></li>
 </ul>
 </p></li>
-<li><p><strong>kwargs</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code> for performing the
+<li><p><strong>samples_axis</strong> (<em>{&quot;auto&quot;</em><em>,</em><em>&quot;index&quot;</em><em>,</em><em>&quot;columns&quot;}</em><em>, </em><em>default=&quot;auto&quot;</em>) – <p>Orientation control:</p>
+<ul>
+<li><p>”index”: enforce samples on df.index (df is samples x features)</p></li>
+<li><p>”columns”: enforce samples on df.columns (df is features x samples), then transpose</p></li>
+<li><p>”auto”: infer orientation strictly from label agreement between df1 and df2
+(see <cite>_coerce_two_dfs_samples_x_features</cite> for details)</p></li>
+</ul>
+</p></li>
+<li><p><strong>alternative</strong> (<em>{&quot;two-sided&quot;</em><em>,</em><em>&quot;less&quot;</em><em>,</em><em>&quot;greater&quot;}</em><em>, </em><em>default=&quot;two-sided&quot;</em>) – Alternative hypothesis passed to the underlying SciPy test.</p></li>
+<li><p><strong>nan_policy</strong> (<em>{&quot;omit&quot;</em><em>,</em><em>&quot;raise&quot;}</em><em>, </em><em>default=&quot;omit&quot;</em>) – NaN handling. For t-test, this is passed to SciPy. For MWU/Wilcoxon, NaNs are
+handled feature-wise by the underlying implementation.</p></li>
+<li><p><strong>equal_var</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Used for t-test only. False means Welch’s t-test.</p></li>
+<li><p><strong>n_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=1</em>) – Workers for MWU/Wilcoxon (feature-wise). If 1, runs serially.</p></li>
+<li><p><strong>parallel_backend</strong> (<em>{&quot;processes&quot;</em><em>,</em><em>&quot;threads&quot;</em><em>,</em><em>&quot;none&quot;}</em><em>, </em><em>default=&quot;processes&quot;</em>) – Backend for MWU/Wilcoxon.</p></li>
+<li><p><strong>chunk_size_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=256</em>) – Feature chunk size for MWU/Wilcoxon.</p></li>
+<li><p><strong>test_kwargs</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code> for performing the
 statistical test.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>record</strong> – Record of each feature, p-value, and corrected p-value.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>record</strong> (<cite>pandas.DataFrame</cite>) – DataFrame indexed by feature name with columns:
+- “p-value”
+- “corrected p-value”</p></li>
+<li><p><em>DataFrame indexed by feature name with columns</em> –</p>
+<ul>
+<li><p>“p-value”</p></li>
+<li><p>”corrected p-value”</p></li>
+</ul>
+</li>
+</ul>
+</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>For unpaired tests (“MWU” and “t-test”), this wrapper routes to the optimized
+group-vs-rest engine <cite>_sig_feats_by_group_core</cite> by constructing a two-group
+grouping vector over the concatenated observations.</p></li>
+<li><dl class="simple">
+<dt>MWU can be parallelized across feature chunks using additional kwargs:</dt><dd><ul>
+<li><p>n_jobs (int): number of workers (default 1)</p></li>
+<li><p>parallel_backend ({“processes”,”threads”,”none”}): backend (default “processes”)</p></li>
+<li><p>chunk_size_features (int): features per chunk (default 256)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>For “wilcoxon” (paired), a paired signed-rank test is computed between df1 and df2 columns, feature-wise.</p></li>
+<li><dl class="simple">
+<dt>These keys (if present) are <strong>consumed by the wrapper</strong> and not forwarded to SciPy:</dt><dd><ul>
+<li><p>alternative : {“two-sided”,”less”,”greater”} (default “two-sided”)</p></li>
+<li><p>nan_policy : {“omit”,”raise”} (default “omit”)
+* For t-test, this is passed to SciPy.
+* For MWU/wilcoxon, NaNs are omitted feature-wise when nan_policy=”omit”.</p></li>
+<li><p>equal_var : bool (default False) for t-test (Welch vs pooled)</p></li>
+<li><p>n_jobs : int (default 1) for MWU parallelism</p></li>
+<li><p>parallel_backend : {“processes”,”threads”,”none”} (default “processes”) for MWU</p></li>
+<li><p>chunk_size_features : int (default 256) for MWU</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.t_test">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">t_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#t_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.t_test" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">t_test</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">values2</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">equal_var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#t_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.t_test" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the T-test for the means of <em>two independent</em> samples of scores.</p>
 <p>This is a test for the null hypothesis that 2 independent samples
 have identical average (expected) values. This test assumes that the
@@ -678,7 +1442,9 @@ sample is greater than the mean of the distribution underlying
 the second sample.</p></li>
 </ul>
 </p></li>
-<li><p><strong>kwarags</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.ttest_ind</span></code>.</p></li>
+<li><p><strong>equal_var</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.ttest_ind</span></code>; default False corresponds to Welch’s t-test.
+If True, performs the standard independent 2 sample test that assumes equal population variances.</p></li>
+<li><p><strong>kwargs</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.ttest_ind</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -692,7 +1458,16 @@ the second sample.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netflow.methods.stats.wilcoxon_signed_rank_test">
-<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">wilcoxon_signed_rank_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#wilcoxon_signed_rank_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.wilcoxon_signed_rank_test" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">netflow.methods.stats.</span></span><span class="sig-name descname"><span class="pre">wilcoxon_signed_rank_test</span></span><span class="sig-paren">(</span>
+
+<dl>
+<dd><em class="sig-param"><span class="n"><span class="pre">values1</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">values2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'two-sided'</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em>,</dd>
+</dl>
+
+<span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/methods/stats.html#wilcoxon_signed_rank_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.methods.stats.wilcoxon_signed_rank_test" title="Link to this definition">#</a></dt>
 <dd><p>The Wilcoxon signed-rank test.</p>
 <p>The Wilcoxon signed-rank test tests the null hypothesis that two
 related paired samples come from the same distribution. In particular,
@@ -722,7 +1497,7 @@ sample is greater than the mean of the distribution underlying
 the second sample.</p></li>
 </ul>
 </p></li>
-<li><p><strong>kwarags</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.wilcoxon</span></code>.</p></li>
+<li><p><strong>kwargs</strong> (<cite>dict</cite>) – Key-word arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.wilcoxon</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -747,12 +1522,12 @@ the second sample.</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="netflow.methods.metrics.html"
+       href="netflow.methods.network_propagation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">netflow.methods.metrics</p>
+        <p class="prev-next-title">netflow.methods.network_propagation</p>
       </div>
     </a>
     <a class="right-next"
@@ -781,12 +1556,12 @@ the second sample.</p></li>
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="current visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="current pst-show_toc_level nav section-nav flex-column">
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../building/index.html">Installation</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../overview/index.html">User guide</a></li>
 <li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../tutorial/index.html">Tutorials</a></li>
-<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current visible nav section-nav flex-column">
+<li class="toctree-l1 current toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html">API reference</a><ul class="current pst-show_toc_level nav section-nav flex-column">
 <li class="toctree-l2 current toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="../index.html#api-definition">API definition</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l3 current toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html">netflow</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l4 current toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="../main_namespace.html#modules">Modules</a><ul class="current nav section-nav flex-column">
@@ -796,13 +1571,25 @@ the second sample.</p></li>
 <li class="toctree-l5 current toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.html">netflow.methods</a><ul class="current nav section-nav flex-column">
 <li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.classes.html">netflow.methods.classes</a></li>
 <li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.metrics.html">netflow.methods.metrics</a></li>
+<li class="toctree-l6 toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="netflow.methods.network_propagation.html">netflow.methods.network_propagation</a></li>
 <li class="toctree-l6 current toc-h6 nav-item toc-entry"><a class="current reference internal nav-link" href="#">netflow.methods.stats</a><ul class="nav section-nav flex-column">
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._apply_multipletests_safe"><code class="docutils literal notranslate"><span class="pre">_apply_multipletests_safe()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._coerce_samples_x_features"><code class="docutils literal notranslate"><span class="pre">_coerce_samples_x_features()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._coerce_two_dfs_samples_x_features"><code class="docutils literal notranslate"><span class="pre">_coerce_two_dfs_samples_x_features()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._feature_chunks"><code class="docutils literal notranslate"><span class="pre">_feature_chunks()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._mwu_mask_chunk"><code class="docutils literal notranslate"><span class="pre">_mwu_mask_chunk()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._mwu_mask_init_worker"><code class="docutils literal notranslate"><span class="pre">_mwu_mask_init_worker()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._mwu_pvals_group_vs_rest"><code class="docutils literal notranslate"><span class="pre">_mwu_pvals_group_vs_rest()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._pair_chunk"><code class="docutils literal notranslate"><span class="pre">_pair_chunk()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats._pair_init_worker"><code class="docutils literal notranslate"><span class="pre">_pair_init_worker()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.compute_pearson"><code class="docutils literal notranslate"><span class="pre">compute_pearson()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.compute_pearson_parallel"><code class="docutils literal notranslate"><span class="pre">compute_pearson_parallel()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.compute_spearman"><code class="docutils literal notranslate"><span class="pre">compute_spearman()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.compute_spearman_parallel"><code class="docutils literal notranslate"><span class="pre">compute_spearman_parallel()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.mann_whitney_u_test"><code class="docutils literal notranslate"><span class="pre">mann_whitney_u_test()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.perform_stat_test"><code class="docutils literal notranslate"><span class="pre">perform_stat_test()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.perform_stat_test_matrix"><code class="docutils literal notranslate"><span class="pre">perform_stat_test_matrix()</span></code></a></li>
+<li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.sig_feats_by_group"><code class="docutils literal notranslate"><span class="pre">sig_feats_by_group()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.stat_test"><code class="docutils literal notranslate"><span class="pre">stat_test()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.t_test"><code class="docutils literal notranslate"><span class="pre">t_test()</span></code></a></li>
 <li class="toctree-l7 toc-h7 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.methods.stats.wilcoxon_signed_rank_test"><code class="docutils literal notranslate"><span class="pre">wilcoxon_signed_rank_test()</span></code></a></li>
@@ -827,13 +1614,13 @@ the second sample.</p></li>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/reference/generated/netflow.methods.stats.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/reference/generated/netflow.methods.stats.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
 
 </div></div>
               
@@ -848,8 +1635,8 @@ the second sample.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -860,7 +1647,7 @@ the second sample.</p></li>
 
   <p class="copyright">
     
-      © Copyright 2023-2025, The netflow community.
+      © Copyright 2023-2026, The netflow community.
       <br/>
     
   </p>
@@ -869,7 +1656,7 @@ the second sample.</p></li>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -883,7 +1670,7 @@ the second sample.</p></li>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
     </div>

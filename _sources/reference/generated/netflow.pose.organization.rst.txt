@@ -4,11 +4,6 @@ netflow.pose.organization
 .. automodule:: netflow.pose.organization
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -21,10 +16,6 @@ netflow.pose.organization
       get_pose
       root_max_ratio
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -33,11 +24,3 @@ netflow.pose.organization
       Tree
       TreeNode
    
-   
-
-   
-   
-   
-
-
-

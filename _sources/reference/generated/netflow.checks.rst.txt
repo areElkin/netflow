@@ -4,11 +4,6 @@
 .. automodule:: netflow.checks
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -22,15 +17,3 @@
       check_matrix_nonnegative
       check_symmetric
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

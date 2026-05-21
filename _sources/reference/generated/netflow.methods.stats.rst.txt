@@ -4,11 +4,6 @@ netflow.methods.stats
 .. automodule:: netflow.methods.stats
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,19 +14,9 @@ netflow.methods.stats
       compute_spearman_parallel
       mann_whitney_u_test
       perform_stat_test
+      perform_stat_test_matrix
+      sig_feats_by_group
       stat_test
       t_test
       wilcoxon_signed_rank_test
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

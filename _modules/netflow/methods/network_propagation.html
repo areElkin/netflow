@@ -1,0 +1,921 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>netflow.methods.network_propagation &#8212; netflow v0.0.dev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=8e5d96d1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+    <script src="../../../_static/documentation_options.js?v=856df6fb"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/netflow/methods/network_propagation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.dev" />
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/NF_logo3.png" class="logo__image only-light" alt="netflow v0.0.dev Manual - Home"/>
+    <img src="../../../_static/NF_logo3.png" class="logo__image only-dark pst-js-only" alt="netflow v0.0.dev Manual - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorial/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reference/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../building/index.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../overview/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorial/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reference/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item"><nav class="sidebar-indices-items" aria-labelledby="pst-indices-navigation-heading-2">
+  <p id="pst-indices-navigation-heading-2" class="sidebar-indices-items__title" role="heading" aria-level="1">Indices</p>
+  <ul class="indices-link">
+        <li class="toctree-l1">
+          <a class="reference internal"
+             href="../../../genindex.html"
+             accesskey="I">General Index</a>
+        </li>
+        <li class="toctree-l1">
+          <a class="reference internal" href="../../../py-modindex.html">Python Module Index</a>
+        </li>
+  </ul>
+</nav></div>
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">netflow.methods.network_propagation</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for netflow.methods.network_propagation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse.linalg</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">spla</span>
+
+
+<span class="n">TransitionNorm</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;random_walk&quot;</span><span class="p">,</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">]</span>
+<span class="n">Propagation</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;rwr&quot;</span><span class="p">,</span> <span class="s2">&quot;heat_kernel&quot;</span><span class="p">,</span> <span class="s2">&quot;laplacian_solve&quot;</span><span class="p">]</span>
+<span class="n">SolveMode</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;iter&quot;</span><span class="p">,</span> <span class="s2">&quot;closed_form&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="diffuse_network_mutation_profiles">
+<a class="viewcode-back" href="../../../reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation.diffuse_network_mutation_profiles">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">diffuse_network_mutation_profiles</span><span class="p">(</span>
+        <span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
+        <span class="c1"># --- transition operator ---</span>
+        <span class="n">transition_norm</span><span class="p">:</span> <span class="n">TransitionNorm</span> <span class="o">=</span> <span class="s2">&quot;random_walk&quot;</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># --- propagation choice ---</span>
+        <span class="n">propagation</span><span class="p">:</span> <span class="n">Propagation</span> <span class="o">=</span> <span class="s2">&quot;rwr&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>  <span class="c1"># RWR</span>
+        <span class="n">t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># heat kernel</span>
+        <span class="n">lam</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># for Laplacian solve</span>
+        <span class="c1"># --- solver controls ---</span>
+        <span class="n">solve_mode</span><span class="p">:</span> <span class="n">SolveMode</span> <span class="o">=</span> <span class="s2">&quot;iter&quot;</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+        <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+        <span class="n">chunksize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute diffused (network-propagated) profiles for each sample.</span>
+
+<span class="sd">    Given a feature network ``G`` (e.g., an undirected PPI) and an input feature matrix</span>
+<span class="sd">    X (features x samples, often binary 0/1, e.g., mutations) given by ``data``, compute the</span>
+<span class="sd">    diffused / network-smoothed profiles matrix ``X_out`` (same shape/order) for each sample</span>
+<span class="sd">    by propagating signal along network edges.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : nx.Graph</span>
+<span class="sd">        Feature network (e.g., nodes are genes).</span>
+<span class="sd">        Node IDs must match the IDs in the input ``data`` matrix row index.</span>
+<span class="sd">    data : {`str`, `pd.DataFrame`}</span>
+<span class="sd">        Feature-by-sample data matrix (rows=features, columns=samples)</span>
+<span class="sd">    transition_norm : {&quot;random_walk&quot;, &quot;symmetric&quot;}, default=&quot;random_walk&quot;</span>
+<span class="sd">        How to normalize adjacency into the transition matrix / diffusion operator W.</span>
+
+<span class="sd">        Let A be adjacency and D the diagonal degree matrix (D_ii = sum_j A_ij).</span>
+<span class="sd">        We construct a sparse operator W used via left-multiplication: W @ X.</span>
+
+<span class="sd">        transition_norm options:</span>
+
+<span class="sd">        - &quot;random_walk&quot;: Computes the random-walk transition P = D^{-1}A.</span>
+<span class="sd">                         The random walk with restart (RWR) update rule is implemented</span>
+<span class="sd">                         using the operator W := P^T:</span>
+<span class="sd">                         X_{t+1} = (1-α) X0 + α P^T X_t.</span>
+<span class="sd">                         Recommended default choice for network propagation of sparse binary mutations.</span>
+<span class="sd">        - &quot;symmetric&quot;: Computes the symmetric normalized adjacency: W = D^{-1/2} A D^{-1/2}.</span>
+<span class="sd">                       Recommended if a symmetric operator is wanted (often nicer mathematically / numerically).</span>
+<span class="sd">                       Sometimes preferable because it can reduce some degree-driven bias compared with pure</span>
+<span class="sd">                       random-walk operators.</span>
+<span class="sd">    weight : {`str`, `None`}, default=None</span>
+<span class="sd">        Edge attribute name in G to use as weights. If None, edges are treated as weight=1.</span>
+<span class="sd">    propagation : {&quot;rwr&quot;, &quot;heat_kernel&quot;, &quot;laplacian_solve&quot;}, default=&quot;rwr&quot;</span>
+<span class="sd">        Which diffusion model to use.</span>
+
+<span class="sd">        propagation options</span>
+
+<span class="sd">        - &quot;rwr&quot; : Random Walk with Restart</span>
+<span class="sd">            Update rule:</span>
+<span class="sd">                X_{k+1} = (1-α) X0 + α W X_k</span>
+<span class="sd">            Closed form (stationary solution):</span>
+<span class="sd">                X* = (1-α) (I - αW)^{-1} X0</span>
+
+<span class="sd">            Interpretation:</span>
+<span class="sd">            - Each step mixes an “anchor to original mutation profile” term (X0) with a</span>
+<span class="sd">              “spread across network” term (W X_t).</span>
+<span class="sd">            - α controls locality: smaller α -&gt; more local; larger α -&gt; more global smoothing.</span>
+
+<span class="sd">            Examples in literature:</span>
+<span class="sd">            - Network-based stratification / network propagation pipelines (e.g., NBS-style smoothing)</span>
+<span class="sd">            - Classic “network propagation” for biological signal diffusion</span>
+
+<span class="sd">            Recommendation:</span>
+<span class="sd">            - Default for smoothing sparse binary mutation profiles prior to similarity/clustering.</span>
+<span class="sd">            - Start α ≈ 0.7; sweep 0.5–0.85 for sensitivity.</span>
+<span class="sd">            - Set transition_norm = &quot;random_walk&quot;</span>
+
+<span class="sd">            Uses parameters: alpha, solve_mode, (max_iter,tol if solve_mode=&quot;iter&quot;),</span>
+<span class="sd">                             (chunksize if solve_mode=&quot;closed_form&quot;)</span>
+<span class="sd">            Ignores parameters: beta, t, lam</span>
+<span class="sd">        - &quot;heat_kernel&quot; : Heat-kernel diffusion</span>
+<span class="sd">            Continuous-time diffusion:</span>
+<span class="sd">                X*(t) = exp(-t L) X0, with L = I - W</span>
+
+<span class="sd">            Recommendation:</span>
+<span class="sd">            - Use if you want a “diffusion time” knob t with a multi-scale interpretation.</span>
+<span class="sd">            - Often explored by scanning t across scales.</span>
+<span class="sd">            - Set transition_norm = &quot;symmetric&quot;</span>
+
+<span class="sd">            Uses parameters: t</span>
+<span class="sd">            Ignores parameters: alpha, beta, lam, solve_mode, max_iter, tol, chunksize</span>
+<span class="sd">        - &quot;laplacian_solve&quot; Laplacian-regularized smoothing</span>
+<span class="sd">            Linear solve:</span>
+<span class="sd">                X* = (I + λL)^{-1} X0, with L = I - W</span>
+
+<span class="sd">            Equivalent optimization view:</span>
+<span class="sd">                argmin_X  ||X - X0||_F^2 + λ * Tr(X^T L X)</span>
+
+<span class="sd">            Recommendation:</span>
+<span class="sd">            - Use when you prefer a regularization knob λ and a single sparse solve.</span>
+<span class="sd">            - Often stable and efficient for large graphs and many samples.</span>
+<span class="sd">            - Set transition_norm = &quot;symmetric&quot;</span>
+
+<span class="sd">            Uses parameters: lam, chunksize</span>
+<span class="sd">            Ignores parameters: alpha, beta, t, solve_mode, max_iter, tol</span>
+<span class="sd">    alpha : `float`, default=0.7</span>
+<span class="sd">        RWR diffusion strength (restart complement). Must satisfy 0 &lt;= alpha &lt; 1.</span>
+<span class="sd">        Larger alpha =&gt; more diffusion; smaller alpha =&gt; more anchored to X0 (less diffusion).</span>
+<span class="sd">        Used only if propagation=&quot;rwr&quot;. Ignored otherwise.</span>
+
+<span class="sd">        Practical guidance based on literature (binary mutations on undirected PPI):</span>
+<span class="sd">        - alpha ~ 0.7 is a strong default</span>
+<span class="sd">        - sweep 0.5–0.85 for sensitivity</span>
+<span class="sd">    t : `float`, default=1.0</span>
+<span class="sd">        Heat-kernel diffusion time (t &gt;= 0).</span>
+<span class="sd">        Used only if propagation=&quot;heat_kernel&quot;. Ignored otherwise.</span>
+<span class="sd">    lam : `float`, default=1.0</span>
+<span class="sd">        Laplacian smoothing strength (lambda &gt;= 0).</span>
+<span class="sd">        Used only if propagation=&quot;laplacian_solve&quot;. Ignored otherwise.</span>
+<span class="sd">    solve_mode : {&quot;iter&quot;, &quot;closed_form&quot;}, default=&quot;iter&quot;</span>
+<span class="sd">        How to compute stationary solutions for restart diffusion.</span>
+<span class="sd">        Used only if propagation=&quot;rwr&quot;. Ignored otherwise.</span>
+<span class="sd">        Note: propagation=&quot;heat_kernel&quot; uses expm_multiply and</span>
+<span class="sd">        propagation=&quot;laplacian_solve&quot; uses a sparse LU solver</span>
+
+<span class="sd">        options:</span>
+
+<span class="sd">        - &quot;iter&quot;: fixed-point iteration to convergence</span>
+<span class="sd">        - &quot;closed_form&quot;: sparse LU solve of the corresponding linear system</span>
+<span class="sd">                         (I - αW) X* = (1-α) X0</span>
+<span class="sd">    max_iter : `int`, default=200</span>
+<span class="sd">        Max iterations for solve_mode=&quot;iter&quot;.</span>
+<span class="sd">        Used only when propagation=&quot;rwr&quot; AND solve_mode=&quot;iter&quot;.</span>
+<span class="sd">        Ignored otherwise.</span>
+<span class="sd">    tol : `float`, default=1e-8</span>
+<span class="sd">        Convergence tolerance for solve_mode=&quot;iter&quot;.</span>
+<span class="sd">        Used only when propagation=&quot;rwr&quot; AND solve_mode=&quot;iter&quot;.</span>
+<span class="sd">        Ignored otherwise.</span>
+<span class="sd">    chunksize : `int`, default=64</span>
+<span class="sd">        RHS block size (number of samples per block) for LU-based multi-RHS solves.</span>
+<span class="sd">        Used when:</span>
+<span class="sd">          - propagation=&quot;rwr&quot; AND solve_mode=&quot;closed_form&quot;</span>
+<span class="sd">          - propagation=&quot;laplacian_solve&quot;</span>
+<span class="sd">        Ignored otherwise.</span>
+<span class="sd">    dtype : {numpy dtype, `str`}, default=np.float64</span>
+<span class="sd">        Numeric dtype used for computations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    X_out : `pd.DataFrame`</span>
+<span class="sd">        Diffused feature-by-sample matrix with features (e.g., genes) and samples ordered exactly as in input.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Recommended defaults for undirected PPI + binary mutation matrix:</span>
+<span class="sd">        propagation=&quot;rwr&quot;, transition_norm=&quot;random_walk&quot;, alpha=0.7, solve_mode=&quot;iter&quot;</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    RWR default:</span>
+<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, propagation=&quot;rwr&quot;, alpha=0.7)</span>
+
+<span class="sd">    Symmetric operator + RWR:</span>
+<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, transition_norm=&quot;symmetric&quot;, propagation=&quot;rwr&quot;, alpha=0.7)</span>
+
+<span class="sd">    Heat kernel:</span>
+<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, propagation=&quot;heat_kernel&quot;, t=1.0)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">feats</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">set</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Feature IDs in the data must match node names in the graph.&quot;</span><span class="p">)</span>
+
+    <span class="n">X_full</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">feat_to_idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">g</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">feats</span><span class="p">)}</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">((</span><span class="n">feat_to_idx</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">feats</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">feats</span><span class="p">))</span>
+    <span class="n">X0</span> <span class="o">=</span> <span class="n">X_full</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># (n_feats x n_samples)</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">_build_operator_W</span><span class="p">(</span>
+        <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span>
+        <span class="n">feats_order</span><span class="o">=</span><span class="n">feats</span><span class="p">,</span>
+        <span class="n">transition_norm</span><span class="o">=</span><span class="n">transition_norm</span><span class="p">,</span>
+        <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Parameter validation</span>
+    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;rwr&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;For propagation=&#39;rwr&#39;, require 0 &lt;= alpha &lt; 1.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;heat_kernel&quot;</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;For propagation=&#39;heat_kernel&#39;, require t &gt;= 0.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;laplacian_solve&quot;</span> <span class="ow">and</span> <span class="n">lam</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;For propagation=&#39;laplacian_solve&#39;, require lam &gt;= 0.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Compute diffusion</span>
+    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;rwr&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">solve_mode</span> <span class="o">==</span> <span class="s2">&quot;iter&quot;</span><span class="p">:</span>
+            <span class="n">X_star</span> <span class="o">=</span> <span class="n">_fixed_point_rwr</span><span class="p">(</span><span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span> <span class="n">X0</span><span class="o">=</span><span class="n">X0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">solve_mode</span> <span class="o">==</span> <span class="s2">&quot;closed_form&quot;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">W</span><span class="p">)</span>     <span class="c1"># (I - αW)</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">X0</span>                                    <span class="c1"># (1-α)X0</span>
+            <span class="n">X_star</span> <span class="o">=</span> <span class="n">_closed_form_solve</span><span class="p">(</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown solve_mode: </span><span class="si">{</span><span class="n">solve_mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;heat_kernel&quot;</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="n">W</span>   <span class="c1"># L = I - W</span>
+        <span class="n">X_star</span> <span class="o">=</span> <span class="n">spla</span><span class="o">.</span><span class="n">expm_multiply</span><span class="p">((</span><span class="o">-</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">L</span><span class="p">,</span> <span class="n">X0</span><span class="p">)</span>      <span class="c1"># exp(-tL)X0</span>
+
+    <span class="k">elif</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;laplacian_solve&quot;</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="n">W</span>   <span class="c1"># L = I - W</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">lam</span> <span class="o">*</span> <span class="n">L</span><span class="p">)</span>  <span class="c1"># I + λL</span>
+        <span class="n">X_star</span> <span class="o">=</span> <span class="n">_closed_form_solve</span><span class="p">(</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">X0</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown propagation: </span><span class="si">{</span><span class="n">propagation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">X_out</span> <span class="o">=</span> <span class="n">X_full</span>
+    <span class="n">X_out</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">X_star</span>
+    <span class="n">X_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_out</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">feats</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">samples</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_out</span></div>
+
+
+
+<span class="c1"># -----------------------------</span>
+<span class="c1"># Helpers</span>
+<span class="c1"># -----------------------------</span>
+<div class="viewcode-block" id="_build_operator_W">
+<a class="viewcode-back" href="../../../reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation._build_operator_W">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_operator_W</span><span class="p">(</span>
+    <span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
+    <span class="n">feats_order</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">transition_norm</span><span class="p">:</span> <span class="n">TransitionNorm</span> <span class="o">=</span> <span class="s2">&quot;random_walk&quot;</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Build the sparse graph diffusion operator W over a specified feature ordering.</span>
+
+<span class="sd">    This constructs adjacency A in the *exact* order `featss_order`, then normalizes it into W.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G: `nx.Graph`</span>
+<span class="sd">        Graph containing the features in `feats_order`.</span>
+<span class="sd">    feats_order:</span>
+<span class="sd">        List of features (e.g., genes) IDs defining the matrix row/column order.</span>
+<span class="sd">    transition_norm : {&quot;random_walk&quot;, &quot;symmetric&quot;}, default=&quot;random_walk&quot;</span>
+<span class="sd">        How to normalize adjacency into the transition matrix / diffusion operator W.</span>
+
+<span class="sd">        Let A be adjacency and D the diagonal degree matrix (D_ii = sum_j A_ij).</span>
+<span class="sd">        We construct a sparse operator W used via left-multiplication: W @ X.</span>
+
+<span class="sd">        options:</span>
+
+<span class="sd">        - &quot;random_walk&quot;: Computes the random-walk transition P := D^{-1}A.</span>
+<span class="sd">                         The random walk with restart (RWR) update rule is implemented</span>
+<span class="sd">                         using the operator W := P^T:</span>
+<span class="sd">                         X_{t+1} = (1-α) X0 + α W X_t.</span>
+<span class="sd">                         Recommended default choice for network propagation of sparse binary mutations.</span>
+<span class="sd">        - &quot;symmetric&quot;: Computes the symmetric normalized adjacency: W = D^{-1/2} A D^{-1/2}.</span>
+<span class="sd">                       Recommended if a symmetric operator is wanted (often nicer mathematically / numerically).</span>
+<span class="sd">                       Sometimes preferable because it can reduce some degree-driven bias compared with pure</span>
+<span class="sd">                       random-walk operators.</span>
+<span class="sd">    weight : {`str`, `None`}, default=None</span>
+<span class="sd">        Edge attribute name in G to use as weights. If None, edges are treated as weight=1.</span>
+<span class="sd">    dtype : {numpy dtype, `str`}, default=np.float64</span>
+<span class="sd">        Numeric dtype used for computations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    W : `scipy.sparse.csr_matrix`</span>
+<span class="sd">        W with shape (n_feats, n_feats), CSR format.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Self-loops are removed from the adjacency by default (diagonal set to 0).</span>
+<span class="sd">    - Isolated nodes (degree 0) will not propagate; restart-based diffusions keep them anchored.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_scipy_sparse_array</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">feats_order</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+
+    <span class="c1"># Remove self loops unless intentionally included</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">A</span><span class="o">.</span><span class="n">setdiag</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">A</span><span class="o">.</span><span class="n">eliminate_zeros</span><span class="p">()</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">transition_norm</span> <span class="o">==</span> <span class="s2">&quot;random_walk&quot;</span><span class="p">:</span>
+        <span class="n">inv_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">nz</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">inv_d</span><span class="p">[</span><span class="n">nz</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">d</span><span class="p">[</span><span class="n">nz</span><span class="p">]</span>
+        <span class="n">Dinv</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">inv_d</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">))</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">Dinv</span> <span class="o">@</span> <span class="n">A</span>          <span class="c1"># D^{-1}A</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>       <span class="c1"># P^T</span>
+    <span class="k">elif</span> <span class="n">transition_norm</span> <span class="o">==</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">:</span>
+        <span class="n">inv_sqrt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">nz</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">inv_sqrt</span><span class="p">[</span><span class="n">nz</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">nz</span><span class="p">])</span>
+        <span class="n">Dmhalf</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">inv_sqrt</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">))</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="p">(</span><span class="n">Dmhalf</span> <span class="o">@</span> <span class="n">A</span> <span class="o">@</span> <span class="n">Dmhalf</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown transition_norm: </span><span class="si">{</span><span class="n">transition_norm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">W</span></div>
+
+
+
+<div class="viewcode-block" id="_fixed_point_rwr">
+<a class="viewcode-back" href="../../../reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation._fixed_point_rwr">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fixed_point_rwr</span><span class="p">(</span>
+    <span class="n">W</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">,</span>
+    <span class="n">X0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fixed-point iteration solver for Random Walk with Restart (RWR) diffusion.</span>
+
+<span class="sd">    Model</span>
+<span class="sd">    -----</span>
+<span class="sd">    Update rule:</span>
+<span class="sd">        X_{t+1} = (1-α) X0 + α W X_t</span>
+
+<span class="sd">    Stationary solution (if it converges):</span>
+<span class="sd">        X* = (1-α) (I - αW)^{-1} X0</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    W: `csr_matrix`</span>
+<span class="sd">        Sparse diffusion operator (n x n).</span>
+<span class="sd">    X0: `np.ndarray`</span>
+<span class="sd">        Seed matrix (n x m) with m samples.</span>
+<span class="sd">    alpha: `float`</span>
+<span class="sd">        0 &lt;= α &lt; 1. Larger α =&gt; more diffusion.</span>
+<span class="sd">    max_iter: `int`</span>
+<span class="sd">        Maximum iterations.</span>
+<span class="sd">    tol: `float`</span>
+<span class="sd">        Relative convergence criterion on Frobenius norm:</span>
+<span class="sd">            ||X_new - X|| / (||X|| + eps) &lt; tol</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    X : `np.ndarray`</span>
+<span class="sd">        Diffused profiles X* (n x m).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">one_minus</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+        <span class="n">X_new</span> <span class="o">=</span> <span class="n">one_minus</span> <span class="o">*</span> <span class="n">X0</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">W</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span>
+        <span class="n">denom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-12</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X_new</span> <span class="o">-</span> <span class="n">X</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">X_new</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X_new</span>
+
+    <span class="k">return</span> <span class="n">X</span></div>
+
+
+
+<div class="viewcode-block" id="_closed_form_solve">
+<a class="viewcode-back" href="../../../reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation._closed_form_solve">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_closed_form_solve</span><span class="p">(</span><span class="n">M</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve the sparse linear system M X = B for multiple RHS columns via one LU factorization.</span>
+
+<span class="sd">    Used for closed-form stationary solutions:</span>
+<span class="sd">      - RWR:       (I - αW) X* = (1-α)X0</span>
+<span class="sd">      - Laplacian: (I + λL) X* = X0</span>
+
+<span class="sd">    Implementation</span>
+<span class="sd">    --------------</span>
+<span class="sd">    - Factorize M once using sparse LU (splu).</span>
+<span class="sd">    - Solve in blocks of RHS columns to limit peak memory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    M: `csr_matrix`</span>
+<span class="sd">        Sparse square matrix (n x n).</span>
+<span class="sd">    B: `np.ndarray`</span>
+<span class="sd">        Dense RHS matrix (n x m).</span>
+<span class="sd">    chunksize: `int`</span>
+<span class="sd">        Number of RHS columns to solve at a time.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    X : `np.ndarray`</span>
+<span class="sd">        Dense solution X with shape (n x m).</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - For extremely large n, might need iterative linear solvers (cg/gmres) + preconditioning.</span>
+<span class="sd">      This LU approach is simple and usually robust for medium-to-large graphs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">B</span>
+
+    <span class="n">lu</span> <span class="o">=</span> <span class="n">spla</span><span class="o">.</span><span class="n">splu</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">tocsc</span><span class="p">())</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j0</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">):</span>
+        <span class="n">j1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">j0</span> <span class="o">+</span> <span class="n">chunksize</span><span class="p">)</span>
+        <span class="n">X</span><span class="p">[:,</span> <span class="n">j0</span><span class="p">:</span><span class="n">j1</span><span class="p">]</span> <span class="o">=</span> <span class="n">lu</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">j0</span><span class="p">:</span><span class="n">j1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">X</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../building/index.html">Installation</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../overview/index.html">User guide</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../tutorial/index.html">Tutorials</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../reference/index.html">API reference</a></li>
+<li class="toctree-l1 toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="../../../references.html">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023-2026, The netflow community.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
