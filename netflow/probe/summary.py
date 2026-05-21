@@ -516,7 +516,7 @@ def get_branch_node_order(poser, graph_nw, weights=None, min_branch_size=3):
     return branch_ord_dict
 
 
-def feature_graph_order_correlation(poser, graph_nw, data_df, obs_labels, weights=None):
+def feature_graph_order_correlation_global(poser, graph_nw, data_df, obs_labels, weights=None):
     """ Compute correlation between features and global node ordering.
 
     Parameters:
@@ -529,14 +529,14 @@ def feature_graph_order_correlation(poser, graph_nw, data_df, obs_labels, weight
             Feature matrix.
         obs_labels: `list` of `str`
             List of observation labels corresponding to node IDs.
-        weights: {`None`, `pandas.DataFrame`, (n, n)}
-            Dataframe of edge weights between nodes (observations). If `None` unweighted hop count is used.
+        weights: {`None`, `pandas.DataFrame`}
+            Dataframe of edge weights between nodes (observations) used to compute weighted hop distance if provided.
+            Unweighted hop count is used if `None`.
 
     Returns:
     ----------
-        corr_arr: `np.ndarray` (n_features, 1)
-            Array of correlations between features and global ordering of nodes.
-            Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
+        corr_df: `pandas.DataFrame`
+            Dataframe containing spearman correlation between features and global ordering of nodes, and associated p-values.
     """
 
     node_ord_dict = get_global_node_order(poser, graph_nw, weights)
@@ -544,11 +544,57 @@ def feature_graph_order_correlation(poser, graph_nw, data_df, obs_labels, weight
     obs_subset = [obs_labels[node_id] for node_id in node_ids]
 
     feat_arr = np.array(data_df.loc[:, obs_subset])
+    feat_labels = data_df.index
     node_ord_arr = np.array(list(node_ord_dict.values()))
     result = spearmanr(feat_arr, node_ord_arr, axis=1)
-    corr_arr = result.correlation[:-1, -1:]
+    corr_df = pd.DataFrame({'corr':result.correlation[:-1, -1], 'p-val':result.pvalue[:-1,-1]},
+                           index=feat_labels)
 
-    return corr_arr
+    return corr_df
+
+
+def feature_graph_order_correlation_local(poser, graph_nw, data_df, obs_labels, weights=None, min_branch_size=None):
+    """ Compute correlation between features and branch node ordering.
+
+    Parameters:
+    ----------
+        poser: `netflow.pose.POSER`
+            The object used to construct the POSE.
+        graph_nw: `networkx.Graph`
+            The POSE graph.
+        data_df: `pandas.DataFrame` (n_features, n_observations)
+            Feature matrix.
+        obs_labels: `list` of `str`
+            List of observation labels corresponding to node IDs.
+        weights: {`None`, `pandas.DataFrame`, (n, n)}
+            Dataframe of edge weights between nodes (observations) used to compute weighted hop distance if provided.
+            Unweighted hop count is used if `None`.
+        min_branch_size: {`None`, `int`}
+            Skip branches with <= ``min_branch_size`` observations.
+
+    Returns:
+    ----------
+        corr_dict: `dict` of `pandas.DataFrame`.
+             Dictionary mapping branch IDs to a `pd.DataFrame`. Each dataframe contains spearman correlation between features
+             and global ordering of nodes, and associated p-values.
+        
+    """
+    
+    branch_ord_dict = get_branch_node_order(poser, graph_nw, weights=weights, min_branch_size=min_branch_size)
+    feat_labels = data_df.index
+    corr_dict = {}
+    for branch_id, ord_dict in branch_ord_dict.items():
+
+        branch_ord_node_ids = list(ord_dict.keys())
+        observation_subset = [obs_labels[node_id] for node_id in branch_ord_node_ids]
+        feat_arr = np.array(data_df.loc[:, observation_subset])
+        branch_node_ord_arr = np.array(list(ord_dict.values()))
+        
+        result = spearmanr(feat_arr, branch_node_ord_arr, axis=1)
+        corr_dict[branch_id] = pd.DataFrame({'corr':result.correlation[:-1, -1], 'p-val':result.pvalue[:-1,-1]},
+                                            index=feat_labels)
+
+    return corr_dict
 
 
 def ordered_features_correlation_global(poser, graph_nw, data_df, obs_labels, weights=None):
