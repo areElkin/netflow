@@ -2670,12 +2670,13 @@ class Keeper:
         key : `str`
             The label used to reference the distance matrix stored in ``keeper.distances``,
             of size (n_observations, n_observations).
-        root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
+        root : {`None`, `int`, `List[int]`, 'density', 'density_inv', 'ratio'}
             The root. If `None`, 'density' is used.
 
             Options:
 
             - `int` : index of observation
+            - `List[int]` : list of indices of observations and uses the mean distance to them.
             - 'density' : select observation with minimal distance-density
             - 'density_inv' : select observation with maximal distance-density
             - 'ratio' : select observation which leads to maximal triangular ratio distance
@@ -2764,6 +2765,8 @@ class Keeper:
 
         G_poser = poser.branchings_segments(n_branches, until_branched=until_branched, annotate=annotate)
         G_poser_nn = poser.construct_pose_nn_topology(G_poser, mutual=mutual, k_mnn=k_mnn, annotate=annotate)
+
+# line 2065  tips3.append(np.array([np.where(allindices[node.data] == tipx)[0][0] for tipx in tip]).astype(int))
 
         # label = [key]
         # if root is not None:

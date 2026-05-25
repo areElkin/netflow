@@ -100,12 +100,13 @@ def get_pose(keeper, key, label, n_branches, until_branched=False,
             until a segement is successfully branched or no branchable segments
             remain. Otherwise, if `False`, attempt to perform branching only once 
             on the next potentially branchable segment.
-    root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
+    root : {`None`, `int`, `List[int]`, 'density', 'density_inv', 'ratio'}
         The root. If `None`, 'density' is used.
 
         Options:
 
         - `int` : index of observation
+        - `List[int]` : list of indices of observations and uses the mean distance to them.
         - 'density' : select observation with minimal distance-density
         - 'density_inv' : select observation with maximal distance-density
         - 'ratio' : select observation which leads to maximal triangular ratio distance
@@ -1018,12 +1019,13 @@ class POSER:
     key : `str`
         The label used to reference the distance matrix stored in ``keeper.distances``,
         of size (n_observations, n_observations).
-    root : {`None`, `int`, 'density', 'density_inv', 'ratio'}
+    root : {`None`, `int`, `List[int]`, 'density', 'density_inv', 'ratio'}
         The root. If `None`, 'density' is used.
 
         Options:
 
         - `int` : index of observation
+        - `List[int]` : list of indices of observations and uses the mean distance to them.
         - 'density' : select observation with minimal distance-density
         - 'density_inv' : select observation with maximal distance-density
         - 'ratio' : select observation which leads to maximal triangular ratio distance
@@ -1120,6 +1122,10 @@ class POSER:
         elif isinstance(root, int):
             if (root < 0) or (keeper.num_observations - 1 < root):
                 raise ValueError("Unrecognized value for root, expected to be the index of an observation in the keeper.")
+        elif isinstance(root, (list, np.ndarray)):
+            for r in root:
+                if (not isinstance(r, int)) or (r < 0) or (keeper.num_observations - 1 < r):
+                    raise ValueError("Unrecognized value for root, expected to be list of indices of observations in the keeper.")            
         else:
             raise ValueError("Unrecognized value for root.")
         self.root = root
@@ -1140,8 +1146,16 @@ class POSER:
         if root_as_tip:
             tip_0 = self.root
         else:
-            tip_0 = np.argmax(self.distances[self.root])
-        tip_1 = np.argmax(self.distances[tip_0])
+            if isinstance(self.root, (list, np.ndarray)):
+                tip_0 = np.argmax(self.distances[self.root].mean(axis=0))
+            else:
+                tip_0 = np.argmax(self.distances[self.root])
+                
+        if isinstance(tip_0, (list, np.ndarray)):
+            tip_1 = np.argmax(self.distances[tip_0].mean(axis=0))
+        else:
+            tip_1 = np.argmax(self.distances[tip_0])
+            
         node.tips = np.array([tip_0, tip_1])
         self.tree.insert(node)
         self.branched_ordering = []  # [node]
@@ -1151,6 +1165,9 @@ class POSER:
     def _set_pseudo_dist(self):
         """ Return pseudo-distance with respect to root point. """
         self.pseudo_dist = self.distances[self.root].copy()
+
+        if isinstance(self.root, (list, np.ndarray)):
+            self.pseudo_dist = self.pseudo_dist.mean(axis=0)
 
         self.pseudo_dist /= np.max(self.pseudo_dist[self.pseudo_dist < np.inf])
 
@@ -1186,23 +1203,35 @@ class POSER:
                     for jseg in range(len(segs)):
                         if jseg != iseg:
                             for itip in range(2):
-                                if (
-                                        self.distances[
-                                            segs[jseg].tips[1], seg.tips[itip]
-                                        ]
-                                        < 0.5
-                                        * self.distances[
-                                            seg.tips[~itip], seg.tips[itip]
-                                        ]
-                                ):
+                                a = self.distances[segs[jseg].tips[1], seg.tips[itip]]
+                                if isinstance(segs[jseg].tips[1], (list, np.ndarray)) or isinstance(seg.tips[itip], (list, np.ndarray)):
+                                    a = a.mean(axis=0)
+                                b = self.distances[seg.tips[~itip], seg.tips[itip]]
+                                if isinstance(seg.tips[~itip], (list, np.ndarray)) or isinstance(seg.tips[itip], (list, np.ndarray)):
+                                    b = b.mean(axis=0)
+                                if (a < 0.5 * b):
                                     third_maximizer = itip
 
                 # map the global position to the position within the segment
                 allindices = np.arange(self.distances.shape[0], dtype=int)
                 # find the third point on the seg that has maximal added distance from the two tip points:
-                tips = [np.where(allindices[seg.data] == tip)[0][0] for tip in seg.tips]  # local index of tips in the seg
+                # tips = [np.where(allindices[seg.data] == tip)[0][0] for tip in seg.tips]  # local index of tips in the seg
+                tips = []
+                for tip in seg.tips:
+                    if isinstance(tip, (list, np.ndarray)):
+                        a = []
+                        tips.append([np.where(allindices[seg.data] == tipx)[0][0] for tipx in tip])
+                    else:
+                        tips.append(np.where(allindices[seg.data] == tip)[0][0])                        
+                        
                 # find the third point on the seg that has maximal added distance from the two tip points:
-                dseg = Dseg[tips[0]] + Dseg[tips[1]]
+                a = Dseg[tips[0]]
+                if isinstance(tips[0], (list, np.ndarray)):
+                    a = a.mean(axis=0)
+                b = Dseg[tips[1]]
+                if isinstance(tips[1], (list, np.ndarray)):
+                    b = b.mean(axis=0)
+                dseg = a + b
                 
                 if not np.isfinite(dseg).any():
                     seg.branchable = False
@@ -1212,7 +1241,10 @@ class POSER:
                 if third_maximizer is not None:
                     logger.warning(f"TODO: THIRD MAXIMIZER IS NOT NONE... IS THIS CORRECT???")
                     # find a fourth point that has maximal distance to all three
-                    dseg += Dseg[third_tip]
+                    a = Dseg[third_tip]
+                    if isinstance(third_tip, (list, np.ndarray)):
+                        a = a.mean(axis=0)
+                    dseg += a
                     fourth_tip = np.argmax(dseg)
                     # should it be >>> if fourth_tip != tips[third_maximizer] and fourth_tip != third_tip: ... and >>> tips[third_maximizer] = fourth_tip ???
                     if fourth_tip != tips[0] and fourth_tip != third_tip: 
@@ -1222,19 +1254,31 @@ class POSER:
                         dseg -= Dseg[tips[1]] # OLD WAY COMPUTED AFTER UPDATING TIP --- should it be dseg += Dseg[tips[1]]?
                         # dseg = Dseg[tips[0]] + Dseg[tips[1]] # RE ADDED SECOND NEW WAY OPTION:
                     else:
-                        dseg -= Dseg[third_tip]
+                        dseg -= a  # Dseg[third_tip]
                 tips3 = np.append(tips, third_tip)
 
                 # update third tip in global coordinates NOTE: double check that this is correct
                 # seg.tips.append(seg.data[third_tip])
                 # seg.tips = np.append(seg.tips, seg.data[third_tip])
-                seg.tips = seg.data[tips3]
+
+                # seg.tips = seg.data[tips3]  
+                seg.tips = np.array([seg.data[tipx] for tipx in tips3]) 
                 
             elif len(seg.tips) == 3:
                 # map the global position to the position within the segment
                 allindices = np.arange(self.distances.shape[0], dtype=int)
                 # find the third point on the seg that has maximal added distance from the two tip points:
-                tips3 = np.array([np.where(allindices[seg.data] == tip)[0][0] for tip in seg.tips]) # local index of tips in the seg
+                # tips3 = np.array([np.where(allindices[seg.data] == tip)[0][0] for tip in seg.tips]) # local index of tips in the seg
+
+                # tips = [np.where(allindices[seg.data] == tip)[0][0] for tip in seg.tips]  # local index of tips in the seg
+                tips = []
+                for tip in seg.tips:
+                    if isinstance(tip, (list, np.ndarray)):
+                        a = []
+                        tips.append([np.where(allindices[seg.data] == tipx)[0][0] for tipx in tip])
+                    else:
+                        tips.append(np.where(allindices[seg.data] == tip)[0][0])                        
+                tips3 = np.array(tips)
             else:
                 raise AssertionError("Unexpected number of tips.")
             
@@ -1243,7 +1287,17 @@ class POSER:
             # two first tips, given by Dseg[tips[:2]]
             # if we did not normalize, there would be a danger of simply
             # assigning the highest score to the longest segment
-            score = dseg[tips3[2]] / Dseg[tips3[0], tips3[1]]
+            a = dseg[tips3[2]]
+            if isinstance(tips3[2], (list, np.ndarray)):
+                a = a.mean(axis=0)
+            if isinstance(tips3[0], (list, np.ndarray)) and isinstance(tips3[1], (list, np.ndarray)):
+                b = Dseg[tips3[0]][:, tips3[1]].mean()
+            elif isinstance(tips3[0], (list, np.ndarray)) or isinstance(tips3[1], (list, np.ndarray)):
+                b = Dseg[tips3[0], tips3[1]].mean()
+            else:
+                b = Dseg[tips3[0], tips3[1]]
+                
+            score = a / b
             score = len(seg.data) if self.choose_largest_segment else score # simply the number of points
             seg.score = score
             if not self.check_min_branch_size(seg.data):
@@ -1446,12 +1500,21 @@ class POSER:
         """
         # sort distance from first tip point
         # then the sequence of distances Dseg[tips[0]][idcs] increases
-        idcs = np.argsort(Dseg[tips[0]])
+        a = Dseg[tips[0]]
+        if isinstance(tips[0], (list, np.ndarray)):
+            a = a.mean(axis=0)
+        idcs = np.argsort(a)
 
         if True:
+            a = Dseg[tips[1]]
+            if isinstance(tips[1], (list, np.ndarray)):
+                a = a.mean(axis=0)
+            b = Dseg[tips[2]]
+            if isinstance(tips[2], (list, np.ndarray)):
+                b = b.mean(axis=0)
             imax = self.kendall_tau_split(
-                Dseg[tips[1]][idcs],
-                Dseg[tips[2]][idcs],
+                a[idcs],
+                b[idcs],
                 min_length=5 if self.legacy_mbs else self.min_branch_size,
             )
         if False:
@@ -1460,8 +1523,18 @@ class POSER:
             # highly different, one would need to write the following equation
             # in terms of an ordering, such as exploited by the kendall
             # correlation method above
+            a = Dseg[tips[1]]
+            if isinstance(tips[1], (list, np.ndarray)):
+                a = a.mean(axis=0)
+            b = Dseg[tips[2]]
+            if isinstance(tips[2], (list, np.ndarray)):
+                b = b.mean(axis=0)
+            c = Dseg[tips[0]]
+            if isinstance(tips[0], (list, np.ndarray)):
+                c = c.mean(axis=0)
+                
             imax = np.argmin(
-                Dseg[tips[0]][idcs] + Dseg[tips[1]][idcs] + Dseg[tips[2]][idcs]
+                c[idcs] + a[idcs] + b[idcs]
             )
 
         # first new segment: all points until, but excluding the branching point
@@ -1526,8 +1599,14 @@ class POSER:
     def _detect_branching_single_wolf17_tri(self, Dseg, tips):
         # all pairwise distances
         dist_from_0 = Dseg[tips[0]]
+        if isinstance(tips[0], (list, np.ndarray)):
+            dist_from_0 = dist_from_0.mean(axis=0)
         dist_from_1 = Dseg[tips[1]]
+        if isinstance(tips[1], (list, np.ndarray)):
+            dist_from_1 = dist_from_1.mean(axis=0)
         dist_from_2 = Dseg[tips[2]]
+        if isinstance(tips[2], (list, np.ndarray)):
+            dist_from_2 = dist_from_2.mean(axis=0)
         closer_to_0_than_to_1 = dist_from_0 < dist_from_1
         closer_to_0_than_to_2 = dist_from_0 < dist_from_2
         closer_to_1_than_to_2 = dist_from_1 < dist_from_2
@@ -1548,7 +1627,11 @@ class POSER:
 
     def _detect_branching_single_wolf17_bi(self, Dseg, tips):
         dist_from_0 = Dseg[tips[0]]
+        if isinstance(tips[0], (list, np.ndarray)):
+            dist_from_0 = dist_from_0.mean(axis=0)
         dist_from_1 = Dseg[tips[1]]
+        if isinstance(tips[1], (list, np.ndarray)):
+            dist_from_1 = dist_from_1.mean(axis=0)
         closer_to_0_than_to_1 = dist_from_0 < dist_from_1
         ssegs = [closer_to_0_than_to_1, ~closer_to_0_than_to_1]
         return ssegs
@@ -1686,9 +1769,12 @@ class POSER:
                 else:
                     for inewseg, newseg_tips in enumerate(ssegs_tips):
                         reference_point = newseg_tips[0]
+                        a = Dseg[reference_point]
+                        if isinstance(reference_point, (list, np.ndarray)):
+                            a = a.mean(axis=0)
                         # closest (undecided) cell to the new segment tip within undecided cells
                         closest_cell_a = undecided_cells[
-                            np.argmin(Dseg[reference_point][undecided_cells])
+                            np.argmin(a[undecided_cells])
                         ]
                         # RE START MODIFIED
                         # # ssegs_connects[inewseg].append(closest_cell)
@@ -1723,7 +1809,10 @@ class POSER:
                     np.argmax(Dseg[undecided_cells[0]][undecided_cells])
                 ]
 
-                tip_1 = undecided_cells[np.argmax(Dseg[tip_0][undecided_cells])]
+                a = Dseg[tip_0]
+                if isinstance(tip_0, (list, np.ndarray)):
+                    a = a.mean(axis=0)
+                tip_1 = undecided_cells[np.argmax(a[undecided_cells])]
                 ssegs_tips.append([tip_0, tip_1])
                 # RE START MODIFIED
                 # trunk = 3
@@ -1750,23 +1839,32 @@ class POSER:
                     # this is another strategy than for the undecided_cells
                     # here it's possible to use the more symmetric procedure
                     # shouldn't make much of a difference
+                    a = Dseg[reference_point[0]]
+                    if isinstance(reference_point[0], (list, np.ndarray)):
+                        a = a.mean(axis=0)
                     closest_points[0, 1] = ssegs[1][
-                        np.argmin(Dseg[reference_point[0]][ssegs[1]])
+                        np.argmin(a[ssegs[1]])
                     ]
+                    b = Dseg[reference_point[1]]
+                    if isinstance(reference_point[1], (list, np.ndarray)):
+                        b = b.mean(axis=0)
                     closest_points[1, 0] = ssegs[0][
-                        np.argmin(Dseg[reference_point[1]][ssegs[0]])
+                        np.argmin(b[ssegs[0]])
                     ]
                     closest_points[0, 2] = ssegs[2][
-                        np.argmin(Dseg[reference_point[0]][ssegs[2]])
+                        np.argmin(a[ssegs[2]])
                     ]
+                    c = Dseg[reference_point[2]]
+                    if isinstance(reference_point[2], (list, np.ndarray)):
+                        c = c.mean(axis=0)
                     closest_points[2, 0] = ssegs[0][
-                        np.argmin(Dseg[reference_point[2]][ssegs[0]])
+                        np.argmin(c[ssegs[0]])
                     ]
                     closest_points[1, 2] = ssegs[2][
-                        np.argmin(Dseg[reference_point[1]][ssegs[2]])
+                        np.argmin(b[ssegs[2]])
                     ]
                     closest_points[2, 1] = ssegs[1][
-                        np.argmin(Dseg[reference_point[2]][ssegs[1]])
+                        np.argmin(c[ssegs[1]])
                     ]
 
                 added_dist = np.zeros(3)
@@ -1820,12 +1918,18 @@ class POSER:
                                                 ssegs[0][point_in_seg_0]]]]
                 else:
                     reference_point_in_0 = ssegs_tips[0][0]
+                    a = Dseg[reference_point_in_0]
+                    if isinstance(reference_point_in_0, (list, np.ndarray)):
+                        a = a.mean(axis=0)
                     closest_point_in_1 = ssegs[1][
-                        np.argmin(Dseg[reference_point_in_0][ssegs[1]])
+                        np.argmin(a[ssegs[1]])
                     ]
                     reference_point_in_1 = closest_point_in_1  # ssegs_tips[1][0]
+                    b = Dseg[reference_point_in_1]
+                    if isinstance(reference_point_in_1, (list, np.ndarray)):
+                        b = b.mean(axis=0)
                     closest_point_in_0 = ssegs[0][
-                        np.argmin(Dseg[reference_point_in_1][ssegs[0]])
+                        np.argmin(b[ssegs[0]])
                     ]
                     # RE START MODIFIED
                     # # ssegs_connects = [[closest_point_in_1], [closest_point_in_0]]
@@ -1869,8 +1973,11 @@ class POSER:
                 # ssegs_connects = [[]]*len(ssegs) # [[], []]
                 # point in branch closest to the main segment
                 reference_point = tips[0]
+                a = Dseg[reference_point]
+                if isinstance(reference_point, (list, np.ndarray)):
+                    a = a.mean(axis=0)
                 closest_cell_a = branch_seg[
-                    np.argmin(Dseg[reference_point][branch_seg])
+                    np.argmin(a[branch_seg])
                 ]
                 # RE START MODIFIED
                 # # ssegs_connects[0].append(closest_cell)
@@ -1918,15 +2025,25 @@ class POSER:
         # secondtip = newseg[np.argmax(Dseg[tip][newseg])]
         # ssegs_tips.append([tip, secondtip]) # RE: SHOULD BE CHANGED
 
-        secondtip = newseg[np.argmax(Dseg[tip][newseg])]
+        a = Dseg[tip]
+        if isinstance(tip, (list, np.ndarray)):
+            a = a.mean(axis=0)
+        secondtip = newseg[np.argmax(a[newseg])]
         firsttip = tip
 
         if len(np.flatnonzero(newseg)) <= 1:
             logger.info(f'detected group with only {len(np.flatnonzero(newseg))} data points')
-        if firsttip not in set(newseg):
-            new_firsttip = newseg[np.argmin(Dseg[tip][newseg])]
-            logger.info(f'tip is no longer in the unique branched sub-segment, update tip to its nearest point in the new segment: {firsttip} -> {new_firsttip}')
-            firsttip = new_firsttip
+
+        if isinstance(firsttip, (list, np.ndarray)):
+            if len(set(firsttip) & set(newseg)) == 0: 
+                new_firsttip = newseg[np.argmin(a[newseg])] # newseg[np.argmin(Dseg[tip][newseg])]
+                logger.info(f'tip is no longer in the unique branched sub-segment, update tip to its nearest point in the new segment: {firsttip} -> {new_firsttip}')
+                firsttip = new_firsttip
+        else:
+            if firsttip not in set(newseg):
+                new_firsttip = newseg[np.argmin(a[newseg])] # newseg[np.argmin(Dseg[tip][newseg])]
+                logger.info(f'tip is no longer in the unique branched sub-segment, update tip to its nearest point in the new segment: {firsttip} -> {new_firsttip}')
+                firsttip = new_firsttip
 
         tips = np.array([firsttip, secondtip])
 
@@ -1948,8 +2065,19 @@ class POSER:
         # seg_node = self.tree.get_node(self.tree.search(iseg, bottom_up=True))
         allindices = np.arange(self.distances.shape[0], dtype=int)
         Dseg = self.distances[np.ix_(node.data, node.data)]        
-        tips3 = [np.where(allindices[node.data] == tip)[0][0] for tip in node.tips]  # local index of tips in the seg
-        tips3 = np.array(tips3).astype(int)
+        # tips3 = [np.where(allindices[node.data] == tip)[0][0] for tip in node.tips]  # local index of tips in the seg
+        tips3 = []
+        for tip in node.tips:
+            if isinstance(tip, (list, np.ndarray)):
+                a = []
+                # tips3.append([np.where(allindices[node.data] == tipx)[0][0] for tipx in tip])
+                tips3.append(np.array([np.where(allindices[node.data] == tipx)[0][0] for tipx in tip]).astype(int))
+            else:
+                # tips3.append(np.where(allindices[node.data] == tip)[0][0])
+                tips3.append(int(np.where(allindices[node.data] == tip)[0][0]))
+                        
+        # tips3 = np.array(tips3).astype(int) # doesn't work when have a multi-root
+        tips3 = np.array(tips3)
         
         # given the three tip points and the distance matrix detect the
         # branching on the segment, return the list ssegs of segments that
@@ -1971,7 +2099,14 @@ class POSER:
 
             for iseg_new, seg_new in enumerate(ssegs):
                 ssegs[iseg_new] = node.data[seg_new]
-                ssegs_tips[iseg_new] = node.data[ssegs_tips[iseg_new]] 
+                
+                if isinstance(ssegs_tips[iseg_new], (list, np.ndarray)):
+                    ntips = []
+                    for x in ssegs_tips[iseg_new]:
+                        ntips.append(node.data[x])
+                    ssegs_tips[iseg_new] = np.array(ntips)
+                else:
+                    ssegs_tips[iseg_new] = node.data[ssegs_tips[iseg_new]]
                 # logger.warning(f"*** {ssegs_connects[iseg_new][-1]}")
                 # ssegs_connects[iseg_new] = list(node.data[ssegs_connects[iseg_new]])
 
@@ -2172,16 +2307,29 @@ class POSER:
         for node in leaves:
             tips = np.array(node.tips)
             seg = np.array(node.data)
+
+            tips_pd = []
+            for tip in tips:
+                if isinstance(tip, (list, np.ndarray)):
+                    tips_pd.append(np.mean(self.pseudo_dist[tip]))
+                else:
+                    tips_pd.append(self.pseudo_dist[tip])
+            tips_pd = np.array(tips_pd)
+            
             segs[node._counter] = {'name': node.name,
-                                   'tips': tips[np.argsort(self.pseudo_dist[node.tips])],
+                                   'tips': tips[np.argsort(tips_pd)],  # tips[np.argsort(self.pseudo_dist[node.tips])],
                                    'seg': seg[np.argsort(self.pseudo_dist[node.data])],
                                    'undecided' : node.is_trunk,
                                    }
 
         G = self._construct_topology(segs, annotate=annotate)
         if annotate:
-            nx.set_node_attributes(G, {k: 'Yes' if k==self.root else 'No' for k in G},
-                                   name='is_root')
+            if isinstance(self.root, (list, np.ndarray)):
+                nx.set_node_attributes(G, {k: 'Yes' if k in self.root else 'No' for k in G},
+                                       name='is_root')
+            else:
+                nx.set_node_attributes(G, {k: 'Yes' if k==self.root else 'No' for k in G},
+                                       name='is_root')
             nx.set_node_attributes(G, {k: vl for k, vl in enumerate(self.pseudo_dist)},
                            name='pseudo-distance from root')
         

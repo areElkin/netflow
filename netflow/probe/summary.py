@@ -567,8 +567,8 @@ def ordered_features_correlation_global(poser, graph_nw, data_df, obs_labels, we
         weights: {`None`, `pandas.DataFrame`, (n, n)}
             Dataframe of edge weights between nodes (observations). If `None` unweighted hop count is used.
 
-    Returns:
-    ----------
+    Returns: 
+   ----------
         corr_arr: `np.ndarray` (n_features, n_features)
             Array of correlations between every pair of features sorted by the global ordering of nodes.
             Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`
