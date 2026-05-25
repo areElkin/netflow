@@ -59,7 +59,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="May 21, 2026"/>
+    <meta name="docbuild:last-update" content="May 25, 2026"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -543,10 +543,11 @@ the method <code class="xref py py-mod docutils literal notranslate"><span class
 <li><p><strong>keeper</strong> (<cite>netflow.Keeper</cite>) – The keeper object that stores the distance matrix of size (n_observations, n_observations).</p></li>
 <li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the distance matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>,
 of size (n_observations, n_observations).</p></li>
-<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, ‘density’, ‘density_inv’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
+<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, <cite>List[int]</cite>, ‘density’, ‘density_inv’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
 <p>Options:</p>
 <ul>
 <li><p><cite>int</cite> : index of observation</p></li>
+<li><p><cite>List[int]</cite> : list of indices of observations and uses the mean distance to them.</p></li>
 <li><p>’density’ : select observation with minimal distance-density</p></li>
 <li><p>’density_inv’ : select observation with maximal distance-density</p></li>
 <li><p>’ratio’ : select observation which leads to maximal triangular ratio distance</p></li>
@@ -1937,10 +1938,11 @@ of size (n_observations, n_observations).</p></li>
 until a segement is successfully branched or no branchable segments
 remain. Otherwise, if <cite>False</cite>, attempt to perform branching only once
 on the next potentially branchable segment.</p></li>
-<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, ‘density’, ‘density_inv’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
+<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, <cite>List[int]</cite>, ‘density’, ‘density_inv’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
 <p>Options:</p>
 <ul>
 <li><p><cite>int</cite> : index of observation</p></li>
+<li><p><cite>List[int]</cite> : list of indices of observations and uses the mean distance to them.</p></li>
 <li><p>’density’ : select observation with minimal distance-density</p></li>
 <li><p>’density_inv’ : select observation with maximal distance-density</p></li>
 <li><p>’ratio’ : select observation which leads to maximal triangular ratio distance</p></li>

@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="May 21, 2026"/>
+    <meta name="docbuild:last-update" content="May 25, 2026"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -3325,12 +3325,13 @@
 <span class="sd">        key : `str`</span>
 <span class="sd">            The label used to reference the distance matrix stored in ``keeper.distances``,</span>
 <span class="sd">            of size (n_observations, n_observations).</span>
-<span class="sd">        root : {`None`, `int`, &#39;density&#39;, &#39;density_inv&#39;, &#39;ratio&#39;}</span>
+<span class="sd">        root : {`None`, `int`, `List[int]`, &#39;density&#39;, &#39;density_inv&#39;, &#39;ratio&#39;}</span>
 <span class="sd">            The root. If `None`, &#39;density&#39; is used.</span>
 
 <span class="sd">            Options:</span>
 
 <span class="sd">            - `int` : index of observation</span>
+<span class="sd">            - `List[int]` : list of indices of observations and uses the mean distance to them.</span>
 <span class="sd">            - &#39;density&#39; : select observation with minimal distance-density</span>
 <span class="sd">            - &#39;density_inv&#39; : select observation with maximal distance-density</span>
 <span class="sd">            - &#39;ratio&#39; : select observation which leads to maximal triangular ratio distance</span>
@@ -3419,6 +3420,8 @@
 
         <span class="n">G_poser</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">branchings_segments</span><span class="p">(</span><span class="n">n_branches</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="n">until_branched</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="n">annotate</span><span class="p">)</span>
         <span class="n">G_poser_nn</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">construct_pose_nn_topology</span><span class="p">(</span><span class="n">G_poser</span><span class="p">,</span> <span class="n">mutual</span><span class="o">=</span><span class="n">mutual</span><span class="p">,</span> <span class="n">k_mnn</span><span class="o">=</span><span class="n">k_mnn</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="n">annotate</span><span class="p">)</span>
+
+<span class="c1"># line 2065  tips3.append(np.array([np.where(allindices[node.data] == tipx)[0][0] for tipx in tip]).astype(int))</span>
 
         <span class="c1"># label = [key]</span>
         <span class="c1"># if root is not None:</span>

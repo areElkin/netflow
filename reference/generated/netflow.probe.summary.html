@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="May 21, 2026"/>
+    <meta name="docbuild:last-update" content="May 25, 2026"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -927,9 +927,8 @@ Node order is based on weighted distance if provided. Otherwise, based on hop di
 
 <span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/probe/summary.html#ordered_features_correlation_global"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.probe.summary.ordered_features_correlation_global" title="Link to this definition">#</a></dt>
 <dd><p>Compute correlation between feature pairs, sorted by global node order.</p>
-<section id="id13">
-<h2>Parameters:<a class="headerlink" href="#id13" title="Link to this heading">#</a></h2>
 <blockquote>
+<div><blockquote>
 <div><dl class="simple">
 <dt>poser: <cite>netflow.pose.POSER</cite></dt><dd><p>The object used to construct the POSE.</p>
 </dd>
@@ -943,17 +942,11 @@ Node order is based on weighted distance if provided. Otherwise, based on hop di
 </dd>
 </dl>
 </div></blockquote>
-</section>
-<section id="id14">
-<h2>Returns:<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
-<blockquote>
-<div><dl class="simple">
-<dt>corr_arr: <cite>np.ndarray</cite> (n_features, n_features)</dt><dd><p>Array of correlations between every pair of features sorted by the global ordering of nodes.
-Node order is based on weighted distance if provided. Otherwise, based on hop distance if <cite>weights</cite> is <cite>None</cite></p>
-</dd>
-</dl>
+<p>Returns:</p>
 </div></blockquote>
-</section>
+<blockquote>
+<div><p>Node order is based on weighted distance if provided. Otherwise, based on hop distance if <cite>weights</cite> is <cite>None</cite></p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
