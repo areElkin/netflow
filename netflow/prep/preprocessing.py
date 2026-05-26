@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import sklearn.decomposition
+from scipy.stats import spearmanr
 
 
 def MAF_to_binary_matrix(mut, vc_col='Variant_Classification',
@@ -140,3 +141,22 @@ def rand_offset_tx(data, scale, center=0., rand_seed=None):
         data_unique = data + noise
         return data_unique
 
+
+def feature_correlations(data_arr):
+    """ Compute correlations between all feature pairs.
+
+    Parameters:
+    ----------
+        data_arr: `np.array` (n_features, n_observations)
+            Input feature array.
+
+    Returns:
+    ----------
+        corr_arr: `np.ndarray` (n_features, n_features)
+            Array of correlations between every pair of features.
+    """
+
+    result = spearmanr(data_arr, axis=1)
+    corr_arr = result.correlation
+
+    return corr_arr
