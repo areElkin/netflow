@@ -25,7 +25,7 @@ from ..pose import organization as nfo
 #     POSER, compute_rw_transitions,
 # import netflow.InfoNet as InfoNet
 from .._logging import _gen_logger, set_verbose
-from ..prep.preprocessing import PCA_tx, log1p_tx, rand_offset_tx
+from ..prep.preprocessing import PCA_tx, log1p_tx, rand_offset_tx, feature_correlations
 from ..probe import summary
 
 # from importlib import reload
@@ -464,7 +464,11 @@ class DataView:
         data_z = StandardScaler(**kwargs).fit_transform(data.T).T
         data_z = pd.DataFrame(data=data_z, columns=data.columns, index=data.index)
         return data_z
-        
+
+    def feature_correlations(self):
+        data = self.to_frame()
+        corr = feature_correlations(data)
+        return corr
 
 class DistanceKeeper:
     """ A class to store and handle multiple distances.

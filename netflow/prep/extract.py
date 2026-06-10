@@ -1,4 +1,5 @@
 import json
+import math
 import pandas as pd
 import requests
 from bravado.client import SwaggerClient
@@ -22,9 +23,8 @@ class CBioPortalClient:
                     'sampleListId':  {'type': 'string'},
                     'sampleIds':     {'type': 'array', 'items': {'type': 'string'}},
                     'entrezGeneIds': {'type': 'array', 'items': {'type': 'integer'}},
-                }
+                }}
             }
-        }
     },
     '/api/molecular-profiles/{molecularProfileId}/molecular-data/fetch': {
         'post': {
@@ -37,8 +37,7 @@ class CBioPortalClient:
                     'sampleListId':  {'type': 'string'},
                     'sampleIds':     {'type': 'array', 'items': {'type': 'string'}},
                     'entrezGeneIds': {'type': 'array', 'items': {'type': 'integer'}},
-                }
-            }
+                }}
         }
     },
     '/api/molecular-profiles/{molecularProfileId}/discrete-copy-number/fetch': {
@@ -52,10 +51,22 @@ class CBioPortalClient:
                     'sampleListId': {'type': 'string'},
                     'sampleIds': {'type': 'array', 'items': {'type': 'string'}},
                     'entrezGeneIds': {'type': 'array', 'items': {'type': 'integer'}},
-                }
-            }
+            }}
         }
     },
+    '/api/structural-variant/fetch': {
+            'post': {
+                'name': 'structuralVariantFilter',
+                'in': 'body',
+                'required': True,
+                'schema': {
+                    'type': 'object',
+                    'properties': {
+                        'molecularProfileIds': {'type': 'array', 'items': {'type': 'string'}},
+                        'entrezGeneIds': {'type': 'array', 'items': {'type': 'integer'}},
+                    }}
+            },
+        }
     }
 
     SAMPLE_ATTR_MAP = {
@@ -131,10 +142,85 @@ class CBioPortalClient:
         """
         raw_response = response_wrapper.future.result()
         result_json = json.loads(raw_response.text)
-        result_df = pd.json_normalize(result_json)
+        if not result_json:
+            result_df = pd.DataFrame()
+        else:
+            result_df = pd.json_normalize(result_json)
         return result_df
-    
-    
+
+
+    def _read_response_paged(self, bravado_callable, gene_ids, filterName, gene_batch_size=1000, **kwargs):
+        """ Fetch large datasets in batches of `gene_batch_size` and combining responses into a single DataFrame.
+
+        Parameters
+        ----------
+        bravado_callable : callable
+            A valid Bravado function (e.g.,`self.cbioportal.Structural_Variants.fetchStructuralVariantsUsingPOST`).
+        gene_ids : `list` of `int`
+            List of Entrez gene IDs to query to be split into batches of size `gene_batch_size`.
+        filterName : `str`
+            Name of the request parameter expected by `bravado_callable`
+        gene_batch_size : `int`
+            Number of Entrez gene IDs to include per request (Default = 1000).
+        **kwargs
+            Additional parameters required by `bravado_callable`.
+
+        Returns
+        -------
+        result_df : `pandas.DataFrame`
+            Concatenated DataFrame of batch responses.
+        """
+        chunks = []
+        for i in range(0, len(gene_ids), gene_batch_size):
+            batch = gene_ids[i: i + gene_batch_size]
+            batch_kwargs = dict(kwargs)
+            mf = dict(batch_kwargs.pop(filterName, {}))
+            mf['entrezGeneIds'] = batch
+            batch_kwargs[filterName] = mf
+            resp = bravado_callable(**batch_kwargs)
+            chunk = self._read_response(resp)
+            if not chunk.empty:
+                chunks.append(chunk)
+
+        return pd.concat(chunks, ignore_index=True) if chunks else pd.DataFrame()
+
+
+    def _get_col(self, study_info, col_name):
+        """Return column as list.
+        Parameters
+        ----------
+        study_info : `pandas.DataFrame`
+            Information returned by metadata extraction methods.
+        col_name: `str`
+            Name of a column of `study_info`.
+        Returns
+        -------
+        result : `list`
+            Column values as list or an empty list if the column is absent.
+        """
+        return study_info[col_name].tolist() if col_name in study_info.columns else []
+
+
+    @staticmethod
+    def _flatten_dotted_columns(df):
+        """Flatten nested column names returned by pd.json_normalize.
+        Parameters
+        -------
+        df : `pandas.DataFrame`
+             Input dataframe.
+        Returns
+        -------
+        df : `pandas.DataFrame`
+             Output dataframe with flattened column names.
+        """
+
+        for col in df.columns:
+            if '.' in col:
+                parts = col.split('.')
+                new_col = parts[0] + ''.join(p[0].upper() + p[1:] for p in parts[1:] if p)
+                df.rename(columns={col:new_col}, inplace=True)
+        return df
+
     def list_studies(self):
         """ Return names of all studies on cBioPortal.
         Returns
@@ -167,7 +253,7 @@ class CBioPortalClient:
         resp = self.cbioportal.Studies.getAllStudiesUsingGET()
         all_studies = self._read_response(resp)
     
-        study_list = all_studies['name'].to_list()
+        study_list = self._get_col(all_studies, 'name')
         if target_name not in study_list:
             if verbose:
                 print(f'Available studies: {study_list}')
@@ -193,6 +279,7 @@ class CBioPortalClient:
         target_study_id = self.get_study_id(target_name)
         resp = self.cbioportal.Studies.getStudyUsingGET(studyId=target_study_id)
         study_info = self._read_response(resp)
+        study_info = self._flatten_dotted_columns(study_info)
         return study_info
     
     
@@ -211,7 +298,7 @@ class CBioPortalClient:
         target_study_id = self.get_study_id(target_name)
         resp = self.cbioportal.Clinical_Attributes.getAllClinicalAttributesInStudyUsingGET(studyId=target_study_id)
         clinical_attributes = self._read_response(resp)
-        attr_list = clinical_attributes['clinicalAttributeId'].to_list()
+        attr_list = self._get_col(clinical_attributes, 'clinicalAttributeId')
         return attr_list
     
 
@@ -226,14 +313,14 @@ class CBioPortalClient:
         data_list : `list` of `str`
             List of molecular data types (names) available in the study (e.g., ["COPY_NUMBER_ALTERATION", "MRNA_EXPRESSION", ...]).
         id_list : `list` of `str`
-            List of molecular data IDs is returned.
+            List of associated molecular profile IDs.
         """
         target_study_id = self.get_study_id(target_name)
         resp = self.cbioportal.Molecular_Profiles.getAllMolecularProfilesInStudyUsingGET(studyId=target_study_id)
         mp_info = self._read_response(resp)
 
-        data_list = mp_info['molecularAlterationType'].to_list()
-        id_list = mp_info['molecularProfileId'].to_list()
+        data_list = self._get_col(mp_info, 'molecularAlterationType')
+        id_list = self._get_col(mp_info, 'molecularProfileId')
         return data_list, id_list
 
 
@@ -261,20 +348,26 @@ class CBioPortalClient:
         if attribute == 'data_types':
             resp = self.cbioportal.Molecular_Profiles.getAllMolecularProfilesInStudyUsingGET(studyId=target_study_id)
             molec_profile_info = self._read_response(resp)
-            molec_profile_list = molec_profile_info['name'].to_list()
-            molec_profile_ids = molec_profile_info.loc[molec_profile_info['name'].isin(molec_profile_list),'molecularProfileId']
-            dtypes_dict = dict(zip(molec_profile_list, molec_profile_ids))
-            molec_profile_df = pd.DataFrame(list(dtypes_dict.items()), columns=['name', 'id'])
-            ans = molec_profile_df
+            molec_profile_list = self._get_col(molec_profile_info, 'name')
+            if len(molec_profile_list)==0 or molec_profile_info.empty:
+                ans =  pd.DataFrame(columns=['name', 'id'])
+            else:
+                molec_profile_ids = molec_profile_info.loc[molec_profile_info['name'].isin(molec_profile_list),'molecularProfileId']
+                dtypes_dict = dict(zip(molec_profile_list, molec_profile_ids))
+                molec_profile_df = pd.DataFrame(list(dtypes_dict.items()), columns=['name', 'id'])
+                ans = molec_profile_df
         elif attribute == 'cancer_types':
             resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(
                             studyId=target_study_id,
                             attributeId="CANCER_TYPE")
             cancer_type_info = self._read_response(resp)
-            cancer_type_df = cancer_type_info['value'].value_counts().reset_index()
-            cancer_type_df.columns = ['type', 'sampleCount']
-            cancer_type_df = cancer_type_df.sort_values(by='sampleCount', ascending=False)
-            ans = cancer_type_df.reset_index(drop=True)
+            if cancer_type_info.empty or 'value' not in cancer_type_info.columns:
+                ans = pd.DataFrame(columns=['type', 'sampleCount'])
+            else:
+                cancer_type_df = cancer_type_info['value'].value_counts().reset_index()
+                cancer_type_df.columns = ['type', 'sampleCount']
+                cancer_type_df = cancer_type_df.sort_values(by='sampleCount', ascending=False)
+                ans = cancer_type_df.reset_index(drop=True)
         else:
             raise ValueError(f'Invalid input Attribute {attribute} requested.')
         return ans
@@ -303,7 +396,7 @@ class CBioPortalClient:
         if attr == 'patient_id':
             resp = self.cbioportal.Patients.getAllPatientsInStudyUsingGET(studyId=target_study_id)
             pt_info = self._read_response(resp)
-            vals = pt_info['patientId'].to_list()
+            vals = self._get_col(pt_info, 'patientId')
             pts = vals
         else:
             if attr not in valid_attrs:
@@ -313,12 +406,15 @@ class CBioPortalClient:
                                                                                 attributeId=attr.upper(),
                                                                                 clinicalDataType='PATIENT')
             pt_info = self._read_response(resp)
-            vals = pt_info['value']
-            if attr == 'os_months':
-                vals = vals.astype(float)
-            vals = vals.to_list()
-            pts = pt_info['patientId'].to_list()
-
+            if pt_info.empty or 'value' not in pt_info.columns:
+                vals = []
+                pts = []
+            else:
+                vals = pt_info['value']
+                if attr == 'os_months':
+                    vals = vals.to_numeric(vals, errors='coerce')
+                vals = vals.to_list()
+                pts = self._get_col(pt_info, 'patientId')
         return vals, pts
     
     
@@ -372,21 +468,25 @@ class CBioPortalClient:
         if attr == 'sample_id':
             resp = self.cbioportal.Samples.getAllSamplesInStudyUsingGET(studyId=target_study_id)
             sample_info = self._read_response(resp)
-            vals = sample_info['sampleId'].to_list()
+            vals = self._get_col(sample_info, 'sampleId')
             samples = vals
         elif attr == 'patient_id':
             resp = self.cbioportal.Samples.getAllSamplesInStudyUsingGET(studyId=target_study_id)
             sample_info = self._read_response(resp)
-            vals = sample_info['patientId'].to_list()
-            samples = sample_info['sampleId'].to_list()
+            vals = self._get_col(sample_info, 'patientId')
+            samples = self._get_col(sample_info, 'sampleId')
         else:
             if attr not in valid_attrs:
                 raise ValueError(f"No attribute '{attr}'. Valid options: {sorted(valid_attrs)}")
             resp = self.cbioportal.Clinical_Data.getAllClinicalDataInStudyUsingGET(
                 studyId=target_study_id, attributeId=attr.upper())
             sample_info = self._read_response(resp)
-            vals = sample_info['value'].to_list()
-            samples = sample_info['sampleId'].to_list()
+            if sample_info.empty or 'value' not in sample_info.columns:
+                vals = []
+                samples = []
+            else:
+                vals = self._get_col(sample_info, 'value')
+                samples = self._get_col(sample_info, 'sampleId')
         return vals, samples
     
     
@@ -409,8 +509,10 @@ class CBioPortalClient:
         sample_id_list, __ = self.get_sample_attribute(target_study_id, 'sample_id')
 
         sample_df = pd.DataFrame(sample_id_list, columns=['sampleId'])
+        attr_list = list(attr_list) #Create copy
         if 'patient_id' not in attr_list:
             attr_list = ['patient_id'] + attr_list
+
         for attr in attr_list:
             try:
                 vals, samples = self.get_sample_attribute(target_study_id, attr)
@@ -442,13 +544,17 @@ class CBioPortalClient:
         return summary_df
 
 
-    def map_entrezid_to_hugosymbol(self, input_df):
+    def map_entrezid_to_hugosymbol(self, input_df, col_in='entrezGeneId', col_out='hugoGeneSymbol'):
         """ Map gene IDs to HUGO nomenclature.
         Parameters
         ----------
         input_df : `pandas.DataFrame`
             Input dataframe containing `entrezGeneId` column.
-
+        col_in : `str`
+            Name of column to be mapped to hugo gene symbol. Default: `entrezGeneId`.
+            Set to 'site1EntrezGeneId' or 'site2EntrezGeneId' to match site1 or site2 IDs for structural variants.
+        col_out : `str`
+            Name of output column containing hugo gene symbol.Default: `hugoGeneSymbol`.
         Returns
         -------
         input_df : `pandas.DataFrame`
@@ -459,8 +565,21 @@ class CBioPortalClient:
         resp = self.cbioportal.Genes.getAllGenesUsingGET()
         gene_info = self._read_response(resp)
         gene_map = gene_info.set_index('entrezGeneId')['hugoGeneSymbol'].to_dict()
-        input_df['hugoGeneSymbol'] = input_df['entrezGeneId'].map(gene_map).fillna("Unknown")
+        input_df[col_out] = input_df[col_in].map(gene_map).fillna("Unknown")
         return input_df
+
+
+    def get_gene_ids(self):
+        """Return all Entrez gene IDs present in a molecular profile.
+        Returns
+        -------
+        gene_list : `list` of `int`
+            List of Entrez gene IDs.
+        """
+        resp = self.cbioportal.Genes.getAllGenesUsingGET()
+        df = self._read_response(resp)
+        gene_list = self._get_col(df, 'entrezGeneId')
+        return gene_list
 
 
     def get_clinical_data(self, target_name):
@@ -479,7 +598,11 @@ class CBioPortalClient:
         pt_df = self.get_pt_info(target_name, ['os_months', 'os_status'])
         clin_df = CBioPortalClient.map_samples_to_pts(sample_df, pt_df)
         clin_df = clin_df.set_index('sampleId')
-        clin_df['osGroup'] = clin_df['osStatus'].str.contains('DECEASED', na=False).astype(float)
+
+        if 'osStatus' in clin_df.columns:
+            clin_df['osGroup'] = clin_df['osStatus'].str.contains('DECEASED', na=False).astype(float)
+        else:
+            clin_df['osGroup'] = float('nan')
         return clin_df
 
 
@@ -612,7 +735,7 @@ class CBioPortalClient:
         methyl_raw = self.map_entrezid_to_hugosymbol(methyl_raw)
 
         methyl_df = methyl_raw.copy()
-        methyl_df['value'] = pd.to_numeric(methyl_raw['value'], errors='coerce')
+        methyl_df['value'] = pd.to_numeric(methyl_df['value'], errors='coerce')
 
         # Aggregate methylation by mean & reshape to (n_feats, n_obs)
         methyl_df = (
@@ -625,81 +748,101 @@ class CBioPortalClient:
         return methyl_raw, methyl_df
 
 
-def get_rna_seq_data(self, target_name):
-    """Get RNA-seq expression data for all samples in a study.
+    def get_rna_seq_data(self, target_name):
+        """Get RNA-seq expression data for all samples in a study.
 
-    Parameters
-    ----------
-    target_name : `str`
-        Name of a study exactly as displayed on cBioPortal.
+        Parameters
+        ----------
+        target_name : `str`
+            Name of a study exactly as displayed on cBioPortal.
 
-    Returns
-    -------
-    rna_raw : `pandas.DataFrame`
-        DataFrame containing RNA-seq expression values for all samples in the study.
-    rna_df : `pandas.DataFrame`
-        rna_raw processed for loading into the keeper.
+        Returns
+        -------
+        rna_raw : `pandas.DataFrame`
+            DataFrame containing RNA-seq expression values for all samples in the study.
+        rna_df : `pandas.DataFrame`
+            rna_raw processed for loading into the keeper.
 
-    """
-    target_study_id = self.get_study_id(target_name)
+        """
+        target_study_id = self.get_study_id(target_name)
 
-    sel_type = 'MRNA_EXPRESSION'
-    rna_types, rna_ids = self.list_study_data(target_name)
-    if sel_type not in rna_types:
-        raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
-    else:
-        match_idx = rna_types.index(sel_type)
-        mpid = rna_ids[match_idx] #TBD: Check if multiple IDs can have the same study data type
+        sel_type = 'MRNA_EXPRESSION'
+        rna_types, rna_ids = self.list_study_data(target_name)
+        if sel_type not in rna_types:
+            raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
+        else:
+            match_idx = rna_types.index(sel_type)
+            mpid = rna_ids[match_idx] #TBD: Check if multiple IDs can have the same study data type
 
-    resp = self.cbioportal.Molecular_Data.fetchAllMolecularDataInMolecularProfileUsingPOST(
-        molecularProfileId=mpid,
-        molecularDataFilter={'sampleListId': target_study_id + '_all'},
-        projection='SUMMARY')
-    rna_raw = self._read_response(resp)
-    rna_raw = self.map_entrezid_to_hugosymbol(rna_raw)
+        gene_ids = self.get_gene_ids()
+        rna_raw = self._read_response_paged(
+            self.cbioportal.Molecular_Data.fetchAllMolecularDataInMolecularProfileUsingPOST,
+            gene_ids,
+            gene_batch_size=500, filterName='molecularDataFilter',
+            molecularProfileId=mpid,
+            molecularDataFilter={'sampleListId': target_study_id + '_all'},
+            projection='SUMMARY')
+        rna_raw = self.map_entrezid_to_hugosymbol(rna_raw)
 
-    rna_df = rna_raw.copy()
-    rna_df['value'] = pd.to_numeric(rna_df['value'], errors='coerce')
+        rna_df = rna_raw.copy()
+        rna_df['value'] = pd.to_numeric(rna_df['value'], errors='coerce')
 
-    # Aggregate by mean, reshape to (n_feats, n_obs)
-    rna_df = (
-        rna_df.groupby(['hugoGeneSymbol', 'sampleId'])['value']
-        .mean()
-        .unstack(level='sampleId')
-    )
-    rna_df.index.name = 'hugoGeneSymbol'
-    rna_df.columns.name = None
+        # Aggregate by mean, reshape to (n_feats, n_obs)
+        rna_df = (
+            rna_df.groupby(['hugoGeneSymbol', 'sampleId'])['value']
+            .mean()
+            .unstack(level='sampleId')
+        )
+        rna_df.index.name = 'hugoGeneSymbol'
+        rna_df.columns.name = None
 
-    return rna_raw, rna_df
+        return rna_raw, rna_df
 
 
-def get_structural_variant_data(self, target_name):
-    """Get structural variant (fusion) data for all samples in a study.
+    def get_structural_variant_data(self, target_name, target_col, agg_func='first', fill_val='missing'):
+        """Get structural variant (fusion) data for all samples in a study.
 
-    Parameters
-    ----------
-    target_name : `str`
-        Name of a study exactly as displayed on cBioPortal.
+        Parameters
+        ----------
+        target_name : `str`
+            Name of a study exactly as displayed on cBioPortal.
+        target_col : `str`
+            Column from the raw structural variant table to return
+            (e.g., 'site2HugoSymbol', 'variantClass', 'eventInfo').
+        agg_func : `str` or callable
+            Aggregation function passed to `pivot_table` to handle duplicates (Default = 'first').
+        fill_val : `str`, `int`, or `float`
+            Value used to fill missing entries in the pivoted matrix (Default = 'missing').
 
-    Returns
-    -------
-    sv_df : `pandas.DataFrame`
-        DataFrame containing structural variant data for all samples in the study.
-    """
-    target_study_id = self.get_study_id(target_name)
+        Returns
+        -------
+        sv_raw : `pandas.DataFrame`
+            DataFrame containing structural variant data for all smaples.
+        sv_df : `pandas.DataFrame` of shape (n_site1_genes, n_samples)
+            sv_raw processed for loading into the keeper.
+        """
+        sel_type = 'STRUCTURAL_VARIANT'
+        sv_types, sv_ids = self.list_study_data(target_name)
+        if sel_type not in sv_types:
+            raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
+        else:
+            match_idx = sv_types.index(sel_type)
+            mpid = sv_ids[match_idx]
 
-    sel_type = 'STRUCTURAL_VARIANT'
-    sv_types, sv_ids = self.list_study_data(target_name)
-    if sel_type not in sv_types:
-        raise ValueError(f"No profile matching {sel_type} found in study {target_name}.")
-    else:
-        match_idx = sv_types.index(sel_type)
-        mpid = sv_ids[match_idx]
+        gene_ids = self.get_gene_ids()
+        sv_raw = self._read_response_paged(self.cbioportal.Structural_Variants.fetchStructuralVariantsUsingPOST,
+                                           gene_ids, gene_batch_size=500, filterName='structuralVariantFilter',
+                                           structuralVariantFilter={'molecularProfileIds': [mpid]})
+        if sv_raw.empty:
+            raise ValueError(f"No structural variant data returned for study '{target_name}'.")
 
-    resp = self.cbioportal.Structural_Variants.fetchStructuralVariantsUsingPOST(
-        molecularProfileId=mpid,
-        structuralVariantFilter={'sampleListId': target_study_id + '_all'})
-    sv_df = self._read_response(resp)
-    sv_df = self.map_entrezid_to_hugosymbol(sv_df)
-    return sv_df
+        if target_col not in sv_raw.columns:
+            raise ValueError(f"Column '{target_col}' not found. Available columns: {sv_raw.columns.tolist()}")
 
+        sv_df = sv_raw.copy()
+        sv_df = self.map_entrezid_to_hugosymbol(sv_df, col_in='site1EntrezGeneId', col_out='site1HugoSymbol')
+        sv_df = self.map_entrezid_to_hugosymbol(sv_df, col_in='site2EntrezGeneId', col_out='site2HugoSymbol')
+        sv_df = sv_df.pivot_table(index='site1HugoSymbol', columns='sampleId',
+                                  values=target_col, aggfunc=agg_func).fillna(fill_val)
+
+        return sv_raw, sv_df
