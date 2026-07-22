@@ -384,7 +384,7 @@
     "    if g_name in keeper.graphs:\n",
     "        continue\n",
     "\n",
-    "    poser, G_poser_nn = keeper.construct_pose(key, n_branches=n_branches, \n",
+    "    poser, G_poser_nn = keeper.construct_pose(key, n_branches=n_branches, legacy_mbs=True,\n",
     "                                              min_branch_size=min_branch_size, # 10,\n",
     "                                              until_branched=True, verbose='ERROR', \n",
     "                                              mutual=mutual, k_mnn=k_mnn,\n",

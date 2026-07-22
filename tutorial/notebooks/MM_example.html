@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -38,10 +38,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=8e5d96d1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
     <script src="../../_static/documentation_options.js?v=856df6fb"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="May 25, 2026"/>
+    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -1433,7 +1433,7 @@ The final <strong>POSE</strong>, i.e., the <strong>P</strong>seudo-<strong>O</st
         <span class="k">continue</span>
 
     <span class="n">poser</span><span class="p">,</span> <span class="n">G_poser_nn</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">construct_pose</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">n_branches</span><span class="o">=</span><span class="n">n_branches</span><span class="p">,</span>
-                                              <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                              <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">legacy_mbs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                               <span class="n">mutual</span><span class="o">=</span><span class="n">mutual</span><span class="p">,</span> <span class="n">k_mnn</span><span class="o">=</span><span class="n">k_mnn</span><span class="p">,</span>
                                               <span class="n">until_branched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="s1">&#39;ERROR&#39;</span><span class="p">,</span> 
                                               <span class="n">root</span><span class="o">=</span><span class="s1">&#39;density_inv&#39;</span><span class="p">,</span> <span class="n">root_as_tip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1448,7 +1448,7 @@ The final <strong>POSE</strong>, i.e., the <strong>P</strong>seudo-<strong>O</st
     <span class="c1"># for n_branches in [5, 9]:</span>
     <span class="c1">#     max_br_prev = max(list(dict(nx.get_node_attributes(G_poser_nn, &#39;branch&#39;)).values()))</span>
     <span class="c1">#     poser, G_poser_nn = keeper.construct_pose(key, n_branches=n_branches,</span>
-    <span class="c1">#                                           min_branch_size=10,</span>
+    <span class="c1">#                                           min_branch_size=10, legacy_mbs=True,</span>
     <span class="c1">#                                           mutual=mutual, k_mnn=k_mnn,</span>
     <span class="c1">#                                           until_branched=True, verbose=&#39;ERROR&#39;, </span>
     <span class="c1">#                                           root=&#39;density_inv&#39;, root_as_tip=True)</span>
@@ -1991,8 +1991,8 @@ the iteration does not terminate until either a branch has been split or the pro
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2026,7 +2026,7 @@ the iteration does not terminate until either a branch has been split or the pro
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
 </p></div>
       
     </div>
