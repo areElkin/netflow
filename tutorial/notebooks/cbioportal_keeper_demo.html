@@ -56,7 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -423,7 +423,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cbio</span> <span class="o">=</span> <span class="n">CBioPortalClient</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Connected to cBioPortal.&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Connected to cBioPortal.'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -439,11 +439,11 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_studies</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">list_studies</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_studies</span><span class="p">)</span><span class="si">}</span><span class="s1"> studies available on cBioPortal.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_studies</span><span class="p">)</span><span class="si">}</span><span class="s1"> studies available on cBioPortal.</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;First 20 studies:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'First 20 studies:'</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_studies</span><span class="p">)[:</span><span class="mi">20</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; * </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">' * </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -478,16 +478,16 @@ First 20 studies:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for studies by keyword</span>
-<span class="n">keyword</span> <span class="o">=</span> <span class="s1">&#39;MSK-IMPACT&#39;</span>
+<span class="n">keyword</span> <span class="o">=</span> <span class="s1">'MSK-IMPACT'</span>
 <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_studies</span> <span class="k">if</span> <span class="n">keyword</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Studies matching &quot;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s1">&quot;:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Studies matching "</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s1">":'</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Studies matching &quot;MSK-IMPACT&quot;:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Studies matching "MSK-IMPACT":
   MSK-IMPACT 50K Clinical Sequencing Cohort (MSK, Cancer Cell 2026)
   MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017)
   MSK-IMPACT and MSK-ACCESS Mixed Cohort (MSK, Nat Commun 2021)
@@ -502,14 +502,14 @@ First 20 studies:
 <h2>Inspect selected study<a class="headerlink" href="#inspect-selected-study" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">STUDY_NAME</span> <span class="o">=</span> <span class="s1">&#39;MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017)&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">STUDY_NAME</span> <span class="o">=</span> <span class="s1">'MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017)'</span>
 
 <span class="c1"># Study ID and description</span>
 <span class="n">study_id</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_id</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Study ID: </span><span class="si">{</span><span class="n">study_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Study ID: </span><span class="si">{</span><span class="n">study_id</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 
 <span class="n">desc</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_description</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Description:</span><span class="se">\n</span><span class="si">{</span><span class="n">desc</span><span class="p">[[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;description&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sequencedSampleCount&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Description:</span><span class="se">\n</span><span class="si">{</span><span class="n">desc</span><span class="p">[[</span><span class="s2">"name"</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">,</span><span class="w"> </span><span class="s2">"sequencedSampleCount"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -528,8 +528,8 @@ MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017) Targeted sequencing of
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># All molecular data types available in this study</span>
-<span class="n">data_types_df</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_attribute</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">,</span> <span class="s1">&#39;data_types&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Molecular data profiles available:&#39;</span><span class="p">)</span>
+<span class="n">data_types_df</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_attribute</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">,</span> <span class="s1">'data_types'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Molecular data profiles available:'</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">data_types_df</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -585,8 +585,8 @@ MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017) Targeted sequencing of
 <h3>&gt; Cancer-type breakdown<a class="headerlink" href="#cancer-type-breakdown" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cancer_types</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_attribute</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">,</span> <span class="s1">&#39;cancer_types&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Top 10 cancer types by sample count:&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cancer_types</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_study_attribute</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">,</span> <span class="s1">'cancer_types'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Top 10 cancer types by sample count:'</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">cancer_types</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -678,14 +678,14 @@ MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017) Targeted sequencing of
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clinical_attrs</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">list_study_attributes</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clinical_attrs</span><span class="p">)</span><span class="si">}</span><span class="s1"> clinical attributes available:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clinical_attrs</span><span class="p">)</span><span class="si">}</span><span class="s1"> clinical attributes available:'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">clinical_attrs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>24 clinical attributes available:
-[&#39;CANCER_TYPE&#39;, &#39;CANCER_TYPE_DETAILED&#39;, &#39;DNA_INPUT&#39;, &#39;FRACTION_GENOME_ALTERED&#39;, &#39;MATCHED_STATUS&#39;, &#39;METASTATIC_SITE&#39;, &#39;MUTATION_COUNT&#39;, &#39;ONCOTREE_CODE&#39;, &#39;OS_MONTHS&#39;, &#39;OS_STATUS&#39;, &#39;PRIMARY_SITE&#39;, &#39;SAMPLE_CLASS&#39;, &#39;SAMPLE_COLLECTION_SOURCE&#39;, &#39;SAMPLE_COUNT&#39;, &#39;SAMPLE_COVERAGE&#39;, &#39;SAMPLE_TYPE&#39;, &#39;SEX&#39;, &#39;SMOKING_HISTORY&#39;, &#39;SOMATIC_STATUS&#39;, &#39;SPECIMEN_PRESERVATION_TYPE&#39;, &#39;SPECIMEN_TYPE&#39;, &#39;TMB_NONSYNONYMOUS&#39;, &#39;TUMOR_PURITY&#39;, &#39;VITAL_STATUS&#39;]
+['CANCER_TYPE', 'CANCER_TYPE_DETAILED', 'DNA_INPUT', 'FRACTION_GENOME_ALTERED', 'MATCHED_STATUS', 'METASTATIC_SITE', 'MUTATION_COUNT', 'ONCOTREE_CODE', 'OS_MONTHS', 'OS_STATUS', 'PRIMARY_SITE', 'SAMPLE_CLASS', 'SAMPLE_COLLECTION_SOURCE', 'SAMPLE_COUNT', 'SAMPLE_COVERAGE', 'SAMPLE_TYPE', 'SEX', 'SMOKING_HISTORY', 'SOMATIC_STATUS', 'SPECIMEN_PRESERVATION_TYPE', 'SPECIMEN_TYPE', 'TMB_NONSYNONYMOUS', 'TUMOR_PURITY', 'VITAL_STATUS']
 </pre></div>
 </div>
 </div>
@@ -699,7 +699,7 @@ MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017) Targeted sequencing of
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clin_df</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_clinical_data</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Clinical data shape: </span><span class="si">{</span><span class="n">clin_df</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (samples × attributes)&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Clinical data shape: </span><span class="si">{</span><span class="n">clin_df</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (samples × attributes)'</span><span class="p">)</span>
 <span class="c1"># Display clinical data for first 5 samples</span>
 <span class="n">display</span><span class="p">(</span><span class="n">clin_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
@@ -814,11 +814,11 @@ MSK-IMPACT Clinical Sequencing Cohort (MSK, Nat Med 2017) Targeted sequencing of
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fetching mutation data...&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Fetching mutation data...'</span><span class="p">)</span>
 <span class="n">mut_raw</span><span class="p">,</span> <span class="n">mut_proc</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_mutation_data</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mutation matrix shape: </span><span class="si">{</span><span class="n">mut_proc</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (genes × samples)&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Fraction of gene/sample pairs mutated: </span><span class="si">{</span><span class="n">mut_proc</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Mutation matrix shape: </span><span class="si">{</span><span class="n">mut_proc</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (genes × samples)'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Fraction of gene/sample pairs mutated: </span><span class="si">{</span><span class="n">mut_proc</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">mut_proc</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">5</span><span class="p">,</span> <span class="p">:</span><span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -915,13 +915,13 @@ Fraction of gene/sample pairs mutated: 0.0165
 <span class="n">keeper</span> <span class="o">=</span> <span class="n">Keeper</span><span class="p">(</span><span class="n">observation_labels</span><span class="o">=</span><span class="n">sample_ids</span><span class="p">)</span>
 
 <span class="c1"># Load mutation data </span>
-<span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">mut_proc</span><span class="p">,</span> <span class="s1">&#39;mutation&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Keeper data keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">mut_proc</span><span class="p">,</span> <span class="s1">'mutation'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Keeper data keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Keeper data keys: [&#39;mutation&#39;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Keeper data keys: ['mutation']
 </pre></div>
 </div>
 </div>
@@ -930,8 +930,8 @@ Fraction of gene/sample pairs mutated: 0.0165
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># View most frequently mutated genes</span>
 <span class="n">mutation_freq</span> <span class="o">=</span> <span class="n">mut_proc</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Top 10 most frequently mutated genes:&#39;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">mutation_freq</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;n_samples_mutated&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Top 10 most frequently mutated genes:'</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">mutation_freq</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">'n_samples_mutated'</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -1015,10 +1015,10 @@ Fraction of gene/sample pairs mutated: 0.0165
 <p><code class="docutils literal notranslate"><span class="pre">get_cna_data()</span></code> returns an integer <em>(genes, samples)</em>  matrix where -2 represents deep deletion, -1 - shallow deletion, 0 - diploid, 1 - shallow gain, 2-amplification.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fetching CNA data...&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Fetching CNA data...'</span><span class="p">)</span>
 <span class="n">cna_raw</span><span class="p">,</span> <span class="n">cna_proc</span> <span class="o">=</span> <span class="n">cbio</span><span class="o">.</span><span class="n">get_cna_data</span><span class="p">(</span><span class="n">STUDY_NAME</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">CNA matrix shape: </span><span class="si">{</span><span class="n">cna_raw</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (genes × samples)&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">CNA matrix shape: </span><span class="si">{</span><span class="n">cna_raw</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  (genes × samples)'</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">cna_proc</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -1031,10 +1031,10 @@ Fraction of gene/sample pairs mutated: 0.0165
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Align to keeper&#39;s sample order before loading</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Align to keeper's sample order before loading</span>
 <span class="n">cna_aligned</span> <span class="o">=</span> <span class="n">cna_proc</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">sample_ids</span><span class="p">)</span>
-<span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cna_aligned</span><span class="p">,</span> <span class="s1">&#39;cna&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Keeper data keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cna_aligned</span><span class="p">,</span> <span class="s1">'cna'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Keeper data keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1045,11 +1045,11 @@ Fraction of gene/sample pairs mutated: 0.0165
 <h2>Keeper summary<a class="headerlink" href="#keeper-summary" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Keeper observation count: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Data modalities loaded:   </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Keeper observation count: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Data modalities loaded:   </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
     <span class="n">frame</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">]  shape: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  dtype: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">]  shape: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">  dtype: </span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

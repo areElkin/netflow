@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -401,8 +401,8 @@
 
 <div class="viewcode-block" id="dbscan_clustering">
 <a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.dbscan_clustering">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">dbscan_clustering</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;precomputed&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Perform DBSCAN clustering. </span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dbscan_clustering</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"precomputed"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Perform DBSCAN clustering. </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -415,11 +415,11 @@
 <span class="sd">    -------</span>
 <span class="sd">    clusters : `pandas.Series`</span>
 <span class="sd">        The cluster assignment for each observation in ``d``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">min_samples</span><span class="p">,</span> 
                     <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 
-    <span class="n">clusters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dbscan&#39;</span><span class="p">)</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'dbscan'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">clusters</span></div>
 
 
@@ -427,7 +427,7 @@
 <div class="viewcode-block" id="branch_clustering">
 <a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.branch_clustering">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">branch_clustering</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">branch_record</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Perform clustering on each branch.</span>
+<span class="w">    </span><span class="sd">""" Perform clustering on each branch.</span>
 <span class="sd">    </span>
 <span class="sd">    Note: outliers should be returned from ``clustering`` with the value -1.</span>
 <span class="sd">    Currently, such outliers are treated as a cluster.</span>
@@ -452,7 +452,7 @@
 <span class="sd">        The new cluster index for each observation.</span>
 <span class="sd">    branch_map : `dict`</span>
 <span class="sd">        Maps the original branch index to indices of new child sub clusters.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">records</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">branch_record</span><span class="o">==</span><span class="n">ix</span><span class="p">]</span>
@@ -478,7 +478,7 @@
 <div class="viewcode-block" id="high_res_branch_graph">
 <a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.high_res_branch_graph">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">high_res_branch_graph</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Extract higher resolution graph from POSE.</span>
+<span class="w">    </span><span class="sd">""" Extract higher resolution graph from POSE.</span>
 <span class="sd">    </span>
 <span class="sd">    Each node represents a branch from the POSE, and edges are placed between nodes </span>
 <span class="sd">    containing observations incident to edges between branches in the original POSE.</span>
@@ -492,27 +492,27 @@
 <span class="sd">    -------</span>
 <span class="sd">    Ghr : `nx.Graph`</span>
 <span class="sd">        The high-res graph.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">branch_record</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;branch&#39;</span><span class="p">,</span> 
-                                                <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)))</span>   
-    <span class="n">branch_record</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;branch&#39;</span>
+<span class="sd">    """</span>
+    <span class="n">branch_record</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'branch'</span><span class="p">,</span> 
+                                                <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'name'</span><span class="p">)))</span>   
+    <span class="n">branch_record</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'branch'</span>
     
     <span class="n">Ghr</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
     <span class="n">Ghr</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">branch_record</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
 
-    <span class="n">br</span> <span class="o">=</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;branch&#39;</span><span class="p">)</span>
+    <span class="n">br</span> <span class="o">=</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'branch'</span><span class="p">)</span>
     <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">Ghr</span><span class="p">,</span> 
                            <span class="p">{</span><span class="n">i</span> <span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">br</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span> 
-                           <span class="n">name</span><span class="o">=</span><span class="s2">&quot;members&quot;</span><span class="p">)</span>
-    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">Ghr</span><span class="p">,</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ghr</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;members&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ghr</span><span class="p">},</span>
-                           <span class="n">name</span><span class="o">=</span><span class="s2">&quot;n_members&quot;</span><span class="p">)</span>
+                           <span class="n">name</span><span class="o">=</span><span class="s2">"members"</span><span class="p">)</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">Ghr</span><span class="p">,</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ghr</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">'members'</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ghr</span><span class="p">},</span>
+                           <span class="n">name</span><span class="o">=</span><span class="s2">"n_members"</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">==</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]]:</span>
+        <span class="k">if</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">'name'</span><span class="p">]]</span> <span class="o">==</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">'name'</span><span class="p">]]:</span>
             <span class="k">continue</span>
 
         <span class="c1"># put edge between super-nodes containing observations incident on the original edge:</span>
-        <span class="n">Ghr</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]],</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span>
+        <span class="n">Ghr</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">'name'</span><span class="p">]],</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">'name'</span><span class="p">]])</span>
 
     <span class="k">return</span> <span class="n">Ghr</span></div>
 
@@ -521,7 +521,7 @@
 <div class="viewcode-block" id="high_res_clustered_branch_graph">
 <a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.high_res_clustered_branch_graph">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">high_res_clustered_branch_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">clustering</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Extract higher resolution graph from clustering on POSE branches.</span>
+<span class="w">    </span><span class="sd">""" Extract higher resolution graph from clustering on POSE branches.</span>
 <span class="sd">    </span>
 <span class="sd">    Each node represents a cluster from a POSE branch, and edges are placed between nodes </span>
 <span class="sd">    containing observations incident to edges between branches in the original POSE.</span>
@@ -537,31 +537,31 @@
 <span class="sd">    -------</span>
 <span class="sd">    Ghr : `nx.Graph`</span>
 <span class="sd">        The high-res graph.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">branch_record</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;branch&#39;</span><span class="p">,</span> 
-                                                <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)))</span>   
-    <span class="n">branch_record</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;branch&#39;</span>
+<span class="sd">    """</span>
+    <span class="n">branch_record</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'branch'</span><span class="p">,</span> 
+                                                <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'name'</span><span class="p">)))</span>   
+    <span class="n">branch_record</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'branch'</span>
     
     <span class="n">Ghr</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
     <span class="n">Ghr</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">clustering</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
 
     <span class="n">clustering</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">clustering</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;cluster&#39;</span>
-    <span class="n">br</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;cluster&#39;</span><span class="p">)</span>
+    <span class="n">clustering</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'cluster'</span>
+    <span class="n">br</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'cluster'</span><span class="p">)</span>
     <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">Ghr</span><span class="p">,</span> 
                            <span class="p">{</span><span class="n">i</span> <span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">br</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span> 
-                           <span class="n">name</span><span class="o">=</span><span class="s2">&quot;members&quot;</span><span class="p">)</span>
-    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">Ghr</span><span class="p">,</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ghr</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;members&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ghr</span><span class="p">},</span>
-                           <span class="n">name</span><span class="o">=</span><span class="s2">&quot;n_members&quot;</span><span class="p">)</span>
-    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">Ghr</span><span class="p">,</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">Ghr</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;members&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ghr</span><span class="p">},</span>
-                           <span class="n">name</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+                           <span class="n">name</span><span class="o">=</span><span class="s2">"members"</span><span class="p">)</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">Ghr</span><span class="p">,</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ghr</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">'members'</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ghr</span><span class="p">},</span>
+                           <span class="n">name</span><span class="o">=</span><span class="s2">"n_members"</span><span class="p">)</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">Ghr</span><span class="p">,</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">branch_record</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">Ghr</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">'members'</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ghr</span><span class="p">},</span>
+                           <span class="n">name</span><span class="o">=</span><span class="s2">"parent"</span><span class="p">)</span>
     
     <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">clustering</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">==</span> <span class="n">clustering</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]]:</span>
+        <span class="k">if</span> <span class="n">clustering</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">'name'</span><span class="p">]]</span> <span class="o">==</span> <span class="n">clustering</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">'name'</span><span class="p">]]:</span>
             <span class="k">continue</span>
 
         <span class="c1"># put edge between super-nodes containing observations incident on the original edge:</span>
-        <span class="n">Ghr</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">clustering</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]],</span> <span class="n">clustering</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span>
+        <span class="n">Ghr</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">clustering</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">'name'</span><span class="p">]],</span> <span class="n">clustering</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ee</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">'name'</span><span class="p">]])</span>
 
     <span class="k">return</span> <span class="n">Ghr</span></div>
 
@@ -570,7 +570,7 @@
 <div class="viewcode-block" id="avg_cluster_edges">
 <a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.avg_cluster_edges">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">avg_cluster_edges</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Return average value of X within and between clusters.</span>
+<span class="w">    </span><span class="sd">""" Return average value of X within and between clusters.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -581,7 +581,7 @@
 <span class="sd">    G : `networkx.Graph`</span>
 <span class="sd">        (Optional) If provided, restrict to the average over over edges in the graph.</span>
 <span class="sd">        Otherwise, the average is taken between all observations in the cluster.</span>
-<span class="sd">        Expected to have node attribute &#39;name&#39; corresponding to the name of each observation </span>
+<span class="sd">        Expected to have node attribute 'name' corresponding to the name of each observation </span>
 <span class="sd">        (represented as nodes).</span>
 
 <span class="sd">    Returns</span>
@@ -589,16 +589,16 @@
 <span class="sd">    R : `pandas.DataFrame`</span>
 <span class="sd">        The average values within and between clusters, where the index and columns </span>
 <span class="sd">        are the cluster references.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">G</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">node_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">G</span><span class="p">}</span>
+        <span class="n">node_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">'name'</span><span class="p">]</span> <span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">G</span><span class="p">}</span>
         
     <span class="n">clustering</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">clustering</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;cluster&#39;</span>
+    <span class="n">clustering</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'cluster'</span>
      
     <span class="n">R</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">ddict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">clustering</span><span class="o">.</span><span class="n">unique</span><span class="p">()}</span>
 
-    <span class="n">members</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;cluster&#39;</span><span class="p">)</span>
+    <span class="n">members</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'cluster'</span><span class="p">)</span>
     <span class="n">members</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span> <span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">members</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     
     <span class="c1"># within clusters</span>
@@ -634,8 +634,8 @@
 
 <div class="viewcode-block" id="louvain">
 <a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">louvain</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;inverted_distance&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute Louvain communities on graph, intended for POSE</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">louvain</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">'inverted_distance'</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Compute Louvain communities on graph, intended for POSE</span>
 
 <span class="sd">    Louvain communities are computed via ``networkx.community.louvain_communities``</span>
 
@@ -645,7 +645,7 @@
 <span class="sd">        The graph.</span>
 <span class="sd">    weight : {`None`, `str`}</span>
 <span class="sd">        The edge attribute of the value used as the weight. If None, set to 1</span>
-<span class="sd">        for all edges (default value = &#39;inverted_distance&#39;).</span>
+<span class="sd">        for all edges (default value = 'inverted_distance').</span>
 <span class="sd">    resolution : `float`</span>
 <span class="sd">        Influences algorithm preference for larger (resolution value greater than 1)</span>
 <span class="sd">        or smaller (resolution value smaller than 1) communities.</span>
@@ -658,7 +658,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    lvp : `dict`</span>
 <span class="sd">       Index of community each node is partitioned into, keyed by the nodes.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">louvain_partition</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">community</span><span class="o">.</span><span class="n">louvain_communities</span><span class="p">(</span><span class="n">G</span><span class="p">,</span>
                                                          <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
                                                          <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
@@ -677,9 +677,9 @@
 <div class="viewcode-block" id="louvain_paritioned">
 <a class="viewcode-back" href="../../../reference/generated/netflow.probe.clustering.html#netflow.probe.clustering.louvain_paritioned">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">louvain_paritioned</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">class_attr</span><span class="p">,</span> <span class="n">louvain_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;inverted_distance&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                       <span class="n">weight</span><span class="o">=</span><span class="s1">'inverted_distance'</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute Louvain communities on graph and further partition restricted to existing classifier (e.g., branches intended for POSE)</span>
+<span class="w">    </span><span class="sd">""" Compute Louvain communities on graph and further partition restricted to existing classifier (e.g., branches intended for POSE)</span>
 
 <span class="sd">    Louvain communities are computed via ``networkx.community.louvain_communities``</span>
 
@@ -699,7 +699,7 @@
 <span class="sd">        computed and not stored.</span>
 <span class="sd">    weight : {`None`, `str`}</span>
 <span class="sd">        The edge attribute of the value used as the weight. If None, set to 1</span>
-<span class="sd">        for all edges (default value = &#39;inverted_distance&#39;).</span>
+<span class="sd">        for all edges (default value = 'inverted_distance').</span>
 <span class="sd">        (Ignored if pre-existing Louvain communiites were saved in ``louvain_attr``.)</span>
 <span class="sd">    resolution : `float`</span>
 <span class="sd">        Influences algorithm preference for larger (resolution value greater than 1)</span>
@@ -716,11 +716,11 @@
 <span class="sd">    -------</span>
 <span class="sd">    The following node attributes are added to the graph ``G`` :</span>
 
-<span class="sd">        - f&quot;{class_attr}_{louvain_attr}&quot; : The class partitioned and Louvain community</span>
-<span class="sd">          reference index in the form &quot;{class-index}-{Louvain-index}&quot;</span>
-<span class="sd">          (``louvain_attr`` defaults to &quot;lvp&quot; if not provided).</span>
+<span class="sd">        - f"{class_attr}_{louvain_attr}" : The class partitioned and Louvain community</span>
+<span class="sd">          reference index in the form "{class-index}-{Louvain-index}"</span>
+<span class="sd">          (``louvain_attr`` defaults to "lvp" if not provided).</span>
 <span class="sd">        - louvain_attr - The Louvain community reference index, if provided.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">ca</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">class_attr</span><span class="p">))</span>
 
 
@@ -740,10 +740,10 @@
         <span class="k">if</span> <span class="n">louvain_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">lvp</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">louvain_attr</span><span class="p">)</span>
 
-    <span class="n">louvain_str</span> <span class="o">=</span> <span class="n">louvain_attr</span> <span class="k">if</span> <span class="n">louvain_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;lvp&#39;</span>
+    <span class="n">louvain_str</span> <span class="o">=</span> <span class="n">louvain_attr</span> <span class="k">if</span> <span class="n">louvain_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">'lvp'</span>
 
-    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ca</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">lvp</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span>
-                           <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">class_attr</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">louvain_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">ca</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">lvp</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="p">},</span>
+                           <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">class_attr</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">louvain_str</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 

@@ -59,7 +59,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -1854,7 +1854,7 @@ with a 2-multi-index of the pairwise observation labels.</p></li>
 
 <dl>
 <dd><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>,</dd>
-<dd><em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
 <dd><em class="sig-param"><span class="n"><span class="pre">save_eig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
 </dl>
 
@@ -1894,8 +1894,8 @@ Alternatively, if set <code class="docutils literal notranslate"><span class="pr
 
 <dl>
 <dd><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>,</dd>
-<dd><em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
-<dd><em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
 <dd><em class="sig-param"><span class="n"><span class="pre">save_eig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>,</dd>
 </dl>
 
@@ -2128,7 +2128,7 @@ Written to <code class="docutils literal notranslate"><span class="pre">keeper.s
 
 <dl>
 <dd><em class="sig-param"><span class="n"><span class="pre">similarity_key</span></span></em>,</dd>
-<dd><em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
 </dl>
 
 <span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.compute_transitions_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.compute_transitions_from_similarity" title="Link to this definition">#</a></dt>
@@ -2425,7 +2425,7 @@ If <cite>None</cite>, all features are used.</p></li>
 <li><p><strong>include_self</strong> (<cite>bool</cite>) – If <cite>True</cite>, add node in neighborhood which will result in computing normalized profile over the neighborhood.
 If <cite>False</cite>, node is not included in neighborhood which results in computing the transition distribution
 over the neighborhood.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
 and name of file to store stacked results.</p></li>
 <li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
 <li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
@@ -2475,7 +2475,7 @@ and can be accessed by <code class="docutils literal notranslate"><span class="p
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data_key</strong> (<cite>str</cite>) – The key to the data in the data keeper that should be used.</p></li>
 <li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features to compute profile distances on. If <cite>None</cite>, all features are used.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
 name of file to store stacked results.</p></li>
 <li><p><strong>metric</strong> (<cite>str</cite>) – The metric used to compute the distance, passed to scipy.spatial.distance.cdist.</p></li>
 <li><p><strong>normalize</strong> (<cite>bool</cite>) – If <cite>True</cite>, normalize neighborhood profiles to sum to 1.</p></li>
@@ -2694,8 +2694,8 @@ Default behavior is to integrate the keys of the original transitions.</p></li>
 <dl>
 <dd><em class="sig-param"><span class="n"><span class="pre">similarity_keys</span></span></em>,</dd>
 <dd><em class="sig-param"><span class="n"><span class="pre">integrated_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,</dd>
-<dd><em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
-<dd><em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">density_normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>,</dd>
+<dd><em class="sig-param"><span class="n"><span class="pre">n_comps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>,</dd>
 </dl>
 
 <span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#Keeper.integrate_transitions_from_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.Keeper.integrate_transitions_from_similarity" title="Link to this definition">#</a></dt>
@@ -3385,7 +3385,7 @@ If <cite>None</cite>, all features are used.</p></li>
 <li><p><strong>include_self</strong> (<cite>bool</cite>) – If <cite>True</cite>, add node in neighborhood which will result in computing normalized profile over the neighborhood.
 If <cite>False</cite>, node is not included in neighborhood which results in computing the transition distribution
 over the neighborhood.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.misc</span></code>
 and name of file to store stacked results.</p></li>
 <li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the
 <span class="math notranslate nohighlight">\(n\)</span> nodes (ordered from <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span>).
@@ -3447,7 +3447,7 @@ and can be accessed by <code class="docutils literal notranslate"><span class="p
 <li><p><strong>graph_key</strong> (<em>'str'</em>) – The key to the graph in the graph keeper that should be used.
 (Does not have to include all features in the data)</p></li>
 <li><p><strong>features</strong> ({<cite>None</cite>, <cite>list</cite> [<cite>str</cite>])}) – List of features to compute profile distances on. If <cite>None</cite>, all features are used.</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Label that resulting Wasserstein distances are saved in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code> and
 name of file to store stacked results.</p></li>
 <li><p><strong>graph_distances</strong> (<cite>numpy.ndarray</cite>, (n, n)) – A matrix of node-pairwise graph distances between the <span class="math notranslate nohighlight">\(n\)</span> nodes (ordered from <span class="math notranslate nohighlight">\(0, 1, ..., n-1\)</span>).
 If <cite>None</cite>, use hop distance.</p></li>

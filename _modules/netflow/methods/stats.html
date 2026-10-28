@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -408,9 +408,9 @@
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># Public type aliases (helps IDEs + keeps the API self-documenting)</span>
 <span class="c1"># -----------------------------------------------------------------------------</span>
-<span class="n">TestType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;MWU&quot;</span><span class="p">,</span> <span class="s2">&quot;t-test&quot;</span><span class="p">]</span>
-<span class="n">ReturnType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span> <span class="s2">&quot;wide&quot;</span><span class="p">]</span>
-<span class="n">ParallelBackend</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;processes&quot;</span><span class="p">,</span> <span class="s2">&quot;threads&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">]</span>
+<span class="n">TestType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"MWU"</span><span class="p">,</span> <span class="s2">"t-test"</span><span class="p">]</span>
+<span class="n">ReturnType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"dict"</span><span class="p">,</span> <span class="s2">"wide"</span><span class="p">]</span>
+<span class="n">ParallelBackend</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"processes"</span><span class="p">,</span> <span class="s2">"threads"</span><span class="p">,</span> <span class="s2">"none"</span><span class="p">]</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># Multiple testing correction methods supported by statsmodels.multipletests</span>
@@ -418,19 +418,19 @@
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="n">_ALLOWED_MULTITEST</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># one-step correction</span>
-    <span class="s2">&quot;bonferroni&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;sidak&quot;</span><span class="p">,</span>
+    <span class="s2">"bonferroni"</span><span class="p">,</span>
+    <span class="s2">"sidak"</span><span class="p">,</span>
     <span class="c1"># step down method</span>
-    <span class="s2">&quot;holm-sidak&quot;</span><span class="p">,</span>      <span class="c1"># step down method using Sidak adjustments</span>
-    <span class="s2">&quot;holm&quot;</span><span class="p">,</span>            <span class="c1"># step-down method using Bonferroni adjustments</span>
+    <span class="s2">"holm-sidak"</span><span class="p">,</span>      <span class="c1"># step down method using Sidak adjustments</span>
+    <span class="s2">"holm"</span><span class="p">,</span>            <span class="c1"># step-down method using Bonferroni adjustments</span>
     <span class="c1"># step-up / closed methods</span>
-    <span class="s2">&quot;simes-hochberg&quot;</span><span class="p">,</span>  <span class="c1"># step-up method (independent)</span>
-    <span class="s2">&quot;hommel&quot;</span><span class="p">,</span>          <span class="c1"># closed method based on Simes tests (non-negative)</span>
+    <span class="s2">"simes-hochberg"</span><span class="p">,</span>  <span class="c1"># step-up method (independent)</span>
+    <span class="s2">"hommel"</span><span class="p">,</span>          <span class="c1"># closed method based on Simes tests (non-negative)</span>
     <span class="c1"># FDR methods</span>
-    <span class="s2">&quot;fdr_bh&quot;</span><span class="p">,</span>          <span class="c1"># Benjamini/Hochberg (non-negative)</span>
-    <span class="s2">&quot;fdr_by&quot;</span><span class="p">,</span>          <span class="c1"># Benjamini/Yekutieli (negative)</span>
-    <span class="s2">&quot;fdr_tsbh&quot;</span><span class="p">,</span>        <span class="c1"># two stage fdr correction (non-negative)</span>
-    <span class="s2">&quot;fdr_tsbky&quot;</span><span class="p">,</span>       <span class="c1"># two stage fdr correction (non-negative)</span>
+    <span class="s2">"fdr_bh"</span><span class="p">,</span>          <span class="c1"># Benjamini/Hochberg (non-negative)</span>
+    <span class="s2">"fdr_by"</span><span class="p">,</span>          <span class="c1"># Benjamini/Yekutieli (negative)</span>
+    <span class="s2">"fdr_tsbh"</span><span class="p">,</span>        <span class="c1"># two stage fdr correction (non-negative)</span>
+    <span class="s2">"fdr_tsbky"</span><span class="p">,</span>       <span class="c1"># two stage fdr correction (non-negative)</span>
 <span class="p">}</span>
 
 
@@ -440,9 +440,9 @@
     <span class="n">groups</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
     <span class="n">feats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">samples_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">samples_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"auto"</span><span class="p">,</span> <span class="s2">"index"</span><span class="p">,</span> <span class="s2">"columns"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"auto"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Coerce and align inputs so feature data ``feats`` is shaped as (n_samples, n_features).</span>
 
 <span class="sd">    This helper ensures all downstream computations can assume:</span>
@@ -467,13 +467,13 @@
 <span class="sd">        - samples x features (``feats.index`` are sample IDs, ``feats.columns`` feature names)</span>
 <span class="sd">        - features x samples (``feats.columns`` are sample IDs, ``feats.index`` feature names)</span>
 
-<span class="sd">    samples_axis : {&quot;auto&quot;, &quot;index&quot;, &quot;columns&quot;}, default=&quot;auto&quot;</span>
+<span class="sd">    samples_axis : {"auto", "index", "columns"}, default="auto"</span>
 <span class="sd">        Controls how alignment/orientation is determined.</span>
 
-<span class="sd">        - &quot;auto&quot;: infer orientation from whether ``groups.index`` matches</span>
+<span class="sd">        - "auto": infer orientation from whether ``groups.index`` matches</span>
 <span class="sd">          ``feats.index`` or ``feats.columns``.</span>
-<span class="sd">        - &quot;index&quot;: enforce that samples are stored on ``feats.index``.</span>
-<span class="sd">        - &quot;columns&quot;: enforce that samples are stored on ``feats.columns``.</span>
+<span class="sd">        - "index": enforce that samples are stored on ``feats.index``.</span>
+<span class="sd">        - "columns": enforce that samples are stored on ``feats.columns``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -498,13 +498,13 @@
 <span class="sd">    This function is intentionally strict: it does **not** silently drop samples.</span>
 <span class="sd">    If indices do not align, it raises with a clear message rather than</span>
 <span class="sd">    producing a subtly misaligned analysis.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;groups must be a pandas Series.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"groups must be a pandas Series."</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;feats must be a pandas DataFrame.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"feats must be a pandas DataFrame."</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">samples_axis</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">samples_axis</span> <span class="o">==</span> <span class="s2">"auto"</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">feats</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
             <span class="n">X_df</span> <span class="o">=</span> <span class="n">feats</span>
         <span class="k">elif</span> <span class="n">feats</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
@@ -519,24 +519,24 @@
                 <span class="n">X_df</span> <span class="o">=</span> <span class="n">feats</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Could not align groups with feats. Expected either:</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="s2">&quot;  - feats.index == groups.index (samples as rows)</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="s2">&quot;  - feats.columns == groups.index (samples as columns)</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="s2">&quot;No safe strict alignment was found.&quot;</span>
+                    <span class="s2">"Could not align groups with feats. Expected either:</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"  - feats.index == groups.index (samples as rows)</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"  - feats.columns == groups.index (samples as columns)</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"No safe strict alignment was found."</span>
                 <span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">samples_axis</span> <span class="o">==</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">samples_axis</span> <span class="o">==</span> <span class="s2">"index"</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">feats</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;samples_axis=&#39;index&#39; requires feats.index == groups.index.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"samples_axis='index' requires feats.index == groups.index."</span><span class="p">)</span>
         <span class="n">X_df</span> <span class="o">=</span> <span class="n">feats</span>
 
-    <span class="k">elif</span> <span class="n">samples_axis</span> <span class="o">==</span> <span class="s2">&quot;columns&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">samples_axis</span> <span class="o">==</span> <span class="s2">"columns"</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">feats</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;samples_axis=&#39;columns&#39; requires feats.columns == groups.index.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"samples_axis='columns' requires feats.columns == groups.index."</span><span class="p">)</span>
         <span class="n">X_df</span> <span class="o">=</span> <span class="n">feats</span><span class="o">.</span><span class="n">T</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;samples_axis must be one of {&#39;auto&#39;,&#39;index&#39;,&#39;columns&#39;}.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"samples_axis must be one of {'auto','index','columns'}."</span><span class="p">)</span>
 
     <span class="n">groups_aligned</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X_df</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">groups_aligned</span><span class="p">,</span> <span class="n">X_df</span></div>
@@ -546,7 +546,7 @@
 <div class="viewcode-block" id="_feature_chunks">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats._feature_chunks">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_feature_chunks</span><span class="p">(</span><span class="n">n_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Partition a number of features into contiguous chunks (half-open intervals).</span>
 
 <span class="sd">    Parameters</span>
@@ -565,9 +565,9 @@
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
 <span class="sd">        If ``chunk_size &lt;= 0``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">chunk_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;chunk_size must be a positive integer.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"chunk_size must be a positive integer."</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">chunk_size</span><span class="p">,</span> <span class="n">n_features</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_features</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)]</span></div>
 
 
@@ -580,7 +580,7 @@
     <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Apply multiple testing correction with stable behavior in presence of NaNs.</span>
 
 <span class="sd">    Parameters</span>
@@ -601,7 +601,7 @@
 <span class="sd">    -----</span>
 <span class="sd">    `statsmodels.stats.multitest.multipletests` does not always behave well with NaNs.</span>
 <span class="sd">    This helper replaces NaNs with 1.0 for correction, then restores NaNs.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pvals</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
@@ -618,8 +618,8 @@
 
 <div class="viewcode-block" id="mann_whitney_u_test">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats.mann_whitney_u_test">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">mann_whitney_u_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;two-sided&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Perform the Mann-Whitney U rank test on two independent samples.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mann_whitney_u_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">'two-sided'</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Perform the Mann-Whitney U rank test on two independent samples.</span>
 
 <span class="sd">    The Mann-Whitney U test is a nonparametric test of the null hypothesis</span>
 <span class="sd">    that the distribution underlying sample `x` is the same as the</span>
@@ -634,16 +634,16 @@
 <span class="sd">        The arrays must have the same shape, except in the dimension</span>
 <span class="sd">        corresponding to `axis` (the first, by default), which can be</span>
 <span class="sd">        specified in ``kwargs``.</span>
-<span class="sd">    alternative : {&#39;two-sided&#39;, &#39;less&#39;, &#39;greater&#39;}, optional</span>
+<span class="sd">    alternative : {'two-sided', 'less', 'greater'}, optional</span>
 <span class="sd">        Defines the alternative hypothesis.</span>
-<span class="sd">        The following options are available (default is &#39;two-sided&#39;):</span>
+<span class="sd">        The following options are available (default is 'two-sided'):</span>
 
-<span class="sd">        * &#39;two-sided&#39;: the means of the distributions underlying the samples</span>
+<span class="sd">        * 'two-sided': the means of the distributions underlying the samples</span>
 <span class="sd">          are unequal.</span>
-<span class="sd">        * &#39;less&#39;: the mean of the distribution underlying the first sample</span>
+<span class="sd">        * 'less': the mean of the distribution underlying the first sample</span>
 <span class="sd">          is less than the mean of the distribution underlying the second</span>
 <span class="sd">          sample.</span>
-<span class="sd">        * &#39;greater&#39;: the mean of the distribution underlying the first</span>
+<span class="sd">        * 'greater': the mean of the distribution underlying the first</span>
 <span class="sd">          sample is greater than the mean of the distribution underlying</span>
 <span class="sd">          the second sample.</span>
 <span class="sd">    kwargs : `dict`</span>
@@ -653,7 +653,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    p_value : `float`</span>
 <span class="sd">        The p-value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">u_stat</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">mannwhitneyu</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span></div>
 
@@ -661,8 +661,8 @@
 
 <div class="viewcode-block" id="t_test">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats.t_test">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">t_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;two-sided&#39;</span><span class="p">,</span> <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Calculate the T-test for the means of *two independent* samples of scores.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">t_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">'two-sided'</span><span class="p">,</span> <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Calculate the T-test for the means of *two independent* samples of scores.</span>
 
 <span class="sd">    This is a test for the null hypothesis that 2 independent samples</span>
 <span class="sd">    have identical average (expected) values. This test assumes that the</span>
@@ -676,20 +676,20 @@
 <span class="sd">        The arrays must have the same shape, except in the dimension</span>
 <span class="sd">        corresponding to `axis` (the first, by default), which can be</span>
 <span class="sd">        specified in ``kwargs``.</span>
-<span class="sd">    alternative : {&#39;two-sided&#39;, &#39;less&#39;, &#39;greater&#39;}, optional</span>
+<span class="sd">    alternative : {'two-sided', 'less', 'greater'}, optional</span>
 <span class="sd">        Defines the alternative hypothesis.</span>
-<span class="sd">        The following options are available (default is &#39;two-sided&#39;):</span>
+<span class="sd">        The following options are available (default is 'two-sided'):</span>
 
-<span class="sd">        * &#39;two-sided&#39;: the means of the distributions underlying the samples</span>
+<span class="sd">        * 'two-sided': the means of the distributions underlying the samples</span>
 <span class="sd">          are unequal.</span>
-<span class="sd">        * &#39;less&#39;: the mean of the distribution underlying the first sample</span>
+<span class="sd">        * 'less': the mean of the distribution underlying the first sample</span>
 <span class="sd">          is less than the mean of the distribution underlying the second</span>
 <span class="sd">          sample.</span>
-<span class="sd">        * &#39;greater&#39;: the mean of the distribution underlying the first</span>
+<span class="sd">        * 'greater': the mean of the distribution underlying the first</span>
 <span class="sd">          sample is greater than the mean of the distribution underlying</span>
 <span class="sd">          the second sample.</span>
 <span class="sd">    equal_var : bool, default=False</span>
-<span class="sd">        Passed to ``scipy.stats.ttest_ind``; default False corresponds to Welch&#39;s t-test.</span>
+<span class="sd">        Passed to ``scipy.stats.ttest_ind``; default False corresponds to Welch's t-test.</span>
 <span class="sd">        If True, performs the standard independent 2 sample test that assumes equal population variances.</span>
 <span class="sd">    kwargs : `dict`</span>
 <span class="sd">        Key-word arguments passed to ``scipy.stats.ttest_ind``.</span>
@@ -698,7 +698,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    p_value : `float`</span>
 <span class="sd">        The p-value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">t_stat</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="n">equal_var</span><span class="o">=</span><span class="n">equal_var</span><span class="p">,</span>
                                         <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span></div>
@@ -707,8 +707,8 @@
 
 <div class="viewcode-block" id="wilcoxon_signed_rank_test">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats.wilcoxon_signed_rank_test">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">wilcoxon_signed_rank_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;two-sided&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; The Wilcoxon signed-rank test.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">wilcoxon_signed_rank_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">'two-sided'</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" The Wilcoxon signed-rank test.</span>
 
 <span class="sd">    The Wilcoxon signed-rank test tests the null hypothesis that two</span>
 <span class="sd">    related paired samples come from the same distribution. In particular,</span>
@@ -728,16 +728,16 @@
 <span class="sd">        Optional. Either the second set of measurements (if ``x`` is the first set of</span>
 <span class="sd">        measurements), or not specified (if ``x`` is the differences between</span>
 <span class="sd">        two sets of measurements.)  Must be one-dimensional.</span>
-<span class="sd">    alternative : {&#39;two-sided&#39;, &#39;less&#39;, &#39;greater&#39;}, optional</span>
+<span class="sd">    alternative : {'two-sided', 'less', 'greater'}, optional</span>
 <span class="sd">        Defines the alternative hypothesis.</span>
-<span class="sd">        The following options are available (default is &#39;two-sided&#39;):</span>
+<span class="sd">        The following options are available (default is 'two-sided'):</span>
 
-<span class="sd">        * &#39;two-sided&#39;: the means of the distributions underlying the samples</span>
+<span class="sd">        * 'two-sided': the means of the distributions underlying the samples</span>
 <span class="sd">          are unequal.</span>
-<span class="sd">        * &#39;less&#39;: the mean of the distribution underlying the first sample</span>
+<span class="sd">        * 'less': the mean of the distribution underlying the first sample</span>
 <span class="sd">          is less than the mean of the distribution underlying the second</span>
 <span class="sd">          sample.</span>
-<span class="sd">        * &#39;greater&#39;: the mean of the distribution underlying the first</span>
+<span class="sd">        * 'greater': the mean of the distribution underlying the first</span>
 <span class="sd">          sample is greater than the mean of the distribution underlying</span>
 <span class="sd">          the second sample.</span>
 <span class="sd">    kwargs : `dict`</span>
@@ -747,7 +747,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    p_value : `float`</span>
 <span class="sd">        The p-value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">w_stat</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">wilcoxon</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span></div>
 
@@ -757,18 +757,18 @@
 <div class="viewcode-block" id="perform_stat_test">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats.perform_stat_test">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">perform_stat_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="n">test_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Choose and perform a statistical test, matching your original dispatch behavior.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    values1, values2 : array-like</span>
-<span class="sd">        Vectors of measurements. For &#39;wilcoxon&#39;, these are paired vectors.</span>
-<span class="sd">    test_type : {&quot;t-test&quot;,&quot;MWU&quot;,&quot;wilcoxon&quot;}</span>
+<span class="sd">        Vectors of measurements. For 'wilcoxon', these are paired vectors.</span>
+<span class="sd">    test_type : {"t-test","MWU","wilcoxon"}</span>
 <span class="sd">        Which test to apply:</span>
-<span class="sd">          - &quot;t-test&quot;: two-sample independent t-test</span>
-<span class="sd">          - &quot;MWU&quot;: Mann–Whitney U test</span>
-<span class="sd">          - &quot;wilcoxon&quot;: Wilcoxon signed-rank test (paired)</span>
+<span class="sd">          - "t-test": two-sample independent t-test</span>
+<span class="sd">          - "MWU": Mann–Whitney U test</span>
+<span class="sd">          - "wilcoxon": Wilcoxon signed-rank test (paired)</span>
 <span class="sd">    **kwargs : dict</span>
 <span class="sd">        Forwarded to the underlying SciPy test wrapper. In particular:</span>
 <span class="sd">          - You may pass `alternative` in kwargs for all supported tests.</span>
@@ -782,15 +782,15 @@
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
 <span class="sd">        If an invalid test_type is provided.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">test_type</span> <span class="o">==</span> <span class="s1">&#39;t-test&#39;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">test_type</span> <span class="o">==</span> <span class="s1">'t-test'</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">t_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">test_type</span> <span class="o">==</span> <span class="s1">&#39;MWU&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">test_type</span> <span class="o">==</span> <span class="s1">'MWU'</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">mann_whitney_u_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">test_type</span> <span class="o">==</span> <span class="s1">&#39;wilcoxon&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">test_type</span> <span class="o">==</span> <span class="s1">'wilcoxon'</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">wilcoxon_signed_rank_test</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid test type. Choose &#39;t-test&#39;, &#39;MWU&#39;, or &#39;wilcoxon&#39;.&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Invalid test type. Choose 't-test', 'MWU', or 'wilcoxon'."</span><span class="p">)</span></div>
 
 
 
@@ -813,18 +813,18 @@
     <span class="n">nan_policy</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">test_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Initializer for parallel pairwise feature-wise workers (MWU/Wilcoxon).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    X1, X2 : numpy.ndarray</span>
 <span class="sd">        Matrices shaped (n_samples1, n_features) and (n_samples2, n_features).</span>
-<span class="sd">    test : {&quot;MWU&quot;,&quot;wilcoxon&quot;}</span>
+<span class="sd">    test : {"MWU","wilcoxon"}</span>
 <span class="sd">        Feature-wise tests supported by this worker.</span>
-<span class="sd">    alternative : {&quot;two-sided&quot;,&quot;less&quot;,&quot;greater&quot;}</span>
+<span class="sd">    alternative : {"two-sided","less","greater"}</span>
 <span class="sd">        Alternative hypothesis passed to SciPy.</span>
-<span class="sd">    nan_policy : {&quot;omit&quot;,&quot;raise&quot;}</span>
+<span class="sd">    nan_policy : {"omit","raise"}</span>
 <span class="sd">        NaN handling.</span>
 <span class="sd">    test_kwargs : dict</span>
 <span class="sd">        Extra keyword args forwarded to SciPy test functions.</span>
@@ -832,7 +832,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_PAIR_GLOBAL</span>
     <span class="n">_PAIR_GLOBAL</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">X1</span><span class="o">=</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="o">=</span><span class="n">X2</span><span class="p">,</span>
@@ -847,7 +847,7 @@
 <div class="viewcode-block" id="_pair_chunk">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats._pair_chunk">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_pair_chunk</span><span class="p">(</span><span class="n">start_end</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute p-values for a chunk of feature columns for MWU or Wilcoxon.</span>
 
 <span class="sd">    Parameters</span>
@@ -866,24 +866,24 @@
 <span class="sd">    -----</span>
 <span class="sd">    This is used only for tests that SciPy does not vectorize across features:</span>
 <span class="sd">    MWU and Wilcoxon.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">X1</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">&quot;X1&quot;</span><span class="p">]</span>
-    <span class="n">X2</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">&quot;X2&quot;</span><span class="p">]</span>
-    <span class="n">test</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span>
-    <span class="n">alternative</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">&quot;alternative&quot;</span><span class="p">]</span>
-    <span class="n">nan_policy</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">&quot;nan_policy&quot;</span><span class="p">]</span>
-    <span class="n">test_kwargs</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">&quot;test_kwargs&quot;</span><span class="p">]</span>
+<span class="sd">    """</span>
+    <span class="n">X1</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">"X1"</span><span class="p">]</span>
+    <span class="n">X2</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">"X2"</span><span class="p">]</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">"test"</span><span class="p">]</span>
+    <span class="n">alternative</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">"alternative"</span><span class="p">]</span>
+    <span class="n">nan_policy</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">"nan_policy"</span><span class="p">]</span>
+    <span class="n">test_kwargs</span> <span class="o">=</span> <span class="n">_PAIR_GLOBAL</span><span class="p">[</span><span class="s2">"test_kwargs"</span><span class="p">]</span>
 
     <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">start_end</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">isnan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span>
 
-    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;MWU&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">"MWU"</span><span class="p">:</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">mannwhitneyu</span>
         <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)):</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">X1</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">X2</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">&quot;omit&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">"omit"</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                     <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="o">~</span><span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)]</span>
                 <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
@@ -892,15 +892,15 @@
                 <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
                 <span class="k">continue</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="o">**</span><span class="n">test_kwargs</span><span class="p">)</span>
-            <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="s2">"pvalue"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">start</span><span class="p">,</span> <span class="n">out</span>
 
-    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;wilcoxon&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">"wilcoxon"</span><span class="p">:</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">wilcoxon</span>
         <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)):</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">X1</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">X2</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">&quot;omit&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">"omit"</span><span class="p">:</span>
                 <span class="n">ok</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">|</span> <span class="n">isnan</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
                 <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span>
                 <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span>
@@ -908,10 +908,10 @@
                 <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
                 <span class="k">continue</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="o">**</span><span class="n">test_kwargs</span><span class="p">)</span>
-            <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="s2">"pvalue"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">start</span><span class="p">,</span> <span class="n">out</span>
 
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Internal error: unsupported test in _pair_chunk.&quot;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Internal error: unsupported test in _pair_chunk."</span><span class="p">)</span></div>
 
 
 
@@ -921,16 +921,16 @@
     <span class="n">X1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="n">X2</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">test</span><span class="p">:</span> <span class="n">TestType</span> <span class="o">=</span> <span class="s2">&quot;MWU&quot;</span><span class="p">,</span>
-    <span class="n">alternative</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;two-sided&quot;</span><span class="p">,</span> <span class="s2">&quot;less&quot;</span><span class="p">,</span> <span class="s2">&quot;greater&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;two-sided&quot;</span><span class="p">,</span>
-    <span class="n">nan_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;omit&quot;</span><span class="p">,</span> <span class="s2">&quot;raise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;omit&quot;</span><span class="p">,</span>
+    <span class="n">test</span><span class="p">:</span> <span class="n">TestType</span> <span class="o">=</span> <span class="s2">"MWU"</span><span class="p">,</span>
+    <span class="n">alternative</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"two-sided"</span><span class="p">,</span> <span class="s2">"less"</span><span class="p">,</span> <span class="s2">"greater"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"two-sided"</span><span class="p">,</span>
+    <span class="n">nan_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"omit"</span><span class="p">,</span> <span class="s2">"raise"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"omit"</span><span class="p">,</span>
     <span class="n">equal_var</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="n">parallel_backend</span><span class="p">:</span> <span class="n">ParallelBackend</span> <span class="o">=</span> <span class="s2">&quot;processes&quot;</span><span class="p">,</span>
+    <span class="n">parallel_backend</span><span class="p">:</span> <span class="n">ParallelBackend</span> <span class="o">=</span> <span class="s2">"processes"</span><span class="p">,</span>
     <span class="n">chunk_size_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span>
     <span class="n">test_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute per-feature p-values comparing two groups of samples.</span>
 
 <span class="sd">    This function assumes inputs are **samples x features** and returns a vector</span>
@@ -941,24 +941,24 @@
 <span class="sd">    X1, X2 : pandas.DataFrame or numpy.ndarray</span>
 <span class="sd">        Two matrices of shape (n_samples1, n_features) and (n_samples2, n_features).</span>
 <span class="sd">        If DataFrames are given, they are converted once to NumPy arrays.</span>
-<span class="sd">    test : {&quot;MWU&quot;,&quot;t-test&quot;,&quot;wilcoxon&quot;}, default=&quot;MWU&quot;</span>
+<span class="sd">    test : {"MWU","t-test","wilcoxon"}, default="MWU"</span>
 <span class="sd">        Statistical test to perform:</span>
 
-<span class="sd">        - &quot;t-test&quot;: independent two-sample t-test via ``scipy.stats.ttest_ind`` with ``axis=0``</span>
-<span class="sd">        - &quot;MWU&quot;: Mann–Whitney U via ``scipy.stats.mannwhitneyu`` (feature-wise loop/parallel)</span>
-<span class="sd">        - &quot;wilcoxon&quot;: Wilcoxon signed-rank via ``scipy.stats.wilcoxon`` (paired; requires same n_samples)</span>
+<span class="sd">        - "t-test": independent two-sample t-test via ``scipy.stats.ttest_ind`` with ``axis=0``</span>
+<span class="sd">        - "MWU": Mann–Whitney U via ``scipy.stats.mannwhitneyu`` (feature-wise loop/parallel)</span>
+<span class="sd">        - "wilcoxon": Wilcoxon signed-rank via ``scipy.stats.wilcoxon`` (paired; requires same n_samples)</span>
 
-<span class="sd">    alternative : {&quot;two-sided&quot;,&quot;less&quot;,&quot;greater&quot;}, default=&quot;two-sided&quot;</span>
+<span class="sd">    alternative : {"two-sided","less","greater"}, default="two-sided"</span>
 <span class="sd">        Alternative hypothesis passed to SciPy.</span>
-<span class="sd">    nan_policy : {&quot;omit&quot;,&quot;raise&quot;}, default=&quot;omit&quot;</span>
+<span class="sd">    nan_policy : {"omit","raise"}, default="omit"</span>
 <span class="sd">        NaN handling:</span>
-<span class="sd">        - &quot;omit&quot;: omit NaNs feature-wise (t-test uses SciPy nan_policy; MWU/Wilcoxon omit manually)</span>
-<span class="sd">        - &quot;raise&quot;: raise if NaNs are present (t-test uses SciPy; MWU/Wilcoxon will yield NaNs or raise upstream)</span>
+<span class="sd">        - "omit": omit NaNs feature-wise (t-test uses SciPy nan_policy; MWU/Wilcoxon omit manually)</span>
+<span class="sd">        - "raise": raise if NaNs are present (t-test uses SciPy; MWU/Wilcoxon will yield NaNs or raise upstream)</span>
 <span class="sd">    equal_var : bool, default=False</span>
-<span class="sd">        Only used for &quot;t-test&quot;. False means Welch’s t-test.</span>
+<span class="sd">        Only used for "t-test". False means Welch’s t-test.</span>
 <span class="sd">    n_jobs : int, default=1</span>
 <span class="sd">        Number of workers for MWU/Wilcoxon feature loops. If 1, runs serially.</span>
-<span class="sd">    parallel_backend : {&quot;processes&quot;,&quot;threads&quot;,&quot;none&quot;}, default=&quot;processes&quot;</span>
+<span class="sd">    parallel_backend : {"processes","threads","none"}, default="processes"</span>
 <span class="sd">        Backend used for MWU/Wilcoxon parallel execution.</span>
 <span class="sd">    chunk_size_features : int, default=256</span>
 <span class="sd">        Number of features per parallel chunk for MWU/Wilcoxon.</span>
@@ -988,7 +988,7 @@
 <span class="sd">    Why MWU/Wilcoxon still loop:</span>
 <span class="sd">    - SciPy does not vectorize these tests across features, so looping (and optional parallelism)</span>
 <span class="sd">      is necessary if you want one p-value per feature.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">test_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">test_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -996,16 +996,16 @@
     <span class="n">B</span> <span class="o">=</span> <span class="n">X2</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X2</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;X1 and X2 must be 2D arrays (n_samples, n_features).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"X1 and X2 must be 2D arrays (n_samples, n_features)."</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;X1 and X2 must have the same number of features (columns).&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;wilcoxon&quot;</span> <span class="ow">and</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wilcoxon signed-rank requires X1 and X2 to have the same number of samples (rows).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"X1 and X2 must have the same number of features (columns)."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">"wilcoxon"</span> <span class="ow">and</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Wilcoxon signed-rank requires X1 and X2 to have the same number of samples (rows)."</span><span class="p">)</span>
 
-    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
-    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">"C"</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">"C"</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;t-test&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">"t-test"</span><span class="p">:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span>
             <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span>
             <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1020,7 +1020,7 @@
     <span class="n">chunks</span> <span class="o">=</span> <span class="n">_feature_chunks</span><span class="p">(</span><span class="n">n_features</span><span class="p">,</span> <span class="n">chunk_size_features</span><span class="p">)</span>
 
     <span class="c1"># Serial</span>
-    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">"none"</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">_pair_init_worker</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span>
                           <span class="n">nan_policy</span><span class="o">=</span><span class="n">nan_policy</span><span class="p">,</span> <span class="n">test_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">test_kwargs</span><span class="p">))</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n_features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -1030,7 +1030,7 @@
         <span class="k">return</span> <span class="n">p</span>
 
     <span class="c1"># Threads</span>
-    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">&quot;threads&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">"threads"</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cf</span>
 
         <span class="n">_pair_init_worker</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="n">nan_policy</span><span class="p">,</span>
@@ -1042,9 +1042,9 @@
         <span class="k">return</span> <span class="n">p</span>
 
     <span class="c1"># Processes</span>
-    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">&quot;processes&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">"processes"</span><span class="p">:</span>
         <span class="n">methods</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_all_start_methods</span><span class="p">()</span>
-        <span class="n">ctx</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="s2">&quot;fork&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="s2">&quot;fork&quot;</span> <span class="ow">in</span> <span class="n">methods</span> <span class="k">else</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="s2">"fork"</span><span class="p">)</span> <span class="k">if</span> <span class="s2">"fork"</span> <span class="ow">in</span> <span class="n">methods</span> <span class="k">else</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span>
 
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n_features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
@@ -1065,7 +1065,7 @@
                 <span class="n">p</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">out</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
         <span class="k">return</span> <span class="n">p</span>
 
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;parallel_backend must be one of {&#39;processes&#39;,&#39;threads&#39;,&#39;none&#39;}.&quot;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"parallel_backend must be one of {'processes','threads','none'}."</span><span class="p">)</span></div>
 
 
 
@@ -1087,16 +1087,16 @@
     <span class="n">nan_policy</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">mwu_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Initializer for MWU group-vs-rest workers.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    X : numpy.ndarray, shape (n_samples, n_features)</span>
 <span class="sd">        Full matrix.</span>
-<span class="sd">    alternative : {&quot;two-sided&quot;,&quot;less&quot;,&quot;greater&quot;}</span>
+<span class="sd">    alternative : {"two-sided","less","greater"}</span>
 <span class="sd">        Alternative hypothesis passed to SciPy.</span>
-<span class="sd">    nan_policy : {&quot;omit&quot;,&quot;raise&quot;}</span>
+<span class="sd">    nan_policy : {"omit","raise"}</span>
 <span class="sd">        NaN handling.</span>
 <span class="sd">    mwu_kwargs : dict</span>
 <span class="sd">        Extra keyword args forwarded to ``scipy.stats.mannwhitneyu``.</span>
@@ -1104,7 +1104,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_MWU_MASK_GLOBAL</span>
     <span class="n">_MWU_MASK_GLOBAL</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="n">nan_policy</span><span class="p">,</span> <span class="n">mwu_kwargs</span><span class="o">=</span><span class="n">mwu_kwargs</span><span class="p">)</span></div>
 
@@ -1113,7 +1113,7 @@
 <div class="viewcode-block" id="_mwu_mask_chunk">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats._mwu_mask_chunk">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_mwu_mask_chunk</span><span class="p">(</span><span class="n">task</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute MWU p-values for a chunk of feature columns given group/rest row indices.</span>
 
 <span class="sd">    Parameters</span>
@@ -1135,11 +1135,11 @@
 <span class="sd">    -----</span>
 <span class="sd">    This avoids materializing (n_group x n_features) and (n_rest x n_features) matrices.</span>
 <span class="sd">    It only gathers the 1D vectors needed per feature.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">_MWU_MASK_GLOBAL</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
-    <span class="n">alternative</span> <span class="o">=</span> <span class="n">_MWU_MASK_GLOBAL</span><span class="p">[</span><span class="s2">&quot;alternative&quot;</span><span class="p">]</span>
-    <span class="n">nan_policy</span> <span class="o">=</span> <span class="n">_MWU_MASK_GLOBAL</span><span class="p">[</span><span class="s2">&quot;nan_policy&quot;</span><span class="p">]</span>
-    <span class="n">mwu_kwargs</span> <span class="o">=</span> <span class="n">_MWU_MASK_GLOBAL</span><span class="p">[</span><span class="s2">&quot;mwu_kwargs&quot;</span><span class="p">]</span>
+<span class="sd">    """</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">_MWU_MASK_GLOBAL</span><span class="p">[</span><span class="s2">"X"</span><span class="p">]</span>
+    <span class="n">alternative</span> <span class="o">=</span> <span class="n">_MWU_MASK_GLOBAL</span><span class="p">[</span><span class="s2">"alternative"</span><span class="p">]</span>
+    <span class="n">nan_policy</span> <span class="o">=</span> <span class="n">_MWU_MASK_GLOBAL</span><span class="p">[</span><span class="s2">"nan_policy"</span><span class="p">]</span>
+    <span class="n">mwu_kwargs</span> <span class="o">=</span> <span class="n">_MWU_MASK_GLOBAL</span><span class="p">[</span><span class="s2">"mwu_kwargs"</span><span class="p">]</span>
 
     <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">g_idx</span><span class="p">,</span> <span class="n">r_idx</span> <span class="o">=</span> <span class="n">task</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -1149,7 +1149,7 @@
     <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)):</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">g_idx</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">r_idx</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">&quot;omit&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">"omit"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                 <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="o">~</span><span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)]</span>
             <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
@@ -1158,7 +1158,7 @@
             <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
             <span class="k">continue</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="o">**</span><span class="n">mwu_kwargs</span><span class="p">)</span>
-        <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="s2">"pvalue"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">start</span><span class="p">,</span> <span class="n">out</span></div>
 
@@ -1170,14 +1170,14 @@
     <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">g_mask</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">alternative</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;two-sided&quot;</span><span class="p">,</span> <span class="s2">&quot;less&quot;</span><span class="p">,</span> <span class="s2">&quot;greater&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;two-sided&quot;</span><span class="p">,</span>
-    <span class="n">nan_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;omit&quot;</span><span class="p">,</span> <span class="s2">&quot;raise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;omit&quot;</span><span class="p">,</span>
+    <span class="n">alternative</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"two-sided"</span><span class="p">,</span> <span class="s2">"less"</span><span class="p">,</span> <span class="s2">"greater"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"two-sided"</span><span class="p">,</span>
+    <span class="n">nan_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"omit"</span><span class="p">,</span> <span class="s2">"raise"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"omit"</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="n">parallel_backend</span><span class="p">:</span> <span class="n">ParallelBackend</span> <span class="o">=</span> <span class="s2">&quot;processes&quot;</span><span class="p">,</span>
+    <span class="n">parallel_backend</span><span class="p">:</span> <span class="n">ParallelBackend</span> <span class="o">=</span> <span class="s2">"processes"</span><span class="p">,</span>
     <span class="n">chunk_size_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span>
     <span class="n">mwu_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute MWU p-values for group vs rest without materializing submatrices.</span>
 
 <span class="sd">    Parameters</span>
@@ -1186,13 +1186,13 @@
 <span class="sd">        Full matrix (samples x features).</span>
 <span class="sd">    g_mask : numpy.ndarray, dtype=bool, shape (n_samples,)</span>
 <span class="sd">        Boolean mask selecting group samples.</span>
-<span class="sd">    alternative : {&quot;two-sided&quot;,&quot;less&quot;,&quot;greater&quot;}, default=&quot;two-sided&quot;</span>
+<span class="sd">    alternative : {"two-sided","less","greater"}, default="two-sided"</span>
 <span class="sd">        Alternative hypothesis for MWU.</span>
-<span class="sd">    nan_policy : {&quot;omit&quot;,&quot;raise&quot;}, default=&quot;omit&quot;</span>
+<span class="sd">    nan_policy : {"omit","raise"}, default="omit"</span>
 <span class="sd">        NaN handling.</span>
 <span class="sd">    n_jobs : int, default=1</span>
 <span class="sd">        Parallel workers for MWU feature loop.</span>
-<span class="sd">    parallel_backend : {&quot;processes&quot;,&quot;threads&quot;,&quot;none&quot;}, default=&quot;processes&quot;</span>
+<span class="sd">    parallel_backend : {"processes","threads","none"}, default="processes"</span>
 <span class="sd">        Backend for parallel execution.</span>
 <span class="sd">    chunk_size_features : int, default=256</span>
 <span class="sd">        Feature chunk size.</span>
@@ -1208,14 +1208,14 @@
 <span class="sd">    -----</span>
 <span class="sd">    MWU is not vectorized across features in SciPy, so we compute it feature-wise.</span>
 <span class="sd">    This implementation is memory efficient because it does not allocate X_group/X_rest.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">mwu_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">mwu_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">"C"</span><span class="p">)</span>
     <span class="n">g_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">g_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">g_mask</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">g_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;g_mask must be 1D boolean of length n_samples (matching X rows).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"g_mask must be 1D boolean of length n_samples (matching X rows)."</span><span class="p">)</span>
 
     <span class="n">n_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">chunks</span> <span class="o">=</span> <span class="n">_feature_chunks</span><span class="p">(</span><span class="n">n_features</span><span class="p">,</span> <span class="n">chunk_size_features</span><span class="p">)</span>
@@ -1225,7 +1225,7 @@
 
     <span class="n">tasks</span> <span class="o">=</span> <span class="p">[(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">g_idx</span><span class="p">,</span> <span class="n">r_idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">"none"</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">_mwu_mask_init_worker</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="n">nan_policy</span><span class="p">,</span> <span class="n">mwu_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">mwu_kwargs</span><span class="p">))</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n_features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
@@ -1233,7 +1233,7 @@
             <span class="n">p</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span class="o">+</span> <span class="n">out</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
         <span class="k">return</span> <span class="n">p</span>
 
-    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">&quot;threads&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">"threads"</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cf</span>
 
         <span class="n">_mwu_mask_init_worker</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="n">alternative</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="n">nan_policy</span><span class="p">,</span> <span class="n">mwu_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">mwu_kwargs</span><span class="p">))</span>
@@ -1243,9 +1243,9 @@
                 <span class="n">p</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span class="o">+</span> <span class="n">out</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
         <span class="k">return</span> <span class="n">p</span>
 
-    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">&quot;processes&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parallel_backend</span> <span class="o">==</span> <span class="s2">"processes"</span><span class="p">:</span>
         <span class="n">methods</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_all_start_methods</span><span class="p">()</span>
-        <span class="n">ctx</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="s2">&quot;fork&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="s2">&quot;fork&quot;</span> <span class="ow">in</span> <span class="n">methods</span> <span class="k">else</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="s2">"fork"</span><span class="p">)</span> <span class="k">if</span> <span class="s2">"fork"</span> <span class="ow">in</span> <span class="n">methods</span> <span class="k">else</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span>
 
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n_features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
@@ -1265,7 +1265,7 @@
                 <span class="n">p</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">out</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
         <span class="k">return</span> <span class="n">p</span>
 
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;parallel_backend must be one of {&#39;processes&#39;,&#39;threads&#39;,&#39;none&#39;}.&quot;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"parallel_backend must be one of {'processes','threads','none'}."</span><span class="p">)</span></div>
 
 
 
@@ -1275,10 +1275,10 @@
     <span class="n">df1</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">df2</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">samples_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-    <span class="n">test</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;MWU&quot;</span><span class="p">,</span> <span class="s2">&quot;t-test&quot;</span><span class="p">,</span> <span class="s2">&quot;wilcoxon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;MWU&quot;</span><span class="p">,</span>
+    <span class="n">samples_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"auto"</span><span class="p">,</span> <span class="s2">"index"</span><span class="p">,</span> <span class="s2">"columns"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"auto"</span><span class="p">,</span>
+    <span class="n">test</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"MWU"</span><span class="p">,</span> <span class="s2">"t-test"</span><span class="p">,</span> <span class="s2">"wilcoxon"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"MWU"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Coerce and strictly align two DataFrames so both are shaped as (n_samples, n_features).</span>
 
 <span class="sd">    Parameters</span>
@@ -1287,77 +1287,77 @@
 <span class="sd">        Two matrices to compare. Each may be either:</span>
 <span class="sd">        - samples x features (samples on index), or</span>
 <span class="sd">        - features x samples (samples on columns)</span>
-<span class="sd">    samples_axis : {&quot;auto&quot;,&quot;index&quot;,&quot;columns&quot;}, default=&quot;auto&quot;</span>
-<span class="sd">        - &quot;index&quot;: enforce samples on index (samples x features)</span>
-<span class="sd">        - &quot;columns&quot;: enforce samples on columns (features x samples), then transpose</span>
-<span class="sd">        - &quot;auto&quot;: infer strictly from label agreement between df1 and df2:</span>
-<span class="sd">            * if df1.columns == df2.columns and df1.index != df2.index  -&gt; samples_axis=&quot;index&quot;</span>
-<span class="sd">            * if df1.index == df2.index and df1.columns != df2.columns  -&gt; samples_axis=&quot;columns&quot;</span>
+<span class="sd">    samples_axis : {"auto","index","columns"}, default="auto"</span>
+<span class="sd">        - "index": enforce samples on index (samples x features)</span>
+<span class="sd">        - "columns": enforce samples on columns (features x samples), then transpose</span>
+<span class="sd">        - "auto": infer strictly from label agreement between df1 and df2:</span>
+<span class="sd">            * if df1.columns == df2.columns and df1.index != df2.index  -&gt; samples_axis="index"</span>
+<span class="sd">            * if df1.index == df2.index and df1.columns != df2.columns  -&gt; samples_axis="columns"</span>
 <span class="sd">            * if both index and columns match -&gt; ambiguous; choose by heuristic</span>
 <span class="sd">              (smaller dimension treated as samples); if tie, raise.</span>
 <span class="sd">            * if neither matches -&gt; raise.</span>
-<span class="sd">    test : {&quot;MWU&quot;,&quot;t-test&quot;,&quot;wilcoxon&quot;}, default=&quot;MWU&quot;</span>
-<span class="sd">        If &quot;wilcoxon&quot;, requires paired samples after coercion (same sample index).</span>
+<span class="sd">    test : {"MWU","t-test","wilcoxon"}, default="MWU"</span>
+<span class="sd">        If "wilcoxon", requires paired samples after coercion (same sample index).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    X1, X2 : pandas.DataFrame</span>
 <span class="sd">        Coerced matrices as samples x features, strictly aligned on features.</span>
-<span class="sd">        If test=&quot;wilcoxon&quot;, also strictly aligned on samples.</span>
+<span class="sd">        If test="wilcoxon", also strictly aligned on samples.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
 <span class="sd">        If strict alignment is not possible under the requested/inferred orientation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;df1 and df2 must be pandas DataFrames.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"df1 and df2 must be pandas DataFrames."</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">samples_axis</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">samples_axis</span> <span class="o">==</span> <span class="s2">"auto"</span><span class="p">:</span>
         <span class="n">idx_match</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
         <span class="n">col_match</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">col_match</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">idx_match</span><span class="p">:</span>
-            <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span>     <span class="c1"># samples on index, features on columns</span>
+            <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="s2">"index"</span>     <span class="c1"># samples on index, features on columns</span>
         <span class="k">elif</span> <span class="n">idx_match</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">col_match</span><span class="p">:</span>
-            <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="s2">&quot;columns&quot;</span>   <span class="c1"># samples on columns, features on index</span>
+            <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="s2">"columns"</span>   <span class="c1"># samples on columns, features on index</span>
         <span class="k">elif</span> <span class="n">idx_match</span> <span class="ow">and</span> <span class="n">col_match</span><span class="p">:</span>
             <span class="c1"># Ambiguous: both axes match. Use a deterministic heuristic:</span>
             <span class="c1"># treat the smaller axis as samples (common in genomics: n_samples &lt; n_features).</span>
             <span class="k">if</span> <span class="n">df1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">df1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span>
+                <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="s2">"index"</span>
             <span class="k">elif</span> <span class="n">df1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">df1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="s2">&quot;columns&quot;</span>
+                <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="s2">"columns"</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;samples_axis=&#39;auto&#39; is ambiguous because both index and columns match and shapes are square. &quot;</span>
-                    <span class="s2">&quot;Please specify samples_axis=&#39;index&#39; or &#39;columns&#39;.&quot;</span>
+                    <span class="s2">"samples_axis='auto' is ambiguous because both index and columns match and shapes are square. "</span>
+                    <span class="s2">"Please specify samples_axis='index' or 'columns'."</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;samples_axis=&#39;auto&#39; could not infer orientation. Expected either:</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;  - df1.columns == df2.columns (same features; samples on index)</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;  - df1.index == df2.index (same features; samples on columns)</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;No safe strict alignment was found.&quot;</span>
+                <span class="s2">"samples_axis='auto' could not infer orientation. Expected either:</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"  - df1.columns == df2.columns (same features; samples on index)</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"  - df1.index == df2.index (same features; samples on columns)</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"No safe strict alignment was found."</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">samples_axis_use</span> <span class="o">=</span> <span class="n">samples_axis</span>
 
-    <span class="k">if</span> <span class="n">samples_axis_use</span> <span class="o">==</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">samples_axis_use</span> <span class="o">==</span> <span class="s2">"index"</span><span class="p">:</span>
         <span class="c1"># samples x features</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">df1</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;samples_axis=&#39;index&#39; requires df1.columns == df2.columns (same features).&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"samples_axis='index' requires df1.columns == df2.columns (same features)."</span><span class="p">)</span>
         <span class="n">X1</span><span class="p">,</span> <span class="n">X2</span> <span class="o">=</span> <span class="n">df1</span><span class="p">,</span> <span class="n">df2</span>
-    <span class="k">elif</span> <span class="n">samples_axis_use</span> <span class="o">==</span> <span class="s2">&quot;columns&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">samples_axis_use</span> <span class="o">==</span> <span class="s2">"columns"</span><span class="p">:</span>
         <span class="c1"># features x samples -&gt; transpose to samples x features</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">df1</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;samples_axis=&#39;columns&#39; requires df1.index == df2.index (same features).&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"samples_axis='columns' requires df1.index == df2.index (same features)."</span><span class="p">)</span>
         <span class="n">X1</span><span class="p">,</span> <span class="n">X2</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">df2</span><span class="o">.</span><span class="n">T</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;samples_axis must be one of {&#39;auto&#39;,&#39;index&#39;,&#39;columns&#39;}.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"samples_axis must be one of {'auto','index','columns'}."</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;wilcoxon&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">X1</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">X2</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wilcoxon requires paired samples: df1 and df2 must have identical sample IDs/order.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">"wilcoxon"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">X1</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">X2</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"wilcoxon requires paired samples: df1 and df2 must have identical sample IDs/order."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">X1</span><span class="p">,</span> <span class="n">X2</span></div>
 
@@ -1372,19 +1372,19 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">stat_test</span><span class="p">(</span>
     <span class="n">df1</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">df2</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">test</span><span class="p">:</span> <span class="n">TestType</span> <span class="o">=</span> <span class="s2">&quot;MWU&quot;</span><span class="p">,</span>
+    <span class="n">test</span><span class="p">:</span> <span class="n">TestType</span> <span class="o">=</span> <span class="s2">"MWU"</span><span class="p">,</span>
     <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
-    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;fdr_bh&quot;</span><span class="p">,</span>
-    <span class="n">samples_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-    <span class="n">alternative</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;two-sided&quot;</span><span class="p">,</span> <span class="s2">&quot;less&quot;</span><span class="p">,</span> <span class="s2">&quot;greater&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;two-sided&quot;</span><span class="p">,</span>
-    <span class="n">nan_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;omit&quot;</span><span class="p">,</span> <span class="s2">&quot;raise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;omit&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"fdr_bh"</span><span class="p">,</span>
+    <span class="n">samples_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"auto"</span><span class="p">,</span> <span class="s2">"index"</span><span class="p">,</span> <span class="s2">"columns"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"auto"</span><span class="p">,</span>
+    <span class="n">alternative</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"two-sided"</span><span class="p">,</span> <span class="s2">"less"</span><span class="p">,</span> <span class="s2">"greater"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"two-sided"</span><span class="p">,</span>
+    <span class="n">nan_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"omit"</span><span class="p">,</span> <span class="s2">"raise"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"omit"</span><span class="p">,</span>
     <span class="n">equal_var</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="n">parallel_backend</span><span class="p">:</span> <span class="n">ParallelBackend</span> <span class="o">=</span> <span class="s2">&quot;processes&quot;</span><span class="p">,</span>
+    <span class="n">parallel_backend</span><span class="p">:</span> <span class="n">ParallelBackend</span> <span class="o">=</span> <span class="s2">"processes"</span><span class="p">,</span>
     <span class="n">chunk_size_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span>
     <span class="n">test_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Perform statistical test between groups/datasets and apply multiple test correction.</span>
+<span class="w">    </span><span class="sd">""" Perform statistical test between groups/datasets and apply multiple test correction.</span>
 
 <span class="sd">    This compares `df1` vs `df2` feature-by-feature, returning raw and corrected p-values.</span>
 
@@ -1395,7 +1395,7 @@
 <span class="sd">    df1, df2 : `pandas.DataFrame`</span>
 <span class="sd">        The measurements, where rows are features and columns are observations.</span>
 <span class="sd">        The dataframes  must have the same number of features (rows).</span>
-<span class="sd">        If ``test=&#39;wilcoxon&#39;``, they must also have the same number of</span>
+<span class="sd">        If ``test='wilcoxon'``, they must also have the same number of</span>
 <span class="sd">        observationas (columns).</span>
 
 <span class="sd">        Note: Can now handle datasets oriented as:</span>
@@ -1405,18 +1405,18 @@
 
 <span class="sd">        The `samples_axis` argument controls whether orientation is inferred or enforced.</span>
 
-<span class="sd">        If `test=&quot;wilcoxon&quot;` (paired), the sample dimension must match and be aligned</span>
+<span class="sd">        If `test="wilcoxon"` (paired), the sample dimension must match and be aligned</span>
 <span class="sd">        after coercion.</span>
-<span class="sd">    test : {&quot;MWU&quot;,&quot;t-test&quot;,&quot;wilcoxon&quot;}</span>
+<span class="sd">    test : {"MWU","t-test","wilcoxon"}</span>
 <span class="sd">        The statistical test that should be performed. Options are:</span>
 
-<span class="sd">        - &#39;MWU&#39; : Mann Whitney-U Test (default).</span>
-<span class="sd">        - &#39;t-test&#39; : T-test</span>
-<span class="sd">        - &#39;wilcoxon&#39; : Wilcoxon Signed Rank Test</span>
+<span class="sd">        - 'MWU' : Mann Whitney-U Test (default).</span>
+<span class="sd">        - 't-test' : T-test</span>
+<span class="sd">        - 'wilcoxon' : Wilcoxon Signed Rank Test</span>
 <span class="sd">    alpha : `float`</span>
 <span class="sd">        The family-wise error rate (FWER) passed to statsmodels `multipletests`, should be between 0 and 1.</span>
 <span class="sd">    method : `str`</span>
-<span class="sd">        Method for multiple test correction, default=&#39;fdr_bh&#39;.</span>
+<span class="sd">        Method for multiple test correction, default='fdr_bh'.</span>
 
 <span class="sd">        Options:</span>
 
@@ -1430,23 +1430,23 @@
 <span class="sd">        - `fdr_by` : Benjamini/Yekutieli (negative)</span>
 <span class="sd">        - `fdr_tsbh` : two stage fdr correction (non-negative)</span>
 <span class="sd">        - `fdr_tsbky` : two stage fdr correction (non-negative)</span>
-<span class="sd">    samples_axis : {&quot;auto&quot;,&quot;index&quot;,&quot;columns&quot;}, default=&quot;auto&quot;</span>
+<span class="sd">    samples_axis : {"auto","index","columns"}, default="auto"</span>
 <span class="sd">        Orientation control:</span>
 
-<span class="sd">        - &quot;index&quot;: enforce samples on df.index (df is samples x features)</span>
-<span class="sd">        - &quot;columns&quot;: enforce samples on df.columns (df is features x samples), then transpose</span>
-<span class="sd">        - &quot;auto&quot;: infer orientation strictly from label agreement between df1 and df2</span>
+<span class="sd">        - "index": enforce samples on df.index (df is samples x features)</span>
+<span class="sd">        - "columns": enforce samples on df.columns (df is features x samples), then transpose</span>
+<span class="sd">        - "auto": infer orientation strictly from label agreement between df1 and df2</span>
 <span class="sd">          (see `_coerce_two_dfs_samples_x_features` for details)</span>
-<span class="sd">    alternative : {&quot;two-sided&quot;,&quot;less&quot;,&quot;greater&quot;}, default=&quot;two-sided&quot;</span>
+<span class="sd">    alternative : {"two-sided","less","greater"}, default="two-sided"</span>
 <span class="sd">        Alternative hypothesis passed to the underlying SciPy test.</span>
-<span class="sd">    nan_policy : {&quot;omit&quot;,&quot;raise&quot;}, default=&quot;omit&quot;</span>
+<span class="sd">    nan_policy : {"omit","raise"}, default="omit"</span>
 <span class="sd">        NaN handling. For t-test, this is passed to SciPy. For MWU/Wilcoxon, NaNs are</span>
 <span class="sd">        handled feature-wise by the underlying implementation.</span>
 <span class="sd">    equal_var : bool, default=False</span>
 <span class="sd">        Used for t-test only. False means Welch’s t-test.</span>
 <span class="sd">    n_jobs : int, default=1</span>
 <span class="sd">        Workers for MWU/Wilcoxon (feature-wise). If 1, runs serially.</span>
-<span class="sd">    parallel_backend : {&quot;processes&quot;,&quot;threads&quot;,&quot;none&quot;}, default=&quot;processes&quot;</span>
+<span class="sd">    parallel_backend : {"processes","threads","none"}, default="processes"</span>
 <span class="sd">        Backend for MWU/Wilcoxon.</span>
 <span class="sd">    chunk_size_features : int, default=256</span>
 <span class="sd">        Feature chunk size for MWU/Wilcoxon.</span>
@@ -1458,37 +1458,37 @@
 <span class="sd">    -------</span>
 <span class="sd">    record : `pandas.DataFrame`</span>
 <span class="sd">        DataFrame indexed by feature name with columns:</span>
-<span class="sd">        - &quot;p-value&quot;</span>
-<span class="sd">        - &quot;corrected p-value&quot;</span>
+<span class="sd">        - "p-value"</span>
+<span class="sd">        - "corrected p-value"</span>
 
 <span class="sd">    DataFrame indexed by feature name with columns:</span>
-<span class="sd">        - &quot;p-value&quot;</span>
-<span class="sd">        - &quot;corrected p-value&quot;</span>
+<span class="sd">        - "p-value"</span>
+<span class="sd">        - "corrected p-value"</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    - For unpaired tests (&quot;MWU&quot; and &quot;t-test&quot;), this wrapper routes to the optimized</span>
+<span class="sd">    - For unpaired tests ("MWU" and "t-test"), this wrapper routes to the optimized</span>
 <span class="sd">      group-vs-rest engine `_sig_feats_by_group_core` by constructing a two-group</span>
 <span class="sd">      grouping vector over the concatenated observations.</span>
 <span class="sd">    - MWU can be parallelized across feature chunks using additional kwargs:</span>
 <span class="sd">        * n_jobs (int): number of workers (default 1)</span>
-<span class="sd">        * parallel_backend ({&quot;processes&quot;,&quot;threads&quot;,&quot;none&quot;}): backend (default &quot;processes&quot;)</span>
+<span class="sd">        * parallel_backend ({"processes","threads","none"}): backend (default "processes")</span>
 <span class="sd">        * chunk_size_features (int): features per chunk (default 256)</span>
-<span class="sd">    - For &quot;wilcoxon&quot; (paired), a paired signed-rank test is computed between df1 and df2 columns, feature-wise.</span>
+<span class="sd">    - For "wilcoxon" (paired), a paired signed-rank test is computed between df1 and df2 columns, feature-wise.</span>
 <span class="sd">    - These keys (if present) are **consumed by the wrapper** and not forwarded to SciPy:</span>
-<span class="sd">        - alternative : {&quot;two-sided&quot;,&quot;less&quot;,&quot;greater&quot;} (default &quot;two-sided&quot;)</span>
-<span class="sd">        - nan_policy : {&quot;omit&quot;,&quot;raise&quot;} (default &quot;omit&quot;)</span>
+<span class="sd">        - alternative : {"two-sided","less","greater"} (default "two-sided")</span>
+<span class="sd">        - nan_policy : {"omit","raise"} (default "omit")</span>
 <span class="sd">          * For t-test, this is passed to SciPy.</span>
-<span class="sd">          * For MWU/wilcoxon, NaNs are omitted feature-wise when nan_policy=&quot;omit&quot;.</span>
+<span class="sd">          * For MWU/wilcoxon, NaNs are omitted feature-wise when nan_policy="omit".</span>
 <span class="sd">        - equal_var : bool (default False) for t-test (Welch vs pooled)</span>
 <span class="sd">        - n_jobs : int (default 1) for MWU parallelism</span>
-<span class="sd">        - parallel_backend : {&quot;processes&quot;,&quot;threads&quot;,&quot;none&quot;} (default &quot;processes&quot;) for MWU</span>
+<span class="sd">        - parallel_backend : {"processes","threads","none"} (default "processes") for MWU</span>
 <span class="sd">        - chunk_size_features : int (default 256) for MWU</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="s2">&quot;DataFrames must have the same index.&quot;</span>
-    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s1">&#39;wilcoxon&#39;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="s2">"DataFrames must have the same index."</span>
+    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s1">'wilcoxon'</span><span class="p">:</span>
         <span class="k">assert</span> <span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">columns</span> <span class="o">==</span> <span class="n">df2</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="p">(</span>
-            <span class="s2">&quot;DataFrames must have the same observations for performing the Wilcoxon Signed Rank Test.&quot;</span>
+            <span class="s2">"DataFrames must have the same observations for performing the Wilcoxon Signed Rank Test."</span>
         <span class="p">)</span>
 
     <span class="c1"># ~~~~ legacy implementation ~~~~~</span>
@@ -1498,7 +1498,7 @@
     <span class="c1"># corrected_p_values = multipletests(p_values, alpha=alpha, method=method)[1]</span>
 
     <span class="c1"># record = pd.DataFrame(data=[p_values, corrected_p_values],</span>
-    <span class="c1">#                       columns=df1.index.copy(), index=[&#39;p-value&#39;, &#39;corrected p-value&#39;]).T</span>
+    <span class="c1">#                       columns=df1.index.copy(), index=['p-value', 'corrected p-value']).T</span>
     <span class="c1"># ~~~~~ end legacy implementation ~~~~~~</span>
 
     <span class="k">if</span> <span class="n">test_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1531,8 +1531,8 @@
     <span class="n">qvals</span> <span class="o">=</span> <span class="n">_apply_multipletests_safe</span><span class="p">(</span><span class="n">pvals</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
 
     <span class="n">record</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="p">{</span><span class="s2">&quot;p-value&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pvals</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="s2">&quot;corrected p-value&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">qvals</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)},</span>
-        <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">feat_names</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">feat_names</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span>
+        <span class="p">{</span><span class="s2">"p-value"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pvals</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="s2">"corrected p-value"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">qvals</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)},</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">feat_names</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">feat_names</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">record</span></div>
 
@@ -1544,24 +1544,24 @@
     <span class="n">groups</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
     <span class="n">feats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">test</span><span class="p">:</span> <span class="n">TestType</span> <span class="o">=</span> <span class="s2">&quot;MWU&quot;</span><span class="p">,</span>
+    <span class="n">test</span><span class="p">:</span> <span class="n">TestType</span> <span class="o">=</span> <span class="s2">"MWU"</span><span class="p">,</span>
     <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
-    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;fdr_bh&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"fdr_bh"</span><span class="p">,</span>
     <span class="n">min_group_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">samples_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-    <span class="n">alternative</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;two-sided&quot;</span><span class="p">,</span> <span class="s2">&quot;less&quot;</span><span class="p">,</span> <span class="s2">&quot;greater&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;two-sided&quot;</span><span class="p">,</span>
-    <span class="n">nan_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;omit&quot;</span><span class="p">,</span> <span class="s2">&quot;raise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;omit&quot;</span><span class="p">,</span>
+    <span class="n">samples_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"auto"</span><span class="p">,</span> <span class="s2">"index"</span><span class="p">,</span> <span class="s2">"columns"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"auto"</span><span class="p">,</span>
+    <span class="n">alternative</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"two-sided"</span><span class="p">,</span> <span class="s2">"less"</span><span class="p">,</span> <span class="s2">"greater"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"two-sided"</span><span class="p">,</span>
+    <span class="n">nan_policy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"omit"</span><span class="p">,</span> <span class="s2">"raise"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"omit"</span><span class="p">,</span>
     <span class="n">equal_var</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="n">parallel_backend</span><span class="p">:</span> <span class="n">ParallelBackend</span> <span class="o">=</span> <span class="s2">&quot;processes&quot;</span><span class="p">,</span>
+    <span class="n">parallel_backend</span><span class="p">:</span> <span class="n">ParallelBackend</span> <span class="o">=</span> <span class="s2">"processes"</span><span class="p">,</span>
     <span class="n">chunk_size_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span>
     <span class="n">test_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">top_n</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">return_type</span><span class="p">:</span> <span class="n">ReturnType</span> <span class="o">=</span> <span class="s2">&quot;wide&quot;</span><span class="p">,</span>
+    <span class="n">return_type</span><span class="p">:</span> <span class="n">ReturnType</span> <span class="o">=</span> <span class="s2">"wide"</span><span class="p">,</span>
     <span class="n">add_effect_sizes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">log2fc_pseudocount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-9</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute per-group feature significance vs the rest of the cohort.</span>
 
 <span class="sd">    For each group label `g`, compare samples in `g` vs all other samples,</span>
@@ -1577,17 +1577,17 @@
 <span class="sd">        - features x samples (samples on columns)</span>
 
 <span class="sd">        `samples_axis` controls inference/forcing of orientation.</span>
-<span class="sd">    test : {&quot;MWU&quot;,&quot;t-test&quot;,&quot;wilcoxon&quot;}, default=&quot;MWU&quot;</span>
+<span class="sd">    test : {"MWU","t-test","wilcoxon"}, default="MWU"</span>
 <span class="sd">        Statistical test to perform.</span>
-<span class="sd">        - &quot;MWU&quot;: Mann–Whitney U (unpaired, rank-based)</span>
-<span class="sd">        - &quot;t-test&quot;: independent two-sample t-test (Welch by default)</span>
-<span class="sd">        - &quot;wilcoxon&quot;: Wilcoxon signed-rank (paired)</span>
+<span class="sd">        - "MWU": Mann–Whitney U (unpaired, rank-based)</span>
+<span class="sd">        - "t-test": independent two-sample t-test (Welch by default)</span>
+<span class="sd">        - "wilcoxon": Wilcoxon signed-rank (paired)</span>
 
-<span class="sd">        IMPORTANT: &quot;wilcoxon&quot; is not a generic group-vs-rest test (paired design).</span>
-<span class="sd">        This function will raise if test=&quot;wilcoxon&quot;.</span>
+<span class="sd">        IMPORTANT: "wilcoxon" is not a generic group-vs-rest test (paired design).</span>
+<span class="sd">        This function will raise if test="wilcoxon".</span>
 <span class="sd">    alpha : float, default=0.05</span>
 <span class="sd">        Error rate for multiple testing correction.</span>
-<span class="sd">    method : str, default=&quot;fdr_bh&quot;</span>
+<span class="sd">    method : str, default="fdr_bh"</span>
 <span class="sd">        Multiple test correction method.</span>
 
 <span class="sd">        Options</span>
@@ -1606,17 +1606,17 @@
 <span class="sd">    min_group_size : int, default=10</span>
 <span class="sd">        Minimum number of samples required for a group to be tested.</span>
 <span class="sd">        Must be &gt;= 3.</span>
-<span class="sd">    samples_axis : {&quot;auto&quot;,&quot;index&quot;,&quot;columns&quot;}, default=&quot;auto&quot;</span>
+<span class="sd">    samples_axis : {"auto","index","columns"}, default="auto"</span>
 <span class="sd">        Orientation control passed to `_coerce_samples_x_features`.</span>
-<span class="sd">    alternative : {&quot;two-sided&quot;,&quot;less&quot;,&quot;greater&quot;}, default=&quot;two-sided&quot;</span>
+<span class="sd">    alternative : {"two-sided","less","greater"}, default="two-sided"</span>
 <span class="sd">        Alternative hypothesis.</span>
-<span class="sd">    nan_policy : {&quot;omit&quot;,&quot;raise&quot;}, default=&quot;omit&quot;</span>
+<span class="sd">    nan_policy : {"omit","raise"}, default="omit"</span>
 <span class="sd">        NaN handling.</span>
 <span class="sd">    equal_var : bool, default=False</span>
 <span class="sd">        Used for t-test only. False means Welch’s t-test.</span>
 <span class="sd">    n_jobs : int, default=1</span>
 <span class="sd">        Workers for MWU feature-wise computation. If 1, runs serially.</span>
-<span class="sd">    parallel_backend : {&quot;processes&quot;,&quot;threads&quot;,&quot;none&quot;}, default=&quot;processes&quot;</span>
+<span class="sd">    parallel_backend : {"processes","threads","none"}, default="processes"</span>
 <span class="sd">        Backend for MWU parallelism.</span>
 <span class="sd">    chunk_size_features : int, default=256</span>
 <span class="sd">        Feature chunk size for MWU parallelism.</span>
@@ -1625,9 +1625,9 @@
 <span class="sd">    top_n : int, optional</span>
 <span class="sd">        If provided, keep only the top_n features per group after sorting</span>
 <span class="sd">        by corrected p-value then raw p-value.</span>
-<span class="sd">    return_type : {&quot;wide&quot;, &quot;dict&quot;}, default=False</span>
-<span class="sd">        If &quot;wide&quot; (default), return a wide DataFrame with MultiIndex columns (group, metric).</span>
-<span class="sd">        If &quot;dict&quot;, return a dict mapping group -&gt; per-group record DataFrame.</span>
+<span class="sd">    return_type : {"wide", "dict"}, default=False</span>
+<span class="sd">        If "wide" (default), return a wide DataFrame with MultiIndex columns (group, metric).</span>
+<span class="sd">        If "dict", return a dict mapping group -&gt; per-group record DataFrame.</span>
 <span class="sd">    add_effect_sizes : bool, default=True</span>
 <span class="sd">        If `True`, include effect size summaries per feature:</span>
 
@@ -1644,61 +1644,61 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    records_full : dict or pandas.DataFrame</span>
-<span class="sd">        If return_type=&quot;wide&quot;:</span>
+<span class="sd">        If return_type="wide":</span>
 <span class="sd">            DataFrame with index=features and columns MultiIndex (group, metric),</span>
-<span class="sd">            where metric in {&quot;p-value&quot;,&quot;corrected p-value&quot;}.</span>
-<span class="sd">        If return_type=&quot;dict&quot;:</span>
-<span class="sd">            dict[group_label -&gt; DataFrame(index=features, columns=[&quot;p-value&quot;,&quot;corrected p-value&quot;])]</span>
+<span class="sd">            where metric in {"p-value","corrected p-value"}.</span>
+<span class="sd">        If return_type="dict":</span>
+<span class="sd">            dict[group_label -&gt; DataFrame(index=features, columns=["p-value","corrected p-value"])]</span>
 <span class="sd">            Each per-group DataFrame is sorted by corrected p-value then p-value.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        If min_group_size &lt; 3, method invalid, alignment fails, or test=&quot;wilcoxon&quot;.</span>
+<span class="sd">        If min_group_size &lt; 3, method invalid, alignment fails, or test="wilcoxon".</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    - t-test uses SciPy&#39;s vectorized implementation across features via axis=0.</span>
+<span class="sd">    - t-test uses SciPy's vectorized implementation across features via axis=0.</span>
 <span class="sd">    - MWU is computed feature-wise (SciPy is not vectorized). This implementation</span>
 <span class="sd">      avoids large submatrix allocations by gathering per-feature vectors via indices.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;wilcoxon&quot;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">"wilcoxon"</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;wilcoxon signed-rank is a paired test and is not valid for generic group-vs-rest splits. &quot;</span>
-            <span class="s2">&quot;Use test=&#39;MWU&#39; for an unpaired rank-based alternative, or use stat_test(..., test=&#39;wilcoxon&#39;) &quot;</span>
-            <span class="s2">&quot;for explicitly paired matrices.&quot;</span>
+            <span class="s2">"wilcoxon signed-rank is a paired test and is not valid for generic group-vs-rest splits. "</span>
+            <span class="s2">"Use test='MWU' for an unpaired rank-based alternative, or use stat_test(..., test='wilcoxon') "</span>
+            <span class="s2">"for explicitly paired matrices."</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_ALLOWED_MULTITEST</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Unknown multiple-testing method &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;. Must be one of: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_ALLOWED_MULTITEST</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Unknown multiple-testing method '</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">'. Must be one of: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_ALLOWED_MULTITEST</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">test_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">test_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_group_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">min_group_size</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;min_group_size must be an int &gt;= 3.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"min_group_size must be an int &gt;= 3."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">add_effect_sizes</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">log2fc_pseudocount</span><span class="p">)</span> <span class="ow">or</span> <span class="n">log2fc_pseudocount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;log2fc_pseudocount must be a finite positive float.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"log2fc_pseudocount must be a finite positive float."</span><span class="p">)</span>
 
-    <span class="c1"># groups = groups.astype(&quot;category&quot;)</span>
+    <span class="c1"># groups = groups.astype("category")</span>
     <span class="n">groups_aligned</span><span class="p">,</span> <span class="n">X_df</span> <span class="o">=</span> <span class="n">_coerce_samples_x_features</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">feats</span><span class="p">,</span> <span class="n">samples_axis</span><span class="o">=</span><span class="n">samples_axis</span><span class="p">)</span>
 
-    <span class="n">groups_cat</span> <span class="o">=</span> <span class="n">groups_aligned</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+    <span class="n">groups_cat</span> <span class="o">=</span> <span class="n">groups_aligned</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"category"</span><span class="p">)</span>
     <span class="n">codes</span> <span class="o">=</span> <span class="n">groups_cat</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
     <span class="n">categories</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">groups_cat</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
 
     <span class="c1"># X is samples x features</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X_df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X_df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">"C"</span><span class="p">)</span>
     <span class="n">feat_names</span> <span class="o">=</span> <span class="n">X_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
 
     <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">if</span> <span class="n">n_samples</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_cat</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Internal alignment error: feats and groups mismatch after coercion.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Internal alignment error: feats and groups mismatch after coercion."</span><span class="p">)</span>
 
     <span class="n">records</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -1706,14 +1706,14 @@
     <span class="c1"># running both directions is redundant (same p/q values). Run only once.</span>
     <span class="n">n_cats</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
     <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">codes</span><span class="p">[</span><span class="n">codes</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">minlength</span><span class="o">=</span><span class="n">n_cats</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="c1"># Eligible groups are those large enough to test; &quot;out&quot; can include tiny groups</span>
+    <span class="c1"># Eligible groups are those large enough to test; "out" can include tiny groups</span>
     <span class="n">eligible_gis</span> <span class="o">=</span> <span class="p">[</span><span class="n">gi</span> <span class="k">for</span> <span class="n">gi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cats</span><span class="p">)</span> <span class="k">if</span> <span class="n">counts</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_group_size</span> <span class="ow">and</span> <span class="n">counts</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">codes</span><span class="p">)]</span>
 
     <span class="c1"># Special case: exactly two categories total AND two-sided test.</span>
     <span class="c1"># If both categories are eligible, computing both directions is redundant.</span>
-    <span class="k">if</span> <span class="n">n_cats</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">alternative</span> <span class="o">==</span> <span class="s2">&quot;two-sided&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n_cats</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">alternative</span> <span class="o">==</span> <span class="s2">"two-sided"</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">eligible_gis</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="c1"># Choose a deterministic &quot;in&quot; group to compute once.</span>
+            <span class="c1"># Choose a deterministic "in" group to compute once.</span>
             <span class="c1"># I recommend the smaller group; tie -&gt; first.</span>
             <span class="n">gi_keep</span> <span class="o">=</span> <span class="n">eligible_gis</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">([</span><span class="n">counts</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span> <span class="k">for</span> <span class="n">gi</span> <span class="ow">in</span> <span class="n">eligible_gis</span><span class="p">]))]</span>
             <span class="n">eligible_gis</span> <span class="o">=</span> <span class="p">[</span><span class="n">gi_keep</span><span class="p">]</span>
@@ -1727,7 +1727,7 @@
         <span class="k">if</span> <span class="n">n_in</span> <span class="o">&lt;</span> <span class="n">min_group_size</span> <span class="ow">or</span> <span class="n">n_out</span> <span class="o">&lt;</span> <span class="n">min_group_size</span><span class="p">:</span>
             <span class="k">continue</span>
 
-        <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;t-test&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">"t-test"</span><span class="p">:</span>
             <span class="c1"># SciPy vectorized across features (axis=0 because features are columns)</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span>
                 <span class="n">X</span><span class="p">[</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:],</span>
@@ -1740,7 +1740,7 @@
             <span class="p">)</span>
             <span class="n">pvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
-        <span class="k">elif</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">&quot;MWU&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">test</span> <span class="o">==</span> <span class="s2">"MWU"</span><span class="p">:</span>
             <span class="n">pvals</span> <span class="o">=</span> <span class="n">_mwu_pvals_group_vs_rest</span><span class="p">(</span>
                 <span class="n">X</span><span class="p">,</span>
                 <span class="n">g_mask</span><span class="p">,</span>
@@ -1752,62 +1752,62 @@
                 <span class="n">mwu_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">test_kwargs</span><span class="p">),</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;test must be one of {&#39;MWU&#39;,&#39;t-test&#39;,&#39;wilcoxon&#39;}.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"test must be one of {'MWU','t-test','wilcoxon'}."</span><span class="p">)</span>
 
         <span class="n">qvals</span> <span class="o">=</span> <span class="n">_apply_multipletests_safe</span><span class="p">(</span><span class="n">pvals</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
 
         <span class="n">cols</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;pval&quot;</span><span class="p">:</span> <span class="n">pvals</span><span class="p">,</span>
-            <span class="s2">&quot;qval&quot;</span><span class="p">:</span> <span class="n">qvals</span><span class="p">,</span>
+            <span class="s2">"pval"</span><span class="p">:</span> <span class="n">pvals</span><span class="p">,</span>
+            <span class="s2">"qval"</span><span class="p">:</span> <span class="n">qvals</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="n">add_effect_sizes</span><span class="p">:</span>
-            <span class="n">cols</span><span class="p">[</span><span class="s2">&quot;n_in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_in</span><span class="p">)</span> <span class="c1"># np.full(X.shape[1], n_in, dtype=np.int64), # np.full(n_features, n_in, dtype=np.int32),</span>
-            <span class="n">cols</span><span class="p">[</span><span class="s2">&quot;n_out&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_out</span><span class="p">)</span> <span class="c1"># np.full(X.shape[1], n_out, dtype=np.int64),  # np.full(n_features, n_out, dtype=np.int32),</span>
+            <span class="n">cols</span><span class="p">[</span><span class="s2">"n_in"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_in</span><span class="p">)</span> <span class="c1"># np.full(X.shape[1], n_in, dtype=np.int64), # np.full(n_features, n_in, dtype=np.int32),</span>
+            <span class="n">cols</span><span class="p">[</span><span class="s2">"n_out"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_out</span><span class="p">)</span> <span class="c1"># np.full(X.shape[1], n_out, dtype=np.int64),  # np.full(n_features, n_out, dtype=np.int32),</span>
 
-            <span class="n">mean_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">&quot;omit&quot;</span> <span class="k">else</span> <span class="n">X</span><span class="p">[</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">mean_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">&quot;omit&quot;</span> <span class="k">else</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">mean_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">"omit"</span> <span class="k">else</span> <span class="n">X</span><span class="p">[</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">mean_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">nan_policy</span> <span class="o">==</span> <span class="s2">"omit"</span> <span class="k">else</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">g_mask</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">mean_diff</span> <span class="o">=</span> <span class="n">mean_in</span> <span class="o">-</span> <span class="n">mean_out</span>
             <span class="n">log2fc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">((</span><span class="n">mean_in</span> <span class="o">+</span> <span class="n">log2fc_pseudocount</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mean_out</span> <span class="o">+</span> <span class="n">log2fc_pseudocount</span><span class="p">))</span>
-            <span class="n">cols</span><span class="p">[</span><span class="s2">&quot;mean_in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mean_in</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-            <span class="n">cols</span><span class="p">[</span><span class="s2">&quot;mean_out&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mean_out</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-            <span class="n">cols</span><span class="p">[</span><span class="s2">&quot;mean_diff&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mean_diff</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-            <span class="n">cols</span><span class="p">[</span><span class="s2">&quot;log2fc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">log2fc</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">cols</span><span class="p">[</span><span class="s2">"mean_in"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mean_in</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">cols</span><span class="p">[</span><span class="s2">"mean_out"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mean_out</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">cols</span><span class="p">[</span><span class="s2">"mean_diff"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mean_diff</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">cols</span><span class="p">[</span><span class="s2">"log2fc"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">log2fc</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
-        <span class="n">rec</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">feat_names</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">feat_names</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)))</span>
-        <span class="c1"># rec.insert(0, &quot;group&quot;, gname)</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">feat_names</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">feat_names</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)))</span>
+        <span class="c1"># rec.insert(0, "group", gname)</span>
 
-        <span class="n">rec</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;qval&quot;</span><span class="p">,</span> <span class="s2">&quot;pval&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">"qval"</span><span class="p">,</span> <span class="s2">"pval"</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">top_n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">rec</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">top_n</span><span class="p">))</span>
 
         <span class="n">records</span><span class="p">[</span><span class="n">gname</span><span class="p">]</span> <span class="o">=</span> <span class="n">rec</span>
 
-    <span class="k">if</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">&quot;dict&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">"dict"</span><span class="p">:</span>
         <span class="n">records_full</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">records</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-    <span class="k">elif</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">&quot;wide&quot;</span><span class="p">:</span>
-        <span class="n">H</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pval&quot;</span><span class="p">,</span> <span class="s2">&quot;qval&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">"wide"</span><span class="p">:</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"pval"</span><span class="p">,</span> <span class="s2">"qval"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">add_effect_sizes</span><span class="p">:</span>
-            <span class="n">H</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;n_in&quot;</span><span class="p">,</span> <span class="s2">&quot;n_out&quot;</span><span class="p">,</span> <span class="s2">&quot;mean_in&quot;</span><span class="p">,</span> <span class="s2">&quot;mean_out&quot;</span><span class="p">,</span> <span class="s2">&quot;mean_diff&quot;</span><span class="p">,</span> <span class="s2">&quot;log2fc&quot;</span><span class="p">]</span>
+            <span class="n">H</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"n_in"</span><span class="p">,</span> <span class="s2">"n_out"</span><span class="p">,</span> <span class="s2">"mean_in"</span><span class="p">,</span> <span class="s2">"mean_out"</span><span class="p">,</span> <span class="s2">"mean_diff"</span><span class="p">,</span> <span class="s2">"log2fc"</span><span class="p">]</span>
 
-        <span class="c1"># cols = pd.MultiIndex.from_product([list(records.keys()), [&quot;p-value&quot;, &quot;corrected p-value&quot;]])</span>
-        <span class="c1"># cols = pd.MultiIndex.from_product([list(records.keys()), [&quot;pval&quot;, &quot;qval&quot;]])</span>
+        <span class="c1"># cols = pd.MultiIndex.from_product([list(records.keys()), ["p-value", "corrected p-value"]])</span>
+        <span class="c1"># cols = pd.MultiIndex.from_product([list(records.keys()), ["pval", "qval"]])</span>
         <span class="n">cols</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_product</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">records</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">H</span><span class="p">])</span>
         <span class="n">wide</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">feat_names</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">gname</span><span class="p">,</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">records</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">aligned</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">feat_names</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">H</span><span class="p">:</span>
                 <span class="n">wide</span><span class="p">[(</span><span class="n">gname</span><span class="p">,</span> <span class="n">m</span><span class="p">)]</span> <span class="o">=</span> <span class="n">aligned</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-            <span class="c1"># wide[(gname, &quot;p-value&quot;)] = aligned[&quot;p-value&quot;].to_numpy()</span>
-            <span class="c1"># wide[(gname, &quot;corrected p-value&quot;)] = aligned[&quot;corrected p-value&quot;].to_numpy()</span>
-            <span class="c1"># wide[(gname, &quot;pval&quot;)] = aligned[&quot;pval&quot;].to_numpy()</span>
-            <span class="c1"># wide[(gname, &quot;qval&quot;)] = aligned[&quot;qval&quot;].to_numpy()</span>
-        <span class="n">wide</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;records&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">records</span>
+            <span class="c1"># wide[(gname, "p-value")] = aligned["p-value"].to_numpy()</span>
+            <span class="c1"># wide[(gname, "corrected p-value")] = aligned["corrected p-value"].to_numpy()</span>
+            <span class="c1"># wide[(gname, "pval")] = aligned["pval"].to_numpy()</span>
+            <span class="c1"># wide[(gname, "qval")] = aligned["qval"].to_numpy()</span>
+        <span class="n">wide</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"records"</span><span class="p">]</span> <span class="o">=</span> <span class="n">records</span>
 
         <span class="n">records_full</span> <span class="o">=</span> <span class="n">wide</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected return_type, must be one of {&#39;wide&#39;, &#39;dict&#39;}.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unexpected return_type, must be one of {'wide', 'dict'}."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">records_full</span></div>
 
@@ -1818,7 +1818,7 @@
 <div class="viewcode-block" id="compute_spearman">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats.compute_spearman">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_spearman</span><span class="p">(</span><span class="n">row_x</span><span class="p">,</span> <span class="n">row_y</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Spearman correlation with each row in Y for a given row in X.</span>
+<span class="w">    </span><span class="sd">"""Compute Spearman correlation with each row in Y for a given row in X.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1832,7 +1832,7 @@
 <span class="sd">        The correlation.</span>
 <span class="sd">    p_value : `float`</span>
 <span class="sd">        The p-value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>    
+<span class="sd">    """</span>    
     <span class="n">correlation</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">row_x</span><span class="p">,</span> <span class="n">row_y</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">correlation</span><span class="p">,</span> <span class="n">pvalue</span></div>
 
@@ -1841,7 +1841,7 @@
 <div class="viewcode-block" id="compute_spearman_parallel">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats.compute_spearman_parallel">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_spearman_parallel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">num_processors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Spearman correlation between each row of X and all rows of Y in parallel.</span>
+<span class="w">    </span><span class="sd">"""Compute Spearman correlation between each row of X and all rows of Y in parallel.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1860,9 +1860,9 @@
 <span class="sd">        The resulting correlations in the form ``{index_row_X: {index_row_Y: corr}}``</span>
 <span class="sd">    p_values : `dict`</span>
 <span class="sd">        The resulting p_values in the form ``{index_row_X: {index_row_Y: p_value}}``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dimension miss-match, expected X and Y to have the same number of columns&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Dimension miss-match, expected X and Y to have the same number of columns"</span><span class="p">)</span>
     
     <span class="c1"># ensure the columns of X and Y are ordered the same</span>
     <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
@@ -1889,7 +1889,7 @@
 <div class="viewcode-block" id="compute_pearson">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats.compute_pearson">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_pearson</span><span class="p">(</span><span class="n">row_x</span><span class="p">,</span> <span class="n">row_y</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Pearson correlation with each row in Y for a given row in X.</span>
+<span class="w">    </span><span class="sd">"""Compute Pearson correlation with each row in Y for a given row in X.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1903,7 +1903,7 @@
 <span class="sd">        The correlation.</span>
 <span class="sd">    p_value : `float`</span>
 <span class="sd">        The p-value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>    
+<span class="sd">    """</span>    
     <span class="n">correlation</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">scstats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">row_x</span><span class="p">,</span> <span class="n">row_y</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">correlation</span><span class="p">,</span> <span class="n">pvalue</span></div>
 
@@ -1912,7 +1912,7 @@
 <div class="viewcode-block" id="compute_pearson_parallel">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.stats.html#netflow.methods.stats.compute_pearson_parallel">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_pearson_parallel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">num_processors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Pearson correlation between each row of X and all rows of Y in parallel.</span>
+<span class="w">    </span><span class="sd">"""Compute Pearson correlation between each row of X and all rows of Y in parallel.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1931,9 +1931,9 @@
 <span class="sd">        The resulting correlations in the form ``{index_row_X: {index_row_Y: corr}}``</span>
 <span class="sd">    p_values : `dict`</span>
 <span class="sd">        The resulting p_values in the form ``{index_row_X: {index_row_Y: p_value}}``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dimension miss-match, expected X and Y to have the same number of columns&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Dimension miss-match, expected X and Y to have the same number of columns"</span><span class="p">)</span>
     
     <span class="c1"># ensure the columns of X and Y are ordered the same</span>
     <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>

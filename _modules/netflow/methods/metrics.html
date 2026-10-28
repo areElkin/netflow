@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -411,25 +411,25 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">_gen_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<span class="n">linprog_status</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;Optimization proceeding nominally.&#39;</span><span class="p">,</span>
-                  <span class="mi">1</span><span class="p">:</span><span class="s1">&#39;Iteration limit reached.&#39;</span><span class="p">,</span>
-                  <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;Problem appears to be infeasible.&#39;</span><span class="p">,</span>
-                  <span class="mi">3</span><span class="p">:</span><span class="s1">&#39;Problem appears to be unbounded.&#39;</span><span class="p">,</span>
-                  <span class="mi">4</span><span class="p">:</span><span class="s1">&#39;Numerical difficulties encountered.&#39;</span><span class="p">}</span>
+<span class="n">linprog_status</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">'Optimization proceeding nominally.'</span><span class="p">,</span>
+                  <span class="mi">1</span><span class="p">:</span><span class="s1">'Iteration limit reached.'</span><span class="p">,</span>
+                  <span class="mi">2</span><span class="p">:</span><span class="s1">'Problem appears to be infeasible.'</span><span class="p">,</span>
+                  <span class="mi">3</span><span class="p">:</span><span class="s1">'Problem appears to be unbounded.'</span><span class="p">,</span>
+                  <span class="mi">4</span><span class="p">:</span><span class="s1">'Numerical difficulties encountered.'</span><span class="p">}</span>
 
 
 
 <div class="viewcode-block" id="optimal_transportation_distance">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.optimal_transportation_distance">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">optimal_transportation_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>    
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the optimal transportation distance (OTD) of the given density distributions by CVXPY.</span>
+<span class="w">    </span><span class="sd">""" Compute the optimal transportation distance (OTD) of the given density distributions by CVXPY.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : `numpy.ndarray`, (m,)</span>
-<span class="sd">        Source&#39;s density distributions, includes source and source&#39;s neighbors.</span>
+<span class="sd">        Source's density distributions, includes source and source's neighbors.</span>
 <span class="sd">    y : `numpy.ndarray`, (n,) </span>
-<span class="sd">        Target&#39;s density distributions, includes source and source&#39;s neighbors.</span>
+<span class="sd">        Target's density distributions, includes source and source's neighbors.</span>
 <span class="sd">    d : `numpy.ndarray`, (m, n) </span>
 <span class="sd">        Shortest path matrix.</span>
 
@@ -437,7 +437,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    m : `float`</span>
 <span class="sd">        Optimal transportation distance.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">rho</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Variable</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>  <span class="c1"># the transportation plan rho</span>
     <span class="c1"># objective function d(x,y) * rho * x, need to do element-wise multiply here</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">cvx</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cvx</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">rho</span><span class="p">)))</span>
@@ -450,8 +450,8 @@
         <span class="n">m</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">solvr</span><span class="p">)</span>
-        <span class="c1"># m = prob.solve(solver=&#39;ECOS&#39;, abstol=1e-6,verbose=True)</span>
-        <span class="c1"># m = prob.solve(solver=&#39;OSQP&#39;, max_iter=100000,verbose=False)</span>
+        <span class="c1"># m = prob.solve(solver='ECOS', abstol=1e-6,verbose=True)</span>
+        <span class="c1"># m = prob.solve(solver='OSQP', max_iter=100000,verbose=False)</span>
     <span class="k">return</span> <span class="n">m</span></div>
 
 
@@ -459,15 +459,15 @@
 <div class="viewcode-block" id="OTD">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.OTD">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">OTD</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute the optimal transportation distance (OTD) of the given density distributions</span>
+<span class="w">    </span><span class="sd">""" Compute the optimal transportation distance (OTD) of the given density distributions</span>
 <span class="sd">    trying first with POT package and then by CVXPY.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : (m,) numpy.ndarray</span>
-<span class="sd">        Source&#39;s density distributions, includes source and source&#39;s neighbors.</span>
+<span class="sd">        Source's density distributions, includes source and source's neighbors.</span>
 <span class="sd">    y : (n,) numpy.ndarray</span>
-<span class="sd">        Target&#39;s density distributions, includes source and source&#39;s neighbors.</span>
+<span class="sd">        Target's density distributions, includes source and source's neighbors.</span>
 <span class="sd">    d : (m, n) numpy.ndarray</span>
 <span class="sd">        Shortest path matrix.</span>
 <span class="sd">    flag : str, optional</span>
@@ -478,18 +478,18 @@
 <span class="sd">    -------</span>
 <span class="sd">    m : float</span>
 <span class="sd">        Optimal transportation distance.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">flag</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">flag</span><span class="o">+</span><span class="s2">&quot;: &quot;</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="s2">""</span> <span class="k">if</span> <span class="n">flag</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">flag</span><span class="o">+</span><span class="s2">": "</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">wasserstein_distance</span><span class="p">,</span> <span class="n">lg</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">emd2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">lg</span><span class="p">[</span><span class="s1">&#39;warning&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">POT library failed: warning = </span><span class="si">{</span><span class="n">lg</span><span class="p">[</span><span class="s1">&#39;warning&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, retry with explicit computation&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">lg</span><span class="p">[</span><span class="s1">'warning'</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">POT library failed: warning = </span><span class="si">{</span><span class="n">lg</span><span class="p">[</span><span class="s1">'warning'</span><span class="p">]</span><span class="si">}</span><span class="s2">, retry with explicit computation"</span><span class="p">)</span>
             <span class="n">wasserstein_distance</span> <span class="o">=</span> <span class="n">optimal_transportation_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">cvx</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">SolverError</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">OTD failed, retry with SCS solver&quot;</span><span class="p">)</span>
-        <span class="n">wasserstein_distance</span> <span class="o">=</span> <span class="n">optimal_transportation_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="s1">&#39;SCS&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">OTD failed, retry with SCS solver"</span><span class="p">)</span>
+        <span class="n">wasserstein_distance</span> <span class="o">=</span> <span class="n">optimal_transportation_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="s1">'SCS'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wasserstein_distance</span></div>
 
 
@@ -504,7 +504,7 @@
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.wass_distance">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">wass_distance</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span> <span class="n">profiles</span><span class="p">,</span> <span class="n">graph_distances</span><span class="p">,</span> <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
                   <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute Wasserstein distance between profiles of two observations.</span>
+<span class="w">    </span><span class="sd">""" Compute Wasserstein distance between profiles of two observations.</span>
 
 <span class="sd">    .. note: Here, the ``profiles`` include many observations, not just those of interest.</span>
 <span class="sd">             Use ``observations`` to specify which two observations in ``profiles`` the</span>
@@ -520,8 +520,8 @@
 <span class="sd">        Profile columns names referring to the two observations that the Wasserstein distance should be computed between.</span>
 <span class="sd">    profiles : `pandas.DataFrame`</span>
 <span class="sd">        Observation profiles with features as rows and observations as columns.</span>
-<span class="sd">    graph_distances : `numpy.ndarray`, (n&#39;, n&#39;)</span>
-<span class="sd">        A matrix of node-pairwise graph distances between the :math:`n&#39;` nodes ordered by the rows in ``profiles``.</span>
+<span class="sd">    graph_distances : `numpy.ndarray`, (n', n')</span>
+<span class="sd">        A matrix of node-pairwise graph distances between the :math:`n'` nodes ordered by the rows in ``profiles``.</span>
 <span class="sd">    measure_cutoff : `float`</span>
 <span class="sd">        Threshold for treating values in profiles as zero, default = 1e-6.</span>
 
@@ -529,25 +529,25 @@
 <span class="sd">    -------</span>
 <span class="sd">    wasserstein_distance : `float`</span>
 <span class="sd">        The Wasserstein distance.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">observation_a</span><span class="p">,</span> <span class="n">observation_b</span> <span class="o">=</span> <span class="n">observations</span>
     <span class="k">if</span> <span class="n">flag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">observation_a</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">observation_b</span><span class="si">}</span><span class="s2">: &quot;</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">observation_a</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">observation_b</span><span class="si">}</span><span class="s2">: "</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="n">flag</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">observation_a</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">observation_b</span><span class="si">}</span><span class="s2">: &quot;</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="n">flag</span> <span class="o">+</span> <span class="s1">': '</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">observation_a</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">observation_b</span><span class="si">}</span><span class="s2">: "</span>
     <span class="n">m_a</span><span class="p">,</span> <span class="n">m_b</span> <span class="o">=</span> <span class="n">profiles</span><span class="p">[</span><span class="n">observation_a</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">profiles</span><span class="p">[</span><span class="n">observation_b</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
     <span class="n">Na</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">m_a</span> <span class="o">&gt;=</span> <span class="n">measure_cutoff</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#  * np.max(m_a))[0]</span>
     <span class="n">Nb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">m_b</span> <span class="o">&gt;=</span> <span class="n">measure_cutoff</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#  * np.max(m_y))[0]</span>
 
     <span class="k">if</span> <span class="n">Na</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">Nb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">Profiles are both zero, returning Wasserstein distance = 0.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">Profiles are both zero, returning Wasserstein distance = 0."</span><span class="p">)</span>
         <span class="k">return</span> <span class="mf">0.</span>
     <span class="c1"># elif Na.shape[0] == Nb.shape[0] == 1:</span>
-    <span class="c1">#     logger.msg(f&quot;{flag}Both profiles with only one feature, returning Wasserstein distance = 0.&quot;)</span>
+    <span class="c1">#     logger.msg(f"{flag}Both profiles with only one feature, returning Wasserstein distance = 0.")</span>
     <span class="c1">#     return 0.</span>
     <span class="k">elif</span> <span class="p">(</span><span class="n">Na</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">Nb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">Cannot compute Wasserstein distance between a zero-profile, returning Wasserstein distance = nan.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">Cannot compute Wasserstein distance between a zero-profile, returning Wasserstein distance = nan."</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="n">m_a</span><span class="p">,</span> <span class="n">m_b</span> <span class="o">=</span> <span class="n">m_a</span><span class="p">[</span><span class="n">Na</span><span class="p">],</span> <span class="n">m_b</span><span class="p">[</span><span class="n">Nb</span><span class="p">]</span>
@@ -566,8 +566,8 @@
 
 <div class="viewcode-block" id="pairwise_observation_euc_distances">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.pairwise_observation_euc_distances">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">pairwise_observation_euc_distances</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">     </span><span class="sd">&quot;&quot;&quot; Compute observation-pairwise Euclidean distances between the profiles.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pairwise_observation_euc_distances</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">'euclidean'</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">     </span><span class="sd">""" Compute observation-pairwise Euclidean distances between the profiles.</span>
 <span class="sd">     </span>
 <span class="sd">     Parameters</span>
 <span class="sd">     ----------</span>
@@ -582,12 +582,12 @@
 <span class="sd">     -------</span>
 <span class="sd">     ed : pandas Series</span>
 <span class="sd">         Euclidean distances between pairwise observations</span>
-<span class="sd">     &quot;&quot;&quot;</span>
+<span class="sd">     """</span>
      <span class="n">N</span> <span class="o">=</span> <span class="n">profiles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>     
      <span class="n">eds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ss</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">profiles</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">profiles</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
                         <span class="n">index</span><span class="o">=</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
      <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">eds</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">eds</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
-     <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;level_0&#39;</span><span class="p">:</span> <span class="s1">&#39;observation_a&#39;</span><span class="p">,</span> <span class="s1">&#39;level_1&#39;</span><span class="p">:</span> <span class="s1">&#39;observation_b&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;observation_a&#39;</span><span class="p">,</span> <span class="s1">&#39;observation_b&#39;</span><span class="p">])</span>
+     <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'level_0'</span><span class="p">:</span> <span class="s1">'observation_a'</span><span class="p">,</span> <span class="s1">'level_1'</span><span class="p">:</span> <span class="s1">'observation_b'</span><span class="p">})</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">'observation_a'</span><span class="p">,</span> <span class="s1">'observation_b'</span><span class="p">])</span>
      <span class="n">eds</span> <span class="o">=</span> <span class="n">eds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
      <span class="k">return</span> <span class="n">eds</span></div>
@@ -599,7 +599,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">pairwise_observation_wass_distances</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">graph_distances</span><span class="p">,</span> <span class="n">proc</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span>
                                         <span class="n">pairwise_obs_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                         <span class="n">measure_cutoff</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">solvr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute observation-pairwise Wasserstein distances between the profiles on a fixed weighted graph.</span>
+<span class="w">    </span><span class="sd">""" Compute observation-pairwise Wasserstein distances between the profiles on a fixed weighted graph.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -626,24 +626,24 @@
 <span class="sd">    -------</span>
 <span class="sd">    wd : pandas Series</span>
 <span class="sd">        Wasserstein distances between pairwise observations</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">n</span> <span class="o">=</span> <span class="n">profiles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="c1"># wds = np.zeros([1, int(0.5 * n * (n-1))])</span>
-    <span class="c1"># print(f&quot;wds = {wds.shape}.&quot;)</span>
-    <span class="c1"># print(f&quot;wds[0] = {wds[0].shape}.&quot;)</span>
+    <span class="c1"># print(f"wds = {wds.shape}.")</span>
+    <span class="c1"># print(f"wds[0] = {wds[0].shape}.")</span>
 
     <span class="k">if</span> <span class="n">pairwise_obs_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">pairwise_obs_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="mi">2</span><span class="p">))</span>
         
     <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>            
-            <span class="c1"># logger.msg(f&quot;Profiles shape = {n}&quot;)</span>
+            <span class="c1"># logger.msg(f"Profiles shape = {n}")</span>
             <span class="n">chunksize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">proc</span><span class="p">)))</span>
             <span class="c1"># chunksize, extra = divmod(0.5 * n * (n-1), proc * 4)</span>
             <span class="c1"># if extra:</span>
             <span class="c1">#     chunksize += 1</span>
                 
-            <span class="c1"># logger.msg(f&quot;Chunksize = {chunksize}.&quot;)</span>
+            <span class="c1"># logger.msg(f"Chunksize = {chunksize}.")</span>
 
         <span class="c1"># def wass_distance(observations, profiles, graph_distances, measure_cutoff=1e-6,</span>
         <span class="c1">#           solvr=None):</span>
@@ -656,10 +656,10 @@
                        <span class="n">pairwise_obs_list</span><span class="p">,</span>
                        <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">)</span>
 
-        <span class="c1"># logger.msg(f&quot;wds = {wds}.&quot;)</span>
+        <span class="c1"># logger.msg(f"wds = {wds}.")</span>
     <span class="n">wd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">wds</span><span class="p">,</span>
                    <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">profiles</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="mi">2</span><span class="p">),</span>
-                                                   <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;observation_a&#39;</span><span class="p">,</span> <span class="s1">&#39;observation_b&#39;</span><span class="p">]))</span>
+                                                   <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">'observation_a'</span><span class="p">,</span> <span class="s1">'observation_b'</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">wd</span></div>
 
@@ -668,7 +668,7 @@
 <span class="c1"># def pairwise_observation_neighborhood_wass_distance(features, graph_distances,</span>
 <span class="c1">#                                                proc=mp.cpu_count(), chunksize=None, cache_maxsize=1000000):</span>
 <span class="c1">#     for a,b in itertools.:</span>
-<span class="c1">#         with mp.get_context(&#39;fork&#39;).Pool(processes=_proc) as pool:</span>
+<span class="c1">#         with mp.get_context('fork').Pool(processes=_proc) as pool:</span>
 <span class="c1">#         chunksize, extra = divmod(nargs, _proc * 4)</span>
 <span class="c1">#         if extra:</span>
 <span class="c1">#             chunksize += 1</span>
@@ -687,8 +687,8 @@
 <span class="c1"># used to be def norm_features_</span>
 <div class="viewcode-block" id="norm_features_">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.norm_features_">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">norm_features_</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;L1&#39;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Norm of multi-feature data points.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">norm_features_</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">'L1'</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Norm of multi-feature data points.</span>
 
 <span class="sd">    Intended to compute the norm of pairwise distances between observations :math:`s_q` </span>
 <span class="sd">    and :math:`s_r` for all features</span>
@@ -706,16 +706,16 @@
 <span class="sd">    X : `pandas.DataFrame`, (n_observations * (n_observations - 1) / 2, n_features)</span>
 <span class="sd">        The matrix of  multiple pairwise-observation distances.</span>
 <span class="sd">        The norm is computed on the rows of ``X``.</span>
-<span class="sd">    method : {&#39;L1&#39;, &#39;L2&#39;, &#39;inf&#39;, &#39;mean&#39;, &#39;median&#39;}</span>
+<span class="sd">    method : {'L1', 'L2', 'inf', 'mean', 'median'}</span>
 <span class="sd">        Indicate which norm to compute. For each row of the form :math:`x = [x_1, x_2, ..., x_n]` :</span>
 
 <span class="sd">        Options:</span>
 
-<span class="sd">        - &#39;L1&#39; : :math:`\sum_{i=1}^n abs(x_i)`</span>
-<span class="sd">        - &#39;L2&#39; : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`</span>
-<span class="sd">        - &#39;inf&#39; : :math:`max_i abs(x_i)`</span>
-<span class="sd">        - &#39;mean&#39; : Mean of :math:`x`</span>
-<span class="sd">        - &#39;median&#39; : Median of :math:`x`</span>
+<span class="sd">        - 'L1' : :math:`\sum_{i=1}^n abs(x_i)`</span>
+<span class="sd">        - 'L2' : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`</span>
+<span class="sd">        - 'inf' : :math:`max_i abs(x_i)`</span>
+<span class="sd">        - 'mean' : Mean of :math:`x`</span>
+<span class="sd">        - 'median' : Median of :math:`x`</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -723,27 +723,27 @@
 <span class="sd">        Norm of the row(s).</span>
 <span class="sd">        When not a `float`, If ``X`` is a `pandas.DataFrame`, ``n`` is a `pandas.Series`.</span>
 <span class="sd">        Otherwise, if ``X`` is a `numpy.ndarray`, ``n`` is a `numpy.ndarray` vector.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)):</span>
         <span class="n">index</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">values</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="kc">None</span>
         
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;L1&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'L1'</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;L2&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'L2'</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;inf&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'inf'</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'mean'</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;median&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'median'</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">!r}</span><span class="s2"> not recognized for value of method, must be one of [&#39;L1&#39;, &#39;L2&#39;, &#39;inf&#39;, &#39;mean&#39;, &#39;median&#39;].&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">method</span><span class="si">!r}</span><span class="s2"> not recognized for value of method, must be one of ['L1', 'L2', 'inf', 'mean', 'median']."</span>
         <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;computed norm&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"computed norm"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
@@ -753,8 +753,8 @@
     
 <div class="viewcode-block" id="norm_features">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.norm_features">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">norm_features</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Norm of multi-feature data points in keeper.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">norm_features</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">'L1'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Norm of multi-feature data points in keeper.</span>
 
 <span class="sd">    Intended to compute the norm of pairwise distances between observations :math:`s_q` </span>
 <span class="sd">    and :math:`s_r` for all features</span>
@@ -781,16 +781,16 @@
 <span class="sd">    features : {`None`, `List` [`str`]}</span>
 <span class="sd">        Subset of features to include. If provided, restrict to norm over columns corresponding to features</span>
 <span class="sd">        in the specified list. If `None`, use all columns.</span>
-<span class="sd">    method : {&#39;L1&#39;, &#39;L2&#39;, &#39;inf&#39;, &#39;mean&#39;, &#39;median&#39;}</span>
+<span class="sd">    method : {'L1', 'L2', 'inf', 'mean', 'median'}</span>
 <span class="sd">        Indicate which norm to compute. For each row of the form :math:`x = [x_1, x_2, ..., x_n]` :</span>
 <span class="sd">    </span>
 <span class="sd">        Options:</span>
 
-<span class="sd">        - &#39;L1&#39; : :math:`\sum_{i=1}^n abs(x_i)`</span>
-<span class="sd">        - &#39;L2&#39; : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`</span>
-<span class="sd">        - &#39;inf&#39; : :math:`max_i abs(x_i)`</span>
-<span class="sd">        - &#39;mean&#39; : Mean of :math:`x`</span>
-<span class="sd">        - &#39;median&#39; : Median of :math:`x`</span>
+<span class="sd">        - 'L1' : :math:`\sum_{i=1}^n abs(x_i)`</span>
+<span class="sd">        - 'L2' : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`</span>
+<span class="sd">        - 'inf' : :math:`max_i abs(x_i)`</span>
+<span class="sd">        - 'mean' : Mean of :math:`x`</span>
+<span class="sd">        - 'median' : Median of :math:`x`</span>
 <span class="sd">    label : {`None`, `str`}</span>
 <span class="sd">        Label used to store resulting norm in ``keeper.misc``. If `None`, the resulting norm is returned</span>
 <span class="sd">        instead of storing it in the keeper.</span>
@@ -799,7 +799,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    n : `pandas.Series`</span>
 <span class="sd">        Norm of the row(s) of length n_observations * (n_observations - 1) / 2..</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
@@ -817,9 +817,9 @@
 <span class="c1"># used to be def compute_norm_features(self) in organization.pseudo</span>
 <div class="viewcode-block" id="norm_features_as_sym_dist">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.metrics.html#netflow.methods.metrics.norm_features_as_sym_dist">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">norm_features_as_sym_dist</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;L1&#39;</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">norm_features_as_sym_dist</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">'L1'</span><span class="p">,</span>
                               <span class="n">is_distance</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Construct symmetric distance matrix between observations from the norm of</span>
+<span class="w">    </span><span class="sd">""" Construct symmetric distance matrix between observations from the norm of</span>
 <span class="sd">    multi-feature pairwise-observation distances.</span>
 
 <span class="sd">    Intended to compute the norm of pairwise distances between observations :math:`s_q` </span>
@@ -851,20 +851,20 @@
 <span class="sd">    features : {`None`, `List` [`str`]}</span>
 <span class="sd">        Subset of features to include. If provided, restrict to norm over columns corresponding to features</span>
 <span class="sd">        in the specified list. If `None`, use all columns.</span>
-<span class="sd">    method : {&#39;L1&#39;, &#39;L2&#39;, &#39;inf&#39;, &#39;mean&#39;, &#39;median&#39;}</span>
+<span class="sd">    method : {'L1', 'L2', 'inf', 'mean', 'median'}</span>
 <span class="sd">        Indicate which norm to compute. For each row of the form :math:`x = [x_1, x_2, ..., x_n]` :</span>
 <span class="sd">    </span>
 <span class="sd">        Options:</span>
 
-<span class="sd">        - &#39;L1&#39; : :math:`\sum_{i=1}^n abs(x_i)`</span>
-<span class="sd">        - &#39;L2&#39; : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`</span>
-<span class="sd">        - &#39;inf&#39; : :math:`max_i abs(x_i)`</span>
-<span class="sd">        - &#39;mean&#39; : Mean of :math:`x`</span>
-<span class="sd">        - &#39;median&#39; : Median of :math:`x`</span>
+<span class="sd">        - 'L1' : :math:`\sum_{i=1}^n abs(x_i)`</span>
+<span class="sd">        - 'L2' : :math:`\sqrt{\sum_{i=1}^n (x_i)^2}`</span>
+<span class="sd">        - 'inf' : :math:`max_i abs(x_i)`</span>
+<span class="sd">        - 'mean' : Mean of :math:`x`</span>
+<span class="sd">        - 'median' : Median of :math:`x`</span>
 <span class="sd">    is_distance : `bool`</span>
 <span class="sd">        Indicate if the multi-feature pairwise-observations are distances or similarities.</span>
 <span class="sd">        If `True`, they are treated as distances. If `False`, they are treated as similarities.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">Xnorm</span> <span class="o">=</span> <span class="n">norm_features</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 

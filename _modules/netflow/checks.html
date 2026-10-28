@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -401,90 +401,90 @@
 <div class="viewcode-block" id="check_connected_graph">
 <a class="viewcode-back" href="../../reference/generated/netflow.checks.html#netflow.checks.check_connected_graph">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_connected_graph</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Raises an AssertionError if the graph is not connected&quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="n">nx</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span><span class="n">G</span><span class="p">),</span> <span class="s2">&quot;The graph must be connected.&quot;</span></div>
+<span class="w">    </span><span class="sd">""" Raises an AssertionError if the graph is not connected"""</span>
+    <span class="k">assert</span> <span class="n">nx</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span><span class="n">G</span><span class="p">),</span> <span class="s2">"The graph must be connected."</span></div>
 
 
 
 <div class="viewcode-block" id="check_graph_no_self_loops">
 <a class="viewcode-back" href="../../reference/generated/netflow.checks.html#netflow.checks.check_graph_no_self_loops">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_graph_no_self_loops</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Raises an AssertionError if the graph has self-loops&quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">G</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;No self-loops are allowed in the graph.&quot;</span></div>
+<span class="w">    </span><span class="sd">""" Raises an AssertionError if the graph has self-loops"""</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">G</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"No self-loops are allowed in the graph."</span></div>
 
 
 
 <div class="viewcode-block" id="check_graph_weights">
 <a class="viewcode-back" href="../../reference/generated/netflow.checks.html#netflow.checks.check_graph_weights">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_graph_weights</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Raises an AssertionError if there are weights below the tolerance</span>
+<span class="w">    </span><span class="sd">""" Raises an AssertionError if there are weights below the tolerance</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    -----------</span>
 <span class="sd">    G : networkx graph</span>
 <span class="sd">        The graph.</span>
-<span class="sd">    component : {&#39;node&#39;, &#39;edge&#39;}</span>
+<span class="sd">    component : {'node', 'edge'}</span>
 <span class="sd">        Component of graph the weights are attributed to.</span>
 <span class="sd">    weight : str</span>
 <span class="sd">        Graph attribute of the weight.</span>
 <span class="sd">    tol : float, default = TOL</span>
 <span class="sd">        The tolerance to check that no weights are below `tol`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">component</span> <span class="o">==</span> <span class="s1">&#39;node&#39;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">component</span> <span class="o">==</span> <span class="s1">'node'</span><span class="p">:</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">component</span> <span class="o">==</span> <span class="s1">&#39;edge&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">component</span> <span class="o">==</span> <span class="s1">'edge'</span><span class="p">:</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized value for component, must be one of [&#39;node&#39;, &#39;edge&#39;].&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unrecognized value for component, must be one of ['node', 'edge']."</span><span class="p">)</span>
 
     <span class="n">is_not_pos</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">TOL</span>
     <span class="k">if</span> <span class="n">is_not_pos</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Weights must be positive.&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Weights must be positive."</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="check_edges_in_graph">
 <a class="viewcode-back" href="../../reference/generated/netflow.checks.html#netflow.checks.check_edges_in_graph">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_edges_in_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Raises AssertionError if not all edges are in the graph. &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">edge</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]),</span> <span class="s2">&quot;All edges must be in the graph.&quot;</span></div>
+<span class="w">    </span><span class="sd">""" Raises AssertionError if not all edges are in the graph. """</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">edge</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]),</span> <span class="s2">"All edges must be in the graph."</span></div>
 
 
 
 <div class="viewcode-block" id="check_symmetric">
 <a class="viewcode-back" href="../../reference/generated/netflow.checks.html#netflow.checks.check_symmetric">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_symmetric</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Raises AssertionError if the matrix is not symmetric. &quot;&quot;&quot;</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">err_msg</span><span class="o">=</span><span class="s1">&#39;Matrix is not symmetric.&#39;</span><span class="p">)</span></div>
+<span class="w">    </span><span class="sd">""" Raises AssertionError if the matrix is not symmetric. """</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">err_msg</span><span class="o">=</span><span class="s1">'Matrix is not symmetric.'</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="check_distance_matrix">
 <a class="viewcode-back" href="../../reference/generated/netflow.checks.html#netflow.checks.check_distance_matrix">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_distance_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Raises AssertionError if the distance matrix is not non-negative and symmetric.</span>
+<span class="w">    </span><span class="sd">""" Raises AssertionError if the distance matrix is not non-negative and symmetric.</span>
 
-<span class="sd">    Note: This does not require the diagonal to be zeros. &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="n">A</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Distance matrix must be 2-dimensional.&quot;</span>
-    <span class="k">assert</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;Distance matrix must have the same number of rows as columns.&quot;</span>
+<span class="sd">    Note: This does not require the diagonal to be zeros. """</span>
+    <span class="k">assert</span> <span class="n">A</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"Distance matrix must be 2-dimensional."</span>
+    <span class="k">assert</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"Distance matrix must have the same number of rows as columns."</span>
     <span class="n">check_symmetric</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="s2">&quot;Distance matrix must be non-negative.&quot;</span></div>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="s2">"Distance matrix must be non-negative."</span></div>
 
 
 
 <div class="viewcode-block" id="check_matrix_no_nan">
 <a class="viewcode-back" href="../../reference/generated/netflow.checks.html#netflow.checks.check_matrix_no_nan">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_matrix_no_nan</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Raises AssertionError if the matrix has any missing values. &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">A</span><span class="p">)),</span> <span class="s2">&quot;Missing value(s) detected in the matrix.&quot;</span></div>
+<span class="w">    </span><span class="sd">""" Raises AssertionError if the matrix has any missing values. """</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">A</span><span class="p">)),</span> <span class="s2">"Missing value(s) detected in the matrix."</span></div>
 
 
 
 <div class="viewcode-block" id="check_matrix_nonnegative">
 <a class="viewcode-back" href="../../reference/generated/netflow.checks.html#netflow.checks.check_matrix_nonnegative">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_matrix_nonnegative</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Raises AssertionError if the matrix has negative values. &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="s2">&quot;Negative value(s) detected in the matrix.&quot;</span></div>
+<span class="w">    </span><span class="sd">""" Raises AssertionError if the matrix has negative values. """</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.</span><span class="p">,</span> <span class="s2">"Negative value(s) detected in the matrix."</span></div>
 
 
 

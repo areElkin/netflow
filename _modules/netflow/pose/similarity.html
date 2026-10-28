@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -403,7 +403,7 @@
 <div class="viewcode-block" id="mutual_knn_indices">
 <a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.mutual_knn_indices">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">mutual_knn_indices</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get indices of mutual k-nearest neighbors (nn).</span>
+<span class="w">    </span><span class="sd">""" Get indices of mutual k-nearest neighbors (nn).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -419,7 +419,7 @@
 <span class="sd">    kmnn_indices : `defaultdict[`list`]` of the form ``{m : [up to ``n_neighbors`` mutual nns]}``</span>
 <span class="sd">        Defaultdict keyed by row index referrencing the row indices of its mutual nns out of ``n_neighbors`` nns.</span>
 <span class="sd">        Note, this does not include itself in output.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">indices</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="n">get_knn_indices_distances</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">)</span>
     <span class="n">kmnn_indices</span> <span class="o">=</span> <span class="n">ddict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">nbrs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indices</span><span class="p">):</span>
@@ -436,7 +436,7 @@
 <div class="viewcode-block" id="edges_from_mutual_knn_indices">
 <a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.edges_from_mutual_knn_indices">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">edges_from_mutual_knn_indices</span><span class="p">(</span><span class="n">kmnn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Convert mutual k-nns to a list of edges.</span>
+<span class="w">    </span><span class="sd">""" Convert mutual k-nns to a list of edges.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -447,7 +447,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    edges : `list`</span>
 <span class="sd">        The list of edges corresponding to the mutual k-nns.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="n">ix</span><span class="p">],</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nns</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">ix</span><span class="p">])</span> <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">nns</span> <span class="ow">in</span> <span class="n">kmnn</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
     <span class="k">return</span> <span class="n">edges</span></div>
 
@@ -456,7 +456,7 @@
 <div class="viewcode-block" id="mutual_knn_edges">
 <a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.mutual_knn_edges">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">mutual_knn_edges</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get edges between indices of mutual k-nearest neighbors (nn) from distance matrix.</span>
+<span class="w">    </span><span class="sd">""" Get edges between indices of mutual k-nearest neighbors (nn) from distance matrix.</span>
 
 <span class="sd">    .. note:: Self is not included as one of the k-nns.</span>
 
@@ -473,7 +473,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    edges : `list`</span>
 <span class="sd">        The list of edges corresponding to the mutual k-nns.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">indices</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="n">get_knn_indices_distances</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">)</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">nbrs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indices</span><span class="p">):</span>
@@ -489,7 +489,7 @@
 <div class="viewcode-block" id="get_knn_indices_distances">
 <a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.get_knn_indices_distances">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_knn_indices_distances</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get indices of and distances to k-nearest neighbors</span>
+<span class="w">    </span><span class="sd">""" Get indices of and distances to k-nearest neighbors</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -508,7 +508,7 @@
 <span class="sd">    distances : `numpy.ndarray`, (m, n_neighbors)</span>
 <span class="sd">        Matrix with distance to k-nearest neighbors</span>
 <span class="sd">        Note, this does not include itself in output.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)):</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span>
     <span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">n_neighbors</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">n_neighbors</span>
@@ -526,8 +526,8 @@
 
 <div class="viewcode-block" id="sigma_knn_">
 <a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.sigma_knn_">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">sigma_knn_</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Determine sigma for each obs as the distance to its k-th neighbor.    </span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sigma_knn_</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">'mean'</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Determine sigma for each obs as the distance to its k-th neighbor.    </span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -535,40 +535,40 @@
 <span class="sd">        Symmetric distance matrix.</span>
 <span class="sd">    n_neighbors : {`int`, `None`}</span>
 <span class="sd">        K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,</span>
-<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it&#39;s closest neighbor).</span>
+<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it's closest neighbor).</span>
 <span class="sd">        If `None`, all neighbors are used.</span>
-<span class="sd">    method : {&#39;mean&#39;, &#39;median&#39;, &#39;max&#39;}</span>
+<span class="sd">    method : {'mean', 'median', 'max'}</span>
 <span class="sd">        Indicate how to compute sigma.</span>
 <span class="sd">    return_nn : `bool`</span>
 <span class="sd">        If `True`, also return indices and distances of ``n_neighbors`` nearest neighbors.</span>
 
 <span class="sd">        Options:</span>
 
-<span class="sd">        - &#39;mean&#39; : mean of distance to ``n_neighbors`` nearest neighbors</span>
-<span class="sd">        - &#39;median&#39; : median of distance to ``n_neighbors`` nearest neighbors</span>
-<span class="sd">        - &#39;max&#39; : distance to ``n_neighbors``-nearest neighbor</span>
+<span class="sd">        - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">        - 'median' : median of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">        - 'max' : distance to ``n_neighbors``-nearest neighbor</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    sigmas : `numpy.ndarray`, (n_observations, )</span>
 <span class="sd">        The distance to the k-th nearest neighbor for all rows in ``d``.</span>
-<span class="sd">        Sigmas represent the kernel width representing each data point&#39;s accessible neighbors.</span>
+<span class="sd">        Sigmas represent the kernel width representing each data point's accessible neighbors.</span>
 <span class="sd">    indices : `numpy.ndarray`, (n_observations, )</span>
 <span class="sd">        Indices of nearest neighbors where each row corresponds to an observation.</span>
 <span class="sd">        Returned if ``return_nn`` is `True`.</span>
 <span class="sd">    distances : `numpy.ndarray`, (n_observations, ``n_neighbors + 1``)</span>
 <span class="sd">        Distances to nearest neighbors where each row corresponds to an obs.</span>
 <span class="sd">        Returned if ``return_nn`` is `True`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">indices</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="n">get_knn_indices_distances</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'mean'</span><span class="p">:</span>
         <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;median&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'median'</span><span class="p">:</span>
         <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'max'</span><span class="p">:</span>
         <span class="n">sigmas</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">!r}</span><span class="s2"> not recognized for value of method, must be one of [&#39;mean&#39;, &#39;median&#39;, &#39;max&#39;].&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">method</span><span class="si">!r}</span><span class="s2"> not recognized for value of method, must be one of ['mean', 'median', 'max']."</span>
         <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">return_nn</span><span class="p">:</span>
@@ -580,8 +580,8 @@
 
 <div class="viewcode-block" id="sigma_knn">
 <a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.sigma_knn">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">sigma_knn</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Set sigma for each obs as the distance to its k-th neighbor from keeper.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sigma_knn</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">'mean'</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Set sigma for each obs as the distance to its k-th neighbor from keeper.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -591,35 +591,35 @@
 <span class="sd">        The label used to reference the distance matrix stored in ``keeper.distances``,</span>
 <span class="sd">        of size (n_observations, n_observations).</span>
 <span class="sd">    label : `str`</span>
-<span class="sd">        Label used to store resulting sigmas in ``keeper.misc[&#39;sigmas_&#39;+label]``. If ``return_nn`` is `True`,</span>
-<span class="sd">        nearest neighbor indices are stored in ``keeper.misc[&#39;nn_indices_&#39;+label]`` and nearest</span>
-<span class="sd">        neighbor distances are stored in ``keeper.misc[&#39;nn_distances_&#39;+label]``.</span>
+<span class="sd">        Label used to store resulting sigmas in ``keeper.misc['sigmas_'+label]``. If ``return_nn`` is `True`,</span>
+<span class="sd">        nearest neighbor indices are stored in ``keeper.misc['nn_indices_'+label]`` and nearest</span>
+<span class="sd">        neighbor distances are stored in ``keeper.misc['nn_distances_'+label]``.</span>
 <span class="sd">    n_neighbors : {`int`, `None`}</span>
 <span class="sd">        K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,</span>
-<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it&#39;s closest neighbor).</span>
+<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it's closest neighbor).</span>
 <span class="sd">        If `None`, all neighbors are used.</span>
-<span class="sd">    method : {&#39;mean&#39;, &#39;median&#39;, &#39;max&#39;}</span>
+<span class="sd">    method : {'mean', 'median', 'max'}</span>
 <span class="sd">        Indicate how to compute sigma.</span>
 
 <span class="sd">        Options:</span>
 
-<span class="sd">        - &#39;mean&#39; : mean of distance to ``n_neighbors`` nearest neighbors</span>
-<span class="sd">        - &#39;median&#39; : median of distance to ``n_neighbors`` nearest neighbors</span>
-<span class="sd">        - &#39;max&#39; : distance to ``n_neighbors``-nearest neighbor</span>
+<span class="sd">        - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">        - 'median' : median of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">        - 'max' : distance to ``n_neighbors``-nearest neighbor</span>
 <span class="sd">    return_nn : `bool`</span>
 <span class="sd">        If `True`, also return/store indices and distances of ``n_neighbors`` nearest neighbors.</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    sigmas : `numpy.ndarray`, (n_observations, )</span>
 <span class="sd">        The distance to the k-th nearest neighbor for all rows in ``d``.</span>
-<span class="sd">        Sigmas represent the kernel width representing each data point&#39;s accessible neighbors.</span>
+<span class="sd">        Sigmas represent the kernel width representing each data point's accessible neighbors.</span>
 <span class="sd">    indices : `numpy.ndarray`, (n_observations, )</span>
 <span class="sd">        Indices of nearest neighbors where each row corresponds to an observation.</span>
 <span class="sd">        Returned if ``return_nn`` is `True`.</span>
 <span class="sd">    distances : `numpy.ndarray`, (n_observations, ``n_neighbors + 1``)</span>
 <span class="sd">        Distances to nearest neighbors where each row corresponds to an obs.</span>
 <span class="sd">        Returned if ``return_nn`` is `True`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
     <span class="n">sigmas</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="n">sigma_knn_</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -629,11 +629,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">sigmas</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="n">label</span> <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="k">else</span> <span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">label</span>
-        <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span> <span class="s1">&#39;sigmas&#39;</span><span class="o">+</span><span class="n">label</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">label</span> <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">''</span> <span class="k">else</span> <span class="s1">'_'</span><span class="o">+</span><span class="n">label</span>
+        <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span> <span class="s1">'sigmas'</span><span class="o">+</span><span class="n">label</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">return_nn</span><span class="p">:</span>
-            <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="s1">&#39;nn_indices&#39;</span><span class="o">+</span><span class="n">label</span><span class="p">)</span>
-            <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="s1">&#39;nn_distances&#39;</span><span class="o">+</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="s1">'nn_indices'</span><span class="o">+</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="s1">'nn_distances'</span><span class="o">+</span><span class="n">label</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
@@ -642,7 +642,7 @@
 <div class="viewcode-block" id="_distance_to_similarity">
 <a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity._distance_to_similarity">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_distance_to_similarity</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert distance matrix to symmetric similarity measure.</span>
 
 <span class="sd">    .. math::</span>
@@ -655,43 +655,43 @@
 <span class="sd">        Symmetric distance matrix.</span>
 <span class="sd">    n_neighbors : {`int`, `None`}</span>
 <span class="sd">        K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,</span>
-<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it&#39;s closest neighbor).</span>
+<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it's closest neighbor).</span>
 <span class="sd">        If `None`, all neighbors are used.</span>
-<span class="sd">    method : {`float`, `int`, &#39;mean&#39;, &#39;median&#39;, &#39;max&#39;, &#39;precomputed&#39;}</span>
+<span class="sd">    method : {`float`, `int`, 'mean', 'median', 'max', 'precomputed'}</span>
 <span class="sd">        Indicate how to compute sigma.</span>
 
 <span class="sd">        Options:</span>
 
 <span class="sd">        - `float` : constant float to use as sigma</span>
 <span class="sd">        - `int` : constant int to use as sigma</span>
-<span class="sd">        - &#39;mean&#39; : mean of distance to ``n_neighbors`` nearest neighbors</span>
-<span class="sd">        - &#39;median&#39; : median of distance to ``n_neighbors`` nearest neighbors</span>
-<span class="sd">        - &#39;max&#39; : distance to ``n_neighbors``-nearest neighbor</span>
-<span class="sd">        - &#39;precomputed&#39; : precomputed values passed to ``sigmas``</span>
+<span class="sd">        - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">        - 'median' : median of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">        - 'max' : distance to ``n_neighbors``-nearest neighbor</span>
+<span class="sd">        - 'precomputed' : precomputed values passed to ``sigmas``</span>
 <span class="sd">    sigmas : `numpy.ndarray`, (n_observations, )</span>
-<span class="sd">        Option to provide precomputed sigmas , ignored unless ``method=&#39;precomputed&#39;``.</span>
+<span class="sd">        Option to provide precomputed sigmas , ignored unless ``method='precomputed'``.</span>
 <span class="sd">    knn : `bool`</span>
 <span class="sd">        If `True`, restrict similarity measure to be non-zero only between ``n_neighbors`` nearest neighbors.</span>
 <span class="sd">    indices : `numpy.ndarray`, (n_observations, n_neighbors)</span>
 <span class="sd">        Option to provide precomputed indices of ``n_neighbors`` nearest neighbors for each obs when</span>
-<span class="sd">        ``method`` = &#39;precomputed&#39; and ``knn`` = `True`</span>
+<span class="sd">        ``method`` = 'precomputed' and ``knn`` = `True`</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    K : `numpy.ndarray`, (n_observations, n_observations)</span>
 <span class="sd">        Symmetric similarity measure.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
         <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">method</span><span class="p">]</span><span class="o">*</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">method</span><span class="p">)]</span><span class="o">*</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>        
-        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;precomputed&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'precomputed'</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">sigmas</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;When `method` is &#39;precomputed&#39;, `sigmas` must be provided.&quot;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">"When `method` is 'precomputed', `sigmas` must be provided."</span>
                 <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">knn</span> <span class="ow">and</span> <span class="p">(</span><span class="n">indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;When `method` is &#39;precomputed&#39; and `knn` is `True`, `indices` must be provided.&quot;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">"When `method` is 'precomputed' and `knn` is `True`, `indices` must be provided."</span>
                 <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">knn</span><span class="p">:</span>
@@ -699,7 +699,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">sigmas</span> <span class="o">=</span> <span class="n">sigma_knn_</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">return_nn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Uncrecognized type for `method`, must be `float`, `int`, or `str`.&quot;</span><span class="p">)</span>        
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Uncrecognized type for `method`, must be `float`, `int`, or `str`."</span><span class="p">)</span>        
 
     <span class="n">sigmas_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     
@@ -733,7 +733,7 @@
 <a class="viewcode-back" href="../../../reference/generated/netflow.pose.similarity.html#netflow.pose.similarity.distance_to_similarity">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">distance_to_similarity</span><span class="p">(</span><span class="n">keeper</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
                            <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert distance matrix to symmetric similarity measure.</span>
 
 <span class="sd">    Parameters</span>
@@ -745,31 +745,31 @@
 <span class="sd">        of size (n_observations, n_observations).    </span>
 <span class="sd">    n_neighbors : {`int`, `None`}</span>
 <span class="sd">        K-th nearest neighbor (or number of nearest neighbors) to use for computing ``sigmas``,</span>
-<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it&#39;s closest neighbor).</span>
+<span class="sd">        ``n_neighbors &gt; 0``. (Uses ``n_neighbors + 1``, since each obs is it's closest neighbor).</span>
 <span class="sd">        If `None`, all neighbors are used.</span>
-<span class="sd">    method : {`float`, &#39;mean&#39;, &#39;median&#39;, &#39;max&#39;, &#39;precomputed&#39;}</span>
+<span class="sd">    method : {`float`, 'mean', 'median', 'max', 'precomputed'}</span>
 <span class="sd">        Indicate how to compute sigma.</span>
 
 <span class="sd">        Options:</span>
 
 <span class="sd">        - `float` : constant float to use as sigma</span>
 <span class="sd">        - `int` : constant int to use as sigma</span>
-<span class="sd">        - &#39;mean&#39; : mean of distance to ``n_neighbors`` nearest neighbors</span>
-<span class="sd">        - &#39;median&#39; : median of distance to ``n_neighbors`` nearest neighbors</span>
-<span class="sd">        - &#39;max&#39; : distance to ``n_neighbors``-nearest neighbor</span>
-<span class="sd">        - &#39;precomputed&#39; : precomputed values passed to ``sigmas``</span>
+<span class="sd">        - 'mean' : mean of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">        - 'median' : median of distance to ``n_neighbors`` nearest neighbors</span>
+<span class="sd">        - 'max' : distance to ``n_neighbors``-nearest neighbor</span>
+<span class="sd">        - 'precomputed' : precomputed values passed to ``sigmas``</span>
 <span class="sd">    label : `str`</span>
 <span class="sd">        Label used to store resulting similarity matrix of size (n_observations, n_observations)</span>
 <span class="sd">        in ``keeper.similarities``.</span>
 <span class="sd">    sigmas : `str` </span>
-<span class="sd">        Option to provide precomputed sigmas, ignored unless ``method=&#39;precomputed&#39;``.</span>
+<span class="sd">        Option to provide precomputed sigmas, ignored unless ``method='precomputed'``.</span>
 <span class="sd">        If provided, the precomputed sigmas are extracted from ``keeper.misc[sigmas]`` </span>
 <span class="sd">        as a `numpy.ndarray` of size (n_observations, ).</span>
 <span class="sd">    knn : `bool`</span>
 <span class="sd">        If `True`, restrict similarity measure to be non-zero only between ``n_neighbors`` nearest neighbors.</span>
 <span class="sd">    indices : {`None`, `str`}</span>
 <span class="sd">        Option to provide precomputed indices of ``n_neighbors`` nearest neighbors for each obs when</span>
-<span class="sd">        ``method`` = &#39;precomputed&#39; and ``knn`` = `True`.</span>
+<span class="sd">        ``method`` = 'precomputed' and ``knn`` = `True`.</span>
 <span class="sd">        If provided, the indices are extracted from ``keeper.misc[indices]`` as a `numpy.ndarray` of size</span>
 <span class="sd">        (n_observations, n_neighbors).</span>
 
@@ -778,14 +778,14 @@
 <span class="sd">    K : `numpy.ndarray`, (n_observations, n_observations)</span>
 <span class="sd">        Symmetric similarity measure. if ``label`` is not `None`, this is</span>
 <span class="sd">        stored in ``keeper.similarities[label]`` instead of being returned.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">method</span><span class="o">==</span><span class="s1">&#39;precomputed&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">method</span><span class="o">==</span><span class="s1">'precomputed'</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">sigmas</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">sigmas</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">sigmas</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must pass sigmas key when method=&#39;precomputed&#39;.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Must pass sigmas key when method='precomputed'."</span><span class="p">)</span>
             
     <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>

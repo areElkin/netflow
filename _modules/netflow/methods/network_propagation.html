@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -402,9 +402,9 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse.linalg</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">spla</span>
 
 
-<span class="n">TransitionNorm</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;random_walk&quot;</span><span class="p">,</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">]</span>
-<span class="n">Propagation</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;rwr&quot;</span><span class="p">,</span> <span class="s2">&quot;heat_kernel&quot;</span><span class="p">,</span> <span class="s2">&quot;laplacian_solve&quot;</span><span class="p">]</span>
-<span class="n">SolveMode</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;iter&quot;</span><span class="p">,</span> <span class="s2">&quot;closed_form&quot;</span><span class="p">]</span>
+<span class="n">TransitionNorm</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"random_walk"</span><span class="p">,</span> <span class="s2">"symmetric"</span><span class="p">]</span>
+<span class="n">Propagation</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"rwr"</span><span class="p">,</span> <span class="s2">"heat_kernel"</span><span class="p">,</span> <span class="s2">"laplacian_solve"</span><span class="p">]</span>
+<span class="n">SolveMode</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"iter"</span><span class="p">,</span> <span class="s2">"closed_form"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="diffuse_network_mutation_profiles">
@@ -413,21 +413,21 @@
         <span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
         <span class="c1"># --- transition operator ---</span>
-        <span class="n">transition_norm</span><span class="p">:</span> <span class="n">TransitionNorm</span> <span class="o">=</span> <span class="s2">&quot;random_walk&quot;</span><span class="p">,</span>
+        <span class="n">transition_norm</span><span class="p">:</span> <span class="n">TransitionNorm</span> <span class="o">=</span> <span class="s2">"random_walk"</span><span class="p">,</span>
         <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="c1"># --- propagation choice ---</span>
-        <span class="n">propagation</span><span class="p">:</span> <span class="n">Propagation</span> <span class="o">=</span> <span class="s2">&quot;rwr&quot;</span><span class="p">,</span>
+        <span class="n">propagation</span><span class="p">:</span> <span class="n">Propagation</span> <span class="o">=</span> <span class="s2">"rwr"</span><span class="p">,</span>
         <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>  <span class="c1"># RWR</span>
         <span class="n">t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># heat kernel</span>
         <span class="n">lam</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># for Laplacian solve</span>
         <span class="c1"># --- solver controls ---</span>
-        <span class="n">solve_mode</span><span class="p">:</span> <span class="n">SolveMode</span> <span class="o">=</span> <span class="s2">&quot;iter&quot;</span><span class="p">,</span>
+        <span class="n">solve_mode</span><span class="p">:</span> <span class="n">SolveMode</span> <span class="o">=</span> <span class="s2">"iter"</span><span class="p">,</span>
         <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
         <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
         <span class="n">chunksize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span>
         <span class="n">dtype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute diffused (network-propagated) profiles for each sample.</span>
 
 <span class="sd">    Given a feature network ``G`` (e.g., an undirected PPI) and an input feature matrix</span>
@@ -442,7 +442,7 @@
 <span class="sd">        Node IDs must match the IDs in the input ``data`` matrix row index.</span>
 <span class="sd">    data : {`str`, `pd.DataFrame`}</span>
 <span class="sd">        Feature-by-sample data matrix (rows=features, columns=samples)</span>
-<span class="sd">    transition_norm : {&quot;random_walk&quot;, &quot;symmetric&quot;}, default=&quot;random_walk&quot;</span>
+<span class="sd">    transition_norm : {"random_walk", "symmetric"}, default="random_walk"</span>
 <span class="sd">        How to normalize adjacency into the transition matrix / diffusion operator W.</span>
 
 <span class="sd">        Let A be adjacency and D the diagonal degree matrix (D_ii = sum_j A_ij).</span>
@@ -450,23 +450,23 @@
 
 <span class="sd">        transition_norm options:</span>
 
-<span class="sd">        - &quot;random_walk&quot;: Computes the random-walk transition P = D^{-1}A.</span>
+<span class="sd">        - "random_walk": Computes the random-walk transition P = D^{-1}A.</span>
 <span class="sd">                         The random walk with restart (RWR) update rule is implemented</span>
 <span class="sd">                         using the operator W := P^T:</span>
 <span class="sd">                         X_{t+1} = (1-α) X0 + α P^T X_t.</span>
 <span class="sd">                         Recommended default choice for network propagation of sparse binary mutations.</span>
-<span class="sd">        - &quot;symmetric&quot;: Computes the symmetric normalized adjacency: W = D^{-1/2} A D^{-1/2}.</span>
+<span class="sd">        - "symmetric": Computes the symmetric normalized adjacency: W = D^{-1/2} A D^{-1/2}.</span>
 <span class="sd">                       Recommended if a symmetric operator is wanted (often nicer mathematically / numerically).</span>
 <span class="sd">                       Sometimes preferable because it can reduce some degree-driven bias compared with pure</span>
 <span class="sd">                       random-walk operators.</span>
 <span class="sd">    weight : {`str`, `None`}, default=None</span>
 <span class="sd">        Edge attribute name in G to use as weights. If None, edges are treated as weight=1.</span>
-<span class="sd">    propagation : {&quot;rwr&quot;, &quot;heat_kernel&quot;, &quot;laplacian_solve&quot;}, default=&quot;rwr&quot;</span>
+<span class="sd">    propagation : {"rwr", "heat_kernel", "laplacian_solve"}, default="rwr"</span>
 <span class="sd">        Which diffusion model to use.</span>
 
 <span class="sd">        propagation options</span>
 
-<span class="sd">        - &quot;rwr&quot; : Random Walk with Restart</span>
+<span class="sd">        - "rwr" : Random Walk with Restart</span>
 <span class="sd">            Update rule:</span>
 <span class="sd">                X_{k+1} = (1-α) X0 + α W X_k</span>
 <span class="sd">            Closed form (stationary solution):</span>
@@ -484,23 +484,23 @@
 <span class="sd">            Recommendation:</span>
 <span class="sd">            - Default for smoothing sparse binary mutation profiles prior to similarity/clustering.</span>
 <span class="sd">            - Start α ≈ 0.7; sweep 0.5–0.85 for sensitivity.</span>
-<span class="sd">            - Set transition_norm = &quot;random_walk&quot;</span>
+<span class="sd">            - Set transition_norm = "random_walk"</span>
 
-<span class="sd">            Uses parameters: alpha, solve_mode, (max_iter,tol if solve_mode=&quot;iter&quot;),</span>
-<span class="sd">                             (chunksize if solve_mode=&quot;closed_form&quot;)</span>
+<span class="sd">            Uses parameters: alpha, solve_mode, (max_iter,tol if solve_mode="iter"),</span>
+<span class="sd">                             (chunksize if solve_mode="closed_form")</span>
 <span class="sd">            Ignores parameters: beta, t, lam</span>
-<span class="sd">        - &quot;heat_kernel&quot; : Heat-kernel diffusion</span>
+<span class="sd">        - "heat_kernel" : Heat-kernel diffusion</span>
 <span class="sd">            Continuous-time diffusion:</span>
 <span class="sd">                X*(t) = exp(-t L) X0, with L = I - W</span>
 
 <span class="sd">            Recommendation:</span>
 <span class="sd">            - Use if you want a “diffusion time” knob t with a multi-scale interpretation.</span>
 <span class="sd">            - Often explored by scanning t across scales.</span>
-<span class="sd">            - Set transition_norm = &quot;symmetric&quot;</span>
+<span class="sd">            - Set transition_norm = "symmetric"</span>
 
 <span class="sd">            Uses parameters: t</span>
 <span class="sd">            Ignores parameters: alpha, beta, lam, solve_mode, max_iter, tol, chunksize</span>
-<span class="sd">        - &quot;laplacian_solve&quot; Laplacian-regularized smoothing</span>
+<span class="sd">        - "laplacian_solve" Laplacian-regularized smoothing</span>
 <span class="sd">            Linear solve:</span>
 <span class="sd">                X* = (I + λL)^{-1} X0, with L = I - W</span>
 
@@ -510,48 +510,48 @@
 <span class="sd">            Recommendation:</span>
 <span class="sd">            - Use when you prefer a regularization knob λ and a single sparse solve.</span>
 <span class="sd">            - Often stable and efficient for large graphs and many samples.</span>
-<span class="sd">            - Set transition_norm = &quot;symmetric&quot;</span>
+<span class="sd">            - Set transition_norm = "symmetric"</span>
 
 <span class="sd">            Uses parameters: lam, chunksize</span>
 <span class="sd">            Ignores parameters: alpha, beta, t, solve_mode, max_iter, tol</span>
 <span class="sd">    alpha : `float`, default=0.7</span>
 <span class="sd">        RWR diffusion strength (restart complement). Must satisfy 0 &lt;= alpha &lt; 1.</span>
 <span class="sd">        Larger alpha =&gt; more diffusion; smaller alpha =&gt; more anchored to X0 (less diffusion).</span>
-<span class="sd">        Used only if propagation=&quot;rwr&quot;. Ignored otherwise.</span>
+<span class="sd">        Used only if propagation="rwr". Ignored otherwise.</span>
 
 <span class="sd">        Practical guidance based on literature (binary mutations on undirected PPI):</span>
 <span class="sd">        - alpha ~ 0.7 is a strong default</span>
 <span class="sd">        - sweep 0.5–0.85 for sensitivity</span>
 <span class="sd">    t : `float`, default=1.0</span>
 <span class="sd">        Heat-kernel diffusion time (t &gt;= 0).</span>
-<span class="sd">        Used only if propagation=&quot;heat_kernel&quot;. Ignored otherwise.</span>
+<span class="sd">        Used only if propagation="heat_kernel". Ignored otherwise.</span>
 <span class="sd">    lam : `float`, default=1.0</span>
 <span class="sd">        Laplacian smoothing strength (lambda &gt;= 0).</span>
-<span class="sd">        Used only if propagation=&quot;laplacian_solve&quot;. Ignored otherwise.</span>
-<span class="sd">    solve_mode : {&quot;iter&quot;, &quot;closed_form&quot;}, default=&quot;iter&quot;</span>
+<span class="sd">        Used only if propagation="laplacian_solve". Ignored otherwise.</span>
+<span class="sd">    solve_mode : {"iter", "closed_form"}, default="iter"</span>
 <span class="sd">        How to compute stationary solutions for restart diffusion.</span>
-<span class="sd">        Used only if propagation=&quot;rwr&quot;. Ignored otherwise.</span>
-<span class="sd">        Note: propagation=&quot;heat_kernel&quot; uses expm_multiply and</span>
-<span class="sd">        propagation=&quot;laplacian_solve&quot; uses a sparse LU solver</span>
+<span class="sd">        Used only if propagation="rwr". Ignored otherwise.</span>
+<span class="sd">        Note: propagation="heat_kernel" uses expm_multiply and</span>
+<span class="sd">        propagation="laplacian_solve" uses a sparse LU solver</span>
 
 <span class="sd">        options:</span>
 
-<span class="sd">        - &quot;iter&quot;: fixed-point iteration to convergence</span>
-<span class="sd">        - &quot;closed_form&quot;: sparse LU solve of the corresponding linear system</span>
+<span class="sd">        - "iter": fixed-point iteration to convergence</span>
+<span class="sd">        - "closed_form": sparse LU solve of the corresponding linear system</span>
 <span class="sd">                         (I - αW) X* = (1-α) X0</span>
 <span class="sd">    max_iter : `int`, default=200</span>
-<span class="sd">        Max iterations for solve_mode=&quot;iter&quot;.</span>
-<span class="sd">        Used only when propagation=&quot;rwr&quot; AND solve_mode=&quot;iter&quot;.</span>
+<span class="sd">        Max iterations for solve_mode="iter".</span>
+<span class="sd">        Used only when propagation="rwr" AND solve_mode="iter".</span>
 <span class="sd">        Ignored otherwise.</span>
 <span class="sd">    tol : `float`, default=1e-8</span>
-<span class="sd">        Convergence tolerance for solve_mode=&quot;iter&quot;.</span>
-<span class="sd">        Used only when propagation=&quot;rwr&quot; AND solve_mode=&quot;iter&quot;.</span>
+<span class="sd">        Convergence tolerance for solve_mode="iter".</span>
+<span class="sd">        Used only when propagation="rwr" AND solve_mode="iter".</span>
 <span class="sd">        Ignored otherwise.</span>
 <span class="sd">    chunksize : `int`, default=64</span>
 <span class="sd">        RHS block size (number of samples per block) for LU-based multi-RHS solves.</span>
 <span class="sd">        Used when:</span>
-<span class="sd">          - propagation=&quot;rwr&quot; AND solve_mode=&quot;closed_form&quot;</span>
-<span class="sd">          - propagation=&quot;laplacian_solve&quot;</span>
+<span class="sd">          - propagation="rwr" AND solve_mode="closed_form"</span>
+<span class="sd">          - propagation="laplacian_solve"</span>
 <span class="sd">        Ignored otherwise.</span>
 <span class="sd">    dtype : {numpy dtype, `str`}, default=np.float64</span>
 <span class="sd">        Numeric dtype used for computations.</span>
@@ -564,24 +564,24 @@
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    Recommended defaults for undirected PPI + binary mutation matrix:</span>
-<span class="sd">        propagation=&quot;rwr&quot;, transition_norm=&quot;random_walk&quot;, alpha=0.7, solve_mode=&quot;iter&quot;</span>
+<span class="sd">        propagation="rwr", transition_norm="random_walk", alpha=0.7, solve_mode="iter"</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    RWR default:</span>
-<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, propagation=&quot;rwr&quot;, alpha=0.7)</span>
+<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, propagation="rwr", alpha=0.7)</span>
 
 <span class="sd">    Symmetric operator + RWR:</span>
-<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, transition_norm=&quot;symmetric&quot;, propagation=&quot;rwr&quot;, alpha=0.7)</span>
+<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, transition_norm="symmetric", propagation="rwr", alpha=0.7)</span>
 
 <span class="sd">    Heat kernel:</span>
-<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, propagation=&quot;heat_kernel&quot;, t=1.0)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        df_out = diffuse_network_mutation_profiles(G, df, propagation="heat_kernel", t=1.0)</span>
+<span class="sd">    """</span>
     <span class="n">feats</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">set</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Feature IDs in the data must match node names in the graph.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Feature IDs in the data must match node names in the graph."</span><span class="p">)</span>
 
     <span class="n">X_full</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -598,38 +598,38 @@
     <span class="p">)</span>
 
     <span class="c1"># Parameter validation</span>
-    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;rwr&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;For propagation=&#39;rwr&#39;, require 0 &lt;= alpha &lt; 1.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;heat_kernel&quot;</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;For propagation=&#39;heat_kernel&#39;, require t &gt;= 0.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;laplacian_solve&quot;</span> <span class="ow">and</span> <span class="n">lam</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;For propagation=&#39;laplacian_solve&#39;, require lam &gt;= 0.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">"rwr"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"For propagation='rwr', require 0 &lt;= alpha &lt; 1."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">"heat_kernel"</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"For propagation='heat_kernel', require t &gt;= 0."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">"laplacian_solve"</span> <span class="ow">and</span> <span class="n">lam</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"For propagation='laplacian_solve', require lam &gt;= 0."</span><span class="p">)</span>
 
     <span class="c1"># Compute diffusion</span>
-    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;rwr&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">solve_mode</span> <span class="o">==</span> <span class="s2">&quot;iter&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">"rwr"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">solve_mode</span> <span class="o">==</span> <span class="s2">"iter"</span><span class="p">:</span>
             <span class="n">X_star</span> <span class="o">=</span> <span class="n">_fixed_point_rwr</span><span class="p">(</span><span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span> <span class="n">X0</span><span class="o">=</span><span class="n">X0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">solve_mode</span> <span class="o">==</span> <span class="s2">&quot;closed_form&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">solve_mode</span> <span class="o">==</span> <span class="s2">"closed_form"</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">W</span><span class="p">)</span>     <span class="c1"># (I - αW)</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">W</span><span class="p">)</span>     <span class="c1"># (I - αW)</span>
             <span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">X0</span>                                    <span class="c1"># (1-α)X0</span>
             <span class="n">X_star</span> <span class="o">=</span> <span class="n">_closed_form_solve</span><span class="p">(</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown solve_mode: </span><span class="si">{</span><span class="n">solve_mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown solve_mode: </span><span class="si">{</span><span class="n">solve_mode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;heat_kernel&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">"heat_kernel"</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="n">W</span>   <span class="c1"># L = I - W</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="n">W</span>   <span class="c1"># L = I - W</span>
         <span class="n">X_star</span> <span class="o">=</span> <span class="n">spla</span><span class="o">.</span><span class="n">expm_multiply</span><span class="p">((</span><span class="o">-</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">L</span><span class="p">,</span> <span class="n">X0</span><span class="p">)</span>      <span class="c1"># exp(-tL)X0</span>
 
-    <span class="k">elif</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">&quot;laplacian_solve&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">propagation</span> <span class="o">==</span> <span class="s2">"laplacian_solve"</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="n">W</span>   <span class="c1"># L = I - W</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">lam</span> <span class="o">*</span> <span class="n">L</span><span class="p">)</span>  <span class="c1"># I + λL</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-</span> <span class="n">W</span>   <span class="c1"># L = I - W</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">lam</span> <span class="o">*</span> <span class="n">L</span><span class="p">)</span>  <span class="c1"># I + λL</span>
         <span class="n">X_star</span> <span class="o">=</span> <span class="n">_closed_form_solve</span><span class="p">(</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">X0</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown propagation: </span><span class="si">{</span><span class="n">propagation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown propagation: </span><span class="si">{</span><span class="n">propagation</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">X_out</span> <span class="o">=</span> <span class="n">X_full</span>
     <span class="n">X_out</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">X_star</span>
@@ -646,11 +646,11 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_build_operator_W</span><span class="p">(</span>
     <span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">feats_order</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="n">transition_norm</span><span class="p">:</span> <span class="n">TransitionNorm</span> <span class="o">=</span> <span class="s2">&quot;random_walk&quot;</span><span class="p">,</span>
+    <span class="n">transition_norm</span><span class="p">:</span> <span class="n">TransitionNorm</span> <span class="o">=</span> <span class="s2">"random_walk"</span><span class="p">,</span>
     <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dtype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Build the sparse graph diffusion operator W over a specified feature ordering.</span>
 
 <span class="sd">    This constructs adjacency A in the *exact* order `featss_order`, then normalizes it into W.</span>
@@ -661,7 +661,7 @@
 <span class="sd">        Graph containing the features in `feats_order`.</span>
 <span class="sd">    feats_order:</span>
 <span class="sd">        List of features (e.g., genes) IDs defining the matrix row/column order.</span>
-<span class="sd">    transition_norm : {&quot;random_walk&quot;, &quot;symmetric&quot;}, default=&quot;random_walk&quot;</span>
+<span class="sd">    transition_norm : {"random_walk", "symmetric"}, default="random_walk"</span>
 <span class="sd">        How to normalize adjacency into the transition matrix / diffusion operator W.</span>
 
 <span class="sd">        Let A be adjacency and D the diagonal degree matrix (D_ii = sum_j A_ij).</span>
@@ -669,12 +669,12 @@
 
 <span class="sd">        options:</span>
 
-<span class="sd">        - &quot;random_walk&quot;: Computes the random-walk transition P := D^{-1}A.</span>
+<span class="sd">        - "random_walk": Computes the random-walk transition P := D^{-1}A.</span>
 <span class="sd">                         The random walk with restart (RWR) update rule is implemented</span>
 <span class="sd">                         using the operator W := P^T:</span>
 <span class="sd">                         X_{t+1} = (1-α) X0 + α W X_t.</span>
 <span class="sd">                         Recommended default choice for network propagation of sparse binary mutations.</span>
-<span class="sd">        - &quot;symmetric&quot;: Computes the symmetric normalized adjacency: W = D^{-1/2} A D^{-1/2}.</span>
+<span class="sd">        - "symmetric": Computes the symmetric normalized adjacency: W = D^{-1/2} A D^{-1/2}.</span>
 <span class="sd">                       Recommended if a symmetric operator is wanted (often nicer mathematically / numerically).</span>
 <span class="sd">                       Sometimes preferable because it can reduce some degree-driven bias compared with pure</span>
 <span class="sd">                       random-walk operators.</span>
@@ -692,8 +692,8 @@
 <span class="sd">    -----</span>
 <span class="sd">    - Self-loops are removed from the adjacency by default (diagonal set to 0).</span>
 <span class="sd">    - Isolated nodes (degree 0) will not propagate; restart-based diffusions keep them anchored.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">A</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_scipy_sparse_array</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">feats_order</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_scipy_sparse_array</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">feats_order</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
 
     <span class="c1"># Remove self loops unless intentionally included</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -702,21 +702,21 @@
 
     <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">transition_norm</span> <span class="o">==</span> <span class="s2">&quot;random_walk&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">transition_norm</span> <span class="o">==</span> <span class="s2">"random_walk"</span><span class="p">:</span>
         <span class="n">inv_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">nz</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="n">inv_d</span><span class="p">[</span><span class="n">nz</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">d</span><span class="p">[</span><span class="n">nz</span><span class="p">]</span>
         <span class="n">Dinv</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">inv_d</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">))</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">Dinv</span> <span class="o">@</span> <span class="n">A</span>          <span class="c1"># D^{-1}A</span>
         <span class="n">W</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>       <span class="c1"># P^T</span>
-    <span class="k">elif</span> <span class="n">transition_norm</span> <span class="o">==</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">transition_norm</span> <span class="o">==</span> <span class="s2">"symmetric"</span><span class="p">:</span>
         <span class="n">inv_sqrt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">nz</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="n">inv_sqrt</span><span class="p">[</span><span class="n">nz</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">nz</span><span class="p">])</span>
         <span class="n">Dmhalf</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">inv_sqrt</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">))</span>
         <span class="n">W</span> <span class="o">=</span> <span class="p">(</span><span class="n">Dmhalf</span> <span class="o">@</span> <span class="n">A</span> <span class="o">@</span> <span class="n">Dmhalf</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown transition_norm: </span><span class="si">{</span><span class="n">transition_norm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown transition_norm: </span><span class="si">{</span><span class="n">transition_norm</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">W</span></div>
 
@@ -731,7 +731,7 @@
     <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Fixed-point iteration solver for Random Walk with Restart (RWR) diffusion.</span>
 
 <span class="sd">    Model</span>
@@ -760,7 +760,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    X : `np.ndarray`</span>
 <span class="sd">        Diffused profiles X* (n x m).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">X0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">one_minus</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span>
 
@@ -778,7 +778,7 @@
 <div class="viewcode-block" id="_closed_form_solve">
 <a class="viewcode-back" href="../../../reference/generated/netflow.methods.network_propagation.html#netflow.methods.network_propagation._closed_form_solve">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_closed_form_solve</span><span class="p">(</span><span class="n">M</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Solve the sparse linear system M X = B for multiple RHS columns via one LU factorization.</span>
 
 <span class="sd">    Used for closed-form stationary solutions:</span>
@@ -808,7 +808,7 @@
 <span class="sd">    -----</span>
 <span class="sd">    - For extremely large n, might need iterative linear solvers (cg/gmres) + preconditioning.</span>
 <span class="sd">      This LU approach is simple and usually robust for medium-to-large graphs.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">B</span>
 

@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="Jul 22, 2026"/>
+    <meta name="docbuild:last-update" content="Oct 28, 2026"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -503,8 +503,8 @@
 <p>If <code class="docutils literal notranslate"><span class="pre">netflow</span></code> has not been installed, add the path to the library:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
-<span class="c1"># sys.path.insert(0, pathlib.Path(pathlib.Path(&#39;.&#39;).absolute()).parents[0].resolve().as_posix())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+<span class="c1"># sys.path.insert(0, pathlib.Path(pathlib.Path('.').absolute()).parents[0].resolve().as_posix())</span>
 </pre></div>
 </div>
 </div>
@@ -528,7 +528,7 @@
 <h1>Set up directories<a class="headerlink" href="#set-up-directories" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MAIN_DIR</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MAIN_DIR</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -536,18 +536,18 @@
 <p>Paths to where data is stored:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">MAIN_DIR</span> <span class="o">/</span> <span class="s1">&#39;example_data&#39;</span> <span class="o">/</span> <span class="s1">&#39;breast_tcga&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">MAIN_DIR</span> <span class="o">/</span> <span class="s1">'example_data'</span> <span class="o">/</span> <span class="s1">'breast_tcga'</span>
 
-<span class="n">RNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;rna_606.txt&#39;</span>
-<span class="n">E_RNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_rna_606.txt&#39;</span>
+<span class="n">RNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">'rna_606.txt'</span>
+<span class="n">E_RNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">'edgelist_hprd_rna_606.txt'</span>
 
-<span class="n">CNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;cna_606.txt&#39;</span>
-<span class="n">E_CNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_cna_606.txt&#39;</span>
+<span class="n">CNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">'cna_606.txt'</span>
+<span class="n">E_CNA_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">'edgelist_hprd_cna_606.txt'</span>
 
-<span class="n">METH_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;methylation_606.txt&#39;</span>
-<span class="n">E_METH_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;edgelist_hprd_methylation_606.txt&#39;</span>
+<span class="n">METH_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">'methylation_606.txt'</span>
+<span class="n">E_METH_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">'edgelist_hprd_methylation_606.txt'</span>
 
-<span class="n">CLIN_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">&#39;clin_606.txt&#39;</span>
+<span class="n">CLIN_FNAME</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s1">'clin_606.txt'</span>
 </pre></div>
 </div>
 </div>
@@ -555,7 +555,7 @@
 <p>Directory where output should be saved:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">OUT_DIR</span> <span class="o">=</span> <span class="n">MAIN_DIR</span> <span class="o">/</span> <span class="s1">&#39;example_data&#39;</span> <span class="o">/</span> <span class="s1">&#39;results_netflow_breast_tcga&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">OUT_DIR</span> <span class="o">=</span> <span class="n">MAIN_DIR</span> <span class="o">/</span> <span class="s1">'example_data'</span> <span class="o">/</span> <span class="s1">'results_netflow_breast_tcga'</span>
 </pre></div>
 </div>
 </div>
@@ -734,7 +734,7 @@
 <span class="n">display</span><span class="p">(</span><span class="n">E_rna</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 
 <span class="n">G_rna</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_edgelist</span><span class="p">(</span><span class="n">E_rna</span><span class="p">)</span>
-<span class="n">G_rna</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;rna&#39;</span>
+<span class="n">G_rna</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'rna'</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">G_rna</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -775,7 +775,7 @@
     </tr>
   </tbody>
 </table>
-</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Graph named &#39;rna&#39; with 7148 nodes and 27498 edges
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Graph named 'rna' with 7148 nodes and 27498 edges
 </pre></div>
 </div>
 </div>
@@ -894,7 +894,7 @@
 <span class="n">display</span><span class="p">(</span><span class="n">E_cna</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 
 <span class="n">G_cna</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_pandas_edgelist</span><span class="p">(</span><span class="n">E_cna</span><span class="p">)</span>
-<span class="n">G_cna</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;cna&#39;</span>
+<span class="n">G_cna</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'cna'</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">G_cna</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -935,7 +935,7 @@
     </tr>
   </tbody>
 </table>
-</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Graph named &#39;cna&#39; with 8763 nodes and 34906 edges
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Graph named 'cna' with 8763 nodes and 34906 edges
 </pre></div>
 </div>
 </div>
@@ -966,7 +966,7 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>Note: Future releases will handle various file types.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span> <span class="s1">&#39;rna&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span> <span class="s1">'rna'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -986,7 +986,7 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>We can also upload the cna data:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cna</span><span class="p">,</span> <span class="s1">&#39;cna&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">cna</span><span class="p">,</span> <span class="s1">'cna'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -994,7 +994,7 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>Similarly, we can add the graphs associated with the RNA data:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="n">G_rna</span><span class="p">,</span> <span class="s1">&#39;rna&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_graph</span><span class="p">(</span><span class="n">G_rna</span><span class="p">,</span> <span class="s1">'rna'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1007,15 +1007,15 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>Suppose we had some miscellaneous data, for example a list of genes of interest, that we wanted to store in the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code>, this could be done as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gene_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SLC3A1&#39;</span><span class="p">,</span> <span class="s1">&#39;TIMM13&#39;</span><span class="p">,</span> <span class="s1">&#39;STYX&#39;</span><span class="p">,</span> <span class="s1">&#39;MUC6&#39;</span><span class="p">,</span> <span class="s1">&#39;TIMM17B&#39;</span><span class="p">,</span> <span class="s1">&#39;TNFSF18&#39;</span><span class="p">,</span> <span class="s1">&#39;TOMM7&#39;</span><span class="p">,</span> <span class="s1">&#39;TOMM40&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;TRAPPC2L&#39;</span><span class="p">,</span> <span class="s1">&#39;AZU1&#39;</span><span class="p">,</span> <span class="s1">&#39;TUBB1&#39;</span><span class="p">,</span> <span class="s1">&#39;XCR1&#39;</span><span class="p">,</span> <span class="s1">&#39;VPS33B&#39;</span><span class="p">,</span> <span class="s1">&#39;XCL2&#39;</span><span class="p">,</span> <span class="s1">&#39;KNTC1&#39;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gene_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'SLC3A1'</span><span class="p">,</span> <span class="s1">'TIMM13'</span><span class="p">,</span> <span class="s1">'STYX'</span><span class="p">,</span> <span class="s1">'MUC6'</span><span class="p">,</span> <span class="s1">'TIMM17B'</span><span class="p">,</span> <span class="s1">'TNFSF18'</span><span class="p">,</span> <span class="s1">'TOMM7'</span><span class="p">,</span> <span class="s1">'TOMM40'</span><span class="p">,</span>
+             <span class="s1">'TRAPPC2L'</span><span class="p">,</span> <span class="s1">'AZU1'</span><span class="p">,</span> <span class="s1">'TUBB1'</span><span class="p">,</span> <span class="s1">'XCR1'</span><span class="p">,</span> <span class="s1">'VPS33B'</span><span class="p">,</span> <span class="s1">'XCL2'</span><span class="p">,</span> <span class="s1">'KNTC1'</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">gene_list</span><span class="p">,</span> <span class="s1">&#39;my_gene_list&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">gene_list</span><span class="p">,</span> <span class="s1">'my_gene_list'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1026,7 +1026,7 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>Alternatively, you can specify any data, distances, similarities, graphs, or miscelaneous data to be loaded into the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> at the same time as it’s initialized. For example, we initialize the <code class="docutils literal notranslate"><span class="pre">Keeper</span></code> and load the RNA and CNA feature data and their associated graphs in one call:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span> <span class="o">=</span> <span class="n">nf</span><span class="o">.</span><span class="n">Keeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;rna&#39;</span><span class="p">:</span> <span class="n">rna</span><span class="p">,</span> <span class="s1">&#39;cna&#39;</span><span class="p">:</span> <span class="n">cna</span><span class="p">},</span> <span class="n">graphs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;rna&#39;</span><span class="p">:</span> <span class="n">G_rna</span><span class="p">,</span> <span class="s1">&#39;cna&#39;</span><span class="p">:</span> <span class="n">G_cna</span><span class="p">})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span> <span class="o">=</span> <span class="n">nf</span><span class="o">.</span><span class="n">Keeper</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'rna'</span><span class="p">:</span> <span class="n">rna</span><span class="p">,</span> <span class="s1">'cna'</span><span class="p">:</span> <span class="n">cna</span><span class="p">},</span> <span class="n">graphs</span><span class="o">=</span><span class="p">{</span><span class="s1">'rna'</span><span class="p">:</span> <span class="n">G_rna</span><span class="p">,</span> <span class="s1">'cna'</span><span class="p">:</span> <span class="n">G_cna</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -1048,11 +1048,11 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add RNA and CNA feature data:</span>
-<span class="n">keeper</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">RNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rna&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
-<span class="n">keeper</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">CNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cna&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">RNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'rna'</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+<span class="n">keeper</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">CNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'cna'</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
 <span class="c1"># uncomment to add methylation feature data:</span>
-<span class="c1"># keeper.load_data(METH_FNAME, label=&#39;meth&#39;, header=0, index_col=0)</span>
+<span class="c1"># keeper.load_data(METH_FNAME, label='meth', header=0, index_col=0)</span>
 </pre></div>
 </div>
 </div>
@@ -1060,11 +1060,11 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>We next add the graphs associated with RNA and CNA. (See the documentation for more details and the expected edgelist format.)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">load_graph</span><span class="p">(</span><span class="n">E_RNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rna&#39;</span><span class="p">)</span>
-<span class="n">keeper</span><span class="o">.</span><span class="n">load_graph</span><span class="p">(</span><span class="n">E_CNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cna&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">load_graph</span><span class="p">(</span><span class="n">E_RNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'rna'</span><span class="p">)</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">load_graph</span><span class="p">(</span><span class="n">E_CNA_FNAME</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'cna'</span><span class="p">)</span>
 
 <span class="c1"># uncomment to add methylation graph:</span>
-<span class="c1"># keeper.load_graph(E_METH_FNAME, label=&#39;meth&#39;)</span>
+<span class="c1"># keeper.load_graph(E_METH_FNAME, label='meth')</span>
 </pre></div>
 </div>
 </div>
@@ -1081,7 +1081,7 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>We can extract the data in the form of a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">'rna'</span><span class="p">]</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1214,13 +1214,13 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>Next, we demonstrate how to get a graph that has been stored in <code class="docutils literal notranslate"><span class="pre">keeper</span></code>, keyed by its reference label:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="s1">'rna'</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Graph named &#39;rna&#39; with 7148 nodes and 27498 edges
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Graph named 'rna' with 7148 nodes and 27498 edges
 </pre></div>
 </div>
 </div>
@@ -1229,7 +1229,7 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># first we add the gene list to the keeper:</span>
-<span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">gene_list</span><span class="p">,</span> <span class="s1">&#39;my_gene_list&#39;</span><span class="p">)</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">add_misc</span><span class="p">(</span><span class="n">gene_list</span><span class="p">,</span> <span class="s1">'my_gene_list'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1237,26 +1237,26 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># and to access the gene list:</span>
-<span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="s1">&#39;my_gene_list&#39;</span><span class="p">]</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="s1">'my_gene_list'</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;SLC3A1&#39;,
- &#39;TIMM13&#39;,
- &#39;STYX&#39;,
- &#39;MUC6&#39;,
- &#39;TIMM17B&#39;,
- &#39;TNFSF18&#39;,
- &#39;TOMM7&#39;,
- &#39;TOMM40&#39;,
- &#39;TRAPPC2L&#39;,
- &#39;AZU1&#39;,
- &#39;TUBB1&#39;,
- &#39;XCR1&#39;,
- &#39;VPS33B&#39;,
- &#39;XCL2&#39;,
- &#39;KNTC1&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['SLC3A1',
+ 'TIMM13',
+ 'STYX',
+ 'MUC6',
+ 'TIMM17B',
+ 'TNFSF18',
+ 'TOMM7',
+ 'TOMM40',
+ 'TRAPPC2L',
+ 'AZU1',
+ 'TUBB1',
+ 'XCR1',
+ 'VPS33B',
+ 'XCL2',
+ 'KNTC1']
 </pre></div>
 </div>
 </div>
@@ -1292,7 +1292,7 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>For example, we can extract a subset of <code class="docutils literal notranslate"><span class="pre">keeper</span></code> with the first 3 observations, using <code class="docutils literal notranslate"><span class="pre">keep_misc=True</span></code> and <code class="docutils literal notranslate"><span class="pre">keep_graphs=True</span></code> to keep a copy of miscellaneous data and the graphs. Additionally, we use <code class="docutils literal notranslate"><span class="pre">outdir</span></code> to specify the output directory we want for this subset of observations</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">outdir_sub</span> <span class="o">=</span> <span class="n">OUT_DIR</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">OUT_DIR</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_sub&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">outdir_sub</span> <span class="o">=</span> <span class="n">OUT_DIR</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">OUT_DIR</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">'_sub'</span><span class="p">)</span>
 
 <span class="n">keeper_sub</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> 
                            <span class="n">keep_misc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_graphs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1307,7 +1307,7 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 <p>You can extract a subset of observations and features for any data stored in the data-keeper as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rna_sub</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;rna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rna_sub</span> <span class="o">=</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">'rna'</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span>
                                     <span class="n">features</span><span class="o">=</span><span class="n">gene_list</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 <span class="n">rna_sub</span>
 </pre></div>
@@ -1382,16 +1382,16 @@ ii. Directly from a file that is loadable via <code class="docutils literal notr
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rna_euc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">cdist</span><span class="p">(</span><span class="n">rna</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">rna</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">),</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rna_euc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">cdist</span><span class="p">(</span><span class="n">rna</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">rna</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">'euclidean'</span><span class="p">),</span>
                        <span class="n">index</span><span class="o">=</span><span class="n">rna</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">rna</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-<span class="n">keeper</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="n">rna_euc</span><span class="p">,</span> <span class="s1">&#39;rna_euc&#39;</span><span class="p">)</span>
+<span class="n">keeper</span><span class="o">.</span><span class="n">add_distance</span><span class="p">(</span><span class="n">rna_euc</span><span class="p">,</span> <span class="s1">'rna_euc'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="s1">&#39;rna_euc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keeper</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="s1">'rna_euc'</span><span class="p">]</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">keeper</span><span class="o">.</span><span class="n">observation_labels</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1494,8 +1494,8 @@ cna
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;ABCB8&#39;, &#39;SAT1&#39;, &#39;ABCF3&#39;, &#39;ARF1&#39;]
-[&#39;ABCB8&#39;, &#39;SAT1&#39;, &#39;ABCF3&#39;, &#39;ARF1&#39;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['ABCB8', 'SAT1', 'ABCF3', 'ARF1']
+['ABCB8', 'SAT1', 'ABCF3', 'ARF1']
 </pre></div>
 </div>
 </div>
@@ -1529,7 +1529,7 @@ cna
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;rna&#39;, &#39;cna&#39;])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys(['rna', 'cna'])
 </pre></div>
 </div>
 </div>
@@ -1541,7 +1541,7 @@ cna
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;rna_euc&#39;])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys(['rna_euc'])
 </pre></div>
 </div>
 </div>
@@ -1553,7 +1553,7 @@ cna
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;rna&#39;, &#39;cna&#39;])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys(['rna', 'cna'])
 </pre></div>
 </div>
 </div>
@@ -1566,7 +1566,7 @@ cna
 <p>For example, we next check if the RNA feature data is in <code class="docutils literal notranslate"><span class="pre">keeper.data</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;rna&#39;</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s1">'rna'</span> <span class="ow">in</span> <span class="n">keeper</span><span class="o">.</span><span class="n">data</span>
 </pre></div>
 </div>
 </div>
