@@ -823,6 +823,10 @@ class InfoNet:
                 wds_tmp = pd.concat(wds, axis=1)
                 wds_tmp = wds_tmp.rename(columns=nx.get_node_attributes(self.G, 'name'))
                 if wds_prior is not None:
+                    # check that the index is the same
+                    wds_prior.index = wds_prior.index.map(lambda x: tuple(sorted(x)))
+                    wds_tmp.index = wds_tmp.index.map(lambda x: tuple(sorted(x)))
+                    
                     wds_prior = pd.concat([wds_prior, wds_tmp], axis=1)
                 else:
                     wds_prior = wds_tmp
